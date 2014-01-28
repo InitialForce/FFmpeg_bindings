@@ -1,0 +1,66 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly CppSharp.Parser, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly CppSharp.AST, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=None, flags=None
+Class ParserOptions: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.Collections.Generic.List`1[System.String] IncludeDirs : Public
+    System.Collections.Generic.List`1[System.String] SystemIncludeDirs : Public
+    System.Collections.Generic.List`1[System.String] Defines : Public
+    System.Collections.Generic.List`1[System.String] LibraryDirs : Public
+    System.String FileName : Public
+    CppSharp.AST.ASTContext ASTContext : Public
+    Int32 ToolSetToUse : Public
+    System.String TargetTriple : Public
+    Boolean NoStandardIncludes : Public
+    Boolean NoBuiltinIncludes : Public
+    Boolean MicrosoftMode : Public
+    CppAbi Abi : Public
+    Boolean Verbose : Public
+Struct ParserDiagnostic: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+  Fields:
+    System.String FileName : Public
+    System.String Message : Public
+    ParserDiagnosticLevel Level : Public
+    Int32 LineNumber : Public
+    Int32 ColumnNumber : Public
+Class ParserResult: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    ParserResultKind Kind : Public
+    System.Collections.Generic.List`1[ParserDiagnostic] Diagnostics : Public
+    CppSharp.AST.ASTContext ASTContext : Public
+    CppSharp.AST.NativeLibrary Library : Public
+Struct CppAbi: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    CppAbi Itanium = 0 : Public, Static, Literal, HasDefault
+    CppAbi Microsoft = 1 : Public, Static, Literal, HasDefault
+    CppAbi ARM = 2 : Public, Static, Literal, HasDefault
+Struct ParserDiagnosticLevel: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    ParserDiagnosticLevel Ignored = 0 : Public, Static, Literal, HasDefault
+    ParserDiagnosticLevel Note = 1 : Public, Static, Literal, HasDefault
+    ParserDiagnosticLevel Warning = 2 : Public, Static, Literal, HasDefault
+    ParserDiagnosticLevel Error = 3 : Public, Static, Literal, HasDefault
+    ParserDiagnosticLevel Fatal = 4 : Public, Static, Literal, HasDefault
+Struct ParserResultKind: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    ParserResultKind Success = 0 : Public, Static, Literal, HasDefault
+    ParserResultKind Error = 1 : Public, Static, Literal, HasDefault
+    ParserResultKind FileNotFound = 2 : Public, Static, Literal, HasDefault
+Class CppSharp.Parser.ClangParser: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    ParseHeader(ParserOptions): PrivateScope, Public, Static, HideBySig
+    ParseLibrary(ParserOptions): PrivateScope, Public, Static, HideBySig

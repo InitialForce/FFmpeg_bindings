@@ -5,16 +5,22 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFmpegBindings", "FFmpegBindings\FFmpegBindings.csproj", "{45C8FC62-811B-497D-BBAA-60205CFA8F91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2.1.3", "2.1.3\2.1.3.csproj", "{B0EE6496-CE63-42B7-9BDF-007B84138306}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Debug|x86.ActiveCfg = Debug|x86
+		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Debug|x86.Build.0 = Debug|x86
+		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Release|x86.ActiveCfg = Release|x86
+		{45C8FC62-811B-497D-BBAA-60205CFA8F91}.Release|x86.Build.0 = Release|x86
+		{B0EE6496-CE63-42B7-9BDF-007B84138306}.Debug|x86.ActiveCfg = Debug|x86
+		{B0EE6496-CE63-42B7-9BDF-007B84138306}.Debug|x86.Build.0 = Debug|x86
+		{B0EE6496-CE63-42B7-9BDF-007B84138306}.Release|x86.ActiveCfg = Release|x86
+		{B0EE6496-CE63-42B7-9BDF-007B84138306}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

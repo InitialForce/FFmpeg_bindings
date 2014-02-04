@@ -1,4 +1,8 @@
-﻿using CppSharp;
+﻿using System.Collections.Generic;
+using System.IO;
+using CppSharp;
+using CppSharp.Generators;
+using CppSharp.Passes;
 
 namespace FFmpegBindings
 {
@@ -6,48 +10,74 @@ namespace FFmpegBindings
     {
         public static void Main(string[] args)
         {
-            Generate(new AVUtilLibrary());
-            //            Generate(new SDL());
+            var ffmpegInstallDir = new DirectoryInfo(@"C:\WORK\REPOS-SC\FFmpeg_bindings\ffmpeg\2.1.3");
+            var outputDir = new DirectoryInfo(@"C:\WORK\REPOS-SC\FFmpeg_bindings\src\2.1.3");
+
+            var avcodecLib = new FFmpegSubLibrary(ffmpegInstallDir, "avcodec", "avcodec-if-55.dll", outputDir, new List<string>
+            {
+                "old_codec_ids.h",
+                "dxva2.h",
+                "vda.h",
+                "vdpau.h",
+                "xvmc.h"
+            });
+            var avutilLib = new FFmpegSubLibrary(ffmpegInstallDir, "avutil", "avutil-if-52.dll", outputDir);
+            var avformatLib = new FFmpegSubLibrary(ffmpegInstallDir, "avformat", "avformat-if-55.dll", outputDir);
+            var swresampleLib = new FFmpegSubLibrary(ffmpegInstallDir, "swresample", "swresample-if-0.dll", outputDir);
+            var swscaleLib = new FFmpegSubLibrary(ffmpegInstallDir, "swscale", "swscale-if-2.dll", outputDir);
+            var avfilterLib = new FFmpegSubLibrary(ffmpegInstallDir, "avfilter", "avfilter-if-3.dll", outputDir);
+            var avdeviceLib = new FFmpegSubLibrary(ffmpegInstallDir, "avdevice", "avdevice-if-55.dll", outputDir);
+
+            Generate(avutilLib);
+            Generate(avcodecLib);
+            Generate(avformatLib);
+            Generate(swresampleLib);
+            Generate(swscaleLib);
+            Generate(avfilterLib);
+            Generate(avdeviceLib);
+
         }
 
         /// <summary>
-        /// Some of the code from ConsoleDriver.Run
+        ///     Some of the code from ConsoleDriver.Run
         /// </summary>
         /// <param name="library"></param>
         private static void Generate(ILibrary library)
         {
-            var options = new DriverOptions();
+            var options = new DriverOptions
+            {
+                TargetTriple = "i686-pc-win32",
+                //            TargetTriple = "x86_64-pc-win64",
+                Gnu99Mode = true,
+                Verbose = true,
+            };
 
-//            options.TargetTriple = "x86_64-pc-win64";
-            options.TargetTriple = "i686-pc-win32";
-
-            var Log = new TextDiagnosticPrinter();
-            var driver = new Driver(options, Log);
+            var log = new TextDiagnosticPrinter();
+            var driver = new Driver(options, log);
+            log.Verbose = driver.Options.Verbose;
 
             library.Setup(driver);
             driver.Setup();
 
-//            Log.Verbose = driver.Options.Verbose;
-
             if (!options.Quiet)
-                Log.EmitMessage("Parsing libraries...");
+                log.EmitMessage("Parsing libraries...");
 
             if (!driver.ParseLibraries())
                 return;
 
             if (!options.Quiet)
-                Log.EmitMessage("Indexing library symbols...");
+                log.EmitMessage("Indexing library symbols...");
 
             driver.Symbols.IndexSymbols();
 
             if (!options.Quiet)
-                Log.EmitMessage("Parsing code...");
+                log.EmitMessage("Parsing code...");
 
             if (!driver.ParseCode())
                 return;
 
             if (!options.Quiet)
-                Log.EmitMessage("Processing code...");
+                log.EmitMessage("Processing code...");
 
             library.Preprocess(driver, driver.ASTContext);
 
@@ -57,13 +87,13 @@ namespace FFmpegBindings
             library.Postprocess(driver, driver.ASTContext);
 
             if (!options.Quiet)
-                Log.EmitMessage("Generating code...");
+                log.EmitMessage("Generating code...");
 
-            var outputs = driver.GenerateCode();
+            List<GeneratorOutput> outputs = driver.GenerateCode();
 
-            foreach (var output in outputs)
+            foreach (GeneratorOutput output in outputs)
             {
-                foreach (var pass in driver.GeneratorOutputPasses.Passes)
+                foreach (GeneratorOutputPass pass in driver.GeneratorOutputPasses.Passes)
                 {
                     pass.Driver = driver;
                     pass.VisitGeneratorOutput(output);

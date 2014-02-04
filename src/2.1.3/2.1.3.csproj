@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B0EE6496-CE63-42B7-9BDF-007B84138306}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>_2._1._3</RootNamespace>
+    <AssemblyName>2.1.3</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="libavcodec\avcodec.cs" />
+    <Compile Include="libavcodec\avfft.cs" />
+    <Compile Include="libavcodec\vaapi.cs" />
+    <Compile Include="libavdevice\avdevice.cs" />
+    <Compile Include="libavfilter\asrc_abuffer.cs" />
+    <Compile Include="libavfilter\avcodec.cs" />
+    <Compile Include="libavfilter\avfilter.cs" />
+    <Compile Include="libavfilter\buffersink.cs" />
+    <Compile Include="libavfilter\buffersrc.cs" />
+    <Compile Include="libavformat\avformat.cs" />
+    <Compile Include="libavformat\avio.cs" />
+    <Compile Include="libavutil\adler32.cs" />
+    <Compile Include="libavutil\aes.cs" />
+    <Compile Include="libavutil\audio_fifo.cs" />
+    <Compile Include="libavutil\avstring.cs" />
+    <Compile Include="libavutil\avutil.cs" />
+    <Compile Include="libavutil\base64.cs" />
+    <Compile Include="libavutil\blowfish.cs" />
+    <Compile Include="libavutil\bprint.cs" />
+    <Compile Include="libavutil\bswap.cs" />
+    <Compile Include="libavutil\buffer.cs" />
+    <Compile Include="libavutil\channel_layout.cs" />
+    <Compile Include="libavutil\common.cs" />
+    <Compile Include="libavutil\cpu.cs" />
+    <Compile Include="libavutil\crc.cs" />
+    <Compile Include="libavutil\dict.cs" />
+    <Compile Include="libavutil\error.cs" />
+    <Compile Include="libavutil\eval.cs" />
+    <Compile Include="libavutil\fifo.cs" />
+    <Compile Include="libavutil\file.cs" />
+    <Compile Include="libavutil\frame.cs" />
+    <Compile Include="libavutil\hmac.cs" />
+    <Compile Include="libavutil\imgutils.cs" />
+    <Compile Include="libavutil\intfloat.cs" />
+    <Compile Include="libavutil\intfloat_readwrite.cs" />
+    <Compile Include="libavutil\intreadwrite.cs" />
+    <Compile Include="libavutil\lfg.cs" />
+    <Compile Include="libavutil\log.cs" />
+    <Compile Include="libavutil\lzo.cs" />
+    <Compile Include="libavutil\mathematics.cs" />
+    <Compile Include="libavutil\md5.cs" />
+    <Compile Include="libavutil\mem.cs" />
+    <Compile Include="libavutil\murmur3.cs" />
+    <Compile Include="libavutil\opt.cs" />
+    <Compile Include="libavutil\parseutils.cs" />
+    <Compile Include="libavutil\pixdesc.cs" />
+    <Compile Include="libavutil\pixfmt.cs" />
+    <Compile Include="libavutil\random_seed.cs" />
+    <Compile Include="libavutil\rational.cs" />
+    <Compile Include="libavutil\ripemd.cs" />
+    <Compile Include="libavutil\samplefmt.cs" />
+    <Compile Include="libavutil\sha.cs" />
+    <Compile Include="libavutil\sha512.cs" />
+    <Compile Include="libavutil\time.cs" />
+    <Compile Include="libavutil\timecode.cs" />
+    <Compile Include="libavutil\timestamp.cs" />
+    <Compile Include="libavutil\xtea.cs" />
+    <Compile Include="libswresample\swresample.cs" />
+    <Compile Include="libswscale\swscale.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="libavcodec\libavcodec-inlines.cpp" />
+    <Content Include="libavcodec\libavcodec-inlines.def" />
+    <Content Include="libavdevice\libavdevice-inlines.cpp" />
+    <Content Include="libavdevice\libavdevice-inlines.def" />
+    <Content Include="libavfilter\libavfilter-inlines.cpp" />
+    <Content Include="libavfilter\libavfilter-inlines.def" />
+    <Content Include="libavformat\libavformat-inlines.cpp" />
+    <Content Include="libavformat\libavformat-inlines.def" />
+    <Content Include="libavutil\libavutil-inlines.cpp" />
+    <Content Include="libavutil\libavutil-inlines.def" />
+    <Content Include="libswresample\libswresample-inlines.cpp" />
+    <Content Include="libswresample\libswresample-inlines.def" />
+    <Content Include="libswscale\libswscale-inlines.cpp" />
+    <Content Include="libswscale\libswscale-inlines.def" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

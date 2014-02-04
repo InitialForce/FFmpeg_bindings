@@ -19,6 +19,7 @@ Class ParserOptions: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Boolean NoStandardIncludes : Public
     Boolean NoBuiltinIncludes : Public
     Boolean MicrosoftMode : Public
+    Boolean Gnu99Mode : Public
     CppAbi Abi : Public
     Boolean Verbose : Public
 Struct ParserDiagnostic: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit

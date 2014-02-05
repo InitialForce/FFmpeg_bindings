@@ -11,7 +11,7 @@ namespace FFmpegBindings
 
         public static void Main(string[] args)
         {
-            var versionString = "2.1.3";
+            var versionString = "1.0.7";
             var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
             var outputDir = new DirectoryInfo(@"..\..\..\..\..\src\" + versionString);
 

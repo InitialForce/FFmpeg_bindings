@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B0EE6496-CE63-42B7-9BDF-007B84138306}</ProjectGuid>
+    <ProjectGuid>{6B37DBFD-7DA9-470A-ABE3-15CCCF0D8402}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>_2._1._3</RootNamespace>
-    <AssemblyName>2.1.3</AssemblyName>
+    <RootNamespace>_1._0._7</RootNamespace>
+    <AssemblyName>1.0.7</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,12 +48,14 @@
     <Compile Include="libavfilter\asrc_abuffer.cs" />
     <Compile Include="libavfilter\avcodec.cs" />
     <Compile Include="libavfilter\avfilter.cs" />
+    <Compile Include="libavfilter\avfiltergraph.cs" />
     <Compile Include="libavfilter\buffersink.cs" />
     <Compile Include="libavfilter\buffersrc.cs" />
     <Compile Include="libavformat\avformat.cs" />
     <Compile Include="libavformat\avio.cs" />
     <Compile Include="libavutil\adler32.cs" />
     <Compile Include="libavutil\aes.cs" />
+    <Compile Include="libavutil\audioconvert.cs" />
     <Compile Include="libavutil\audio_fifo.cs" />
     <Compile Include="libavutil\avstring.cs" />
     <Compile Include="libavutil\avutil.cs" />
@@ -61,8 +63,6 @@
     <Compile Include="libavutil\blowfish.cs" />
     <Compile Include="libavutil\bprint.cs" />
     <Compile Include="libavutil\bswap.cs" />
-    <Compile Include="libavutil\buffer.cs" />
-    <Compile Include="libavutil\channel_layout.cs" />
     <Compile Include="libavutil\common.cs" />
     <Compile Include="libavutil\cpu.cs" />
     <Compile Include="libavutil\crc.cs" />
@@ -71,8 +71,6 @@
     <Compile Include="libavutil\eval.cs" />
     <Compile Include="libavutil\fifo.cs" />
     <Compile Include="libavutil\file.cs" />
-    <Compile Include="libavutil\frame.cs" />
-    <Compile Include="libavutil\hmac.cs" />
     <Compile Include="libavutil\imgutils.cs" />
     <Compile Include="libavutil\intfloat.cs" />
     <Compile Include="libavutil\intfloat_readwrite.cs" />
@@ -83,17 +81,14 @@
     <Compile Include="libavutil\mathematics.cs" />
     <Compile Include="libavutil\md5.cs" />
     <Compile Include="libavutil\mem.cs" />
-    <Compile Include="libavutil\murmur3.cs" />
     <Compile Include="libavutil\opt.cs" />
     <Compile Include="libavutil\parseutils.cs" />
     <Compile Include="libavutil\pixdesc.cs" />
     <Compile Include="libavutil\pixfmt.cs" />
     <Compile Include="libavutil\random_seed.cs" />
     <Compile Include="libavutil\rational.cs" />
-    <Compile Include="libavutil\ripemd.cs" />
     <Compile Include="libavutil\samplefmt.cs" />
     <Compile Include="libavutil\sha.cs" />
-    <Compile Include="libavutil\sha512.cs" />
     <Compile Include="libavutil\time.cs" />
     <Compile Include="libavutil\timecode.cs" />
     <Compile Include="libavutil\timestamp.cs" />

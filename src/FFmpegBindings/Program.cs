@@ -10,8 +10,9 @@ namespace FFmpegBindings
     {
         public static void Main(string[] args)
         {
-            var ffmpegInstallDir = new DirectoryInfo(@"C:\WORK\REPOS-SC\FFmpeg_bindings\ffmpeg\2.1.3");
-            var outputDir = new DirectoryInfo(@"C:\WORK\REPOS-SC\FFmpeg_bindings\src\2.1.3");
+            var versionString = "2.1.3";
+            var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
+            var outputDir = new DirectoryInfo(@"..\..\..\..\..\src\" + versionString);
 
             var avcodecLib = new FFmpegSubLibrary(ffmpegInstallDir, "avcodec", "avcodec-if-55.dll", outputDir, new List<string>
             {

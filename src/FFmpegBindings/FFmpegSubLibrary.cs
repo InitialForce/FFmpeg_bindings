@@ -10,21 +10,38 @@ namespace FFmpegBindings
     {
         private readonly IEnumerable<string> _filesToIgnore;
         private readonly string _libraryName;
+        private readonly string _libraryPostfix;
         private readonly string _dllName;
         private readonly DirectoryInfo _outputDir;
         private readonly DirectoryInfo _includeDir;
+        private int _majorVersion;
 
-        public FFmpegSubLibrary(DirectoryInfo includeDir, string libraryName, string dllName, DirectoryInfo outputDir, IEnumerable<string> filesToIgnore = null)
+        public FFmpegSubLibrary(DirectoryInfo includeDir, string libraryName, string libraryPostfix, DirectoryInfo outputDir, IEnumerable<string> filesToIgnore = null)
         {
             _includeDir = includeDir;
             if (!_includeDir.Exists)
                 throw new DirectoryNotFoundException(_includeDir.FullName);
 
             _libraryName = libraryName;
-            _dllName = dllName;
+            _libraryPostfix = libraryPostfix;
 
             _outputDir = outputDir;
             _filesToIgnore = filesToIgnore ?? Enumerable.Empty<string>();
+
+            _majorVersion = ParseMajorVersion();
+
+            _dllName = string.Format("{0}-{1}-{2}.dll", _libraryName, libraryPostfix, _majorVersion);
+        }
+
+        private int ParseMajorVersion()
+        {
+            var versionHeaderText =
+                File.ReadAllLines(Path.Combine(_includeDir.FullName, "lib" + _libraryName, "Version.h"));
+            var majorDefineTextTag = "LIB" + _libraryName.ToUpper() + "_VERSION_MAJOR";
+            var majorDefineLineText =
+                versionHeaderText.First(a => a.Contains("#define") && a.Contains(majorDefineTextTag));
+
+            return int.Parse(majorDefineLineText.Split(' ').Last());
         }
 
         public virtual void Preprocess(Driver driver, ASTContext ctx)

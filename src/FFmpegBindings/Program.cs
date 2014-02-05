@@ -8,13 +8,15 @@ namespace FFmpegBindings
 {
     internal static class Program
     {
+
         public static void Main(string[] args)
         {
             var versionString = "2.1.3";
             var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
             var outputDir = new DirectoryInfo(@"..\..\..\..\..\src\" + versionString);
 
-            var avcodecLib = new FFmpegSubLibrary(ffmpegInstallDir, "avcodec", "avcodec-if-55.dll", outputDir, new List<string>
+            const string libraryPostfix = "if";
+            var avcodecLib = new FFmpegSubLibrary(ffmpegInstallDir, "avcodec", libraryPostfix, outputDir, new List<string>
             {
                 "old_codec_ids.h",
                 "dxva2.h",
@@ -22,12 +24,12 @@ namespace FFmpegBindings
                 "vdpau.h",
                 "xvmc.h"
             });
-            var avutilLib = new FFmpegSubLibrary(ffmpegInstallDir, "avutil", "avutil-if-52.dll", outputDir);
-            var avformatLib = new FFmpegSubLibrary(ffmpegInstallDir, "avformat", "avformat-if-55.dll", outputDir);
-            var swresampleLib = new FFmpegSubLibrary(ffmpegInstallDir, "swresample", "swresample-if-0.dll", outputDir);
-            var swscaleLib = new FFmpegSubLibrary(ffmpegInstallDir, "swscale", "swscale-if-2.dll", outputDir);
-            var avfilterLib = new FFmpegSubLibrary(ffmpegInstallDir, "avfilter", "avfilter-if-3.dll", outputDir);
-            var avdeviceLib = new FFmpegSubLibrary(ffmpegInstallDir, "avdevice", "avdevice-if-55.dll", outputDir);
+            var avutilLib = new FFmpegSubLibrary(ffmpegInstallDir, "avutil", libraryPostfix, outputDir);
+            var avformatLib = new FFmpegSubLibrary(ffmpegInstallDir, "avformat", libraryPostfix, outputDir);
+            var swresampleLib = new FFmpegSubLibrary(ffmpegInstallDir, "swresample", libraryPostfix, outputDir);
+            var swscaleLib = new FFmpegSubLibrary(ffmpegInstallDir, "swscale", libraryPostfix, outputDir);
+            var avfilterLib = new FFmpegSubLibrary(ffmpegInstallDir, "avfilter", libraryPostfix, outputDir);
+            var avdeviceLib = new FFmpegSubLibrary(ffmpegInstallDir, "avdevice", libraryPostfix, outputDir);
 
             Generate(avutilLib);
             Generate(avcodecLib);

@@ -35,11 +35,19 @@ namespace FFmpegBindings
 
         private int ParseMajorVersion()
         {
-            var versionHeaderText =
-                File.ReadAllLines(Path.Combine(_includeDir.FullName, "lib" + _libraryName, "Version.h"));
+            var versionFilePath = Path.Combine(_includeDir.FullName, "lib" + _libraryName, "version.h");
+            string[] headerTextLines;
+            if (File.Exists(versionFilePath))
+            {
+                headerTextLines = File.ReadAllLines(versionFilePath);
+            }
+            else
+            {
+                var libraryHeader = Path.Combine(_includeDir.FullName, "lib" + _libraryName, _libraryName +".h");
+                headerTextLines = File.ReadAllLines(libraryHeader);
+            }
             var majorDefineTextTag = "LIB" + _libraryName.ToUpper() + "_VERSION_MAJOR";
-            var majorDefineLineText =
-                versionHeaderText.First(a => a.Contains("#define") && a.Contains(majorDefineTextTag));
+            var majorDefineLineText = headerTextLines.First(a => a.Contains("#define") && a.Contains(majorDefineTextTag));
 
             return int.Parse(majorDefineLineText.Split(' ').Last());
         }

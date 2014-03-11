@@ -6,9 +6,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
         /// <summary>
         /// Decode a base64-encoded string.
@@ -21,9 +21,10 @@ namespace libavutil
         /// invalid input
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_base64_decode")]
-        internal static extern int av_base64_decode(byte* @out, global::System.IntPtr @in, int out_size);
+        public static extern int av_base64_decode(byte* _out, string _in, int out_size);
 
         /// <summary>
         /// Encode data to base64 and null-terminate.
@@ -36,8 +37,9 @@ namespace libavutil
         /// @return         out or NULL in case of error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_base64_encode")]
-        internal static extern sbyte* av_base64_encode(sbyte* @out, int out_size, byte* @in, int in_size);
+        public static extern sbyte* av_base64_encode(System.Text.StringBuilder _out, int out_size, byte* _in, int in_size);
     }
 }

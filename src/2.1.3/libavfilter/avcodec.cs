@@ -5,10 +5,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavfilter
+namespace FFmpeg
 {
-    public unsafe partial class libavfilter
+    public unsafe static partial class libavfilter
     {
         /// <summary>
         /// Create and return a picref reference from the data and properties
@@ -18,9 +19,10 @@ namespace libavfilter
         /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_video_buffer_ref_from_frame")]
-        internal static extern AVFilterBufferRef* avfilter_get_video_buffer_ref_from_frame(AVFrame* frame, int perms);
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_video_buffer_ref_from_frame(libavutil.AVFrame* frame, int perms);
 
         /// <summary>
         /// Create and return a picref reference from the data and properties
@@ -30,9 +32,10 @@ namespace libavfilter
         /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_audio_buffer_ref_from_frame")]
-        internal static extern AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_frame(AVFrame* frame, int perms);
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_frame(libavutil.AVFrame* frame, int perms);
 
         /// <summary>
         /// Create and return a buffer reference from the data and properties
@@ -42,9 +45,10 @@ namespace libavfilter
         /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_buffer_ref_from_frame")]
-        internal static extern AVFilterBufferRef* avfilter_get_buffer_ref_from_frame(AVMediaType type, AVFrame* frame, int perms);
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_buffer_ref_from_frame(libavutil.AVMediaType type, libavutil.AVFrame* frame, int perms);
 
         /// <summary>
         /// Fill an AVFrame with the information stored in samplesref.
@@ -56,9 +60,10 @@ namespace libavfilter
         /// @deprecated Use avfilter_copy_buf_props() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_fill_frame_from_audio_buffer_ref")]
-        internal static extern int avfilter_fill_frame_from_audio_buffer_ref(AVFrame* frame, AVFilterBufferRef* samplesref);
+        public static extern int avfilter_fill_frame_from_audio_buffer_ref(libavutil.AVFrame* frame, libavfilter.AVFilterBufferRef* samplesref);
 
         /// <summary>
         /// Fill an AVFrame with the information stored in picref.
@@ -70,9 +75,10 @@ namespace libavfilter
         /// @deprecated Use avfilter_copy_buf_props() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_fill_frame_from_video_buffer_ref")]
-        internal static extern int avfilter_fill_frame_from_video_buffer_ref(AVFrame* frame, AVFilterBufferRef* picref);
+        public static extern int avfilter_fill_frame_from_video_buffer_ref(libavutil.AVFrame* frame, libavfilter.AVFilterBufferRef* picref);
 
         /// <summary>
         /// Fill an AVFrame with information stored in ref.
@@ -84,8 +90,9 @@ namespace libavfilter
         /// @deprecated Use avfilter_copy_buf_props() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_fill_frame_from_buffer_ref")]
-        internal static extern int avfilter_fill_frame_from_buffer_ref(AVFrame* frame, AVFilterBufferRef* @ref);
+        public static extern int avfilter_fill_frame_from_buffer_ref(libavutil.AVFrame* frame, libavfilter.AVFilterBufferRef* _ref);
     }
 }

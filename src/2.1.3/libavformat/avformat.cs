@@ -5,1243 +5,1234 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavformat
+namespace FFmpeg
 {
-    /// <summary>
-    /// @}
-    /// </summary>
-    public enum AVStreamParseType
+    public unsafe static partial class libavformat
     {
-        AVSTREAM_PARSE_NONE = 0,
-        /// <summary>full parsing and repack</summary>
-        AVSTREAM_PARSE_FULL = 1,
-        /// <summary>Only parse headers, do not repack.</summary>
-        AVSTREAM_PARSE_HEADERS = 2,
-        /// <summary>full parsing and interpolation of timestamps for frames not starting on a packet boundary</summary>
-        AVSTREAM_PARSE_TIMESTAMPS = 3,
-        /// <summary>full parsing and repack of the first frame only, only implemented for H.264 currently</summary>
-        AVSTREAM_PARSE_FULL_ONCE = 4,
-        /// <summary>full parsing and repack with timestamp and position generation by parser for raw this assumes that each packet in the file contains no demuxer level headers and just codec level data, otherwise position generation would fail</summary>
-        AVSTREAM_PARSE_FULL_RAW = 1463898624
-    }
-
-    /// <summary>
-    /// The duration of a video can be estimated through various ways, and this
-    /// enum can be used
-    /// to know how the duration was estimated.
-    /// </summary>
-    public enum AVDurationEstimationMethod
-    {
-        /// <summary>Duration accurately estimated from PTSes</summary>
-        AVFMT_DURATION_FROM_PTS = 0,
-        /// <summary>Duration estimated from a stream with a known duration</summary>
-        AVFMT_DURATION_FROM_STREAM = 1,
-        /// <summary>Duration estimated from bitrate (less accurate)</summary>
-        AVFMT_DURATION_FROM_BITRATE = 2
-    }
-
-    /// <summary>
-    /// The exact value of the fractional number is: 'val + num / den'.
-    /// num is assumed to be 0 <= num < den.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFrac
-    {
-        [FieldOffset(0)]
-        public long val;
-
-        [FieldOffset(8)]
-        public long num;
-
-        [FieldOffset(16)]
-        public long den;
-    }
-
-    /// <summary>
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodecTag
-    {
-    }
-
-    /// <summary>
-    /// This structure contains the data a format has to probe a file.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVProbeData
-    {
-        [FieldOffset(0)]
-        public global::System.IntPtr filename;
+        public const sbyte AVPROBE_SCORE_EXTENSION = 50;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(4)]
-        public byte* buf;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(8)]
-        public int buf_size;
-    }
-
-    /// <summary>
-    /// @addtogroup lavf_encoding
-    /// @{
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVOutputFormat
-    {
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
-
-        /// <summary>
-        /// Descriptive name for the format, meant to be more human-readable
-        /// than name. You should use the NULL_IF_CONFIG_SMALL() macro
-        /// to define it.
-        /// </summary>
-        [FieldOffset(4)]
-        public global::System.IntPtr long_name;
-
-        [FieldOffset(8)]
-        public global::System.IntPtr mime_type;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(12)]
-        public global::System.IntPtr extensions;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(16)]
-        public AVCodecID audio_codec;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(20)]
-        public AVCodecID video_codec;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(24)]
-        public AVCodecID subtitle_codec;
-
-        /// <summary>
-        /// can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_RAWPICTURE,
-        /// AVFMT_GLOBALHEADER, AVFMT_NOTIMESTAMPS, AVFMT_VARIABLE_FPS,
-        /// AVFMT_NODIMENSIONS, AVFMT_NOSTREAMS, AVFMT_ALLOW_FLUSH,
-        /// AVFMT_TS_NONSTRICT
-        /// </summary>
-        [FieldOffset(28)]
-        public int flags;
-
-        /// <summary>
-        /// List of supported codec_id-codec_tag pairs, ordered by "better
-        /// choice first". The arrays are all terminated by AV_CODEC_ID_NONE.
-        /// </summary>
-        [FieldOffset(32)]
-        public AVCodecTag* codec_tag;
-
-        /// <summary>
-        /// < AVClass for the private context
-        /// </summary>
-        [FieldOffset(36)]
-        public AVClass* priv_class;
-
-        /// <summary>
-        /// No fields below this line are part of the public API. They
-        /// may not be used outside of libavformat and can be changed and
-        /// removed at will.
-        /// New public fields should be added right above.
-        /// 
-        /// </summary>
-        [FieldOffset(40)]
-        public AVOutputFormat* next;
-
-        /// <summary>
-        /// size of private data so that it can be allocated in the wrapper
-        /// </summary>
-        [FieldOffset(44)]
-        public int priv_data_size;
-
-        [FieldOffset(48)]
-        public global::System.IntPtr write_header;
-
-        /// <summary>
-        /// Write a packet. If AVFMT_ALLOW_FLUSH is set in flags,
-        /// pkt can be NULL in order to flush data buffered in the muxer.
-        /// When flushing, return 0 if there still is more data to flush,
-        /// or 1 if everything was flushed and there is no more buffered
-        /// data.
-        /// </summary>
-        [FieldOffset(52)]
-        public global::System.IntPtr write_packet;
-
-        [FieldOffset(56)]
-        public global::System.IntPtr write_trailer;
-
-        /// <summary>
-        /// Currently only used to set pixel format if not YUV420P.
-        /// </summary>
-        [FieldOffset(60)]
-        public global::System.IntPtr interleave_packet;
-
-        /// <summary>
-        /// Test if the given codec can be stored in this container.
-        /// 
-        /// @return 1 if the codec is supported, 0 if it is not.
-        /// A negative number if unknown.
-        /// MKTAG('A', 'P', 'I', 'C') if the codec is only supported as
-        /// AV_DISPOSITION_ATTACHED_PIC
-        /// </summary>
-        [FieldOffset(64)]
-        public global::System.IntPtr query_codec;
-
-        [FieldOffset(68)]
-        public global::System.IntPtr get_output_timestamp;
-    }
-
-    /// <summary>
-    /// @addtogroup lavf_decoding
-    /// @{
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVInputFormat
-    {
-        /// <summary>
-        /// A comma separated list of short names for the format. New names
-        /// may be appended with a minor bump.
-        /// </summary>
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
-
-        /// <summary>
-        /// Descriptive name for the format, meant to be more human-readable
-        /// than name. You should use the NULL_IF_CONFIG_SMALL() macro
-        /// to define it.
-        /// </summary>
-        [FieldOffset(4)]
-        public global::System.IntPtr long_name;
-
-        /// <summary>
-        /// Can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_SHOW_IDS,
-        /// AVFMT_GENERIC_INDEX, AVFMT_TS_DISCONT, AVFMT_NOBINSEARCH,
-        /// AVFMT_NOGENSEARCH, AVFMT_NO_BYTE_SEEK, AVFMT_SEEK_TO_PTS.
-        /// </summary>
-        [FieldOffset(8)]
-        public int flags;
-
-        /// <summary>
-        /// If extensions are defined, then no probe is done. You should
-        /// usually not use extension format guessing because it is not
-        /// reliable enough
-        /// </summary>
-        [FieldOffset(12)]
-        public global::System.IntPtr extensions;
-
-        [FieldOffset(16)]
-        public AVCodecTag* codec_tag;
-
-        /// <summary>
-        /// < AVClass for the private context
-        /// </summary>
-        [FieldOffset(20)]
-        public AVClass* priv_class;
-
-        /// <summary>
-        /// No fields below this line are part of the public API. They
-        /// may not be used outside of libavformat and can be changed and
-        /// removed at will.
-        /// New public fields should be added right above.
-        /// 
-        /// </summary>
-        [FieldOffset(24)]
-        public AVInputFormat* next;
-
-        /// <summary>
-        /// Raw demuxers store their codec ID here.
-        /// </summary>
-        [FieldOffset(28)]
-        public int raw_codec_id;
-
-        /// <summary>
-        /// Size of private data so that it can be allocated in the wrapper.
-        /// </summary>
-        [FieldOffset(32)]
-        public int priv_data_size;
-
-        /// <summary>
-        /// Tell if a given file has a chance of being parsed as this format.
-        /// The buffer provided is guaranteed to be AVPROBE_PADDING_SIZE bytes
-        /// big so you do not have to check for that unless you need more.
-        /// </summary>
-        [FieldOffset(36)]
-        public global::System.IntPtr read_probe;
-
-        /// <summary>
-        /// Read the format header and initialize the AVFormatContext
-        /// structure. Return 0 if OK. Only used in raw format right
-        /// now. 'avformat_new_stream' should be called to create new streams.
-        /// </summary>
-        [FieldOffset(40)]
-        public global::System.IntPtr read_header;
-
-        /// <summary>
-        /// Read one packet and put it in 'pkt'. pts and flags are also
-        /// set. 'avformat_new_stream' can be called only if the flag
-        /// AVFMTCTX_NOHEADER is used and only in the calling thread (not in a
-        /// background thread).
-        /// @return 0 on success, < 0 on error.
-        /// When returning an error, pkt must not have been allocated
-        /// or must be freed before returning
-        /// </summary>
-        [FieldOffset(44)]
-        public global::System.IntPtr read_packet;
-
-        /// <summary>
-        /// Close the stream. The AVFormatContext and AVStreams are not
-        /// freed by this function
-        /// </summary>
-        [FieldOffset(48)]
-        public global::System.IntPtr read_close;
-
-        /// <summary>
-        /// Seek to a given timestamp relative to the frames in
-        /// stream component stream_index.
-        /// @param stream_index Must not be -1.
-        /// @param flags Selects which direction should be preferred if no
-        /// exact
-        /// match is available.
-        /// @return >= 0 on success (but not necessarily the new offset)
-        /// </summary>
-        [FieldOffset(52)]
-        public global::System.IntPtr read_seek;
-
-        /// <summary>
-        /// Get the next timestamp in stream[stream_index].time_base units.
-        /// @return the timestamp or AV_NOPTS_VALUE if an error occurred
-        /// </summary>
-        [FieldOffset(56)]
-        public global::System.IntPtr read_timestamp;
-
-        /// <summary>
-        /// Start/resume playing - only meaningful if using a network-based
-        /// format
-        /// (RTSP).
-        /// </summary>
-        [FieldOffset(60)]
-        public global::System.IntPtr read_play;
-
-        /// <summary>
-        /// Pause playing - only meaningful if using a network-based format
-        /// (RTSP).
-        /// </summary>
-        [FieldOffset(64)]
-        public global::System.IntPtr read_pause;
-
-        /// <summary>
-        /// Seek to timestamp ts.
-        /// Seeking will be done so that the point from which all active
-        /// streams
-        /// can be presented successfully will be closest to ts and within
-        /// min/max_ts.
-        /// Active streams are all streams that have AVStream.discard <
-        /// AVDISCARD_ALL.
-        /// </summary>
-        [FieldOffset(68)]
-        public global::System.IntPtr read_seek2;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVIndexEntry
-    {
-        [FieldOffset(0)]
-        public long pos;
-
-        /// <summary>
-        /// Timestamp in AVStream.time_base units, preferably the time from
-        /// which on correctly decoded frames are available
-        /// when seeking to this entry. That means preferable PTS on keyframe
-        /// based formats.
-        /// But demuxers can choose to store a different timestamp, if it is
-        /// more convenient for the implementation or nothing better
-        /// is known
-        /// </summary>
-        [FieldOffset(8)]
-        public long timestamp;
-
-        [FieldOffset(16)]
-        public int flags;
-
-        [FieldOffset(16)]
-        public int size;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(20)]
-        public int min_distance;
-    }
-
-    /// <summary>
-    /// Stream structure.
-    /// New fields can be added to the end with minor version bumps.
-    /// Removal, reordering and changes to existing fields require a major
-    /// version bump.
-    /// sizeof(AVStream) must not be used outside libav*.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVStream
-    {
-        /// <summary>
-        /// </summary>
-        [FieldOffset(0)]
-        public int index;
-
-        /// <summary>
-        /// Format-specific stream ID.
-        /// decoding: set by libavformat
-        /// encoding: set by the user, replaced by libavformat if left unset
-        /// </summary>
-        [FieldOffset(4)]
-        public int id;
-
-        /// <summary>
-        /// Codec context associated with this stream. Allocated and freed by
-        /// libavformat.
-        /// 
-        /// - decoding: The demuxer exports codec information stored in the
-        /// headers
-        /// here.
-        /// - encoding: The user sets codec information, the muxer writes it to
-        /// the
-        /// output. Mandatory fields as specified in AVCodecContext
-        /// documentation must be set even if this AVCodecContext is
-        /// not actually used for encoding.
-        /// </summary>
-        [FieldOffset(8)]
-        public AVCodecContext* codec;
-
-        [FieldOffset(12)]
-        public global::System.IntPtr priv_data;
-
-        /// <summary>
-        /// encoding: pts generation when outputting stream
-        /// </summary>
-        [FieldOffset(16)]
-        public AVFrac* pts;
-
-        /// <summary>
-        /// This is the fundamental unit of time (in seconds) in terms
-        /// of which frame timestamps are represented.
-        /// 
-        /// decoding: set by libavformat
-        /// encoding: set by libavformat in avformat_write_header. The muxer
-        /// may use the
-        /// user-provided value of @ref AVCodecContext.time_base
-        /// "codec->time_base"
-        /// as a hint.
-        /// </summary>
-        [FieldOffset(40)]
-        public AVRational* time_base;
-
-        /// <summary>
-        /// Decoding: pts of the first frame of the stream in presentation
-        /// order, in stream time base.
-        /// Only set this if you are absolutely 100% sure that the value you
-        /// set
-        /// it to really is the pts of the first frame.
-        /// This may be undefined (AV_NOPTS_VALUE).
-        /// @note The ASF header does NOT contain a correct start_time the ASF
-        /// demuxer must NOT set this.
-        /// </summary>
-        [FieldOffset(48)]
-        public long start_time;
-
-        /// <summary>
-        /// Decoding: duration of the stream, in stream time base.
-        /// If a source file does not specify a duration, but does specify
-        /// a bitrate, this value will be estimated from bitrate and file size.
-        /// </summary>
-        [FieldOffset(56)]
-        public long duration;
-
-        /// <summary>
-        /// < number of frames in this stream if known or 0
-        /// </summary>
-        [FieldOffset(64)]
-        public long nb_frames;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(72)]
-        public int disposition;
-
-        /// <summary>
-        /// < Selects which packets can be discarded at will and do not need to
-        /// be demuxed.
-        /// </summary>
-        [FieldOffset(76)]
-        public AVDiscard discard;
-
-        /// <summary>
-        /// sample aspect ratio (0 if unknown)
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavformat.
-        /// </summary>
-        [FieldOffset(80)]
-        public AVRational* sample_aspect_ratio;
-
-        [FieldOffset(88)]
-        public AVDictionary* metadata;
-
-        /// <summary>
-        /// Average framerate
-        /// </summary>
-        [FieldOffset(92)]
-        public AVRational* avg_frame_rate;
-
-        /// <summary>
-        /// For streams with AV_DISPOSITION_ATTACHED_PIC disposition, this
-        /// packet
-        /// will contain the attached picture.
-        /// 
-        /// decoding: set by libavformat, must not be modified by the caller.
-        /// encoding: unused
-        /// </summary>
-        [FieldOffset(104)]
-        public AVPacket* attached_pic;
-
-        [FieldOffset(184)]
-        public AVStream.* info;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(188)]
-        public int pts_wrap_bits;
-
-        /// <summary>
-        /// Timestamp corresponding to the last dts sync point.
-        /// 
-        /// Initialized when AVCodecParserContext.dts_sync_point >= 0 and
-        /// a DTS is received from the underlying container. Otherwise set to
-        /// AV_NOPTS_VALUE by default.
-        /// </summary>
-        [FieldOffset(192)]
-        public long reference_dts;
-
-        [FieldOffset(200)]
-        public long first_dts;
-
-        [FieldOffset(208)]
-        public long cur_dts;
-
-        [FieldOffset(216)]
-        public long last_IP_pts;
-
-        [FieldOffset(224)]
-        public int last_IP_duration;
-
-        [FieldOffset(228)]
-        public int probe_packets;
-
-        /// <summary>
-        /// Number of frames that have been demuxed during
-        /// av_find_stream_info()
-        /// </summary>
-        [FieldOffset(232)]
-        public int codec_info_nb_frames;
-
-        [FieldOffset(236)]
-        public AVStreamParseType need_parsing;
-
-        [FieldOffset(240)]
-        public AVCodecParserContext* parser;
-
-        /// <summary>
-        /// last packet in packet_buffer for this stream when muxing.
-        /// </summary>
-        [FieldOffset(244)]
-        public AVPacketList* last_in_packet_buffer;
-
-        [FieldOffset(248)]
-        public AVProbeData* probe_data;
+        public const sbyte AVPROBE_SCORE_MAX = 100;
 
-        [FieldOffset(264)]
-        public fixed long pts_buffer[17];
+        public const sbyte AVPROBE_PADDING_SIZE = 32;
 
-        /// <summary>
-        /// support seeking natively. */
-        /// </summary>
-        [FieldOffset(400)]
-        public AVIndexEntry* index_entries;
-
-        [FieldOffset(404)]
-        public int nb_index_entries;
-
-        [FieldOffset(408)]
-        public uint index_entries_allocated_size;
-
-        /// <summary>
-        /// Real base framerate of the stream.
-        /// This is the lowest framerate with which all timestamps can be
-        /// represented accurately (it is the least common multiple of all
-        /// framerates in the stream). Note, this value is just a guess!
-        /// For example, if the time base is 1/90000 and all frames have either
-        /// approximately 3600 or 1800 timer ticks, then r_frame_rate will be
-        /// 50/1.
-        /// 
-        /// Code outside avformat should access this field using:
-        /// av_stream_get/set_r_frame_rate(stream)
-        /// </summary>
-        [FieldOffset(412)]
-        public AVRational* r_frame_rate;
-
-        /// <summary>
-        /// Stream Identifier
-        /// This is the MPEG-TS stream identifier +1
-        /// 0 means unknown
-        /// </summary>
-        [FieldOffset(420)]
-        public int stream_identifier;
-
-        [FieldOffset(424)]
-        public long interleaver_chunk_size;
-
-        [FieldOffset(432)]
-        public long interleaver_chunk_duration;
+        public const sbyte AVFMT_NOFILE = 1;
 
-        /// <summary>
-        /// stream probing state
-        /// -1   -> probing finished
-        /// 0   -> no probing requested
-        /// rest -> perform probing with request_probe being the minimum score
-        /// to accept.
-        /// NOT PART OF PUBLIC API
-        /// </summary>
-        [FieldOffset(440)]
-        public int request_probe;
-
-        /// <summary>
-        /// Indicates that everything up to the next keyframe
-        /// should be discarded.
-        /// </summary>
-        [FieldOffset(444)]
-        public int skip_to_keyframe;
+        public const sbyte AVFMT_NEEDNUMBER = 2;
 
-        /// <summary>
-        /// Number of samples to skip at the start of the frame decoded from
-        /// the next packet.
-        /// </summary>
-        [FieldOffset(448)]
-        public int skip_samples;
+        public const sbyte AVFMT_SHOW_IDS = 8;
 
-        /// <summary>
-        /// Number of internally decoded frames, used internally in
-        /// libavformat, do not access
-        /// its lifetime differs from info which is why it is not in that
-        /// structure.
-        /// </summary>
-        [FieldOffset(452)]
-        public int nb_decoded_frames;
+        public const sbyte AVFMT_RAWPICTURE = 20;
 
-        /// <summary>
-        /// Timestamp offset added to timestamps before muxing
-        /// NOT PART OF PUBLIC API
-        /// </summary>
-        [FieldOffset(456)]
-        public long mux_ts_offset;
+        public const sbyte AVFMT_GLOBALHEADER = 40;
 
-        /// <summary>
-        /// Internal data to check for wrapping of the time stamp
-        /// </summary>
-        [FieldOffset(464)]
-        public long pts_wrap_reference;
+        public const byte AVFMT_NOTIMESTAMPS = 80;
 
-        /// <summary>
-        /// Options for behavior, when a wrap is detected.
-        /// 
-        /// Defined by AV_PTS_WRAP_ values.
-        /// 
-        /// If correction is enabled, there are two possibilities:
-        /// If the first time stamp is near the wrap point, the wrap offset
-        /// will be subtracted, which will create negative time stamps.
-        /// Otherwise the offset will be added.
-        /// </summary>
-        [FieldOffset(472)]
-        public int pts_wrap_behavior;
-    }
-
-    /// <summary>
-    /// New fields can be added to the end with minor version bumps.
-    /// Removal, reordering and changes to existing fields require a major
-    /// version bump.
-    /// sizeof(AVProgram) must not be used outside libav*.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVProgram
-    {
-        [FieldOffset(0)]
-        public int id;
-
-        [FieldOffset(4)]
-        public int flags;
+        public const short AVFMT_GENERIC_INDEX = 100;
 
-        /// <summary>
-        /// < selects which program to discard and which to feed to the caller
-        /// </summary>
-        [FieldOffset(8)]
-        public AVDiscard discard;
+        public const short AVFMT_TS_DISCONT = 200;
 
-        [FieldOffset(12)]
-        public uint* stream_index;
+        public const short AVFMT_VARIABLE_FPS = 400;
 
-        [FieldOffset(16)]
-        public uint nb_stream_indexes;
+        public const short AVFMT_NODIMENSIONS = 800;
 
-        [FieldOffset(20)]
-        public AVDictionary* metadata;
+        public const short AVFMT_NOSTREAMS = 1000;
 
-        [FieldOffset(24)]
-        public int program_num;
+        public const short AVFMT_NOBINSEARCH = 2000;
 
-        [FieldOffset(28)]
-        public int pmt_pid;
+        public const short AVFMT_NOGENSEARCH = 4000;
 
-        [FieldOffset(32)]
-        public int pcr_pid;
+        public const ushort AVFMT_NO_BYTE_SEEK = 8000;
 
-        /// <summary>
-        /// All fields below this line are not part of the public API. They
-        /// may not be used outside of libavformat and can be changed and
-        /// removed at will.
-        /// New public fields should be added right above.
-        /// 
-        /// </summary>
-        [FieldOffset(40)]
-        public long start_time;
+        public const int AVFMT_ALLOW_FLUSH = 10000;
 
-        [FieldOffset(48)]
-        public long end_time;
+        public const int AVFMT_TS_NONSTRICT = 20000;
 
-        /// <summary>
-        /// < reference dts for wrap detection
-        /// </summary>
-        [FieldOffset(56)]
-        public long pts_wrap_reference;
+        public const int AVFMT_TS_NEGATIVE = 40000;
 
-        /// <summary>
-        /// < behavior on wrap detection
-        /// </summary>
-        [FieldOffset(64)]
-        public int pts_wrap_behavior;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVChapter
-    {
-        /// <summary>
-        /// < unique ID to identify the chapter
-        /// </summary>
-        [FieldOffset(0)]
-        public int id;
+        public const int AVFMT_SEEK_TO_PTS = 4000000;
 
-        /// <summary>
-        /// < time base in which the start/end timestamps are specified
-        /// </summary>
-        [FieldOffset(4)]
-        public AVRational* time_base;
+        public const sbyte AVINDEX_KEYFRAME = 1;
 
-        /// <summary>
-        /// < chapter start/end time in time_base units
-        /// </summary>
-        [FieldOffset(16)]
-        public long start;
+        public const sbyte AV_DISPOSITION_DEFAULT = 1;
 
-        /// <summary>
-        /// < chapter start/end time in time_base units
-        /// </summary>
-        [FieldOffset(24)]
-        public long end;
-
-        [FieldOffset(32)]
-        public AVDictionary* metadata;
-    }
-
-    /// <summary>
-    /// Format I/O context.
-    /// New fields can be added to the end with minor version bumps.
-    /// Removal, reordering and changes to existing fields require a major
-    /// version bump.
-    /// sizeof(AVFormatContext) must not be used outside libav*, use
-    /// avformat_alloc_context() to create an AVFormatContext.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFormatContext
-    {
-        /// <summary>
-        /// A class for logging and AVOptions. Set by avformat_alloc_context().
-        /// Exports (de)muxer private options if they exist.
-        /// </summary>
-        [FieldOffset(0)]
-        public AVClass* av_class;
+        public const sbyte AV_DISPOSITION_DUB = 2;
 
-        /// <summary>
-        /// Can only be iformat or oformat, not both at the same time.
-        /// 
-        /// decoding: set by avformat_open_input().
-        /// encoding: set by the user.
-        /// </summary>
-        [FieldOffset(4)]
-        public AVInputFormat* iformat;
+        public const sbyte AV_DISPOSITION_ORIGINAL = 4;
 
-        [FieldOffset(8)]
-        public AVOutputFormat* oformat;
+        public const sbyte AV_DISPOSITION_COMMENT = 8;
 
-        /// <summary>
-        /// Format private data. This is an AVOptions-enabled struct
-        /// if and only if iformat/oformat.priv_class is not NULL.
-        /// </summary>
-        [FieldOffset(12)]
-        public global::System.IntPtr priv_data;
+        public const sbyte AV_DISPOSITION_LYRICS = 10;
 
-        /// <summary>
-        /// I/O context.
-        /// 
-        /// decoding: either set by the user before avformat_open_input() (then
-        /// the user must close it manually) or set by avformat_open_input().
-        /// encoding: set by the user.
-        /// 
-        /// Do NOT set this field if AVFMT_NOFILE flag is set in
-        /// iformat/oformat.flags. In such a case, the (de)muxer will handle
-        /// I/O in some other way and this field will be NULL.
-        /// </summary>
-        [FieldOffset(16)]
-        public AVIOContext* pb;
+        public const sbyte AV_DISPOSITION_KARAOKE = 20;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(20)]
-        public int ctx_flags;
+        public const sbyte AV_DISPOSITION_FORCED = 40;
 
-        /// <summary>
-        /// A list of all streams in the file. New streams are created with
-        /// avformat_new_stream().
-        /// 
-        /// decoding: streams are created by libavformat in
-        /// avformat_open_input().
-        /// If AVFMTCTX_NOHEADER is set in ctx_flags, then new streams may also
-        /// appear in av_read_frame().
-        /// encoding: streams are created by the user before
-        /// avformat_write_header().
-        /// </summary>
-        [FieldOffset(24)]
-        public uint nb_streams;
+        public const byte AV_DISPOSITION_HEARING_IMPAIRED = 80;
 
-        [FieldOffset(28)]
-        public AVStream* streams;
+        public const short AV_DISPOSITION_VISUAL_IMPAIRED = 100;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(32)]
-        public fixed sbyte filename[1024];
+        public const short AV_DISPOSITION_CLEAN_EFFECTS = 200;
 
-        /// <summary>
-        /// Decoding: position of the first frame of the component, in
-        /// AV_TIME_BASE fractional seconds. NEVER set this value directly:
-        /// It is deduced from the AVStream values.
-        /// </summary>
-        [FieldOffset(1056)]
-        public long start_time;
+        public const short AV_DISPOSITION_ATTACHED_PIC = 400;
 
-        /// <summary>
-        /// Decoding: duration of the stream, in AV_TIME_BASE fractional
-        /// seconds. Only set this value if you know none of the individual
-        /// stream
-        /// durations and also do not set any of them. This is deduced from the
-        /// AVStream values if not set.
-        /// </summary>
-        [FieldOffset(1064)]
-        public long duration;
+        public const int AV_DISPOSITION_CAPTIONS = 10000;
 
-        /// <summary>
-        /// Decoding: total stream bitrate in bit/s, 0 if not
-        /// available. Never set it directly if the file_size and the
-        /// duration are known as FFmpeg can compute it automatically.
-        /// </summary>
-        [FieldOffset(1072)]
-        public int bit_rate;
+        public const int AV_DISPOSITION_DESCRIPTIONS = 20000;
 
-        [FieldOffset(1076)]
-        public uint packet_size;
+        public const int AV_DISPOSITION_METADATA = 40000;
 
-        [FieldOffset(1080)]
-        public int max_delay;
+        public const sbyte AV_PTS_WRAP_IGNORE = 0;
 
-        [FieldOffset(1084)]
-        public int flags;
+        public const sbyte AV_PTS_WRAP_ADD_OFFSET = 1;
 
-        /// <summary>
-        /// decoding: size of data to probe; encoding: unused.
-        /// </summary>
-        [FieldOffset(1088)]
-        public uint probesize;
+        public const sbyte AV_PTS_WRAP_SUB_OFFSET = -1;
 
-        /// <summary>
-        /// decoding: maximum time (in AV_TIME_BASE units) during which the
-        /// input should
-        /// be analyzed in avformat_find_stream_info().
-        /// </summary>
-        [FieldOffset(1092)]
-        public int max_analyze_duration;
+        public const short MAX_PROBE_PACKETS = 2500;
 
-        [FieldOffset(1096)]
-        public byte* key;
+        public const sbyte MAX_REORDER_DELAY = 16;
 
-        [FieldOffset(1100)]
-        public int keylen;
+        public const sbyte AV_PROGRAM_RUNNING = 1;
 
-        [FieldOffset(1104)]
-        public uint nb_programs;
+        public const sbyte AVFMTCTX_NOHEADER = 1;
 
-        [FieldOffset(1108)]
-        public AVProgram* programs;
+        public const sbyte AVFMT_FLAG_GENPTS = 1;
 
-        /// <summary>
-        /// Forced video codec_id.
-        /// Demuxing: Set by user.
-        /// </summary>
-        [FieldOffset(1112)]
-        public AVCodecID video_codec_id;
+        public const sbyte AVFMT_FLAG_IGNIDX = 2;
 
-        /// <summary>
-        /// Forced audio codec_id.
-        /// Demuxing: Set by user.
-        /// </summary>
-        [FieldOffset(1116)]
-        public AVCodecID audio_codec_id;
+        public const sbyte AVFMT_FLAG_NONBLOCK = 4;
 
-        /// <summary>
-        /// Forced subtitle codec_id.
-        /// Demuxing: Set by user.
-        /// </summary>
-        [FieldOffset(1120)]
-        public AVCodecID subtitle_codec_id;
+        public const sbyte AVFMT_FLAG_IGNDTS = 8;
 
-        /// <summary>
-        /// Maximum amount of memory in bytes to use for the index of each
-        /// stream.
-        /// If the index exceeds this size, entries will be discarded as
-        /// needed to maintain a smaller size. This can lead to slower or less
-        /// accurate seeking (depends on demuxer).
-        /// Demuxers for which a full in-memory index is mandatory will ignore
-        /// this.
-        /// muxing  : unused
-        /// demuxing: set by user
-        /// </summary>
-        [FieldOffset(1124)]
-        public uint max_index_size;
+        public const sbyte AVFMT_FLAG_NOFILLIN = 10;
 
-        /// <summary>
-        /// Maximum amount of memory in bytes to use for buffering frames
-        /// obtained from realtime capture devices.
-        /// </summary>
-        [FieldOffset(1128)]
-        public uint max_picture_buffer;
+        public const sbyte AVFMT_FLAG_NOPARSE = 20;
 
-        /// <summary>
-        /// Number of chapters in AVChapter array.
-        /// When muxing, chapters are normally written in the file header,
-        /// so nb_chapters should normally be initialized before write_header
-        /// is called. Some muxers (e.g. mov and mkv) can also write chapters
-        /// in the trailer.  To write chapters in the trailer, nb_chapters
-        /// must be zero when write_header is called and non-zero when
-        /// write_trailer is called.
-        /// muxing  : set by user
-        /// demuxing: set by libavformat
-        /// </summary>
-        [FieldOffset(1132)]
-        public uint nb_chapters;
+        public const sbyte AVFMT_FLAG_NOBUFFER = 40;
 
-        [FieldOffset(1136)]
-        public AVChapter* chapters;
+        public const byte AVFMT_FLAG_CUSTOM_IO = 80;
 
-        [FieldOffset(1140)]
-        public AVDictionary* metadata;
+        public const short AVFMT_FLAG_DISCARD_CORRUPT = 100;
 
-        /// <summary>
-        /// Start time of the stream in real world time, in microseconds
-        /// since the unix epoch (00:00 1st January 1970). That is, pts=0
-        /// in the stream was captured at this real world time.
-        /// - encoding: Set by user.
-        /// - decoding: Unused.
-        /// </summary>
-        [FieldOffset(1144)]
-        public long start_time_realtime;
+        public const short AVFMT_FLAG_FLUSH_PACKETS = 200;
 
-        /// <summary>
-        /// decoding: number of frames used to probe fps
-        /// </summary>
-        [FieldOffset(1152)]
-        public int fps_probe_size;
+        public const ushort AVFMT_FLAG_MP4A_LATM = 8000;
 
-        /// <summary>
-        /// Error recognition; higher values will detect more errors but may
-        /// misdetect some more or less valid parts as errors.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(1156)]
-        public int error_recognition;
+        public const int AVFMT_FLAG_SORT_DTS = 10000;
 
-        /// <summary>
-        /// Custom interrupt callbacks for the I/O layer.
-        /// 
-        /// decoding: set by the user before avformat_open_input().
-        /// encoding: set by the user before avformat_write_header()
-        /// (mainly useful for AVFMT_NOFILE formats). The callback
-        /// should also be passed to avio_open2() if it's used to
-        /// open the file.
-        /// </summary>
-        [FieldOffset(1160)]
-        public AVIOInterruptCB* interrupt_callback;
+        public const int AVFMT_FLAG_PRIV_OPT = 20000;
 
-        /// <summary>
-        /// Flags to enable debugging.
-        /// </summary>
-        [FieldOffset(1168)]
-        public int debug;
+        public const int AVFMT_FLAG_KEEP_SIDE_DATA = 40000;
 
-        /// <summary>
-        /// Transport stream id.
-        /// This will be moved into demuxer private options. Thus no API/ABI
-        /// compatibility
-        /// </summary>
-        [FieldOffset(1172)]
-        public int ts_id;
+        public const sbyte FF_FDEBUG_TS = 1;
 
-        /// <summary>
-        /// Audio preload in microseconds.
-        /// Note, not all formats support this and unpredictable things may
-        /// happen if it is used when not supported.
-        /// - encoding: Set by user via AVOptions (NO direct access)
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(1176)]
-        public int audio_preload;
+        public const int RAW_PACKET_BUFFER_SIZE = 2500000;
 
-        /// <summary>
-        /// Max chunk time in microseconds.
-        /// Note, not all formats support this and unpredictable things may
-        /// happen if it is used when not supported.
-        /// - encoding: Set by user via AVOptions (NO direct access)
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(1180)]
-        public int max_chunk_duration;
+        public const sbyte AVSEEK_FLAG_BACKWARD = 1;
 
-        /// <summary>
-        /// Max chunk size in bytes
-        /// Note, not all formats support this and unpredictable things may
-        /// happen if it is used when not supported.
-        /// - encoding: Set by user via AVOptions (NO direct access)
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(1184)]
-        public int max_chunk_size;
+        public const sbyte AVSEEK_FLAG_BYTE = 2;
 
-        /// <summary>
-        /// forces the use of wallclock timestamps as pts/dts of packets
-        /// This has undefined results in the presence of B frames.
-        /// - encoding: unused
-        /// - decoding: Set by user via AVOptions (NO direct access)
-        /// </summary>
-        [FieldOffset(1188)]
-        public int use_wallclock_as_timestamps;
+        public const sbyte AVSEEK_FLAG_ANY = 4;
 
-        /// <summary>
-        /// Avoid negative timestamps during muxing.
-        /// 0 -> allow negative timestamps
-        /// 1 -> avoid negative timestamps
-        /// -1 -> choose automatically (default)
-        /// Note, this only works when interleave_packet_per_dts is in use.
-        /// - encoding: Set by user via AVOptions (NO direct access)
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(1192)]
-        public int avoid_negative_ts;
+        public const sbyte AVSEEK_FLAG_FRAME = 8;
 
         /// <summary>
-        /// avio flags, used to force AVIO_FLAG_DIRECT.
-        /// - encoding: unused
-        /// - decoding: Set by user via AVOptions (NO direct access)
+        /// @}
         /// </summary>
-        [FieldOffset(1196)]
-        public int avio_flags;
+        public enum AVStreamParseType
+        {
+            AVSTREAM_PARSE_NONE = 0,
+            /// <summary>full parsing and repack</summary>
+            AVSTREAM_PARSE_FULL = 1,
+            /// <summary>Only parse headers, do not repack.</summary>
+            AVSTREAM_PARSE_HEADERS = 2,
+            /// <summary>full parsing and interpolation of timestamps for frames not starting on a packet boundary</summary>
+            AVSTREAM_PARSE_TIMESTAMPS = 3,
+            /// <summary>full parsing and repack of the first frame only, only implemented for H.264 currently</summary>
+            AVSTREAM_PARSE_FULL_ONCE = 4,
+            /// <summary>full parsing and repack with timestamp and position generation by parser for raw this assumes that each packet in the file contains no demuxer level headers and just codec level data, otherwise position generation would fail</summary>
+            AVSTREAM_PARSE_FULL_RAW = 1463898624
+        }
 
         /// <summary>
-        /// The duration field can be estimated through various ways, and this
-        /// field can be used
+        /// The duration of a video can be estimated through various ways, and this
+        /// enum can be used
         /// to know how the duration was estimated.
-        /// - encoding: unused
-        /// - decoding: Read by user via AVOptions (NO direct access)
         /// </summary>
-        [FieldOffset(1200)]
-        public AVDurationEstimationMethod duration_estimation_method;
+        public enum AVDurationEstimationMethod
+        {
+            /// <summary>Duration accurately estimated from PTSes</summary>
+            AVFMT_DURATION_FROM_PTS = 0,
+            /// <summary>Duration estimated from a stream with a known duration</summary>
+            AVFMT_DURATION_FROM_STREAM = 1,
+            /// <summary>Duration estimated from bitrate (less accurate)</summary>
+            AVFMT_DURATION_FROM_BITRATE = 2
+        }
 
         /// <summary>
-        /// Skip initial bytes when opening stream
-        /// - encoding: unused
-        /// - decoding: Set by user via AVOptions (NO direct access)
+        /// The exact value of the fractional number is: 'val + num / den'.
+        /// num is assumed to be 0 <= num < den.
         /// </summary>
-        [FieldOffset(1204)]
-        public uint skip_initial_bytes;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFrac
+        {
+            public long val;
+
+            public long num;
+
+            public long den;
+        }
 
         /// <summary>
-        /// Correct single timestamp overflows
-        /// - encoding: unused
-        /// - decoding: Set by user via AVOPtions (NO direct access)
+        /// 
         /// </summary>
-        [FieldOffset(1208)]
-        public uint correct_ts_overflow;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodecTag
+        {
+        }
 
         /// <summary>
-        /// Force seeking to any (also non key) frames.
-        /// - encoding: unused
-        /// - decoding: Set by user via AVOPtions (NO direct access)
+        /// This structure contains the data a format has to probe a file.
         /// </summary>
-        [FieldOffset(1212)]
-        public int seek2any;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVProbeData
+        {
+            public sbyte* filename;
+
+            /// <summary>
+            /// Buffer must have AVPROBE_PADDING_SIZE of extra allocated bytes filled
+            /// with zero.
+            /// </summary>
+            public byte* buf;
+
+            /// <summary>
+            /// Size of buf except extra allocated bytes
+            /// </summary>
+            public int buf_size;
+        }
 
         /// <summary>
-        /// Flush the I/O context after each packet.
-        /// - encoding: Set by user via AVOptions (NO direct access)
-        /// - decoding: unused
+        /// @addtogroup lavf_encoding
+        /// @{
         /// </summary>
-        [FieldOffset(1216)]
-        public int flush_packets;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVOutputFormat
+        {
+            public sbyte* name;
+
+            /// <summary>
+            /// Descriptive name for the format, meant to be more human-readable
+            /// than name. You should use the NULL_IF_CONFIG_SMALL() macro
+            /// to define it.
+            /// </summary>
+            public sbyte* long_name;
+
+            public sbyte* mime_type;
+
+            /// <summary>
+            /// comma-separated filename extensions
+            /// </summary>
+            public sbyte* extensions;
+
+            /// <summary>
+            /// default audio codec
+            /// </summary>
+            public libavcodec.AVCodecID audio_codec;
+
+            /// <summary>
+            /// default video codec
+            /// </summary>
+            public libavcodec.AVCodecID video_codec;
+
+            /// <summary>
+            /// default subtitle codec
+            /// </summary>
+            public libavcodec.AVCodecID subtitle_codec;
+
+            /// <summary>
+            /// can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_RAWPICTURE,
+            /// AVFMT_GLOBALHEADER, AVFMT_NOTIMESTAMPS, AVFMT_VARIABLE_FPS,
+            /// AVFMT_NODIMENSIONS, AVFMT_NOSTREAMS, AVFMT_ALLOW_FLUSH,
+            /// AVFMT_TS_NONSTRICT
+            /// </summary>
+            public int flags;
+
+            /// <summary>
+            /// List of supported codec_id-codec_tag pairs, ordered by "better
+            /// choice first". The arrays are all terminated by AV_CODEC_ID_NONE.
+            /// </summary>
+            public libavformat.AVCodecTag** codec_tag;
+
+            /// <summary>
+            /// AVClass for the private context
+            /// </summary>
+            public libavutil.AVClass* priv_class;
+
+            /// <summary>
+            /// 
+            /// No fields below this line are part of the public API. They
+            /// may not be used outside of libavformat and can be changed and
+            /// removed at will.
+            /// New public fields should be added right above.
+            /// 
+            /// </summary>
+            public libavformat.AVOutputFormat* next;
+
+            /// <summary>
+            /// size of private data so that it can be allocated in the wrapper
+            /// </summary>
+            public int priv_data_size;
+
+            public global::System.IntPtr write_header;
+
+            /// <summary>
+            /// Write a packet. If AVFMT_ALLOW_FLUSH is set in flags,
+            /// pkt can be NULL in order to flush data buffered in the muxer.
+            /// When flushing, return 0 if there still is more data to flush,
+            /// or 1 if everything was flushed and there is no more buffered
+            /// data.
+            /// </summary>
+            public global::System.IntPtr write_packet;
+
+            public global::System.IntPtr write_trailer;
+
+            /// <summary>
+            /// Currently only used to set pixel format if not YUV420P.
+            /// </summary>
+            public global::System.IntPtr interleave_packet;
+
+            /// <summary>
+            /// Test if the given codec can be stored in this container.
+            /// 
+            /// @return 1 if the codec is supported, 0 if it is not.
+            /// A negative number if unknown.
+            /// MKTAG('A', 'P', 'I', 'C') if the codec is only supported as
+            /// AV_DISPOSITION_ATTACHED_PIC
+            /// </summary>
+            public global::System.IntPtr query_codec;
+
+            public global::System.IntPtr get_output_timestamp;
+        }
 
         /// <summary>
-        /// format probing score.
-        /// The maximal score is AVPROBE_SCORE_MAX, its set when the demuxer
-        /// probes
-        /// the format.
-        /// - encoding: unused
-        /// - decoding: set by avformat, read by user via
-        /// av_format_get_probe_score() (NO direct access)
+        /// @addtogroup lavf_decoding
+        /// @{
         /// </summary>
-        [FieldOffset(1220)]
-        public int probe_score;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVInputFormat
+        {
+            /// <summary>
+            /// A comma separated list of short names for the format. New names
+            /// may be appended with a minor bump.
+            /// </summary>
+            public sbyte* name;
+
+            /// <summary>
+            /// Descriptive name for the format, meant to be more human-readable
+            /// than name. You should use the NULL_IF_CONFIG_SMALL() macro
+            /// to define it.
+            /// </summary>
+            public sbyte* long_name;
+
+            /// <summary>
+            /// Can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_SHOW_IDS,
+            /// AVFMT_GENERIC_INDEX, AVFMT_TS_DISCONT, AVFMT_NOBINSEARCH,
+            /// AVFMT_NOGENSEARCH, AVFMT_NO_BYTE_SEEK, AVFMT_SEEK_TO_PTS.
+            /// </summary>
+            public int flags;
+
+            /// <summary>
+            /// If extensions are defined, then no probe is done. You should
+            /// usually not use extension format guessing because it is not
+            /// reliable enough
+            /// </summary>
+            public sbyte* extensions;
+
+            public libavformat.AVCodecTag** codec_tag;
+
+            /// <summary>
+            /// AVClass for the private context
+            /// </summary>
+            public libavutil.AVClass* priv_class;
+
+            /// <summary>
+            /// 
+            /// No fields below this line are part of the public API. They
+            /// may not be used outside of libavformat and can be changed and
+            /// removed at will.
+            /// New public fields should be added right above.
+            /// 
+            /// </summary>
+            public libavformat.AVInputFormat* next;
+
+            /// <summary>
+            /// Raw demuxers store their codec ID here.
+            /// </summary>
+            public int raw_codec_id;
+
+            /// <summary>
+            /// Size of private data so that it can be allocated in the wrapper.
+            /// </summary>
+            public int priv_data_size;
+
+            /// <summary>
+            /// Tell if a given file has a chance of being parsed as this format.
+            /// The buffer provided is guaranteed to be AVPROBE_PADDING_SIZE bytes
+            /// big so you do not have to check for that unless you need more.
+            /// </summary>
+            public global::System.IntPtr read_probe;
+
+            /// <summary>
+            /// Read the format header and initialize the AVFormatContext
+            /// structure. Return 0 if OK. Only used in raw format right
+            /// now. 'avformat_new_stream' should be called to create new streams.
+            /// </summary>
+            public global::System.IntPtr read_header;
+
+            /// <summary>
+            /// Read one packet and put it in 'pkt'. pts and flags are also
+            /// set. 'avformat_new_stream' can be called only if the flag
+            /// AVFMTCTX_NOHEADER is used and only in the calling thread (not in a
+            /// background thread).
+            /// @return 0 on success, < 0 on error.
+            /// When returning an error, pkt must not have been allocated
+            /// or must be freed before returning
+            /// </summary>
+            public global::System.IntPtr read_packet;
+
+            /// <summary>
+            /// Close the stream. The AVFormatContext and AVStreams are not
+            /// freed by this function
+            /// </summary>
+            public global::System.IntPtr read_close;
+
+            /// <summary>
+            /// Seek to a given timestamp relative to the frames in
+            /// stream component stream_index.
+            /// @param stream_index Must not be -1.
+            /// @param flags Selects which direction should be preferred if no exact
+            /// match is available.
+            /// @return >= 0 on success (but not necessarily the new offset)
+            /// </summary>
+            public global::System.IntPtr read_seek;
+
+            /// <summary>
+            /// Get the next timestamp in stream[stream_index].time_base units.
+            /// @return the timestamp or AV_NOPTS_VALUE if an error occurred
+            /// </summary>
+            public global::System.IntPtr read_timestamp;
+
+            /// <summary>
+            /// Start/resume playing - only meaningful if using a network-based format
+            /// (RTSP).
+            /// </summary>
+            public global::System.IntPtr read_play;
+
+            /// <summary>
+            /// Pause playing - only meaningful if using a network-based format
+            /// (RTSP).
+            /// </summary>
+            public global::System.IntPtr read_pause;
+
+            /// <summary>
+            /// Seek to timestamp ts.
+            /// Seeking will be done so that the point from which all active streams
+            /// can be presented successfully will be closest to ts and within
+            /// min/max_ts.
+            /// Active streams are all streams that have AVStream.discard <
+            /// AVDISCARD_ALL.
+            /// </summary>
+            public global::System.IntPtr read_seek2;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVIndexEntry
+        {
+            public long pos;
+
+            /// <summary>
+            /// 
+            /// Timestamp in AVStream.time_base units, preferably the time from which
+            /// on correctly decoded frames are available
+            /// when seeking to this entry. That means preferable PTS on keyframe based
+            /// formats.
+            /// But demuxers can choose to store a different timestamp, if it is more
+            /// convenient for the implementation or nothing better
+            /// is known
+            /// </summary>
+            public long timestamp;
+
+            public int flags;
+
+            public int size;
+
+            /// <summary>
+            /// Minimum distance between this and the previous keyframe, used to avoid
+            /// unneeded searching.
+            /// </summary>
+            public int min_distance;
+        }
 
         /// <summary>
-        /// This buffer is only needed when packets were already buffered but
-        /// not decoded, for example to get the codec parameters in MPEG
-        /// streams.
+        /// Stream structure.
+        /// New fields can be added to the end with minor version bumps.
+        /// Removal, reordering and changes to existing fields require a major
+        /// version bump.
+        /// sizeof(AVStream) must not be used outside libav*.
         /// </summary>
-        [FieldOffset(1224)]
-        public AVPacketList* packet_buffer;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVStream
+        {
+            /// <summary>
+            /// stream index in AVFormatContext
+            /// </summary>
+            public int index;
 
-        [FieldOffset(1228)]
-        public AVPacketList* packet_buffer_end;
+            /// <summary>
+            /// Format-specific stream ID.
+            /// decoding: set by libavformat
+            /// encoding: set by the user, replaced by libavformat if left unset
+            /// </summary>
+            public int id;
+
+            /// <summary>
+            /// Codec context associated with this stream. Allocated and freed by
+            /// libavformat.
+            /// 
+            /// - decoding: The demuxer exports codec information stored in the headers
+            /// here.
+            /// - encoding: The user sets codec information, the muxer writes it to the
+            /// output. Mandatory fields as specified in AVCodecContext
+            /// documentation must be set even if this AVCodecContext is
+            /// not actually used for encoding.
+            /// </summary>
+            public libavcodec.AVCodecContext* codec;
+
+            public void* priv_data;
+
+            /// <summary>
+            /// encoding: pts generation when outputting stream
+            /// </summary>
+            public libavformat.AVFrac pts;
+
+            /// <summary>
+            /// This is the fundamental unit of time (in seconds) in terms
+            /// of which frame timestamps are represented.
+            /// 
+            /// decoding: set by libavformat
+            /// encoding: set by libavformat in avformat_write_header. The muxer may
+            /// use the
+            /// user-provided value of @ref AVCodecContext.time_base "codec->time_base"
+            /// as a hint.
+            /// </summary>
+            public libavutil.AVRational time_base;
+
+            /// <summary>
+            /// Decoding: pts of the first frame of the stream in presentation order,
+            /// in stream time base.
+            /// Only set this if you are absolutely 100% sure that the value you set
+            /// it to really is the pts of the first frame.
+            /// This may be undefined (AV_NOPTS_VALUE).
+            /// @note The ASF header does NOT contain a correct start_time the ASF
+            /// demuxer must NOT set this.
+            /// </summary>
+            public long start_time;
+
+            /// <summary>
+            /// Decoding: duration of the stream, in stream time base.
+            /// If a source file does not specify a duration, but does specify
+            /// a bitrate, this value will be estimated from bitrate and file size.
+            /// </summary>
+            public long duration;
+
+            /// <summary>
+            /// number of frames in this stream if known or 0
+            /// </summary>
+            public long nb_frames;
+
+            /// <summary>
+            /// AV_DISPOSITION_* bit field
+            /// </summary>
+            public int disposition;
+
+            /// <summary>
+            /// Selects which packets can be discarded at will and do not need to be
+            /// demuxed.
+            /// </summary>
+            public libavcodec.AVDiscard discard;
+
+            /// <summary>
+            /// sample aspect ratio (0 if unknown)
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavformat.
+            /// </summary>
+            public libavutil.AVRational sample_aspect_ratio;
+
+            public libavutil.AVDictionary* metadata;
+
+            /// <summary>
+            /// Average framerate
+            /// </summary>
+            public libavutil.AVRational avg_frame_rate;
+
+            /// <summary>
+            /// For streams with AV_DISPOSITION_ATTACHED_PIC disposition, this packet
+            /// will contain the attached picture.
+            /// 
+            /// decoding: set by libavformat, must not be modified by the caller.
+            /// encoding: unused
+            /// </summary>
+            public libavcodec.AVPacket attached_pic;
+
+            public libavformat.AVStream.AVStream_anon* info;
+
+            /// <summary>
+            /// number of bits in pts (used for wrapping control)
+            /// </summary>
+            public int pts_wrap_bits;
+
+            /// <summary>
+            /// Timestamp corresponding to the last dts sync point.
+            /// 
+            /// Initialized when AVCodecParserContext.dts_sync_point >= 0 and
+            /// a DTS is received from the underlying container. Otherwise set to
+            /// AV_NOPTS_VALUE by default.
+            /// </summary>
+            public long reference_dts;
+
+            public long first_dts;
+
+            public long cur_dts;
+
+            public long last_IP_pts;
+
+            public int last_IP_duration;
+
+            public int probe_packets;
+
+            /// <summary>
+            /// Number of frames that have been demuxed during av_find_stream_info()
+            /// </summary>
+            public int codec_info_nb_frames;
+
+            public libavformat.AVStreamParseType need_parsing;
+
+            public libavcodec.AVCodecParserContext* parser;
+
+            /// <summary>
+            /// last packet in packet_buffer for this stream when muxing.
+            /// </summary>
+            public libavformat.AVPacketList* last_in_packet_buffer;
+
+            public libavformat.AVProbeData probe_data;
+
+            public fixed long pts_buffer[17];
+
+            /// <summary>
+            /// Only used if the format does not
+            /// support seeking natively.
+            /// </summary>
+            public libavformat.AVIndexEntry* index_entries;
+
+            public int nb_index_entries;
+
+            public uint index_entries_allocated_size;
+
+            /// <summary>
+            /// Real base framerate of the stream.
+            /// This is the lowest framerate with which all timestamps can be
+            /// represented accurately (it is the least common multiple of all
+            /// framerates in the stream). Note, this value is just a guess!
+            /// For example, if the time base is 1/90000 and all frames have either
+            /// approximately 3600 or 1800 timer ticks, then r_frame_rate will be 50/1.
+            /// 
+            /// Code outside avformat should access this field using:
+            /// av_stream_get/set_r_frame_rate(stream)
+            /// </summary>
+            public libavutil.AVRational r_frame_rate;
+
+            /// <summary>
+            /// Stream Identifier
+            /// This is the MPEG-TS stream identifier +1
+            /// 0 means unknown
+            /// </summary>
+            public int stream_identifier;
+
+            public long interleaver_chunk_size;
+
+            public long interleaver_chunk_duration;
+
+            /// <summary>
+            /// stream probing state
+            /// -1   -> probing finished
+            /// 0   -> no probing requested
+            /// rest -> perform probing with request_probe being the minimum score to
+            /// accept.
+            /// NOT PART OF PUBLIC API
+            /// </summary>
+            public int request_probe;
+
+            /// <summary>
+            /// Indicates that everything up to the next keyframe
+            /// should be discarded.
+            /// </summary>
+            public int skip_to_keyframe;
+
+            /// <summary>
+            /// Number of samples to skip at the start of the frame decoded from the
+            /// next packet.
+            /// </summary>
+            public int skip_samples;
+
+            /// <summary>
+            /// Number of internally decoded frames, used internally in libavformat, do
+            /// not access
+            /// its lifetime differs from info which is why it is not in that
+            /// structure.
+            /// </summary>
+            public int nb_decoded_frames;
+
+            /// <summary>
+            /// Timestamp offset added to timestamps before muxing
+            /// NOT PART OF PUBLIC API
+            /// </summary>
+            public long mux_ts_offset;
+
+            /// <summary>
+            /// Internal data to check for wrapping of the time stamp
+            /// </summary>
+            public long pts_wrap_reference;
+
+            /// <summary>
+            /// Options for behavior, when a wrap is detected.
+            /// 
+            /// Defined by AV_PTS_WRAP_ values.
+            /// 
+            /// If correction is enabled, there are two possibilities:
+            /// If the first time stamp is near the wrap point, the wrap offset
+            /// will be subtracted, which will create negative time stamps.
+            /// Otherwise the offset will be added.
+            /// </summary>
+            public int pts_wrap_behavior;
+
+            [StructLayout(LayoutKind.Sequential)]
+            public unsafe partial struct AVStream_anon
+            {
+                public long last_dts;
+
+                public long duration_gcd;
+
+                public int duration_count;
+
+                public fixed fixed double duration_error[1452];
+
+                public long codec_info_duration;
+
+                public long codec_info_duration_fields;
+
+                public int found_decoder;
+
+                public long last_duration;
+
+                /// <summary>
+                /// Those are used for average framerate estimation.
+                /// </summary>
+                public long fps_first_dts;
+
+                public int fps_first_dts_idx;
+
+                public long fps_last_dts;
+
+                public int fps_last_dts_idx;
+            }
+        }
 
         /// <summary>
+        /// New fields can be added to the end with minor version bumps.
+        /// Removal, reordering and changes to existing fields require a major
+        /// version bump.
+        /// sizeof(AVProgram) must not be used outside libav*.
         /// </summary>
-        [FieldOffset(1232)]
-        public long data_offset;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVProgram
+        {
+            public int id;
+
+            public int flags;
+
+            /// <summary>
+            /// selects which program to discard and which to feed to the caller
+            /// </summary>
+            public libavcodec.AVDiscard discard;
+
+            public uint* stream_index;
+
+            public uint nb_stream_indexes;
+
+            public libavutil.AVDictionary* metadata;
+
+            public int program_num;
+
+            public int pmt_pid;
+
+            public int pcr_pid;
+
+            /// <summary>
+            /// 
+            /// All fields below this line are not part of the public API. They
+            /// may not be used outside of libavformat and can be changed and
+            /// removed at will.
+            /// New public fields should be added right above.
+            /// 
+            /// </summary>
+            public long start_time;
+
+            public long end_time;
+
+            /// <summary>
+            /// reference dts for wrap detection
+            /// </summary>
+            public long pts_wrap_reference;
+
+            /// <summary>
+            /// behavior on wrap detection
+            /// </summary>
+            public int pts_wrap_behavior;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVChapter
+        {
+            /// <summary>
+            /// unique ID to identify the chapter
+            /// </summary>
+            public int id;
+
+            /// <summary>
+            /// time base in which the start/end timestamps are specified
+            /// </summary>
+            public libavutil.AVRational time_base;
+
+            /// <summary>
+            /// chapter start/end time in time_base units
+            /// </summary>
+            public long start;
+
+            /// <summary>
+            /// chapter start/end time in time_base units
+            /// </summary>
+            public long end;
+
+            public libavutil.AVDictionary* metadata;
+        }
 
         /// <summary>
-        /// Raw packets from the demuxer, prior to parsing and decoding.
-        /// This buffer is used for buffering packets until the codec can
-        /// be identified, as parsing cannot be done without knowing the
-        /// codec.
+        /// Format I/O context.
+        /// New fields can be added to the end with minor version bumps.
+        /// Removal, reordering and changes to existing fields require a major
+        /// version bump.
+        /// sizeof(AVFormatContext) must not be used outside libav*, use
+        /// avformat_alloc_context() to create an AVFormatContext.
         /// </summary>
-        [FieldOffset(1240)]
-        public AVPacketList* raw_packet_buffer;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFormatContext
+        {
+            /// <summary>
+            /// A class for logging and AVOptions. Set by avformat_alloc_context().
+            /// Exports (de)muxer private options if they exist.
+            /// </summary>
+            public libavutil.AVClass* av_class;
 
-        [FieldOffset(1244)]
-        public AVPacketList* raw_packet_buffer_end;
+            /// <summary>
+            /// Can only be iformat or oformat, not both at the same time.
+            /// 
+            /// decoding: set by avformat_open_input().
+            /// encoding: set by the user.
+            /// </summary>
+            public libavformat.AVInputFormat* iformat;
 
-        /// <summary>
-        /// Packets split by the parser get queued here.
-        /// </summary>
-        [FieldOffset(1248)]
-        public AVPacketList* parse_queue;
+            public libavformat.AVOutputFormat* oformat;
 
-        [FieldOffset(1252)]
-        public AVPacketList* parse_queue_end;
+            /// <summary>
+            /// Format private data. This is an AVOptions-enabled struct
+            /// if and only if iformat/oformat.priv_class is not NULL.
+            /// </summary>
+            public void* priv_data;
 
-        [FieldOffset(1256)]
-        public int raw_packet_buffer_remaining_size;
+            /// <summary>
+            /// I/O context.
+            /// 
+            /// decoding: either set by the user before avformat_open_input() (then
+            /// the user must close it manually) or set by avformat_open_input().
+            /// encoding: set by the user.
+            /// 
+            /// Do NOT set this field if AVFMT_NOFILE flag is set in
+            /// iformat/oformat.flags. In such a case, the (de)muxer will handle
+            /// I/O in some other way and this field will be NULL.
+            /// </summary>
+            public libavformat.AVIOContext* pb;
 
-        /// <summary>
-        /// Offset to remap timestamps to be non-negative.
-        /// Expressed in timebase units.
-        /// @see AVStream.mux_ts_offset
-        /// </summary>
-        [FieldOffset(1264)]
-        public long offset;
+            /// <summary>
+            /// Format-specific flags, see AVFMTCTX_xx
+            /// </summary>
+            public int ctx_flags;
 
-        /// <summary>
-        /// Timebase for the timestamp offset.
-        /// </summary>
-        [FieldOffset(1272)]
-        public AVRational* offset_timebase;
+            /// <summary>
+            /// A list of all streams in the file. New streams are created with
+            /// avformat_new_stream().
+            /// 
+            /// decoding: streams are created by libavformat in avformat_open_input().
+            /// If AVFMTCTX_NOHEADER is set in ctx_flags, then new streams may also
+            /// appear in av_read_frame().
+            /// encoding: streams are created by the user before
+            /// avformat_write_header().
+            /// </summary>
+            public uint nb_streams;
 
-        /// <summary>
-        /// IO repositioned flag.
-        /// This is set by avformat when the underlaying IO context read
-        /// pointer
-        /// is repositioned, for example when doing byte based seeking.
-        /// Demuxers can use the flag to detect such changes.
-        /// </summary>
-        [FieldOffset(1280)]
-        public int io_repositioned;
+            public libavformat.AVStream** streams;
 
-        /// <summary>
-        /// Forced video codec.
-        /// This allows forcing a specific decoder, even when there are
-        /// multiple with
-        /// the same codec_id.
-        /// Demuxing: Set by user via av_format_set_video_codec (NO direct
-        /// access).
-        /// </summary>
-        [FieldOffset(1284)]
-        public AVCodec* video_codec;
+            /// <summary>
+            /// input or output filename
+            /// </summary>
+            public fixed sbyte filename[1024];
 
-        /// <summary>
-        /// Forced audio codec.
-        /// This allows forcing a specific decoder, even when there are
-        /// multiple with
-        /// the same codec_id.
-        /// Demuxing: Set by user via av_format_set_audio_codec (NO direct
-        /// access).
-        /// </summary>
-        [FieldOffset(1288)]
-        public AVCodec* audio_codec;
+            /// <summary>
+            /// Decoding: position of the first frame of the component, in
+            /// AV_TIME_BASE fractional seconds. NEVER set this value directly:
+            /// It is deduced from the AVStream values.
+            /// </summary>
+            public long start_time;
 
-        /// <summary>
-        /// Forced subtitle codec.
-        /// This allows forcing a specific decoder, even when there are
-        /// multiple with
-        /// the same codec_id.
-        /// Demuxing: Set by user via av_format_set_subtitle_codec (NO direct
-        /// access).
-        /// </summary>
-        [FieldOffset(1292)]
-        public AVCodec* subtitle_codec;
-    }
+            /// <summary>
+            /// Decoding: duration of the stream, in AV_TIME_BASE fractional
+            /// seconds. Only set this value if you know none of the individual stream
+            /// durations and also do not set any of them. This is deduced from the
+            /// AVStream values if not set.
+            /// </summary>
+            public long duration;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVPacketList
-    {
-        [FieldOffset(0)]
-        public AVPacket* pkt;
+            /// <summary>
+            /// Decoding: total stream bitrate in bit/s, 0 if not
+            /// available. Never set it directly if the file_size and the
+            /// duration are known as FFmpeg can compute it automatically.
+            /// </summary>
+            public int bit_rate;
 
-        [FieldOffset(80)]
-        public AVPacketList* next;
-    }
+            public uint packet_size;
 
-    public unsafe partial class libavformat
-    {
+            public int max_delay;
+
+            public int flags;
+
+            /// <summary>
+            /// decoding: size of data to probe; encoding: unused.
+            /// </summary>
+            public uint probesize;
+
+            /// <summary>
+            /// decoding: maximum time (in AV_TIME_BASE units) during which the input
+            /// should
+            /// be analyzed in avformat_find_stream_info().
+            /// </summary>
+            public int max_analyze_duration;
+
+            public byte* key;
+
+            public int keylen;
+
+            public uint nb_programs;
+
+            public libavformat.AVProgram** programs;
+
+            /// <summary>
+            /// Forced video codec_id.
+            /// Demuxing: Set by user.
+            /// </summary>
+            public libavcodec.AVCodecID video_codec_id;
+
+            /// <summary>
+            /// Forced audio codec_id.
+            /// Demuxing: Set by user.
+            /// </summary>
+            public libavcodec.AVCodecID audio_codec_id;
+
+            /// <summary>
+            /// Forced subtitle codec_id.
+            /// Demuxing: Set by user.
+            /// </summary>
+            public libavcodec.AVCodecID subtitle_codec_id;
+
+            /// <summary>
+            /// Maximum amount of memory in bytes to use for the index of each stream.
+            /// If the index exceeds this size, entries will be discarded as
+            /// needed to maintain a smaller size. This can lead to slower or less
+            /// accurate seeking (depends on demuxer).
+            /// Demuxers for which a full in-memory index is mandatory will ignore
+            /// this.
+            /// muxing  : unused
+            /// demuxing: set by user
+            /// </summary>
+            public uint max_index_size;
+
+            /// <summary>
+            /// Maximum amount of memory in bytes to use for buffering frames
+            /// obtained from realtime capture devices.
+            /// </summary>
+            public uint max_picture_buffer;
+
+            /// <summary>
+            /// Number of chapters in AVChapter array.
+            /// When muxing, chapters are normally written in the file header,
+            /// so nb_chapters should normally be initialized before write_header
+            /// is called. Some muxers (e.g. mov and mkv) can also write chapters
+            /// in the trailer.  To write chapters in the trailer, nb_chapters
+            /// must be zero when write_header is called and non-zero when
+            /// write_trailer is called.
+            /// muxing  : set by user
+            /// demuxing: set by libavformat
+            /// </summary>
+            public uint nb_chapters;
+
+            public libavformat.AVChapter** chapters;
+
+            public libavutil.AVDictionary* metadata;
+
+            /// <summary>
+            /// Start time of the stream in real world time, in microseconds
+            /// since the unix epoch (00:00 1st January 1970). That is, pts=0
+            /// in the stream was captured at this real world time.
+            /// - encoding: Set by user.
+            /// - decoding: Unused.
+            /// </summary>
+            public long start_time_realtime;
+
+            /// <summary>
+            /// decoding: number of frames used to probe fps
+            /// </summary>
+            public int fps_probe_size;
+
+            /// <summary>
+            /// Error recognition; higher values will detect more errors but may
+            /// misdetect some more or less valid parts as errors.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public int error_recognition;
+
+            /// <summary>
+            /// Custom interrupt callbacks for the I/O layer.
+            /// 
+            /// decoding: set by the user before avformat_open_input().
+            /// encoding: set by the user before avformat_write_header()
+            /// (mainly useful for AVFMT_NOFILE formats). The callback
+            /// should also be passed to avio_open2() if it's used to
+            /// open the file.
+            /// </summary>
+            public libavformat.AVIOInterruptCB interrupt_callback;
+
+            /// <summary>
+            /// Flags to enable debugging.
+            /// </summary>
+            public int debug;
+
+            /// <summary>
+            /// Transport stream id.
+            /// This will be moved into demuxer private options. Thus no API/ABI
+            /// compatibility
+            /// </summary>
+            public int ts_id;
+
+            /// <summary>
+            /// Audio preload in microseconds.
+            /// Note, not all formats support this and unpredictable things may happen
+            /// if it is used when not supported.
+            /// - encoding: Set by user via AVOptions (NO direct access)
+            /// - decoding: unused
+            /// </summary>
+            public int audio_preload;
+
+            /// <summary>
+            /// Max chunk time in microseconds.
+            /// Note, not all formats support this and unpredictable things may happen
+            /// if it is used when not supported.
+            /// - encoding: Set by user via AVOptions (NO direct access)
+            /// - decoding: unused
+            /// </summary>
+            public int max_chunk_duration;
+
+            /// <summary>
+            /// Max chunk size in bytes
+            /// Note, not all formats support this and unpredictable things may happen
+            /// if it is used when not supported.
+            /// - encoding: Set by user via AVOptions (NO direct access)
+            /// - decoding: unused
+            /// </summary>
+            public int max_chunk_size;
+
+            /// <summary>
+            /// forces the use of wallclock timestamps as pts/dts of packets
+            /// This has undefined results in the presence of B frames.
+            /// - encoding: unused
+            /// - decoding: Set by user via AVOptions (NO direct access)
+            /// </summary>
+            public int use_wallclock_as_timestamps;
+
+            /// <summary>
+            /// Avoid negative timestamps during muxing.
+            /// 0 -> allow negative timestamps
+            /// 1 -> avoid negative timestamps
+            /// -1 -> choose automatically (default)
+            /// Note, this only works when interleave_packet_per_dts is in use.
+            /// - encoding: Set by user via AVOptions (NO direct access)
+            /// - decoding: unused
+            /// </summary>
+            public int avoid_negative_ts;
+
+            /// <summary>
+            /// avio flags, used to force AVIO_FLAG_DIRECT.
+            /// - encoding: unused
+            /// - decoding: Set by user via AVOptions (NO direct access)
+            /// </summary>
+            public int avio_flags;
+
+            /// <summary>
+            /// The duration field can be estimated through various ways, and this
+            /// field can be used
+            /// to know how the duration was estimated.
+            /// - encoding: unused
+            /// - decoding: Read by user via AVOptions (NO direct access)
+            /// </summary>
+            public libavformat.AVDurationEstimationMethod duration_estimation_method;
+
+            /// <summary>
+            /// Skip initial bytes when opening stream
+            /// - encoding: unused
+            /// - decoding: Set by user via AVOptions (NO direct access)
+            /// </summary>
+            public uint skip_initial_bytes;
+
+            /// <summary>
+            /// Correct single timestamp overflows
+            /// - encoding: unused
+            /// - decoding: Set by user via AVOPtions (NO direct access)
+            /// </summary>
+            public uint correct_ts_overflow;
+
+            /// <summary>
+            /// Force seeking to any (also non key) frames.
+            /// - encoding: unused
+            /// - decoding: Set by user via AVOPtions (NO direct access)
+            /// </summary>
+            public int seek2any;
+
+            /// <summary>
+            /// Flush the I/O context after each packet.
+            /// - encoding: Set by user via AVOptions (NO direct access)
+            /// - decoding: unused
+            /// </summary>
+            public int flush_packets;
+
+            /// <summary>
+            /// format probing score.
+            /// The maximal score is AVPROBE_SCORE_MAX, its set when the demuxer probes
+            /// the format.
+            /// - encoding: unused
+            /// - decoding: set by avformat, read by user via
+            /// av_format_get_probe_score() (NO direct access)
+            /// </summary>
+            public int probe_score;
+
+            /// <summary>
+            /// This buffer is only needed when packets were already buffered but
+            /// not decoded, for example to get the codec parameters in MPEG
+            /// streams.
+            /// </summary>
+            public libavformat.AVPacketList* packet_buffer;
+
+            public libavformat.AVPacketList* packet_buffer_end;
+
+            /// <summary>
+            /// offset of the first packet
+            /// </summary>
+            public long data_offset;
+
+            /// <summary>
+            /// Raw packets from the demuxer, prior to parsing and decoding.
+            /// This buffer is used for buffering packets until the codec can
+            /// be identified, as parsing cannot be done without knowing the
+            /// codec.
+            /// </summary>
+            public libavformat.AVPacketList* raw_packet_buffer;
+
+            public libavformat.AVPacketList* raw_packet_buffer_end;
+
+            /// <summary>
+            /// Packets split by the parser get queued here.
+            /// </summary>
+            public libavformat.AVPacketList* parse_queue;
+
+            public libavformat.AVPacketList* parse_queue_end;
+
+            public int raw_packet_buffer_remaining_size;
+
+            /// <summary>
+            /// Offset to remap timestamps to be non-negative.
+            /// Expressed in timebase units.
+            /// @see AVStream.mux_ts_offset
+            /// </summary>
+            public long offset;
+
+            /// <summary>
+            /// Timebase for the timestamp offset.
+            /// </summary>
+            public libavutil.AVRational offset_timebase;
+
+            /// <summary>
+            /// IO repositioned flag.
+            /// This is set by avformat when the underlaying IO context read pointer
+            /// is repositioned, for example when doing byte based seeking.
+            /// Demuxers can use the flag to detect such changes.
+            /// </summary>
+            public int io_repositioned;
+
+            /// <summary>
+            /// Forced video codec.
+            /// This allows forcing a specific decoder, even when there are multiple
+            /// with
+            /// the same codec_id.
+            /// Demuxing: Set by user via av_format_set_video_codec (NO direct access).
+            /// </summary>
+            public libavcodec.AVCodec* video_codec;
+
+            /// <summary>
+            /// Forced audio codec.
+            /// This allows forcing a specific decoder, even when there are multiple
+            /// with
+            /// the same codec_id.
+            /// Demuxing: Set by user via av_format_set_audio_codec (NO direct access).
+            /// </summary>
+            public libavcodec.AVCodec* audio_codec;
+
+            /// <summary>
+            /// Forced subtitle codec.
+            /// This allows forcing a specific decoder, even when there are multiple
+            /// with
+            /// the same codec_id.
+            /// Demuxing: Set by user via av_format_set_subtitle_codec (NO direct
+            /// access).
+            /// </summary>
+            public libavcodec.AVCodec* subtitle_codec;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVPacketList
+        {
+            public libavcodec.AVPacket pkt;
+
+            public libavformat.AVPacketList* next;
+        }
+
         /// <summary>
         /// Allocate and read the payload of a packet and initialize its
         /// fields with default values.
@@ -1251,9 +1242,10 @@ namespace libavformat
         /// @return >0 (read size) if OK, AVERROR_xxx otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_packet")]
-        internal static extern int av_get_packet(AVIOContext* s, AVPacket* pkt, int size);
+        public static extern int av_get_packet(libavformat.AVIOContext* s, libavcodec.AVPacket* pkt, int size);
 
         /// <summary>
         /// Read data and append it to the current content of the AVPacket.
@@ -1269,54 +1261,64 @@ namespace libavformat
         /// will not be lost even if an error occurs.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_append_packet")]
-        internal static extern int av_append_packet(AVIOContext* s, AVPacket* pkt, int size);
+        public static extern int av_append_packet(libavformat.AVIOContext* s, libavcodec.AVPacket* pkt, int size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_stream_get_r_frame_rate")]
-        internal static extern AVRational* av_stream_get_r_frame_rate(AVStream* s);
+        public static extern libavutil.AVRational av_stream_get_r_frame_rate(libavformat.AVStream* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_stream_set_r_frame_rate")]
-        internal static extern void av_stream_set_r_frame_rate(AVStream* s, AVRational* r);
+        public static extern void av_stream_set_r_frame_rate(libavformat.AVStream* s, libavutil.AVRational r);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_format_get_probe_score")]
-        internal static extern int av_format_get_probe_score(AVFormatContext* s);
+        public static extern int av_format_get_probe_score(libavformat.AVFormatContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_format_get_video_codec")]
-        internal static extern AVCodec* av_format_get_video_codec(AVFormatContext* s);
+        public static extern libavcodec.AVCodec* av_format_get_video_codec(libavformat.AVFormatContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_format_set_video_codec")]
-        internal static extern void av_format_set_video_codec(AVFormatContext* s, AVCodec* c);
+        public static extern void av_format_set_video_codec(libavformat.AVFormatContext* s, libavcodec.AVCodec* c);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_format_get_audio_codec")]
-        internal static extern AVCodec* av_format_get_audio_codec(AVFormatContext* s);
+        public static extern libavcodec.AVCodec* av_format_get_audio_codec(libavformat.AVFormatContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_format_set_audio_codec")]
-        internal static extern void av_format_set_audio_codec(AVFormatContext* s, AVCodec* c);
+        public static extern void av_format_set_audio_codec(libavformat.AVFormatContext* s, libavcodec.AVCodec* c);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_format_get_subtitle_codec")]
-        internal static extern AVCodec* av_format_get_subtitle_codec(AVFormatContext* s);
+        public static extern libavcodec.AVCodec* av_format_get_subtitle_codec(libavformat.AVFormatContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_format_set_subtitle_codec")]
-        internal static extern void av_format_set_subtitle_codec(AVFormatContext* s, AVCodec* c);
+        public static extern void av_format_set_subtitle_codec(libavformat.AVFormatContext* s, libavcodec.AVCodec* c);
 
         /// <summary>
         /// Returns the method used to set ctx->duration.
@@ -1325,33 +1327,37 @@ namespace libavformat
         /// AVFMT_DURATION_FROM_BITRATE.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fmt_ctx_get_duration_estimation_method")]
-        internal static extern AVDurationEstimationMethod av_fmt_ctx_get_duration_estimation_method(AVFormatContext* ctx);
+        public static extern libavformat.AVDurationEstimationMethod av_fmt_ctx_get_duration_estimation_method(libavformat.AVFormatContext* ctx);
 
         /// <summary>
         /// Return the LIBAVFORMAT_VERSION_INT constant.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_version")]
-        internal static extern uint avformat_version();
+        public static extern uint avformat_version();
 
         /// <summary>
         /// Return the libavformat build-time configuration.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_configuration")]
-        internal static extern global::System.IntPtr avformat_configuration();
+        public static extern sbyte* avformat_configuration();
 
         /// <summary>
         /// Return the libavformat license.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_license")]
-        internal static extern global::System.IntPtr avformat_license();
+        public static extern sbyte* avformat_license();
 
         /// <summary>
         /// Initialize libavformat and register all the muxers, demuxers and
@@ -1362,19 +1368,22 @@ namespace libavformat
         /// @see av_register_output_format()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_register_all")]
-        internal static extern void av_register_all();
+        public static extern void av_register_all();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_register_input_format")]
-        internal static extern void av_register_input_format(AVInputFormat* format);
+        public static extern void av_register_input_format(libavformat.AVInputFormat* format);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_register_output_format")]
-        internal static extern void av_register_output_format(AVOutputFormat* format);
+        public static extern void av_register_output_format(libavformat.AVOutputFormat* format);
 
         /// <summary>
         /// Do global initialization of network components. This is optional,
@@ -1385,17 +1394,19 @@ namespace libavformat
         /// protocols at some major version bump.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_network_init")]
-        internal static extern int avformat_network_init();
+        public static extern int avformat_network_init();
 
         /// <summary>
         /// Undo the initialization done by avformat_network_init.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_network_deinit")]
-        internal static extern int avformat_network_deinit();
+        public static extern int avformat_network_deinit();
 
         /// <summary>
         /// If f is NULL, returns the first registered input format,
@@ -1403,9 +1414,10 @@ namespace libavformat
         /// or NULL if f is the last one.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_iformat_next")]
-        internal static extern AVInputFormat* av_iformat_next(AVInputFormat* f);
+        public static extern libavformat.AVInputFormat* av_iformat_next(libavformat.AVInputFormat* f);
 
         /// <summary>
         /// If f is NULL, returns the first registered output format,
@@ -1413,9 +1425,10 @@ namespace libavformat
         /// or NULL if f is the last one.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_oformat_next")]
-        internal static extern AVOutputFormat* av_oformat_next(AVOutputFormat* f);
+        public static extern libavformat.AVOutputFormat* av_oformat_next(libavformat.AVOutputFormat* f);
 
         /// <summary>
         /// Allocate an AVFormatContext.
@@ -1423,18 +1436,20 @@ namespace libavformat
         /// allocated by the framework within it.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_alloc_context")]
-        internal static extern AVFormatContext* avformat_alloc_context();
+        public static extern libavformat.AVFormatContext* avformat_alloc_context();
 
         /// <summary>
         /// Free an AVFormatContext and all its streams.
         /// @param s context to free
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_free_context")]
-        internal static extern void avformat_free_context(AVFormatContext* s);
+        public static extern void avformat_free_context(libavformat.AVFormatContext* s);
 
         /// <summary>
         /// Get the AVClass for AVFormatContext. It can be used in combination with
@@ -1443,9 +1458,10 @@ namespace libavformat
         /// @see av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_get_class")]
-        internal static extern AVClass* avformat_get_class();
+        public static extern libavutil.AVClass* avformat_get_class();
 
         /// <summary>
         /// Add a new stream to a media file.
@@ -1469,19 +1485,22 @@ namespace libavformat
         /// @return newly created stream or NULL on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_new_stream")]
-        internal static extern AVStream* avformat_new_stream(AVFormatContext* s, AVCodec* c);
+        public static extern libavformat.AVStream* avformat_new_stream(libavformat.AVFormatContext* s, libavcodec.AVCodec* c);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_new_program")]
-        internal static extern AVProgram* av_new_program(AVFormatContext* s, int id);
+        public static extern libavformat.AVProgram* av_new_program(libavformat.AVFormatContext* s, int id);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_alloc_output_context")]
-        internal static extern AVFormatContext* avformat_alloc_output_context(global::System.IntPtr format, AVOutputFormat* oformat, global::System.IntPtr filename);
+        public static extern libavformat.AVFormatContext* avformat_alloc_output_context(string format, libavformat.AVOutputFormat* oformat, string filename);
 
         /// <summary>
         /// Allocate an AVFormatContext for an output format.
@@ -1500,17 +1519,41 @@ namespace libavformat
         /// failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_alloc_output_context2")]
-        internal static extern int avformat_alloc_output_context2(AVFormatContext* ctx, AVOutputFormat* oformat, global::System.IntPtr format_name, global::System.IntPtr filename);
+        public static extern int avformat_alloc_output_context2(libavformat.AVFormatContext** ctx, libavformat.AVOutputFormat* oformat, string format_name, string filename);
+
+        /// <summary>
+        /// Allocate an AVFormatContext for an output format.
+        /// avformat_free_context() can be used to free the context and
+        /// everything allocated by the framework within it.
+        /// 
+        /// @param *ctx is set to the created format context, or to NULL in
+        /// case of failure
+        /// @param oformat format to use for allocating the context, if NULL
+        /// format_name and filename are used instead
+        /// @param format_name the name of output format to use for allocating the
+        /// context, if NULL filename is used instead
+        /// @param filename the name of the filename to use for allocating the
+        /// context, may be NULL
+        /// @return >= 0 in case of success, a negative AVERROR code in case of
+        /// failure
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avformat_alloc_output_context2")]
+        public static extern int avformat_alloc_output_context2(ref libavformat.AVFormatContext* ctx, libavformat.AVOutputFormat* oformat, string format_name, string filename);
 
         /// <summary>
         /// Find AVInputFormat based on the short name of the input format.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_input_format")]
-        internal static extern AVInputFormat* av_find_input_format(global::System.IntPtr short_name);
+        public static extern libavformat.AVInputFormat* av_find_input_format(string short_name);
 
         /// <summary>
         /// Guess the file format.
@@ -1519,9 +1562,10 @@ namespace libavformat
         /// demuxers with or without AVFMT_NOFILE are probed.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_probe_input_format")]
-        internal static extern AVInputFormat* av_probe_input_format(AVProbeData* pd, int is_opened);
+        public static extern libavformat.AVInputFormat* av_probe_input_format(libavformat.AVProbeData* pd, int is_opened);
 
         /// <summary>
         /// Guess the file format.
@@ -1535,9 +1579,10 @@ namespace libavformat
         /// to retry with a larger probe buffer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_probe_input_format2")]
-        internal static extern AVInputFormat* av_probe_input_format2(AVProbeData* pd, int is_opened, int* score_max);
+        public static extern libavformat.AVInputFormat* av_probe_input_format2(libavformat.AVProbeData* pd, int is_opened, int* score_max);
 
         /// <summary>
         /// Guess the file format.
@@ -1547,9 +1592,10 @@ namespace libavformat
         /// @param score_ret The score of the best detection.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_probe_input_format3")]
-        internal static extern AVInputFormat* av_probe_input_format3(AVProbeData* pd, int is_opened, int* score_ret);
+        public static extern libavformat.AVInputFormat* av_probe_input_format3(libavformat.AVProbeData* pd, int is_opened, int* score_ret);
 
         /// <summary>
         /// Probe a bytestream to determine the input format. Each time a probe
@@ -1572,17 +1618,54 @@ namespace libavformat
         /// AVERROR code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_probe_input_buffer2")]
-        internal static extern int av_probe_input_buffer2(AVIOContext* pb, AVInputFormat* fmt, global::System.IntPtr filename, global::System.IntPtr logctx, uint offset, uint max_probe_size);
+        public static extern int av_probe_input_buffer2(libavformat.AVIOContext* pb, libavformat.AVInputFormat** fmt, string filename, void* logctx, uint offset, uint max_probe_size);
+
+        /// <summary>
+        /// Probe a bytestream to determine the input format. Each time a probe
+        /// returns
+        /// with a score that is too low, the probe buffer size is increased and
+        /// another
+        /// attempt is made. When the maximum probe size is reached, the input
+        /// format
+        /// with the highest score is returned.
+        /// 
+        /// @param pb the bytestream to probe
+        /// @param fmt the input format is put here
+        /// @param filename the filename of the stream
+        /// @param logctx the log context
+        /// @param offset the offset within the bytestream to probe from
+        /// @param max_probe_size the maximum probe buffer size (zero for default)
+        /// @return the score in case of success, a negative value corresponding to
+        /// an
+        /// the maximal score is AVPROBE_SCORE_MAX
+        /// AVERROR code otherwise
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_probe_input_buffer2")]
+        public static extern int av_probe_input_buffer2(libavformat.AVIOContext* pb, ref libavformat.AVInputFormat* fmt, string filename, void* logctx, uint offset, uint max_probe_size);
 
         /// <summary>
         /// Like av_probe_input_buffer2() but returns 0 on success
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_probe_input_buffer")]
-        internal static extern int av_probe_input_buffer(AVIOContext* pb, AVInputFormat* fmt, global::System.IntPtr filename, global::System.IntPtr logctx, uint offset, uint max_probe_size);
+        public static extern int av_probe_input_buffer(libavformat.AVIOContext* pb, libavformat.AVInputFormat** fmt, string filename, void* logctx, uint offset, uint max_probe_size);
+
+        /// <summary>
+        /// Like av_probe_input_buffer2() but returns 0 on success
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_probe_input_buffer")]
+        public static extern int av_probe_input_buffer(libavformat.AVIOContext* pb, ref libavformat.AVInputFormat* fmt, string filename, void* logctx, uint offset, uint max_probe_size);
 
         /// <summary>
         /// Open an input stream and read the header. The codecs are not opened.
@@ -1609,14 +1692,46 @@ namespace libavformat
         /// set its pb field.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_open_input")]
-        internal static extern int avformat_open_input(AVFormatContext* ps, global::System.IntPtr filename, AVInputFormat* fmt, AVDictionary* options);
+        public static extern int avformat_open_input(libavformat.AVFormatContext** ps, string filename, libavformat.AVInputFormat* fmt, libavutil.AVDictionary** options);
+
+        /// <summary>
+        /// Open an input stream and read the header. The codecs are not opened.
+        /// The stream must be closed with avformat_close_input().
+        /// 
+        /// @param ps Pointer to user-supplied AVFormatContext (allocated by
+        /// avformat_alloc_context).
+        /// May be a pointer to NULL, in which case an AVFormatContext is allocated
+        /// by this
+        /// function and written into ps.
+        /// Note that a user-supplied AVFormatContext will be freed on failure.
+        /// @param filename Name of the stream to open.
+        /// @param fmt If non-NULL, this parameter forces a specific input format.
+        /// Otherwise the format is autodetected.
+        /// @param options  A dictionary filled with AVFormatContext and
+        /// demuxer-private options.
+        /// On return this parameter will be destroyed and replaced with a dict
+        /// containing
+        /// options that were not found. May be NULL.
+        /// 
+        /// @return 0 on success, a negative AVERROR on failure.
+        /// 
+        /// @note If you want to use custom IO, preallocate the format context and
+        /// set its pb field.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avformat_open_input")]
+        public static extern int avformat_open_input(ref libavformat.AVFormatContext* ps, string filename, libavformat.AVInputFormat* fmt, ref libavutil.AVDictionary* options);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_demuxer_open")]
-        internal static extern int av_demuxer_open(AVFormatContext* ic);
+        public static extern int av_demuxer_open(libavformat.AVFormatContext* ic);
 
         /// <summary>
         /// Read packets of a media file to get stream information. This
@@ -1634,9 +1749,10 @@ namespace libavformat
         /// @deprecated use avformat_find_stream_info.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_stream_info")]
-        internal static extern int av_find_stream_info(AVFormatContext* ic);
+        public static extern int av_find_stream_info(libavformat.AVFormatContext* ic);
 
         /// <summary>
         /// Read packets of a media file to get stream information. This
@@ -1661,9 +1777,38 @@ namespace libavformat
         /// we do not waste time getting stuff the user does not need.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_find_stream_info")]
-        internal static extern int avformat_find_stream_info(AVFormatContext* ic, AVDictionary* options);
+        public static extern int avformat_find_stream_info(libavformat.AVFormatContext* ic, libavutil.AVDictionary** options);
+
+        /// <summary>
+        /// Read packets of a media file to get stream information. This
+        /// is useful for file formats with no headers such as MPEG. This
+        /// function also computes the real framerate in case of MPEG-2 repeat
+        /// frame mode.
+        /// The logical file position is not changed by this function;
+        /// examined packets may be buffered for later processing.
+        /// 
+        /// @param ic media file handle
+        /// @param options  If non-NULL, an ic.nb_streams long array of pointers to
+        /// dictionaries, where i-th member contains options for
+        /// codec corresponding to i-th stream.
+        /// On return each dictionary will be filled with options that were not
+        /// found.
+        /// @return >=0 if OK, AVERROR_xxx on error
+        /// 
+        /// @note this function isn't guaranteed to open all the codecs, so
+        /// options being non-empty at return is a perfectly normal behavior.
+        /// 
+        /// @todo Let the user decide somehow what information is needed so that
+        /// we do not waste time getting stuff the user does not need.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avformat_find_stream_info")]
+        public static extern int avformat_find_stream_info(libavformat.AVFormatContext* ic, ref libavutil.AVDictionary* options);
 
         /// <summary>
         /// Find the programs which belong to a given stream.
@@ -1677,9 +1822,10 @@ namespace libavformat
         /// the last program is not among the programs of ic.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_program_from_stream")]
-        internal static extern AVProgram* av_find_program_from_stream(AVFormatContext* ic, AVProgram* last, int s);
+        public static extern libavformat.AVProgram* av_find_program_from_stream(libavformat.AVFormatContext* ic, libavformat.AVProgram* last, int s);
 
         /// <summary>
         /// Find the "best" stream in the file.
@@ -1709,9 +1855,43 @@ namespace libavformat
         /// NULL, then *decoder_ret is guaranteed to be set to a valid AVCodec.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_best_stream")]
-        internal static extern int av_find_best_stream(AVFormatContext* ic, AVMediaType type, int wanted_stream_nb, int related_stream, AVCodec* decoder_ret, int flags);
+        public static extern int av_find_best_stream(libavformat.AVFormatContext* ic, libavutil.AVMediaType type, int wanted_stream_nb, int related_stream, libavcodec.AVCodec** decoder_ret, int flags);
+
+        /// <summary>
+        /// Find the "best" stream in the file.
+        /// The best stream is determined according to various heuristics as the
+        /// most
+        /// likely to be what the user expects.
+        /// If the decoder parameter is non-NULL, av_find_best_stream will find the
+        /// default decoder for the stream's codec; streams for which no decoder
+        /// can
+        /// be found are ignored.
+        /// 
+        /// @param ic                media file handle
+        /// @param type              stream type: video, audio, subtitles, etc.
+        /// @param wanted_stream_nb  user-requested stream number,
+        /// or -1 for automatic selection
+        /// @param related_stream    try to find a stream related (eg. in the same
+        /// program) to this one, or -1 if none
+        /// @param decoder_ret       if non-NULL, returns the decoder for the
+        /// selected stream
+        /// @param flags             flags; none are currently defined
+        /// @return  the non-negative stream number in case of success,
+        /// AVERROR_STREAM_NOT_FOUND if no stream with the requested type
+        /// could be found,
+        /// AVERROR_DECODER_NOT_FOUND if streams were found but no decoder
+        /// @note  If av_find_best_stream returns successfully and decoder_ret is
+        /// not
+        /// NULL, then *decoder_ret is guaranteed to be set to a valid AVCodec.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_find_best_stream")]
+        public static extern int av_find_best_stream(libavformat.AVFormatContext* ic, libavutil.AVMediaType type, int wanted_stream_nb, int related_stream, ref libavcodec.AVCodec* decoder_ret, int flags);
 
         /// <summary>
         /// @deprecated use AVFMT_FLAG_NOFILLIN | AVFMT_FLAG_NOPARSE to read raw
@@ -1727,9 +1907,10 @@ namespace libavformat
         /// @return 0 if OK, AVERROR_xxx on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_read_packet")]
-        internal static extern int av_read_packet(AVFormatContext* s, AVPacket* pkt);
+        public static extern int av_read_packet(libavformat.AVFormatContext* s, libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Return the next frame of a stream.
@@ -1762,9 +1943,10 @@ namespace libavformat
         /// @return 0 if OK, < 0 on error or end of file
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_read_frame")]
-        internal static extern int av_read_frame(AVFormatContext* s, AVPacket* pkt);
+        public static extern int av_read_frame(libavformat.AVFormatContext* s, libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Seek to the keyframe at timestamp.
@@ -1778,9 +1960,10 @@ namespace libavformat
         /// @return >= 0 on success
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_seek_frame")]
-        internal static extern int av_seek_frame(AVFormatContext* s, int stream_index, long timestamp, int flags);
+        public static extern int av_seek_frame(libavformat.AVFormatContext* s, int stream_index, long timestamp, int flags);
 
         /// <summary>
         /// Seek to timestamp ts.
@@ -1816,18 +1999,20 @@ namespace libavformat
         /// ABI compatibility yet!
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_seek_file")]
-        internal static extern int avformat_seek_file(AVFormatContext* s, int stream_index, long min_ts, long ts, long max_ts, int flags);
+        public static extern int avformat_seek_file(libavformat.AVFormatContext* s, int stream_index, long min_ts, long ts, long max_ts, int flags);
 
         /// <summary>
         /// Start playing a network-based stream (e.g. RTSP stream) at the
         /// current position.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_read_play")]
-        internal static extern int av_read_play(AVFormatContext* s);
+        public static extern int av_read_play(libavformat.AVFormatContext* s);
 
         /// <summary>
         /// Pause a network-based stream (e.g. RTSP stream).
@@ -1835,23 +2020,36 @@ namespace libavformat
         /// Use av_read_play() to resume it.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_read_pause")]
-        internal static extern int av_read_pause(AVFormatContext* s);
+        public static extern int av_read_pause(libavformat.AVFormatContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_close_input_file")]
-        internal static extern void av_close_input_file(AVFormatContext* s);
+        public static extern void av_close_input_file(libavformat.AVFormatContext* s);
 
         /// <summary>
         /// Close an opened input AVFormatContext. Free it and all its contents
         /// and set *s to NULL.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_close_input")]
-        internal static extern void avformat_close_input(AVFormatContext* s);
+        public static extern void avformat_close_input(libavformat.AVFormatContext** s);
+
+        /// <summary>
+        /// Close an opened input AVFormatContext. Free it and all its contents
+        /// and set *s to NULL.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avformat_close_input")]
+        public static extern void avformat_close_input(ref libavformat.AVFormatContext* s);
 
         /// <summary>
         /// Add a new stream to a media file.
@@ -1864,14 +2062,16 @@ namespace libavformat
         /// @param id file-format-dependent stream ID
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_new_stream")]
-        internal static extern AVStream* av_new_stream(AVFormatContext* s, int id);
+        public static extern libavformat.AVStream* av_new_stream(libavformat.AVFormatContext* s, int id);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_pts_info")]
-        internal static extern void av_set_pts_info(AVStream* s, int pts_wrap_bits, uint pts_num, uint pts_den);
+        public static extern void av_set_pts_info(libavformat.AVStream* s, int pts_wrap_bits, uint pts_num, uint pts_den);
 
         /// <summary>
         /// @addtogroup lavf_encoding
@@ -1896,9 +2096,38 @@ namespace libavformat
         /// @see av_opt_find, av_dict_set, avio_open, av_oformat_next.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_write_header")]
-        internal static extern int avformat_write_header(AVFormatContext* s, AVDictionary* options);
+        public static extern int avformat_write_header(libavformat.AVFormatContext* s, libavutil.AVDictionary** options);
+
+        /// <summary>
+        /// @addtogroup lavf_encoding
+        /// @{
+        /// 
+        /// 
+        /// Allocate the stream private data and write the stream header to
+        /// an output media file.
+        /// 
+        /// @param s Media file handle, must be allocated with
+        /// avformat_alloc_context().
+        /// Its oformat field must be set to the desired output format;
+        /// Its pb field must be set to an already opened AVIOContext.
+        /// @param options  An AVDictionary filled with AVFormatContext and
+        /// muxer-private options.
+        /// On return this parameter will be destroyed and replaced with a dict
+        /// containing
+        /// options that were not found. May be NULL.
+        /// 
+        /// @return 0 on success, negative AVERROR on failure.
+        /// 
+        /// @see av_opt_find, av_dict_set, avio_open, av_oformat_next.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avformat_write_header")]
+        public static extern int avformat_write_header(libavformat.AVFormatContext* s, ref libavutil.AVDictionary* options);
 
         /// <summary>
         /// Write a packet to an output media file.
@@ -1918,9 +2147,10 @@ namespace libavformat
         /// to flush
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_write_frame")]
-        internal static extern int av_write_frame(AVFormatContext* s, AVPacket* pkt);
+        public static extern int av_write_frame(libavformat.AVFormatContext* s, libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Write a packet to an output media file ensuring correct interleaving.
@@ -1959,9 +2189,10 @@ namespace libavformat
         /// @return 0 on success, a negative AVERROR on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_interleaved_write_frame")]
-        internal static extern int av_interleaved_write_frame(AVFormatContext* s, AVPacket* pkt);
+        public static extern int av_interleaved_write_frame(libavformat.AVFormatContext* s, libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Write the stream trailer to an output media file and free the
@@ -1973,9 +2204,10 @@ namespace libavformat
         /// @return 0 if OK, AVERROR_xxx on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_write_trailer")]
-        internal static extern int av_write_trailer(AVFormatContext* s);
+        public static extern int av_write_trailer(libavformat.AVFormatContext* s);
 
         /// <summary>
         /// Return the output format in the list of registered output formats
@@ -1990,17 +2222,19 @@ namespace libavformat
         /// MIME type of the registered formats
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_guess_format")]
-        internal static extern AVOutputFormat* av_guess_format(global::System.IntPtr short_name, global::System.IntPtr filename, global::System.IntPtr mime_type);
+        public static extern libavformat.AVOutputFormat* av_guess_format(string short_name, string filename, string mime_type);
 
         /// <summary>
         /// Guess the codec ID based upon muxer and filename.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_guess_codec")]
-        internal static extern AVCodecID av_guess_codec(AVOutputFormat* fmt, global::System.IntPtr short_name, global::System.IntPtr filename, global::System.IntPtr mime_type, AVMediaType type);
+        public static extern libavcodec.AVCodecID av_guess_codec(libavformat.AVOutputFormat* fmt, string short_name, string filename, string mime_type, libavutil.AVMediaType type);
 
         /// <summary>
         /// Get timing information for the data currently output.
@@ -2019,23 +2253,10 @@ namespace libavformat
         /// atomically.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_output_timestamp")]
-        internal static extern int av_get_output_timestamp(AVFormatContext* s, int stream, long* dts, long* wall);
-
-        /// <summary>
-        /// Send a nice hexadecimal dump of a buffer to the specified file stream.
-        /// 
-        /// @param f The file stream pointer where the dump should be sent to.
-        /// @param buf buffer
-        /// @param size buffer size
-        /// 
-        /// @see av_hex_dump_log, av_pkt_dump2, av_pkt_dump_log2
-        /// </summary>
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-            EntryPoint="av_hex_dump")]
-        internal static extern void av_hex_dump(_iobuf* f, byte* buf, int size);
+        public static extern int av_get_output_timestamp(libavformat.AVFormatContext* s, int stream, long* dts, long* wall);
 
         /// <summary>
         /// Send a nice hexadecimal dump of a buffer to the log.
@@ -2052,22 +2273,10 @@ namespace libavformat
         /// @see av_hex_dump, av_pkt_dump2, av_pkt_dump_log2
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hex_dump_log")]
-        internal static extern void av_hex_dump_log(global::System.IntPtr avcl, int level, byte* buf, int size);
-
-        /// <summary>
-        /// Send a nice dump of a packet to the specified file stream.
-        /// 
-        /// @param f The file stream pointer where the dump should be sent to.
-        /// @param pkt packet to dump
-        /// @param dump_payload True if the payload must be displayed, too.
-        /// @param st AVStream that the packet belongs to
-        /// </summary>
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-            EntryPoint="av_pkt_dump2")]
-        internal static extern void av_pkt_dump2(_iobuf* f, AVPacket* pkt, int dump_payload, AVStream* st);
+        public static extern void av_hex_dump_log(void* avcl, int level, byte* buf, int size);
 
         /// <summary>
         /// Send a nice dump of a packet to the log.
@@ -2083,9 +2292,10 @@ namespace libavformat
         /// @param st AVStream that the packet belongs to
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_pkt_dump_log2")]
-        internal static extern void av_pkt_dump_log2(global::System.IntPtr avcl, int level, AVPacket* pkt, int dump_payload, AVStream* st);
+        public static extern void av_pkt_dump_log2(void* avcl, int level, libavcodec.AVPacket* pkt, int dump_payload, libavformat.AVStream* st);
 
         /// <summary>
         /// Get the AVCodecID for the given codec tag tag.
@@ -2095,9 +2305,23 @@ namespace libavformat
         /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_id")]
-        internal static extern AVCodecID av_codec_get_id(AVCodecTag* tags, uint tag);
+        public static extern libavcodec.AVCodecID av_codec_get_id(libavformat.AVCodecTag** tags, uint tag);
+
+        /// <summary>
+        /// Get the AVCodecID for the given codec tag tag.
+        /// If no codec id is found returns AV_CODEC_ID_NONE.
+        /// 
+        /// @param tags list of supported codec_id-codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_codec_get_id")]
+        public static extern libavcodec.AVCodecID av_codec_get_id(ref libavformat.AVCodecTag* tags, uint tag);
 
         /// <summary>
         /// Get the codec tag for the given codec id id.
@@ -2107,9 +2331,23 @@ namespace libavformat
         /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_tag")]
-        internal static extern uint av_codec_get_tag(AVCodecTag* tags, AVCodecID id);
+        public static extern uint av_codec_get_tag(libavformat.AVCodecTag** tags, libavcodec.AVCodecID id);
+
+        /// <summary>
+        /// Get the codec tag for the given codec id id.
+        /// If no codec tag is found returns 0.
+        /// 
+        /// @param tags list of supported codec_id-codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_codec_get_tag")]
+        public static extern uint av_codec_get_tag(ref libavformat.AVCodecTag* tags, libavcodec.AVCodecID id);
 
         /// <summary>
         /// Get the codec tag for the given codec id.
@@ -2121,14 +2359,31 @@ namespace libavformat
         /// @return 0 if id was not found in tags, > 0 if it was found
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_tag2")]
-        internal static extern int av_codec_get_tag2(AVCodecTag* tags, AVCodecID id, uint* tag);
+        public static extern int av_codec_get_tag2(libavformat.AVCodecTag** tags, libavcodec.AVCodecID id, uint* tag);
+
+        /// <summary>
+        /// Get the codec tag for the given codec id.
+        /// 
+        /// @param tags list of supported codec_id - codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// @param id codec id that should be searched for in the list
+        /// @param tag A pointer to the found tag
+        /// @return 0 if id was not found in tags, > 0 if it was found
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_codec_get_tag2")]
+        public static extern int av_codec_get_tag2(ref libavformat.AVCodecTag* tags, libavcodec.AVCodecID id, uint* tag);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_default_stream_index")]
-        internal static extern int av_find_default_stream_index(AVFormatContext* s);
+        public static extern int av_find_default_stream_index(libavformat.AVFormatContext* s);
 
         /// <summary>
         /// Get the index for a specific timestamp.
@@ -2140,9 +2395,10 @@ namespace libavformat
         /// @return < 0 if no such timestamp could be found
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_index_search_timestamp")]
-        internal static extern int av_index_search_timestamp(AVStream* st, long timestamp, int flags);
+        public static extern int av_index_search_timestamp(libavformat.AVStream* st, long timestamp, int flags);
 
         /// <summary>
         /// Add an index entry into a sorted list. Update the entry if the list
@@ -2151,9 +2407,10 @@ namespace libavformat
         /// @param timestamp timestamp in the time base of the given stream
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_add_index_entry")]
-        internal static extern int av_add_index_entry(AVStream* st, long pos, long timestamp, int size, int distance, int flags);
+        public static extern int av_add_index_entry(libavformat.AVStream* st, long pos, long timestamp, int size, int distance, int flags);
 
         /// <summary>
         /// Split a URL string into components.
@@ -2175,14 +2432,16 @@ namespace libavformat
         /// @param url the URL to split
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_url_split")]
-        internal static extern void av_url_split(sbyte* proto, int proto_size, sbyte* authorization, int authorization_size, sbyte* hostname, int hostname_size, int* port_ptr, sbyte* path, int path_size, global::System.IntPtr url);
+        public static extern void av_url_split(System.Text.StringBuilder proto, int proto_size, System.Text.StringBuilder authorization, int authorization_size, System.Text.StringBuilder hostname, int hostname_size, int* port_ptr, System.Text.StringBuilder path, int path_size, string url);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_dump_format")]
-        internal static extern void av_dump_format(AVFormatContext* ic, int index, global::System.IntPtr url, int is_output);
+        public static extern void av_dump_format(libavformat.AVFormatContext* ic, int index, string url, int is_output);
 
         /// <summary>
         /// Return in 'buf' the path with '%d' replaced by a number.
@@ -2197,9 +2456,10 @@ namespace libavformat
         /// @return 0 if OK, -1 on format error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_frame_filename")]
-        internal static extern int av_get_frame_filename(sbyte* buf, int buf_size, global::System.IntPtr path, int number);
+        public static extern int av_get_frame_filename(System.Text.StringBuilder buf, int buf_size, string path, int number);
 
         /// <summary>
         /// Check whether filename actually is a numbered sequence generator.
@@ -2208,9 +2468,10 @@ namespace libavformat
         /// @return 1 if a valid numbered sequence string, 0 otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_filename_number_test")]
-        internal static extern int av_filename_number_test(global::System.IntPtr filename);
+        public static extern int av_filename_number_test(string filename);
 
         /// <summary>
         /// Generate an SDP for an RTP session.
@@ -2230,9 +2491,10 @@ namespace libavformat
         /// @return 0 if OK, AVERROR_xxx on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_sdp_create")]
-        internal static extern int av_sdp_create(AVFormatContext* ac, int n_files, sbyte* buf, int size);
+        public static extern int av_sdp_create(libavformat.AVFormatContext** ac, int n_files, System.Text.StringBuilder buf, int size);
 
         /// <summary>
         /// Return a positive value if the given filename has one of the given
@@ -2241,24 +2503,25 @@ namespace libavformat
         /// @param extensions a comma-separated list of filename extensions
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_match_ext")]
-        internal static extern int av_match_ext(global::System.IntPtr filename, global::System.IntPtr extensions);
+        public static extern int av_match_ext(string filename, string extensions);
 
         /// <summary>
         /// Test if the given container can store a codec.
         /// 
-        /// @param std_compliance standards compliance level, one of
-        /// FF_COMPLIANCE_*
+        /// @param std_compliance standards compliance level, one of FF_COMPLIANCE_
         /// 
         /// @return 1 if codec with ID codec_id can be stored in ofmt, 0 if it
         /// cannot.
         /// A negative number if this information is not available.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_query_codec")]
-        internal static extern int avformat_query_codec(AVOutputFormat* ofmt, AVCodecID codec_id, int std_compliance);
+        public static extern int avformat_query_codec(libavformat.AVOutputFormat* ofmt, libavcodec.AVCodecID codec_id, int std_compliance);
 
         /// <summary>
         /// @defgroup riff_fourcc RIFF FourCCs
@@ -2279,17 +2542,19 @@ namespace libavformat
         /// AVCodecID.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_get_riff_video_tags")]
-        internal static extern AVCodecTag* avformat_get_riff_video_tags();
+        public static extern libavformat.AVCodecTag* avformat_get_riff_video_tags();
 
         /// <summary>
         /// @return the table mapping RIFF FourCCs for audio to AVCodecID.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_get_riff_audio_tags")]
-        internal static extern AVCodecTag* avformat_get_riff_audio_tags();
+        public static extern libavformat.AVCodecTag* avformat_get_riff_audio_tags();
 
         /// <summary>
         /// Guess the sample aspect ratio of a frame, based on both the stream and
@@ -2315,9 +2580,10 @@ namespace libavformat
         /// @return the guessed (valid) sample_aspect_ratio, 0/1 if no idea
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_guess_sample_aspect_ratio")]
-        internal static extern AVRational* av_guess_sample_aspect_ratio(AVFormatContext* format, AVStream* stream, AVFrame* frame);
+        public static extern libavutil.AVRational av_guess_sample_aspect_ratio(libavformat.AVFormatContext* format, libavformat.AVStream* stream, libavutil.AVFrame* frame);
 
         /// <summary>
         /// Guess the frame rate, based on both the container and codec
@@ -2330,9 +2596,10 @@ namespace libavformat
         /// @return the guessed (valid) frame rate, 0/1 if no idea
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_guess_frame_rate")]
-        internal static extern AVRational* av_guess_frame_rate(AVFormatContext* ctx, AVStream* stream, AVFrame* frame);
+        public static extern libavutil.AVRational av_guess_frame_rate(libavformat.AVFormatContext* ctx, libavformat.AVStream* stream, libavutil.AVFrame* frame);
 
         /// <summary>
         /// Check if the stream st contained in s is matched by the stream
@@ -2349,13 +2616,15 @@ namespace libavformat
         /// @note  A stream specifier can match several streams in the format.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_match_stream_specifier")]
-        internal static extern int avformat_match_stream_specifier(AVFormatContext* s, AVStream* st, global::System.IntPtr spec);
+        public static extern int avformat_match_stream_specifier(libavformat.AVFormatContext* s, libavformat.AVStream* st, string spec);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avformat_queue_attached_pictures")]
-        internal static extern int avformat_queue_attached_pictures(AVFormatContext* s);
+        public static extern int avformat_queue_attached_pictures(libavformat.AVFormatContext* s);
     }
 }

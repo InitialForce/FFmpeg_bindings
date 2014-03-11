@@ -315,7 +315,7 @@ namespace FFmpeg
 
             public const sbyte Length = 8;
 
-            public libavutil.AVBufferRef this[sbyte idx]
+            public libavutil.AVBufferRef* this[sbyte idx]
             {
                 get
                 {

@@ -6,17 +6,18 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
         /// <summary>
         /// Get the current time in microseconds.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_gettime")]
-        internal static extern long av_gettime();
+        public static extern long av_gettime();
 
         /// <summary>
         /// Sleep for a period of time.  Although the duration is expressed in
@@ -27,8 +28,9 @@ namespace libavutil
         /// @return zero on success or (negative) error code.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_usleep")]
-        internal static extern int av_usleep(uint usec);
+        public static extern int av_usleep(uint usec);
     }
 }

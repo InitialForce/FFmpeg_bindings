@@ -6,72 +6,60 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct av_intfloat32
+    public unsafe static partial class libavutil
     {
-        [FieldOffset(0)]
-        public uint i;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct av_intfloat32
+        {
+            public uint i;
 
-        [FieldOffset(0)]
-        public float f;
+            public float f;
+        }
 
-        [FieldOffset(0)]
-        private uint i;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct av_intfloat64
+        {
+            public ulong i;
 
-        [FieldOffset(0)]
-        private float f;
-    }
+            public double f;
+        }
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct av_intfloat64
-    {
-        [FieldOffset(0)]
-        public ulong i;
-
-        [FieldOffset(0)]
-        public double f;
-
-        [FieldOffset(0)]
-        private ulong i;
-
-        [FieldOffset(0)]
-        private double f;
-    }
-
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Reinterpret a 32-bit integer as a float.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_int2float")]
-        internal static extern float av_int2float(uint i);
+        public static extern float av_int2float(uint i);
 
         /// <summary>
         /// Reinterpret a float as a 32-bit integer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_float2int")]
-        internal static extern uint av_float2int(float f);
+        public static extern uint av_float2int(float f);
 
         /// <summary>
         /// Reinterpret a 64-bit integer as a double.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_int2double")]
-        internal static extern double av_int2double(ulong i);
+        public static extern double av_int2double(ulong i);
 
         /// <summary>
         /// Reinterpret a double as a 64-bit integer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_double2int")]
-        internal static extern ulong av_double2int(double f);
+        public static extern ulong av_double2int(double f);
     }
 }

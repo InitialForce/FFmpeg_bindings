@@ -6,24 +6,25 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVAudioFifo
+    public unsafe static partial class libavutil
     {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVAudioFifo
+        {
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Free an AVAudioFifo.
         /// 
         /// @param af  AVAudioFifo to free
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_free")]
-        internal static extern void av_audio_fifo_free(AVAudioFifo* af);
+        public static extern void av_audio_fifo_free(libavutil.AVAudioFifo* af);
 
         /// <summary>
         /// Allocate an AVAudioFifo.
@@ -34,9 +35,10 @@ namespace libavutil
         /// @return            newly allocated AVAudioFifo, or NULL on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_alloc")]
-        internal static extern AVAudioFifo* av_audio_fifo_alloc(AVSampleFormat sample_fmt, int channels, int nb_samples);
+        public static extern libavutil.AVAudioFifo* av_audio_fifo_alloc(libavutil.AVSampleFormat sample_fmt, int channels, int nb_samples);
 
         /// <summary>
         /// Reallocate an AVAudioFifo.
@@ -46,9 +48,10 @@ namespace libavutil
         /// @return            0 if OK, or negative AVERROR code on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_realloc")]
-        internal static extern int av_audio_fifo_realloc(AVAudioFifo* af, int nb_samples);
+        public static extern int av_audio_fifo_realloc(libavutil.AVAudioFifo* af, int nb_samples);
 
         /// <summary>
         /// Write data to an AVAudioFifo.
@@ -69,9 +72,34 @@ namespace libavutil
         /// actually written will always be nb_samples.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_write")]
-        internal static extern int av_audio_fifo_write(AVAudioFifo* af, global::System.IntPtr data, int nb_samples);
+        public static extern int av_audio_fifo_write(libavutil.AVAudioFifo* af, void** data, int nb_samples);
+
+        /// <summary>
+        /// Write data to an AVAudioFifo.
+        /// 
+        /// The AVAudioFifo will be reallocated automatically if the available
+        /// space
+        /// is less than nb_samples.
+        /// 
+        /// @see enum AVSampleFormat
+        /// The documentation for AVSampleFormat describes the data layout.
+        /// 
+        /// @param af          AVAudioFifo to write to
+        /// @param data        audio data plane pointers
+        /// @param nb_samples  number of samples to write
+        /// @return            number of samples actually written, or negative
+        /// AVERROR
+        /// code on failure. If successful, the number of samples
+        /// actually written will always be nb_samples.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_audio_fifo_write")]
+        public static extern int av_audio_fifo_write(libavutil.AVAudioFifo* af, ref void* data, int nb_samples);
 
         /// <summary>
         /// Read data from an AVAudioFifo.
@@ -89,9 +117,31 @@ namespace libavutil
         /// nb_samples if av_audio_fifo_size is less than nb_samples.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_read")]
-        internal static extern int av_audio_fifo_read(AVAudioFifo* af, global::System.IntPtr data, int nb_samples);
+        public static extern int av_audio_fifo_read(libavutil.AVAudioFifo* af, void** data, int nb_samples);
+
+        /// <summary>
+        /// Read data from an AVAudioFifo.
+        /// 
+        /// @see enum AVSampleFormat
+        /// The documentation for AVSampleFormat describes the data layout.
+        /// 
+        /// @param af          AVAudioFifo to read from
+        /// @param data        audio data plane pointers
+        /// @param nb_samples  number of samples to read
+        /// @return            number of samples actually read, or negative AVERROR
+        /// code
+        /// on failure. The number of samples actually read will not
+        /// be greater than nb_samples, and will only be less than
+        /// nb_samples if av_audio_fifo_size is less than nb_samples.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_audio_fifo_read")]
+        public static extern int av_audio_fifo_read(libavutil.AVAudioFifo* af, ref void* data, int nb_samples);
 
         /// <summary>
         /// Drain data from an AVAudioFifo.
@@ -103,9 +153,10 @@ namespace libavutil
         /// @return            0 if OK, or negative AVERROR code on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_drain")]
-        internal static extern int av_audio_fifo_drain(AVAudioFifo* af, int nb_samples);
+        public static extern int av_audio_fifo_drain(libavutil.AVAudioFifo* af, int nb_samples);
 
         /// <summary>
         /// Reset the AVAudioFifo buffer.
@@ -115,9 +166,10 @@ namespace libavutil
         /// @param af  AVAudioFifo to reset
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_reset")]
-        internal static extern void av_audio_fifo_reset(AVAudioFifo* af);
+        public static extern void av_audio_fifo_reset(libavutil.AVAudioFifo* af);
 
         /// <summary>
         /// Get the current number of samples in the AVAudioFifo available for
@@ -127,9 +179,10 @@ namespace libavutil
         /// @return    number of samples available for reading
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_size")]
-        internal static extern int av_audio_fifo_size(AVAudioFifo* af);
+        public static extern int av_audio_fifo_size(libavutil.AVAudioFifo* af);
 
         /// <summary>
         /// Get the current number of samples in the AVAudioFifo available for
@@ -139,8 +192,9 @@ namespace libavutil
         /// @return    number of samples available for writing
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_fifo_space")]
-        internal static extern int av_audio_fifo_space(AVAudioFifo* af);
+        public static extern int av_audio_fifo_space(libavutil.AVAudioFifo* af);
     }
 }

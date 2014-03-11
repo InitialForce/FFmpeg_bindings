@@ -6,9 +6,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
         /// <summary>
         /// Parse str and store the parsed ratio in q.
@@ -29,9 +29,10 @@ namespace libavutil
         /// @return >= 0 on success, a negative error code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parse_ratio")]
-        internal static extern int av_parse_ratio(AVRational* q, global::System.IntPtr str, int max, int log_offset, global::System.IntPtr log_ctx);
+        public static extern int av_parse_ratio(libavutil.AVRational* q, string str, int max, int log_offset, void* log_ctx);
 
         /// <summary>
         /// Parse str and put in width_ptr and height_ptr the detected values.
@@ -47,9 +48,10 @@ namespace libavutil
         /// @return >= 0 on success, a negative error code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parse_video_size")]
-        internal static extern int av_parse_video_size(int* width_ptr, int* height_ptr, global::System.IntPtr str);
+        public static extern int av_parse_video_size(int* width_ptr, int* height_ptr, string str);
 
         /// <summary>
         /// Parse str and store the detected values in *rate.
@@ -62,9 +64,10 @@ namespace libavutil
         /// @return >= 0 on success, a negative error code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parse_video_rate")]
-        internal static extern int av_parse_video_rate(AVRational* rate, global::System.IntPtr str);
+        public static extern int av_parse_video_rate(libavutil.AVRational* rate, string str);
 
         /// <summary>
         /// Put the RGBA values that correspond to color_string in rgba_color.
@@ -86,9 +89,10 @@ namespace libavutil
         /// failure (for example if color_string cannot be parsed).
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parse_color")]
-        internal static extern int av_parse_color(byte* rgba_color, global::System.IntPtr color_string, int slen, global::System.IntPtr log_ctx);
+        public static extern int av_parse_color(byte* rgba_color, string color_string, int slen, void* log_ctx);
 
         /// <summary>
         /// Get the name of a color from the internal table of hard-coded named
@@ -103,9 +107,28 @@ namespace libavutil
         /// @return the color name string or NULL if color_idx is not in the array
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_known_color_name")]
-        internal static extern global::System.IntPtr av_get_known_color_name(int color_idx, byte* rgb);
+        public static extern sbyte* av_get_known_color_name(int color_idx, byte** rgb);
+
+        /// <summary>
+        /// Get the name of a color from the internal table of hard-coded named
+        /// colors.
+        /// 
+        /// This function is meant to enumerate the color names recognized by
+        /// av_parse_color().
+        /// 
+        /// @param color_idx index of the requested color, starting from 0
+        /// @param rgbp      if not NULL, will point to a 3-elements array with the
+        /// color value in RGB
+        /// @return the color name string or NULL if color_idx is not in the array
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_get_known_color_name")]
+        public static extern sbyte* av_get_known_color_name(int color_idx, ref byte* rgb);
 
         /// <summary>
         /// Parse timestr and return in *time a corresponding number of
@@ -141,38 +164,10 @@ namespace libavutil
         /// AVERROR code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parse_time")]
-        internal static extern int av_parse_time(long* timeval, global::System.IntPtr timestr, int duration);
-
-        /// <summary>
-        /// Parse the input string p according to the format string fmt and
-        /// store its results in the structure dt.
-        /// This implementation supports only a subset of the formats supported
-        /// by the standard strptime().
-        /// 
-        /// In particular it actually supports the parameters:
-        /// - %H: the hour as a decimal number, using a 24-hour clock, in the
-        /// range '00' through '23'
-        /// - %J: hours as a decimal number, in the range '0' through INT_MAX
-        /// - %M: the minute as a decimal number, using a 24-hour clock, in the
-        /// range '00' through '59'
-        /// - %S: the second as a decimal number, using a 24-hour clock, in the
-        /// range '00' through '59'
-        /// - %Y: the year as a decimal number, using the Gregorian calendar
-        /// - %m: the month as a decimal number, in the range '1' through '12'
-        /// - %d: the day of the month as a decimal number, in the range '1'
-        /// through '31'
-        /// - %%: a literal '%'
-        /// 
-        /// @return a pointer to the first character not processed in this
-        /// function call, or NULL in case the function fails to match all of
-        /// the fmt string and therefore an error occurred
-        /// </summary>
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-            EntryPoint="av_small_strptime")]
-        internal static extern sbyte* av_small_strptime(global::System.IntPtr p, global::System.IntPtr fmt, tm* dt);
+        public static extern int av_parse_time(long* timeval, string timestr, int duration);
 
         /// <summary>
         /// Attempt to find a specific tag in a URL.
@@ -181,16 +176,9 @@ namespace libavutil
         /// Return 1 if found.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_info_tag")]
-        internal static extern int av_find_info_tag(sbyte* arg, int arg_size, global::System.IntPtr tag1, global::System.IntPtr info);
-
-        /// <summary>
-        /// Convert the decomposed UTC time in tm to a time_t value.
-        /// </summary>
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-            EntryPoint="av_timegm")]
-        internal static extern long av_timegm(tm* tm);
+        public static extern int av_find_info_tag(System.Text.StringBuilder arg, int arg_size, string tag1, string info);
     }
 }

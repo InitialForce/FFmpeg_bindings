@@ -5,10 +5,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavfilter
+namespace FFmpeg
 {
-    public unsafe partial class libavfilter
+    public unsafe static partial class libavfilter
     {
         /// <summary>
         /// Queue an audio buffer to the audio buffer source.
@@ -26,9 +27,10 @@ namespace libavfilter
         /// @deprecated use av_buffersrc_add_ref() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_asrc_buffer_add_samples")]
-        internal static extern int av_asrc_buffer_add_samples(AVFilterContext* abuffersrc, byte* data, int* linesize, int nb_samples, int sample_rate, int sample_fmt, long ch_layout, int planar, long pts, int flags);
+        public static extern int av_asrc_buffer_add_samples(libavfilter.AVFilterContext* abuffersrc, byte** data, int* linesize, int nb_samples, int sample_rate, int sample_fmt, long ch_layout, int planar, long pts, int flags);
 
         /// <summary>
         /// Queue an audio buffer to the audio buffer source.
@@ -48,9 +50,10 @@ namespace libavfilter
         /// @deprecated use av_buffersrc_add_ref() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_asrc_buffer_add_buffer")]
-        internal static extern int av_asrc_buffer_add_buffer(AVFilterContext* abuffersrc, byte* buf, int buf_size, int sample_rate, int sample_fmt, long ch_layout, int planar, long pts, int flags);
+        public static extern int av_asrc_buffer_add_buffer(libavfilter.AVFilterContext* abuffersrc, byte* buf, int buf_size, int sample_rate, int sample_fmt, long ch_layout, int planar, long pts, int flags);
 
         /// <summary>
         /// Queue an audio buffer to the audio buffer source.
@@ -62,8 +65,9 @@ namespace libavfilter
         /// @deprecated use av_buffersrc_add_ref() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_asrc_buffer_add_audio_buffer_ref")]
-        internal static extern int av_asrc_buffer_add_audio_buffer_ref(AVFilterContext* abuffersrc, AVFilterBufferRef* samplesref, int flags);
+        public static extern int av_asrc_buffer_add_audio_buffer_ref(libavfilter.AVFilterContext* abuffersrc, libavfilter.AVFilterBufferRef* samplesref, int flags);
     }
 }

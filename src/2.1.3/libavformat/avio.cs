@@ -5,204 +5,196 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavformat
+namespace FFmpeg
 {
-    /// <summary>
-    /// Callback for checking whether to abort blocking functions.
-    /// AVERROR_EXIT is returned in this case by the interrupted
-    /// function. During blocking operations, callback is called with
-    /// opaque as parameter. If the callback returns 1, the
-    /// blocking operation will be aborted.
-    /// 
-    /// No members can be added to this struct without a major bump, if
-    /// new elements have been added after this struct in AVFormatContext
-    /// or AVIOContext.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVIOInterruptCB
+    public unsafe static partial class libavformat
     {
-        [FieldOffset(0)]
-        public global::System.IntPtr callback;
+        public const sbyte AVIO_SEEKABLE_NORMAL = 1;
 
-        [FieldOffset(4)]
-        public global::System.IntPtr opaque;
-    }
+        public const int AVSEEK_SIZE = 10000;
 
-    /// <summary>
-    /// Bytestream IO Context.
-    /// New fields can be added to the end with minor version bumps.
-    /// Removal, reordering and changes to existing fields require a major
-    /// version bump.
-    /// sizeof(AVIOContext) must not be used outside libav*.
-    /// 
-    /// @note None of the function pointers in AVIOContext should be called
-    /// directly, they should only be set by the client application
-    /// when implementing custom I/O. Normally these are set to the
-    /// function pointers specified in avio_alloc_context()
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVIOContext
-    {
+        public const int AVSEEK_FORCE = 20000;
+
+        public const sbyte AVIO_FLAG_READ = 1;
+
+        public const sbyte AVIO_FLAG_WRITE = 2;
+
+        public const sbyte AVIO_FLAG_NONBLOCK = 8;
+
+        public const ushort AVIO_FLAG_DIRECT = 8000;
+
         /// <summary>
-        /// A class for private options.
+        /// Callback for checking whether to abort blocking functions.
+        /// AVERROR_EXIT is returned in this case by the interrupted
+        /// function. During blocking operations, callback is called with
+        /// opaque as parameter. If the callback returns 1, the
+        /// blocking operation will be aborted.
         /// 
-        /// If this AVIOContext is created by avio_open2(), av_class is set and
-        /// passes the options down to protocols.
+        /// No members can be added to this struct without a major bump, if
+        /// new elements have been added after this struct in AVFormatContext
+        /// or AVIOContext.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVIOInterruptCB
+        {
+            public global::System.IntPtr callback;
+
+            public void* opaque;
+        }
+
+        /// <summary>
+        /// Bytestream IO Context.
+        /// New fields can be added to the end with minor version bumps.
+        /// Removal, reordering and changes to existing fields require a major
+        /// version bump.
+        /// sizeof(AVIOContext) must not be used outside libav*.
         /// 
-        /// If this AVIOContext is manually allocated, then av_class may be set
-        /// by
-        /// the caller.
-        /// 
-        /// warning -- this field can be NULL, be sure to not pass this
-        /// AVIOContext
-        /// to any av_opt_* functions in that case.
+        /// @note None of the function pointers in AVIOContext should be called
+        /// directly, they should only be set by the client application
+        /// when implementing custom I/O. Normally these are set to the
+        /// function pointers specified in avio_alloc_context()
         /// </summary>
-        [FieldOffset(0)]
-        public AVClass* av_class;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVIOContext
+        {
+            /// <summary>
+            /// A class for private options.
+            /// 
+            /// If this AVIOContext is created by avio_open2(), av_class is set and
+            /// passes the options down to protocols.
+            /// 
+            /// If this AVIOContext is manually allocated, then av_class may be set by
+            /// the caller.
+            /// 
+            /// warning -- this field can be NULL, be sure to not pass this AVIOContext
+            /// to any av_opt_* functions in that case.
+            /// </summary>
+            public libavutil.AVClass* av_class;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(4)]
-        public byte* buffer;
+            /// <summary>
+            /// Start of the buffer.
+            /// </summary>
+            public byte* buffer;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(8)]
-        public int buffer_size;
+            /// <summary>
+            /// Maximum buffer size
+            /// </summary>
+            public int buffer_size;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(12)]
-        public byte* buf_ptr;
+            /// <summary>
+            /// Current position in the buffer
+            /// </summary>
+            public byte* buf_ptr;
 
-        /// <summary>
-        /// buffer+buffer_size if the read function returned
-        /// less data than requested, e.g. for streams where
-        /// no more data has been received yet. */
-        /// </summary>
-        [FieldOffset(16)]
-        public byte* buf_end;
+            /// <summary>
+            /// End of the data, may be less than
+            /// buffer+buffer_size if the read function returned
+            /// less data than requested, e.g. for streams where
+            /// no more data has been received yet.
+            /// </summary>
+            public byte* buf_end;
 
-        /// <summary>
-        /// functions. */
-        /// </summary>
-        [FieldOffset(20)]
-        public global::System.IntPtr opaque;
+            /// <summary>
+            /// A private pointer, passed to the read/write/seek/...
+            /// functions.
+            /// </summary>
+            public void* opaque;
 
-        [FieldOffset(24)]
-        public global::System.IntPtr read_packet;
+            public global::System.IntPtr read_packet;
 
-        [FieldOffset(28)]
-        public global::System.IntPtr write_packet;
+            public global::System.IntPtr write_packet;
 
-        [FieldOffset(32)]
-        public global::System.IntPtr seek;
+            public global::System.IntPtr seek;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(40)]
-        public long pos;
+            /// <summary>
+            /// position in the file of the current buffer
+            /// </summary>
+            public long pos;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(48)]
-        public int must_flush;
+            /// <summary>
+            /// true if the next seek should flush
+            /// </summary>
+            public int must_flush;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(52)]
-        public int eof_reached;
+            /// <summary>
+            /// true if eof reached
+            /// </summary>
+            public int eof_reached;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(56)]
-        public int write_flag;
+            /// <summary>
+            /// true if open for writing
+            /// </summary>
+            public int write_flag;
 
-        [FieldOffset(60)]
-        public int max_packet_size;
+            public int max_packet_size;
 
-        [FieldOffset(64)]
-        public uint checksum;
+            public uint checksum;
 
-        [FieldOffset(68)]
-        public byte* checksum_ptr;
+            public byte* checksum_ptr;
 
-        [FieldOffset(72)]
-        public global::System.IntPtr update_checksum;
+            public global::System.IntPtr update_checksum;
 
-        /// <summary>
-        /// </summary>
-        [FieldOffset(76)]
-        public int error;
+            /// <summary>
+            /// contains the error code or 0 if no error happened
+            /// </summary>
+            public int error;
 
-        /// <summary>
-        /// Pause or resume playback for network streaming protocols - e.g.
-        /// MMS.
-        /// </summary>
-        [FieldOffset(80)]
-        public global::System.IntPtr read_pause;
+            /// <summary>
+            /// Pause or resume playback for network streaming protocols - e.g. MMS.
+            /// </summary>
+            public global::System.IntPtr read_pause;
 
-        /// <summary>
-        /// Seek to a given timestamp in stream with the specified
-        /// stream_index.
-        /// Needed for some network streaming protocols which don't support
-        /// seeking
-        /// to byte position.
-        /// </summary>
-        [FieldOffset(84)]
-        public global::System.IntPtr read_seek;
+            /// <summary>
+            /// Seek to a given timestamp in stream with the specified stream_index.
+            /// Needed for some network streaming protocols which don't support seeking
+            /// to byte position.
+            /// </summary>
+            public global::System.IntPtr read_seek;
 
-        /// <summary>
-        /// A combination of AVIO_SEEKABLE_ flags or 0 when the stream is not
-        /// seekable.
-        /// </summary>
-        [FieldOffset(88)]
-        public int seekable;
+            /// <summary>
+            /// A combination of AVIO_SEEKABLE_ flags or 0 when the stream is not
+            /// seekable.
+            /// </summary>
+            public int seekable;
 
-        /// <summary>
-        /// max filesize, used to limit allocations
-        /// This field is internal to libavformat and access from outside is
-        /// not allowed.
-        /// </summary>
-        [FieldOffset(96)]
-        public long maxsize;
+            /// <summary>
+            /// max filesize, used to limit allocations
+            /// This field is internal to libavformat and access from outside is not
+            /// allowed.
+            /// </summary>
+            public long maxsize;
 
-        /// <summary>
-        /// avio_read and avio_write should if possible be satisfied directly
-        /// instead of going through a buffer, and avio_seek will always
-        /// call the underlying seek function directly.
-        /// </summary>
-        [FieldOffset(104)]
-        public int direct;
+            /// <summary>
+            /// avio_read and avio_write should if possible be satisfied directly
+            /// instead of going through a buffer, and avio_seek will always
+            /// call the underlying seek function directly.
+            /// </summary>
+            public int direct;
 
-        /// <summary>
-        /// Bytes read statistic
-        /// This field is internal to libavformat and access from outside is
-        /// not allowed.
-        /// </summary>
-        [FieldOffset(112)]
-        public long bytes_read;
+            /// <summary>
+            /// Bytes read statistic
+            /// This field is internal to libavformat and access from outside is not
+            /// allowed.
+            /// </summary>
+            public long bytes_read;
 
-        /// <summary>
-        /// seek statistic
-        /// This field is internal to libavformat and access from outside is
-        /// not allowed.
-        /// </summary>
-        [FieldOffset(120)]
-        public int seek_count;
+            /// <summary>
+            /// seek statistic
+            /// This field is internal to libavformat and access from outside is not
+            /// allowed.
+            /// </summary>
+            public int seek_count;
 
-        /// <summary>
-        /// writeout statistic
-        /// This field is internal to libavformat and access from outside is
-        /// not allowed.
-        /// </summary>
-        [FieldOffset(124)]
-        public int writeout_count;
-    }
+            /// <summary>
+            /// writeout statistic
+            /// This field is internal to libavformat and access from outside is not
+            /// allowed.
+            /// </summary>
+            public int writeout_count;
+        }
 
-    public unsafe partial class libavformat
-    {
         /// <summary>
         /// Return AVIO_FLAG_* access flags corresponding to the access permissions
         /// of the resource in url, or a negative value corresponding to an
@@ -216,9 +208,10 @@ namespace libavformat
         /// checked resource.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_check")]
-        internal static extern int avio_check(global::System.IntPtr url, int flags);
+        public static extern int avio_check(string url, int flags);
 
         /// <summary>
         /// Allocate and initialize an AVIOContext for buffered I/O. It must be
@@ -243,127 +236,146 @@ namespace libavformat
         /// @return Allocated AVIOContext or NULL on failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_alloc_context")]
-        internal static extern AVIOContext* avio_alloc_context(byte* buffer, int buffer_size, int write_flag, global::System.IntPtr opaque, global::System.IntPtr read_packet, global::System.IntPtr write_packet, global::System.IntPtr seek);
+        public static extern libavformat.AVIOContext* avio_alloc_context(byte* buffer, int buffer_size, int write_flag, void* opaque, global::System.IntPtr read_packet, global::System.IntPtr write_packet, global::System.IntPtr seek);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_w8")]
-        internal static extern void avio_w8(AVIOContext* s, int b);
+        public static extern void avio_w8(libavformat.AVIOContext* s, int b);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_write")]
-        internal static extern void avio_write(AVIOContext* s, byte* buf, int size);
+        public static extern void avio_write(libavformat.AVIOContext* s, byte* buf, int size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wl64")]
-        internal static extern void avio_wl64(AVIOContext* s, ulong val);
+        public static extern void avio_wl64(libavformat.AVIOContext* s, ulong val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wb64")]
-        internal static extern void avio_wb64(AVIOContext* s, ulong val);
+        public static extern void avio_wb64(libavformat.AVIOContext* s, ulong val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wl32")]
-        internal static extern void avio_wl32(AVIOContext* s, uint val);
+        public static extern void avio_wl32(libavformat.AVIOContext* s, uint val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wb32")]
-        internal static extern void avio_wb32(AVIOContext* s, uint val);
+        public static extern void avio_wb32(libavformat.AVIOContext* s, uint val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wl24")]
-        internal static extern void avio_wl24(AVIOContext* s, uint val);
+        public static extern void avio_wl24(libavformat.AVIOContext* s, uint val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wb24")]
-        internal static extern void avio_wb24(AVIOContext* s, uint val);
+        public static extern void avio_wb24(libavformat.AVIOContext* s, uint val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wl16")]
-        internal static extern void avio_wl16(AVIOContext* s, uint val);
+        public static extern void avio_wl16(libavformat.AVIOContext* s, uint val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_wb16")]
-        internal static extern void avio_wb16(AVIOContext* s, uint val);
+        public static extern void avio_wb16(libavformat.AVIOContext* s, uint val);
 
         /// <summary>
         /// Write a NULL-terminated string.
         /// @return number of bytes written.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_put_str")]
-        internal static extern int avio_put_str(AVIOContext* s, global::System.IntPtr str);
+        public static extern int avio_put_str(libavformat.AVIOContext* s, string str);
 
         /// <summary>
         /// Convert an UTF-8 string to UTF-16LE and write it.
         /// @return number of bytes written.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_put_str16le")]
-        internal static extern int avio_put_str16le(AVIOContext* s, global::System.IntPtr str);
+        public static extern int avio_put_str16le(libavformat.AVIOContext* s, string str);
 
         /// <summary>
         /// fseek() equivalent for AVIOContext.
         /// @return new position or AVERROR.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_seek")]
-        internal static extern long avio_seek(AVIOContext* s, long offset, int whence);
+        public static extern long avio_seek(libavformat.AVIOContext* s, long offset, int whence);
 
         /// <summary>
         /// Skip given number of bytes forward
         /// @return new position or AVERROR.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_skip")]
-        internal static extern long avio_skip(AVIOContext* s, long offset);
+        public static extern long avio_skip(libavformat.AVIOContext* s, long offset);
 
         /// <summary>
         /// ftell() equivalent for AVIOContext.
         /// @return position or AVERROR.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_tell")]
-        internal static extern long avio_tell(AVIOContext* s);
+        public static extern long avio_tell(libavformat.AVIOContext* s);
 
         /// <summary>
         /// Get the filesize.
         /// @return filesize or AVERROR
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_size")]
-        internal static extern long avio_size(AVIOContext* s);
+        public static extern long avio_size(libavformat.AVIOContext* s);
 
         /// <summary>
         /// feof() equivalent for AVIOContext.
         /// @return non zero if and only if end of file
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="url_feof")]
-        internal static extern int url_feof(AVIOContext* s);
+        public static extern int url_feof(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_printf")]
-        internal static extern int avio_printf(AVIOContext* s, global::System.IntPtr fmt);
+        public static extern int avio_printf(libavformat.AVIOContext* s, string fmt);
 
         /// <summary>
         /// Force flushing of buffered data to the output s.
@@ -372,18 +384,20 @@ namespace libavformat
         /// without to wait to fill the internal buffer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_flush")]
-        internal static extern void avio_flush(AVIOContext* s);
+        public static extern void avio_flush(libavformat.AVIOContext* s);
 
         /// <summary>
         /// Read size bytes from AVIOContext into buf.
         /// @return number of bytes read or AVERROR
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_read")]
-        internal static extern int avio_read(AVIOContext* s, byte* buf, int size);
+        public static extern int avio_read(libavformat.AVIOContext* s, byte* buf, int size);
 
         /// <summary>
         /// @name Functions for reading from AVIOContext
@@ -393,49 +407,58 @@ namespace libavformat
         /// necessary
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_r8")]
-        internal static extern int avio_r8(AVIOContext* s);
+        public static extern int avio_r8(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rl16")]
-        internal static extern uint avio_rl16(AVIOContext* s);
+        public static extern uint avio_rl16(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rl24")]
-        internal static extern uint avio_rl24(AVIOContext* s);
+        public static extern uint avio_rl24(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rl32")]
-        internal static extern uint avio_rl32(AVIOContext* s);
+        public static extern uint avio_rl32(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rl64")]
-        internal static extern ulong avio_rl64(AVIOContext* s);
+        public static extern ulong avio_rl64(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rb16")]
-        internal static extern uint avio_rb16(AVIOContext* s);
+        public static extern uint avio_rb16(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rb24")]
-        internal static extern uint avio_rb24(AVIOContext* s);
+        public static extern uint avio_rb24(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rb32")]
-        internal static extern uint avio_rb32(AVIOContext* s);
+        public static extern uint avio_rb32(libavformat.AVIOContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_rb64")]
-        internal static extern ulong avio_rb64(AVIOContext* s);
+        public static extern ulong avio_rb64(libavformat.AVIOContext* s);
 
         /// <summary>
         /// Read a string from pb into buf. The reading will terminate when either
@@ -453,9 +476,10 @@ namespace libavformat
         /// bytes actually read.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_get_str")]
-        internal static extern int avio_get_str(AVIOContext* pb, int maxlen, sbyte* buf, int buflen);
+        public static extern int avio_get_str(libavformat.AVIOContext* pb, int maxlen, System.Text.StringBuilder buf, int buflen);
 
         /// <summary>
         /// Read a UTF-16 string from pb and convert it to UTF-8.
@@ -464,14 +488,16 @@ namespace libavformat
         /// @return number of bytes read (is always <= maxlen)
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_get_str16le")]
-        internal static extern int avio_get_str16le(AVIOContext* pb, int maxlen, sbyte* buf, int buflen);
+        public static extern int avio_get_str16le(libavformat.AVIOContext* pb, int maxlen, System.Text.StringBuilder buf, int buflen);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_get_str16be")]
-        internal static extern int avio_get_str16be(AVIOContext* pb, int maxlen, sbyte* buf, int buflen);
+        public static extern int avio_get_str16be(libavformat.AVIOContext* pb, int maxlen, System.Text.StringBuilder buf, int buflen);
 
         /// <summary>
         /// Create and initialize a AVIOContext for accessing the
@@ -487,9 +513,29 @@ namespace libavformat
         /// AVERROR code in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_open")]
-        internal static extern int avio_open(AVIOContext* s, global::System.IntPtr url, int flags);
+        public static extern int avio_open(libavformat.AVIOContext** s, string url, int flags);
+
+        /// <summary>
+        /// Create and initialize a AVIOContext for accessing the
+        /// resource indicated by url.
+        /// @note When the resource indicated by url has been opened in
+        /// read+write mode, the AVIOContext can be used only for writing.
+        /// 
+        /// @param s Used to return the pointer to the created AVIOContext.
+        /// In case of failure the pointed to value is set to NULL.
+        /// @param flags flags which control how the resource indicated by url
+        /// is to be opened
+        /// @return >= 0 in case of success, a negative value corresponding to an
+        /// AVERROR code in case of failure
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avio_open")]
+        public static extern int avio_open(ref libavformat.AVIOContext* s, string url, int flags);
 
         /// <summary>
         /// Create and initialize a AVIOContext for accessing the
@@ -511,9 +557,35 @@ namespace libavformat
         /// AVERROR code in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_open2")]
-        internal static extern int avio_open2(AVIOContext* s, global::System.IntPtr url, int flags, AVIOInterruptCB* int_cb, AVDictionary* options);
+        public static extern int avio_open2(libavformat.AVIOContext** s, string url, int flags, libavformat.AVIOInterruptCB* int_cb, libavutil.AVDictionary** options);
+
+        /// <summary>
+        /// Create and initialize a AVIOContext for accessing the
+        /// resource indicated by url.
+        /// @note When the resource indicated by url has been opened in
+        /// read+write mode, the AVIOContext can be used only for writing.
+        /// 
+        /// @param s Used to return the pointer to the created AVIOContext.
+        /// In case of failure the pointed to value is set to NULL.
+        /// @param flags flags which control how the resource indicated by url
+        /// is to be opened
+        /// @param int_cb an interrupt callback to be used at the protocols level
+        /// @param options  A dictionary filled with protocol-private options. On
+        /// return
+        /// this parameter will be destroyed and replaced with a dict containing
+        /// options
+        /// that were not found. May be NULL.
+        /// @return >= 0 in case of success, a negative value corresponding to an
+        /// AVERROR code in case of failure
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avio_open2")]
+        public static extern int avio_open2(ref libavformat.AVIOContext* s, string url, int flags, libavformat.AVIOInterruptCB* int_cb, ref libavutil.AVDictionary* options);
 
         /// <summary>
         /// Close the resource accessed by the AVIOContext s and free it.
@@ -526,9 +598,10 @@ namespace libavformat
         /// @see avio_closep
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_close")]
-        internal static extern int avio_close(AVIOContext* s);
+        public static extern int avio_close(libavformat.AVIOContext* s);
 
         /// <summary>
         /// Close the resource accessed by the AVIOContext *s, free it
@@ -542,9 +615,27 @@ namespace libavformat
         /// @see avio_close
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_closep")]
-        internal static extern int avio_closep(AVIOContext* s);
+        public static extern int avio_closep(libavformat.AVIOContext** s);
+
+        /// <summary>
+        /// Close the resource accessed by the AVIOContext *s, free it
+        /// and set the pointer pointing to it to NULL.
+        /// This function can only be used if s was opened by avio_open().
+        /// 
+        /// The internal buffer is automatically flushed before closing the
+        /// resource.
+        /// 
+        /// @return 0 on success, an AVERROR < 0 on error.
+        /// @see avio_close
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avio_closep")]
+        public static extern int avio_closep(ref libavformat.AVIOContext* s);
 
         /// <summary>
         /// Open a write only memory stream.
@@ -553,9 +644,22 @@ namespace libavformat
         /// @return zero if no error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_open_dyn_buf")]
-        internal static extern int avio_open_dyn_buf(AVIOContext* s);
+        public static extern int avio_open_dyn_buf(libavformat.AVIOContext** s);
+
+        /// <summary>
+        /// Open a write only memory stream.
+        /// 
+        /// @param s new IO context
+        /// @return zero if no error.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avio_open_dyn_buf")]
+        public static extern int avio_open_dyn_buf(ref libavformat.AVIOContext* s);
 
         /// <summary>
         /// Return the written size and a pointer to the buffer. The buffer
@@ -567,9 +671,25 @@ namespace libavformat
         /// @return the length of the byte buffer
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_close_dyn_buf")]
-        internal static extern int avio_close_dyn_buf(AVIOContext* s, byte* pbuffer);
+        public static extern int avio_close_dyn_buf(libavformat.AVIOContext* s, byte** pbuffer);
+
+        /// <summary>
+        /// Return the written size and a pointer to the buffer. The buffer
+        /// must be freed with av_free().
+        /// Padding of FF_INPUT_BUFFER_PADDING_SIZE is added to the buffer.
+        /// 
+        /// @param s IO context
+        /// @param pbuffer pointer to a byte buffer
+        /// @return the length of the byte buffer
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avio_close_dyn_buf")]
+        public static extern int avio_close_dyn_buf(libavformat.AVIOContext* s, ref byte* pbuffer);
 
         /// <summary>
         /// Iterate through names of available protocols.
@@ -583,9 +703,27 @@ namespace libavformat
         /// @return A static string containing the name of current protocol or NULL
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_enum_protocols")]
-        internal static extern global::System.IntPtr avio_enum_protocols(global::System.IntPtr opaque, int output);
+        public static extern sbyte* avio_enum_protocols(void** opaque, int output);
+
+        /// <summary>
+        /// Iterate through names of available protocols.
+        /// 
+        /// @param opaque A private pointer representing current protocol.
+        /// It must be a pointer to NULL on first iteration and will
+        /// be updated by successive calls to avio_enum_protocols.
+        /// @param output If set to 1, iterate over output protocols,
+        /// otherwise over input protocols.
+        /// 
+        /// @return A static string containing the name of current protocol or NULL
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avio_enum_protocols")]
+        public static extern sbyte* avio_enum_protocols(ref void* opaque, int output);
 
         /// <summary>
         /// Pause and resume playing - only meaningful if using a network streaming
@@ -593,9 +731,10 @@ namespace libavformat
         /// @param pause 1 for pause, 0 for resume
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_pause")]
-        internal static extern int avio_pause(AVIOContext* h, int pause);
+        public static extern int avio_pause(libavformat.AVIOContext* h, int pause);
 
         /// <summary>
         /// Seek to a given timestamp relative to some component stream.
@@ -616,8 +755,9 @@ namespace libavformat
         /// @see AVInputFormat::read_seek
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avformat-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avio_seek_time")]
-        internal static extern long avio_seek_time(AVIOContext* h, int stream_index, long timestamp, int flags);
+        public static extern long avio_seek_time(libavformat.AVIOContext* h, int stream_index, long timestamp, int flags);
     }
 }

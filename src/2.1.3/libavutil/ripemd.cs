@@ -6,22 +6,23 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVRIPEMD
+    public unsafe static partial class libavutil
     {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVRIPEMD
+        {
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Allocate an AVRIPEMD context.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_ripemd_alloc")]
-        internal static extern AVRIPEMD* av_ripemd_alloc();
+        public static extern libavutil.AVRIPEMD* av_ripemd_alloc();
 
         /// <summary>
         /// Initialize RIPEMD hashing.
@@ -31,9 +32,10 @@ namespace libavutil
         /// @return        zero if initialization succeeded, -1 otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_ripemd_init")]
-        internal static extern int av_ripemd_init(AVRIPEMD* context, int bits);
+        public static extern int av_ripemd_init(libavutil.AVRIPEMD* context, int bits);
 
         /// <summary>
         /// Update hash value.
@@ -43,9 +45,10 @@ namespace libavutil
         /// @param len     input data length
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_ripemd_update")]
-        internal static extern void av_ripemd_update(AVRIPEMD* context, byte* data, uint len);
+        public static extern void av_ripemd_update(libavutil.AVRIPEMD* context, byte* data, uint len);
 
         /// <summary>
         /// Finish hashing and output digest value.
@@ -54,8 +57,9 @@ namespace libavutil
         /// @param digest  buffer where output digest value is stored
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_ripemd_final")]
-        internal static extern void av_ripemd_final(AVRIPEMD* context, byte* digest);
+        public static extern void av_ripemd_final(libavutil.AVRIPEMD* context, byte* digest);
     }
 }

@@ -6,57 +6,55 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVBuffer
+    public unsafe static partial class libavutil
     {
-    }
-
-    /// <summary>
-    /// A reference to a data buffer.
-    /// 
-    /// The size of this struct is not a part of the public ABI and it is not
-    /// meant
-    /// to be allocated directly.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVBufferRef
-    {
-        [FieldOffset(0)]
-        public AVBuffer* buffer;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVBuffer
+        {
+        }
 
         /// <summary>
-        /// The data buffer. It is considered writable if and only if
-        /// this is the only reference to the buffer, in which case
-        /// av_buffer_is_writable() returns 1.
+        /// A reference to a data buffer.
+        /// 
+        /// The size of this struct is not a part of the public ABI and it is not
+        /// meant
+        /// to be allocated directly.
         /// </summary>
-        [FieldOffset(4)]
-        public byte* data;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVBufferRef
+        {
+            public libavutil.AVBuffer* buffer;
 
-        /// <summary>
-        /// Size of data in bytes.
-        /// </summary>
-        [FieldOffset(8)]
-        public int size;
-    }
+            /// <summary>
+            /// The data buffer. It is considered writable if and only if
+            /// this is the only reference to the buffer, in which case
+            /// av_buffer_is_writable() returns 1.
+            /// </summary>
+            public byte* data;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVBufferPool
-    {
-    }
+            /// <summary>
+            /// Size of data in bytes.
+            /// </summary>
+            public int size;
+        }
 
-    public unsafe partial class libavutil
-    {
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVBufferPool
+        {
+        }
+
         /// <summary>
         /// Allocate an AVBuffer of the given size using av_malloc().
         /// 
         /// @return an AVBufferRef of given size or NULL when out of memory
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_alloc")]
-        internal static extern AVBufferRef* av_buffer_alloc(int size);
+        public static extern libavutil.AVBufferRef* av_buffer_alloc(int size);
 
         /// <summary>
         /// Same as av_buffer_alloc(), except the returned buffer will be
@@ -64,9 +62,10 @@ namespace libavutil
         /// to zero.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_allocz")]
-        internal static extern AVBufferRef* av_buffer_allocz(int size);
+        public static extern libavutil.AVBufferRef* av_buffer_allocz(int size);
 
         /// <summary>
         /// Create an AVBuffer from an existing array.
@@ -81,14 +80,15 @@ namespace libavutil
         /// @param size   size of data in bytes
         /// @param free   a callback for freeing this buffer's data
         /// @param opaque parameter to be got for processing or passed to free
-        /// @param flags  a combination of AV_BUFFER_FLAG_*
+        /// @param flags  a combination of AV_BUFFER_FLAG_
         /// 
         /// @return an AVBufferRef referring to data on success, NULL on failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_create")]
-        internal static extern AVBufferRef* av_buffer_create(byte* data, int size, global::System.IntPtr free, global::System.IntPtr opaque, int flags);
+        public static extern libavutil.AVBufferRef* av_buffer_create(byte* data, int size, global::System.IntPtr free, void* opaque, int flags);
 
         /// <summary>
         /// Default free callback, which calls av_free() on the buffer data.
@@ -96,9 +96,10 @@ namespace libavutil
         /// directly.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_default_free")]
-        internal static extern void av_buffer_default_free(global::System.IntPtr opaque, byte* data);
+        public static extern void av_buffer_default_free(void* opaque, byte* data);
 
         /// <summary>
         /// Create a new reference to an AVBuffer.
@@ -108,9 +109,10 @@ namespace libavutil
         /// failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_ref")]
-        internal static extern AVBufferRef* av_buffer_ref(AVBufferRef* buf);
+        public static extern libavutil.AVBufferRef* av_buffer_ref(libavutil.AVBufferRef* buf);
 
         /// <summary>
         /// Free a given reference and automatically free the buffer if there are
@@ -121,9 +123,24 @@ namespace libavutil
         /// return.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_unref")]
-        internal static extern void av_buffer_unref(AVBufferRef* buf);
+        public static extern void av_buffer_unref(libavutil.AVBufferRef** buf);
+
+        /// <summary>
+        /// Free a given reference and automatically free the buffer if there are
+        /// no more
+        /// references to it.
+        /// 
+        /// @param buf the reference to be freed. The pointer is set to NULL on
+        /// return.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_buffer_unref")]
+        public static extern void av_buffer_unref(ref libavutil.AVBufferRef* buf);
 
         /// <summary>
         /// @return 1 if the caller may write to the data referred to by buf (which
@@ -134,22 +151,25 @@ namespace libavutil
         /// A positive answer is valid until av_buffer_ref() is called on buf.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_is_writable")]
-        internal static extern int av_buffer_is_writable(AVBufferRef* buf);
+        public static extern int av_buffer_is_writable(libavutil.AVBufferRef* buf);
 
         /// <summary>
         /// @return the opaque parameter set by av_buffer_create.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_get_opaque")]
-        internal static extern global::System.IntPtr av_buffer_get_opaque(AVBufferRef* buf);
+        public static extern void* av_buffer_get_opaque(libavutil.AVBufferRef* buf);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_get_ref_count")]
-        internal static extern int av_buffer_get_ref_count(AVBufferRef* buf);
+        public static extern int av_buffer_get_ref_count(libavutil.AVBufferRef* buf);
 
         /// <summary>
         /// Create a writable reference from a given buffer reference, avoiding
@@ -163,9 +183,27 @@ namespace libavutil
         /// @return 0 on success, a negative AVERROR on failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_make_writable")]
-        internal static extern int av_buffer_make_writable(AVBufferRef* buf);
+        public static extern int av_buffer_make_writable(libavutil.AVBufferRef** buf);
+
+        /// <summary>
+        /// Create a writable reference from a given buffer reference, avoiding
+        /// data copy
+        /// if possible.
+        /// 
+        /// @param buf buffer reference to make writable. On success, buf is either
+        /// left
+        /// untouched, or it is unreferenced and a new writable AVBufferRef is
+        /// written in its place. On failure, buf is left untouched.
+        /// @return 0 on success, a negative AVERROR on failure.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_buffer_make_writable")]
+        public static extern int av_buffer_make_writable(ref libavutil.AVBufferRef* buf);
 
         /// <summary>
         /// Reallocate a given buffer.
@@ -186,9 +224,34 @@ namespace libavutil
         /// a new buffer is allocated and the data is copied.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_realloc")]
-        internal static extern int av_buffer_realloc(AVBufferRef* buf, int size);
+        public static extern int av_buffer_realloc(libavutil.AVBufferRef** buf, int size);
+
+        /// <summary>
+        /// Reallocate a given buffer.
+        /// 
+        /// @param buf  a buffer reference to reallocate. On success, buf will be
+        /// unreferenced and a new reference with the required size will be
+        /// written in its place. On failure buf will be left untouched. *buf
+        /// may be NULL, then a new buffer is allocated.
+        /// @param size required new buffer size.
+        /// @return 0 on success, a negative AVERROR on failure.
+        /// 
+        /// @note the buffer is actually reallocated with av_realloc() only if it
+        /// was
+        /// initially allocated through av_buffer_realloc(NULL) and there is only
+        /// one
+        /// reference to it (i.e. the one passed to this function). In all other
+        /// cases
+        /// a new buffer is allocated and the data is copied.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_buffer_realloc")]
+        public static extern int av_buffer_realloc(ref libavutil.AVBufferRef* buf, int size);
 
         /// <summary>
         /// Allocate and initialize a buffer pool.
@@ -201,9 +264,10 @@ namespace libavutil
         /// @return newly created buffer pool on success, NULL on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_pool_init")]
-        internal static extern AVBufferPool* av_buffer_pool_init(int size, global::System.IntPtr alloc);
+        public static extern libavutil.AVBufferPool* av_buffer_pool_init(int size, global::System.IntPtr alloc);
 
         /// <summary>
         /// Mark the pool as being available for freeing. It will actually be freed
@@ -218,9 +282,28 @@ namespace libavutil
         /// @see av_buffer_pool_can_uninit()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_pool_uninit")]
-        internal static extern void av_buffer_pool_uninit(AVBufferPool* pool);
+        public static extern void av_buffer_pool_uninit(libavutil.AVBufferPool** pool);
+
+        /// <summary>
+        /// Mark the pool as being available for freeing. It will actually be freed
+        /// only
+        /// once all the allocated buffers associated with the pool are released.
+        /// Thus it
+        /// is safe to call this function while some of the allocated buffers are
+        /// still
+        /// in use.
+        /// 
+        /// @param pool pointer to the pool to be freed. It will be set to NULL.
+        /// @see av_buffer_pool_can_uninit()
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_buffer_pool_uninit")]
+        public static extern void av_buffer_pool_uninit(ref libavutil.AVBufferPool* pool);
 
         /// <summary>
         /// Allocate a new AVBuffer, reusing an old buffer from the pool when
@@ -230,8 +313,9 @@ namespace libavutil
         /// @return a reference to the new buffer on success, NULL on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffer_pool_get")]
-        internal static extern AVBufferRef* av_buffer_pool_get(AVBufferPool* pool);
+        public static extern libavutil.AVBufferRef* av_buffer_pool_get(libavutil.AVBufferPool* pool);
     }
 }

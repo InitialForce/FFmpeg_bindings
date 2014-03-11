@@ -5,3949 +5,4010 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavcodec
+namespace FFmpeg
 {
-    /// <summary>
-    /// Identify the syntax and semantics of the bitstream.
-    /// The principle is roughly:
-    /// Two decoders with the same ID can decode the same streams.
-    /// Two encoders with the same ID can encode compatible streams.
-    /// There may be slight deviations from the principle due to implementation
-    /// details.
-    /// 
-    /// If you add a codec ID to this list, add it so that
-    /// 1. no value of a existing codec ID changes (that would break ABI),
-    /// 2. Give it a value which when taken as ASCII is recognized uniquely by
-    /// a human as this specific codec.
-    /// This ensures that 2 forks can independently add AVCodecIDs without
-    /// producing conflicts.
-    /// 
-    /// After adding new codec IDs, do not forget to add an entry to the codec
-    /// descriptor list and bump libavcodec minor version.
-    /// </summary>
-    public enum AVCodecID
+    public unsafe static partial class libavcodec
     {
-        AV_CODEC_ID_NONE = 0,
-        AV_CODEC_ID_MPEG1VIDEO = 1,
-        /// <summary>preferred ID for MPEG-1/2 video decoding</summary>
-        AV_CODEC_ID_MPEG2VIDEO = 2,
-        AV_CODEC_ID_MPEG2VIDEO_XVMC = 3,
-        AV_CODEC_ID_H261 = 4,
-        AV_CODEC_ID_H263 = 5,
-        AV_CODEC_ID_RV10 = 6,
-        AV_CODEC_ID_RV20 = 7,
-        AV_CODEC_ID_MJPEG = 8,
-        AV_CODEC_ID_MJPEGB = 9,
-        AV_CODEC_ID_LJPEG = 10,
-        AV_CODEC_ID_SP5X = 11,
-        AV_CODEC_ID_JPEGLS = 12,
-        AV_CODEC_ID_MPEG4 = 13,
-        AV_CODEC_ID_RAWVIDEO = 14,
-        AV_CODEC_ID_MSMPEG4V1 = 15,
-        AV_CODEC_ID_MSMPEG4V2 = 16,
-        AV_CODEC_ID_MSMPEG4V3 = 17,
-        AV_CODEC_ID_WMV1 = 18,
-        AV_CODEC_ID_WMV2 = 19,
-        AV_CODEC_ID_H263P = 20,
-        AV_CODEC_ID_H263I = 21,
-        AV_CODEC_ID_FLV1 = 22,
-        AV_CODEC_ID_SVQ1 = 23,
-        AV_CODEC_ID_SVQ3 = 24,
-        AV_CODEC_ID_DVVIDEO = 25,
-        AV_CODEC_ID_HUFFYUV = 26,
-        AV_CODEC_ID_CYUV = 27,
-        AV_CODEC_ID_H264 = 28,
-        AV_CODEC_ID_INDEO3 = 29,
-        AV_CODEC_ID_VP3 = 30,
-        AV_CODEC_ID_THEORA = 31,
-        AV_CODEC_ID_ASV1 = 32,
-        AV_CODEC_ID_ASV2 = 33,
-        AV_CODEC_ID_FFV1 = 34,
-        AV_CODEC_ID_4XM = 35,
-        AV_CODEC_ID_VCR1 = 36,
-        AV_CODEC_ID_CLJR = 37,
-        AV_CODEC_ID_MDEC = 38,
-        AV_CODEC_ID_ROQ = 39,
-        AV_CODEC_ID_INTERPLAY_VIDEO = 40,
-        AV_CODEC_ID_XAN_WC3 = 41,
-        AV_CODEC_ID_XAN_WC4 = 42,
-        AV_CODEC_ID_RPZA = 43,
-        AV_CODEC_ID_CINEPAK = 44,
-        AV_CODEC_ID_WS_VQA = 45,
-        AV_CODEC_ID_MSRLE = 46,
-        AV_CODEC_ID_MSVIDEO1 = 47,
-        AV_CODEC_ID_IDCIN = 48,
-        AV_CODEC_ID_8BPS = 49,
-        AV_CODEC_ID_SMC = 50,
-        AV_CODEC_ID_FLIC = 51,
-        AV_CODEC_ID_TRUEMOTION1 = 52,
-        AV_CODEC_ID_VMDVIDEO = 53,
-        AV_CODEC_ID_MSZH = 54,
-        AV_CODEC_ID_ZLIB = 55,
-        AV_CODEC_ID_QTRLE = 56,
-        AV_CODEC_ID_TSCC = 57,
-        AV_CODEC_ID_ULTI = 58,
-        AV_CODEC_ID_QDRAW = 59,
-        AV_CODEC_ID_VIXL = 60,
-        AV_CODEC_ID_QPEG = 61,
-        AV_CODEC_ID_PNG = 62,
-        AV_CODEC_ID_PPM = 63,
-        AV_CODEC_ID_PBM = 64,
-        AV_CODEC_ID_PGM = 65,
-        AV_CODEC_ID_PGMYUV = 66,
-        AV_CODEC_ID_PAM = 67,
-        AV_CODEC_ID_FFVHUFF = 68,
-        AV_CODEC_ID_RV30 = 69,
-        AV_CODEC_ID_RV40 = 70,
-        AV_CODEC_ID_VC1 = 71,
-        AV_CODEC_ID_WMV3 = 72,
-        AV_CODEC_ID_LOCO = 73,
-        AV_CODEC_ID_WNV1 = 74,
-        AV_CODEC_ID_AASC = 75,
-        AV_CODEC_ID_INDEO2 = 76,
-        AV_CODEC_ID_FRAPS = 77,
-        AV_CODEC_ID_TRUEMOTION2 = 78,
-        AV_CODEC_ID_BMP = 79,
-        AV_CODEC_ID_CSCD = 80,
-        AV_CODEC_ID_MMVIDEO = 81,
-        AV_CODEC_ID_ZMBV = 82,
-        AV_CODEC_ID_AVS = 83,
-        AV_CODEC_ID_SMACKVIDEO = 84,
-        AV_CODEC_ID_NUV = 85,
-        AV_CODEC_ID_KMVC = 86,
-        AV_CODEC_ID_FLASHSV = 87,
-        AV_CODEC_ID_CAVS = 88,
-        AV_CODEC_ID_JPEG2000 = 89,
-        AV_CODEC_ID_VMNC = 90,
-        AV_CODEC_ID_VP5 = 91,
-        AV_CODEC_ID_VP6 = 92,
-        AV_CODEC_ID_VP6F = 93,
-        AV_CODEC_ID_TARGA = 94,
-        AV_CODEC_ID_DSICINVIDEO = 95,
-        AV_CODEC_ID_TIERTEXSEQVIDEO = 96,
-        AV_CODEC_ID_TIFF = 97,
-        AV_CODEC_ID_GIF = 98,
-        AV_CODEC_ID_DXA = 99,
-        AV_CODEC_ID_DNXHD = 100,
-        AV_CODEC_ID_THP = 101,
-        AV_CODEC_ID_SGI = 102,
-        AV_CODEC_ID_C93 = 103,
-        AV_CODEC_ID_BETHSOFTVID = 104,
-        AV_CODEC_ID_PTX = 105,
-        AV_CODEC_ID_TXD = 106,
-        AV_CODEC_ID_VP6A = 107,
-        AV_CODEC_ID_AMV = 108,
-        AV_CODEC_ID_VB = 109,
-        AV_CODEC_ID_PCX = 110,
-        AV_CODEC_ID_SUNRAST = 111,
-        AV_CODEC_ID_INDEO4 = 112,
-        AV_CODEC_ID_INDEO5 = 113,
-        AV_CODEC_ID_MIMIC = 114,
-        AV_CODEC_ID_RL2 = 115,
-        AV_CODEC_ID_ESCAPE124 = 116,
-        AV_CODEC_ID_DIRAC = 117,
-        AV_CODEC_ID_BFI = 118,
-        AV_CODEC_ID_CMV = 119,
-        AV_CODEC_ID_MOTIONPIXELS = 120,
-        AV_CODEC_ID_TGV = 121,
-        AV_CODEC_ID_TGQ = 122,
-        AV_CODEC_ID_TQI = 123,
-        AV_CODEC_ID_AURA = 124,
-        AV_CODEC_ID_AURA2 = 125,
-        AV_CODEC_ID_V210X = 126,
-        AV_CODEC_ID_TMV = 127,
-        AV_CODEC_ID_V210 = 128,
-        AV_CODEC_ID_DPX = 129,
-        AV_CODEC_ID_MAD = 130,
-        AV_CODEC_ID_FRWU = 131,
-        AV_CODEC_ID_FLASHSV2 = 132,
-        AV_CODEC_ID_CDGRAPHICS = 133,
-        AV_CODEC_ID_R210 = 134,
-        AV_CODEC_ID_ANM = 135,
-        AV_CODEC_ID_BINKVIDEO = 136,
-        AV_CODEC_ID_IFF_ILBM = 137,
-        AV_CODEC_ID_IFF_BYTERUN1 = 138,
-        AV_CODEC_ID_KGV1 = 139,
-        AV_CODEC_ID_YOP = 140,
-        AV_CODEC_ID_VP8 = 141,
-        AV_CODEC_ID_PICTOR = 142,
-        AV_CODEC_ID_ANSI = 143,
-        AV_CODEC_ID_A64_MULTI = 144,
-        AV_CODEC_ID_A64_MULTI5 = 145,
-        AV_CODEC_ID_R10K = 146,
-        AV_CODEC_ID_MXPEG = 147,
-        AV_CODEC_ID_LAGARITH = 148,
-        AV_CODEC_ID_PRORES = 149,
-        AV_CODEC_ID_JV = 150,
-        AV_CODEC_ID_DFA = 151,
-        AV_CODEC_ID_WMV3IMAGE = 152,
-        AV_CODEC_ID_VC1IMAGE = 153,
-        AV_CODEC_ID_UTVIDEO = 154,
-        AV_CODEC_ID_BMV_VIDEO = 155,
-        AV_CODEC_ID_VBLE = 156,
-        AV_CODEC_ID_DXTORY = 157,
-        AV_CODEC_ID_V410 = 158,
-        AV_CODEC_ID_XWD = 159,
-        AV_CODEC_ID_CDXL = 160,
-        AV_CODEC_ID_XBM = 161,
-        AV_CODEC_ID_ZEROCODEC = 162,
-        AV_CODEC_ID_MSS1 = 163,
-        AV_CODEC_ID_MSA1 = 164,
-        AV_CODEC_ID_TSCC2 = 165,
-        AV_CODEC_ID_MTS2 = 166,
-        AV_CODEC_ID_CLLC = 167,
-        AV_CODEC_ID_MSS2 = 168,
-        AV_CODEC_ID_VP9 = 169,
-        AV_CODEC_ID_AIC = 170,
-        AV_CODEC_ID_ESCAPE130_DEPRECATED = 171,
-        AV_CODEC_ID_G2M_DEPRECATED = 172,
-        AV_CODEC_ID_WEBP_DEPRECATED = 173,
-        AV_CODEC_ID_BRENDER_PIX = 1112557912,
-        AV_CODEC_ID_Y41P = 1496592720,
-        AV_CODEC_ID_ESCAPE130 = 1160852272,
-        AV_CODEC_ID_EXR = 809850962,
-        AV_CODEC_ID_AVRP = 1096176208,
-        AV_CODEC_ID_012V = 808530518,
-        AV_CODEC_ID_G2M = 4665933,
-        AV_CODEC_ID_AVUI = 1096176969,
-        AV_CODEC_ID_AYUV = 1096373590,
-        AV_CODEC_ID_TARGA_Y216 = 1412575542,
-        AV_CODEC_ID_V308 = 1446195256,
-        AV_CODEC_ID_V408 = 1446260792,
-        AV_CODEC_ID_YUV4 = 1498764852,
-        AV_CODEC_ID_SANM = 1396788813,
-        AV_CODEC_ID_PAF_VIDEO = 1346455126,
-        AV_CODEC_ID_AVRN = 1096176238,
-        AV_CODEC_ID_CPIA = 1129335105,
-        AV_CODEC_ID_XFACE = 1480999235,
-        AV_CODEC_ID_SGIRLE = 1397180754,
-        AV_CODEC_ID_MVC1 = 1297498929,
-        AV_CODEC_ID_MVC2 = 1297498930,
-        AV_CODEC_ID_SNOW = 1397641047,
-        AV_CODEC_ID_WEBP = 1464156752,
-        AV_CODEC_ID_SMVJPEG = 1397577290,
-        AV_CODEC_ID_HEVC = 1211250229,
-        /// <summary>A dummy id pointing at the start of audio codecs</summary>
-        AV_CODEC_ID_FIRST_AUDIO = 65536,
-        AV_CODEC_ID_PCM_S16LE = 65536,
-        AV_CODEC_ID_PCM_S16BE = 65537,
-        AV_CODEC_ID_PCM_U16LE = 65538,
-        AV_CODEC_ID_PCM_U16BE = 65539,
-        AV_CODEC_ID_PCM_S8 = 65540,
-        AV_CODEC_ID_PCM_U8 = 65541,
-        AV_CODEC_ID_PCM_MULAW = 65542,
-        AV_CODEC_ID_PCM_ALAW = 65543,
-        AV_CODEC_ID_PCM_S32LE = 65544,
-        AV_CODEC_ID_PCM_S32BE = 65545,
-        AV_CODEC_ID_PCM_U32LE = 65546,
-        AV_CODEC_ID_PCM_U32BE = 65547,
-        AV_CODEC_ID_PCM_S24LE = 65548,
-        AV_CODEC_ID_PCM_S24BE = 65549,
-        AV_CODEC_ID_PCM_U24LE = 65550,
-        AV_CODEC_ID_PCM_U24BE = 65551,
-        AV_CODEC_ID_PCM_S24DAUD = 65552,
-        AV_CODEC_ID_PCM_ZORK = 65553,
-        AV_CODEC_ID_PCM_S16LE_PLANAR = 65554,
-        AV_CODEC_ID_PCM_DVD = 65555,
-        AV_CODEC_ID_PCM_F32BE = 65556,
-        AV_CODEC_ID_PCM_F32LE = 65557,
-        AV_CODEC_ID_PCM_F64BE = 65558,
-        AV_CODEC_ID_PCM_F64LE = 65559,
-        AV_CODEC_ID_PCM_BLURAY = 65560,
-        AV_CODEC_ID_PCM_LXF = 65561,
-        AV_CODEC_ID_S302M = 65562,
-        AV_CODEC_ID_PCM_S8_PLANAR = 65563,
-        AV_CODEC_ID_PCM_S24LE_PLANAR_DEPRECATED = 65564,
-        AV_CODEC_ID_PCM_S32LE_PLANAR_DEPRECATED = 65565,
-        AV_CODEC_ID_PCM_S24LE_PLANAR = 407917392,
-        AV_CODEC_ID_PCM_S32LE_PLANAR = 542135120,
-        AV_CODEC_ID_PCM_S16BE_PLANAR = 1347637264,
-        AV_CODEC_ID_ADPCM_IMA_QT = 69632,
-        AV_CODEC_ID_ADPCM_IMA_WAV = 69633,
-        AV_CODEC_ID_ADPCM_IMA_DK3 = 69634,
-        AV_CODEC_ID_ADPCM_IMA_DK4 = 69635,
-        AV_CODEC_ID_ADPCM_IMA_WS = 69636,
-        AV_CODEC_ID_ADPCM_IMA_SMJPEG = 69637,
-        AV_CODEC_ID_ADPCM_MS = 69638,
-        AV_CODEC_ID_ADPCM_4XM = 69639,
-        AV_CODEC_ID_ADPCM_XA = 69640,
-        AV_CODEC_ID_ADPCM_ADX = 69641,
-        AV_CODEC_ID_ADPCM_EA = 69642,
-        AV_CODEC_ID_ADPCM_G726 = 69643,
-        AV_CODEC_ID_ADPCM_CT = 69644,
-        AV_CODEC_ID_ADPCM_SWF = 69645,
-        AV_CODEC_ID_ADPCM_YAMAHA = 69646,
-        AV_CODEC_ID_ADPCM_SBPRO_4 = 69647,
-        AV_CODEC_ID_ADPCM_SBPRO_3 = 69648,
-        AV_CODEC_ID_ADPCM_SBPRO_2 = 69649,
-        AV_CODEC_ID_ADPCM_THP = 69650,
-        AV_CODEC_ID_ADPCM_IMA_AMV = 69651,
-        AV_CODEC_ID_ADPCM_EA_R1 = 69652,
-        AV_CODEC_ID_ADPCM_EA_R3 = 69653,
-        AV_CODEC_ID_ADPCM_EA_R2 = 69654,
-        AV_CODEC_ID_ADPCM_IMA_EA_SEAD = 69655,
-        AV_CODEC_ID_ADPCM_IMA_EA_EACS = 69656,
-        AV_CODEC_ID_ADPCM_EA_XAS = 69657,
-        AV_CODEC_ID_ADPCM_EA_MAXIS_XA = 69658,
-        AV_CODEC_ID_ADPCM_IMA_ISS = 69659,
-        AV_CODEC_ID_ADPCM_G722 = 69660,
-        AV_CODEC_ID_ADPCM_IMA_APC = 69661,
-        AV_CODEC_ID_VIMA = 1447644481,
-        AV_CODEC_ID_ADPCM_AFC = 1095123744,
-        AV_CODEC_ID_ADPCM_IMA_OKI = 1330333984,
-        AV_CODEC_ID_ADPCM_DTK = 1146374944,
-        AV_CODEC_ID_ADPCM_IMA_RAD = 1380008992,
-        AV_CODEC_ID_ADPCM_G726LE = 909260615,
-        AV_CODEC_ID_AMR_NB = 73728,
-        AV_CODEC_ID_AMR_WB = 73729,
-        AV_CODEC_ID_RA_144 = 77824,
-        AV_CODEC_ID_RA_288 = 77825,
-        AV_CODEC_ID_ROQ_DPCM = 81920,
-        AV_CODEC_ID_INTERPLAY_DPCM = 81921,
-        AV_CODEC_ID_XAN_DPCM = 81922,
-        AV_CODEC_ID_SOL_DPCM = 81923,
-        AV_CODEC_ID_MP2 = 86016,
-        /// <summary>preferred ID for decoding MPEG audio layer 1, 2 or 3</summary>
-        AV_CODEC_ID_MP3 = 86017,
-        AV_CODEC_ID_AAC = 86018,
-        AV_CODEC_ID_AC3 = 86019,
-        AV_CODEC_ID_DTS = 86020,
-        AV_CODEC_ID_VORBIS = 86021,
-        AV_CODEC_ID_DVAUDIO = 86022,
-        AV_CODEC_ID_WMAV1 = 86023,
-        AV_CODEC_ID_WMAV2 = 86024,
-        AV_CODEC_ID_MACE3 = 86025,
-        AV_CODEC_ID_MACE6 = 86026,
-        AV_CODEC_ID_VMDAUDIO = 86027,
-        AV_CODEC_ID_FLAC = 86028,
-        AV_CODEC_ID_MP3ADU = 86029,
-        AV_CODEC_ID_MP3ON4 = 86030,
-        AV_CODEC_ID_SHORTEN = 86031,
-        AV_CODEC_ID_ALAC = 86032,
-        AV_CODEC_ID_WESTWOOD_SND1 = 86033,
-        /// <summary>as in Berlin toast format</summary>
-        AV_CODEC_ID_GSM = 86034,
-        AV_CODEC_ID_QDM2 = 86035,
-        AV_CODEC_ID_COOK = 86036,
-        AV_CODEC_ID_TRUESPEECH = 86037,
-        AV_CODEC_ID_TTA = 86038,
-        AV_CODEC_ID_SMACKAUDIO = 86039,
-        AV_CODEC_ID_QCELP = 86040,
-        AV_CODEC_ID_WAVPACK = 86041,
-        AV_CODEC_ID_DSICINAUDIO = 86042,
-        AV_CODEC_ID_IMC = 86043,
-        AV_CODEC_ID_MUSEPACK7 = 86044,
-        AV_CODEC_ID_MLP = 86045,
-        AV_CODEC_ID_GSM_MS = 86046,
-        AV_CODEC_ID_ATRAC3 = 86047,
-        AV_CODEC_ID_VOXWARE = 86048,
-        AV_CODEC_ID_APE = 86049,
-        AV_CODEC_ID_NELLYMOSER = 86050,
-        AV_CODEC_ID_MUSEPACK8 = 86051,
-        AV_CODEC_ID_SPEEX = 86052,
-        AV_CODEC_ID_WMAVOICE = 86053,
-        AV_CODEC_ID_WMAPRO = 86054,
-        AV_CODEC_ID_WMALOSSLESS = 86055,
-        AV_CODEC_ID_ATRAC3P = 86056,
-        AV_CODEC_ID_EAC3 = 86057,
-        AV_CODEC_ID_SIPR = 86058,
-        AV_CODEC_ID_MP1 = 86059,
-        AV_CODEC_ID_TWINVQ = 86060,
-        AV_CODEC_ID_TRUEHD = 86061,
-        AV_CODEC_ID_MP4ALS = 86062,
-        AV_CODEC_ID_ATRAC1 = 86063,
-        AV_CODEC_ID_BINKAUDIO_RDFT = 86064,
-        AV_CODEC_ID_BINKAUDIO_DCT = 86065,
-        AV_CODEC_ID_AAC_LATM = 86066,
-        AV_CODEC_ID_QDMC = 86067,
-        AV_CODEC_ID_CELT = 86068,
-        AV_CODEC_ID_G723_1 = 86069,
-        AV_CODEC_ID_G729 = 86070,
-        AV_CODEC_ID_8SVX_EXP = 86071,
-        AV_CODEC_ID_8SVX_FIB = 86072,
-        AV_CODEC_ID_BMV_AUDIO = 86073,
-        AV_CODEC_ID_RALF = 86074,
-        AV_CODEC_ID_IAC = 86075,
-        AV_CODEC_ID_ILBC = 86076,
-        AV_CODEC_ID_OPUS_DEPRECATED = 86077,
-        AV_CODEC_ID_COMFORT_NOISE = 86078,
-        AV_CODEC_ID_TAK_DEPRECATED = 86079,
-        AV_CODEC_ID_METASOUND = 86080,
-        AV_CODEC_ID_FFWAVESYNTH = 1179014995,
-        AV_CODEC_ID_SONIC = 1397706307,
-        AV_CODEC_ID_SONIC_LS = 1397706316,
-        AV_CODEC_ID_PAF_AUDIO = 1346455105,
-        AV_CODEC_ID_OPUS = 1330664787,
-        AV_CODEC_ID_TAK = 1950507339,
-        AV_CODEC_ID_EVRC = 1936029283,
-        AV_CODEC_ID_SMV = 1936944502,
-        /// <summary>A dummy ID pointing at the start of subtitle codecs.</summary>
-        AV_CODEC_ID_FIRST_SUBTITLE = 94208,
-        AV_CODEC_ID_DVD_SUBTITLE = 94208,
-        AV_CODEC_ID_DVB_SUBTITLE = 94209,
-        /// <summary>raw UTF-8 text</summary>
-        AV_CODEC_ID_TEXT = 94210,
-        AV_CODEC_ID_XSUB = 94211,
-        AV_CODEC_ID_SSA = 94212,
-        AV_CODEC_ID_MOV_TEXT = 94213,
-        AV_CODEC_ID_HDMV_PGS_SUBTITLE = 94214,
-        AV_CODEC_ID_DVB_TELETEXT = 94215,
-        AV_CODEC_ID_SRT = 94216,
-        AV_CODEC_ID_MICRODVD = 1833195076,
-        AV_CODEC_ID_EIA_608 = 1664495672,
-        AV_CODEC_ID_JACOSUB = 1246975298,
-        AV_CODEC_ID_SAMI = 1396788553,
-        AV_CODEC_ID_REALTEXT = 1381259348,
-        AV_CODEC_ID_SUBVIEWER1 = 1398953521,
-        AV_CODEC_ID_SUBVIEWER = 1400201814,
-        AV_CODEC_ID_SUBRIP = 1397909872,
-        AV_CODEC_ID_WEBVTT = 1465275476,
-        AV_CODEC_ID_MPL2 = 1297108018,
-        AV_CODEC_ID_VPLAYER = 1448111218,
-        AV_CODEC_ID_PJS = 1349012051,
-        /// <summary>ASS as defined in Matroska</summary>
-        AV_CODEC_ID_ASS = 1095979808,
-        /// <summary>A dummy ID pointing at the start of various fake codecs.</summary>
-        AV_CODEC_ID_FIRST_UNKNOWN = 98304,
-        AV_CODEC_ID_TTF = 98304,
-        AV_CODEC_ID_BINTEXT = 1112823892,
-        AV_CODEC_ID_XBIN = 1480739150,
-        AV_CODEC_ID_IDF = 4801606,
-        AV_CODEC_ID_OTF = 5198918,
-        AV_CODEC_ID_SMPTE_KLV = 1263294017,
-        AV_CODEC_ID_DVD_NAV = 1145979222,
-        /// <summary>codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it</summary>
-        AV_CODEC_ID_PROBE = 102400,
-        /// <summary>_FAKE_ codec to indicate a raw MPEG-2 TS stream (only used by libavformat)</summary>
-        AV_CODEC_ID_MPEG2TS = 131072,
-        /// <summary>_FAKE_ codec to indicate a MPEG-4 Systems stream (only used by libavformat)</summary>
-        AV_CODEC_ID_MPEG4SYSTEMS = 131073,
-        /// <summary>Dummy codec for streams containing only metadata information.</summary>
-        AV_CODEC_ID_FFMETADATA = 135168,
-        CODEC_ID_NONE = 0,
-        CODEC_ID_MPEG1VIDEO = 1,
-        /// <summary>preferred ID for MPEG-1/2 video decoding</summary>
-        CODEC_ID_MPEG2VIDEO = 2,
-        CODEC_ID_MPEG2VIDEO_XVMC = 3,
-        CODEC_ID_H261 = 4,
-        CODEC_ID_H263 = 5,
-        CODEC_ID_RV10 = 6,
-        CODEC_ID_RV20 = 7,
-        CODEC_ID_MJPEG = 8,
-        CODEC_ID_MJPEGB = 9,
-        CODEC_ID_LJPEG = 10,
-        CODEC_ID_SP5X = 11,
-        CODEC_ID_JPEGLS = 12,
-        CODEC_ID_MPEG4 = 13,
-        CODEC_ID_RAWVIDEO = 14,
-        CODEC_ID_MSMPEG4V1 = 15,
-        CODEC_ID_MSMPEG4V2 = 16,
-        CODEC_ID_MSMPEG4V3 = 17,
-        CODEC_ID_WMV1 = 18,
-        CODEC_ID_WMV2 = 19,
-        CODEC_ID_H263P = 20,
-        CODEC_ID_H263I = 21,
-        CODEC_ID_FLV1 = 22,
-        CODEC_ID_SVQ1 = 23,
-        CODEC_ID_SVQ3 = 24,
-        CODEC_ID_DVVIDEO = 25,
-        CODEC_ID_HUFFYUV = 26,
-        CODEC_ID_CYUV = 27,
-        CODEC_ID_H264 = 28,
-        CODEC_ID_INDEO3 = 29,
-        CODEC_ID_VP3 = 30,
-        CODEC_ID_THEORA = 31,
-        CODEC_ID_ASV1 = 32,
-        CODEC_ID_ASV2 = 33,
-        CODEC_ID_FFV1 = 34,
-        CODEC_ID_4XM = 35,
-        CODEC_ID_VCR1 = 36,
-        CODEC_ID_CLJR = 37,
-        CODEC_ID_MDEC = 38,
-        CODEC_ID_ROQ = 39,
-        CODEC_ID_INTERPLAY_VIDEO = 40,
-        CODEC_ID_XAN_WC3 = 41,
-        CODEC_ID_XAN_WC4 = 42,
-        CODEC_ID_RPZA = 43,
-        CODEC_ID_CINEPAK = 44,
-        CODEC_ID_WS_VQA = 45,
-        CODEC_ID_MSRLE = 46,
-        CODEC_ID_MSVIDEO1 = 47,
-        CODEC_ID_IDCIN = 48,
-        CODEC_ID_8BPS = 49,
-        CODEC_ID_SMC = 50,
-        CODEC_ID_FLIC = 51,
-        CODEC_ID_TRUEMOTION1 = 52,
-        CODEC_ID_VMDVIDEO = 53,
-        CODEC_ID_MSZH = 54,
-        CODEC_ID_ZLIB = 55,
-        CODEC_ID_QTRLE = 56,
-        CODEC_ID_TSCC = 57,
-        CODEC_ID_ULTI = 58,
-        CODEC_ID_QDRAW = 59,
-        CODEC_ID_VIXL = 60,
-        CODEC_ID_QPEG = 61,
-        CODEC_ID_PNG = 62,
-        CODEC_ID_PPM = 63,
-        CODEC_ID_PBM = 64,
-        CODEC_ID_PGM = 65,
-        CODEC_ID_PGMYUV = 66,
-        CODEC_ID_PAM = 67,
-        CODEC_ID_FFVHUFF = 68,
-        CODEC_ID_RV30 = 69,
-        CODEC_ID_RV40 = 70,
-        CODEC_ID_VC1 = 71,
-        CODEC_ID_WMV3 = 72,
-        CODEC_ID_LOCO = 73,
-        CODEC_ID_WNV1 = 74,
-        CODEC_ID_AASC = 75,
-        CODEC_ID_INDEO2 = 76,
-        CODEC_ID_FRAPS = 77,
-        CODEC_ID_TRUEMOTION2 = 78,
-        CODEC_ID_BMP = 79,
-        CODEC_ID_CSCD = 80,
-        CODEC_ID_MMVIDEO = 81,
-        CODEC_ID_ZMBV = 82,
-        CODEC_ID_AVS = 83,
-        CODEC_ID_SMACKVIDEO = 84,
-        CODEC_ID_NUV = 85,
-        CODEC_ID_KMVC = 86,
-        CODEC_ID_FLASHSV = 87,
-        CODEC_ID_CAVS = 88,
-        CODEC_ID_JPEG2000 = 89,
-        CODEC_ID_VMNC = 90,
-        CODEC_ID_VP5 = 91,
-        CODEC_ID_VP6 = 92,
-        CODEC_ID_VP6F = 93,
-        CODEC_ID_TARGA = 94,
-        CODEC_ID_DSICINVIDEO = 95,
-        CODEC_ID_TIERTEXSEQVIDEO = 96,
-        CODEC_ID_TIFF = 97,
-        CODEC_ID_GIF = 98,
-        CODEC_ID_DXA = 99,
-        CODEC_ID_DNXHD = 100,
-        CODEC_ID_THP = 101,
-        CODEC_ID_SGI = 102,
-        CODEC_ID_C93 = 103,
-        CODEC_ID_BETHSOFTVID = 104,
-        CODEC_ID_PTX = 105,
-        CODEC_ID_TXD = 106,
-        CODEC_ID_VP6A = 107,
-        CODEC_ID_AMV = 108,
-        CODEC_ID_VB = 109,
-        CODEC_ID_PCX = 110,
-        CODEC_ID_SUNRAST = 111,
-        CODEC_ID_INDEO4 = 112,
-        CODEC_ID_INDEO5 = 113,
-        CODEC_ID_MIMIC = 114,
-        CODEC_ID_RL2 = 115,
-        CODEC_ID_ESCAPE124 = 116,
-        CODEC_ID_DIRAC = 117,
-        CODEC_ID_BFI = 118,
-        CODEC_ID_CMV = 119,
-        CODEC_ID_MOTIONPIXELS = 120,
-        CODEC_ID_TGV = 121,
-        CODEC_ID_TGQ = 122,
-        CODEC_ID_TQI = 123,
-        CODEC_ID_AURA = 124,
-        CODEC_ID_AURA2 = 125,
-        CODEC_ID_V210X = 126,
-        CODEC_ID_TMV = 127,
-        CODEC_ID_V210 = 128,
-        CODEC_ID_DPX = 129,
-        CODEC_ID_MAD = 130,
-        CODEC_ID_FRWU = 131,
-        CODEC_ID_FLASHSV2 = 132,
-        CODEC_ID_CDGRAPHICS = 133,
-        CODEC_ID_R210 = 134,
-        CODEC_ID_ANM = 135,
-        CODEC_ID_BINKVIDEO = 136,
-        CODEC_ID_IFF_ILBM = 137,
-        CODEC_ID_IFF_BYTERUN1 = 138,
-        CODEC_ID_KGV1 = 139,
-        CODEC_ID_YOP = 140,
-        CODEC_ID_VP8 = 141,
-        CODEC_ID_PICTOR = 142,
-        CODEC_ID_ANSI = 143,
-        CODEC_ID_A64_MULTI = 144,
-        CODEC_ID_A64_MULTI5 = 145,
-        CODEC_ID_R10K = 146,
-        CODEC_ID_MXPEG = 147,
-        CODEC_ID_LAGARITH = 148,
-        CODEC_ID_PRORES = 149,
-        CODEC_ID_JV = 150,
-        CODEC_ID_DFA = 151,
-        CODEC_ID_WMV3IMAGE = 152,
-        CODEC_ID_VC1IMAGE = 153,
-        CODEC_ID_UTVIDEO = 154,
-        CODEC_ID_BMV_VIDEO = 155,
-        CODEC_ID_VBLE = 156,
-        CODEC_ID_DXTORY = 157,
-        CODEC_ID_V410 = 158,
-        CODEC_ID_XWD = 159,
-        CODEC_ID_CDXL = 160,
-        CODEC_ID_XBM = 161,
-        CODEC_ID_ZEROCODEC = 162,
-        CODEC_ID_MSS1 = 163,
-        CODEC_ID_MSA1 = 164,
-        CODEC_ID_TSCC2 = 165,
-        CODEC_ID_MTS2 = 166,
-        CODEC_ID_CLLC = 167,
-        CODEC_ID_Y41P = 1496592720,
-        CODEC_ID_ESCAPE130 = 1160852272,
-        CODEC_ID_EXR = 809850962,
-        CODEC_ID_AVRP = 1096176208,
-        CODEC_ID_G2M = 4665933,
-        CODEC_ID_AVUI = 1096176969,
-        CODEC_ID_AYUV = 1096373590,
-        CODEC_ID_V308 = 1446195256,
-        CODEC_ID_V408 = 1446260792,
-        CODEC_ID_YUV4 = 1498764852,
-        CODEC_ID_SANM = 1396788813,
-        CODEC_ID_PAF_VIDEO = 1346455126,
-        CODEC_ID_SNOW = 1397641047,
-        /// <summary>A dummy id pointing at the start of audio codecs</summary>
-        CODEC_ID_FIRST_AUDIO = 65536,
-        CODEC_ID_PCM_S16LE = 65536,
-        CODEC_ID_PCM_S16BE = 65537,
-        CODEC_ID_PCM_U16LE = 65538,
-        CODEC_ID_PCM_U16BE = 65539,
-        CODEC_ID_PCM_S8 = 65540,
-        CODEC_ID_PCM_U8 = 65541,
-        CODEC_ID_PCM_MULAW = 65542,
-        CODEC_ID_PCM_ALAW = 65543,
-        CODEC_ID_PCM_S32LE = 65544,
-        CODEC_ID_PCM_S32BE = 65545,
-        CODEC_ID_PCM_U32LE = 65546,
-        CODEC_ID_PCM_U32BE = 65547,
-        CODEC_ID_PCM_S24LE = 65548,
-        CODEC_ID_PCM_S24BE = 65549,
-        CODEC_ID_PCM_U24LE = 65550,
-        CODEC_ID_PCM_U24BE = 65551,
-        CODEC_ID_PCM_S24DAUD = 65552,
-        CODEC_ID_PCM_ZORK = 65553,
-        CODEC_ID_PCM_S16LE_PLANAR = 65554,
-        CODEC_ID_PCM_DVD = 65555,
-        CODEC_ID_PCM_F32BE = 65556,
-        CODEC_ID_PCM_F32LE = 65557,
-        CODEC_ID_PCM_F64BE = 65558,
-        CODEC_ID_PCM_F64LE = 65559,
-        CODEC_ID_PCM_BLURAY = 65560,
-        CODEC_ID_PCM_LXF = 65561,
-        CODEC_ID_S302M = 65562,
-        CODEC_ID_PCM_S8_PLANAR = 65563,
-        CODEC_ID_ADPCM_IMA_QT = 69632,
-        CODEC_ID_ADPCM_IMA_WAV = 69633,
-        CODEC_ID_ADPCM_IMA_DK3 = 69634,
-        CODEC_ID_ADPCM_IMA_DK4 = 69635,
-        CODEC_ID_ADPCM_IMA_WS = 69636,
-        CODEC_ID_ADPCM_IMA_SMJPEG = 69637,
-        CODEC_ID_ADPCM_MS = 69638,
-        CODEC_ID_ADPCM_4XM = 69639,
-        CODEC_ID_ADPCM_XA = 69640,
-        CODEC_ID_ADPCM_ADX = 69641,
-        CODEC_ID_ADPCM_EA = 69642,
-        CODEC_ID_ADPCM_G726 = 69643,
-        CODEC_ID_ADPCM_CT = 69644,
-        CODEC_ID_ADPCM_SWF = 69645,
-        CODEC_ID_ADPCM_YAMAHA = 69646,
-        CODEC_ID_ADPCM_SBPRO_4 = 69647,
-        CODEC_ID_ADPCM_SBPRO_3 = 69648,
-        CODEC_ID_ADPCM_SBPRO_2 = 69649,
-        CODEC_ID_ADPCM_THP = 69650,
-        CODEC_ID_ADPCM_IMA_AMV = 69651,
-        CODEC_ID_ADPCM_EA_R1 = 69652,
-        CODEC_ID_ADPCM_EA_R3 = 69653,
-        CODEC_ID_ADPCM_EA_R2 = 69654,
-        CODEC_ID_ADPCM_IMA_EA_SEAD = 69655,
-        CODEC_ID_ADPCM_IMA_EA_EACS = 69656,
-        CODEC_ID_ADPCM_EA_XAS = 69657,
-        CODEC_ID_ADPCM_EA_MAXIS_XA = 69658,
-        CODEC_ID_ADPCM_IMA_ISS = 69659,
-        CODEC_ID_ADPCM_G722 = 69660,
-        CODEC_ID_ADPCM_IMA_APC = 69661,
-        CODEC_ID_VIMA = 1447644481,
-        CODEC_ID_AMR_NB = 73728,
-        CODEC_ID_AMR_WB = 73729,
-        CODEC_ID_RA_144 = 77824,
-        CODEC_ID_RA_288 = 77825,
-        CODEC_ID_ROQ_DPCM = 81920,
-        CODEC_ID_INTERPLAY_DPCM = 81921,
-        CODEC_ID_XAN_DPCM = 81922,
-        CODEC_ID_SOL_DPCM = 81923,
-        CODEC_ID_MP2 = 86016,
-        /// <summary>preferred ID for decoding MPEG audio layer 1, 2 or 3</summary>
-        CODEC_ID_MP3 = 86017,
-        CODEC_ID_AAC = 86018,
-        CODEC_ID_AC3 = 86019,
-        CODEC_ID_DTS = 86020,
-        CODEC_ID_VORBIS = 86021,
-        CODEC_ID_DVAUDIO = 86022,
-        CODEC_ID_WMAV1 = 86023,
-        CODEC_ID_WMAV2 = 86024,
-        CODEC_ID_MACE3 = 86025,
-        CODEC_ID_MACE6 = 86026,
-        CODEC_ID_VMDAUDIO = 86027,
-        CODEC_ID_FLAC = 86028,
-        CODEC_ID_MP3ADU = 86029,
-        CODEC_ID_MP3ON4 = 86030,
-        CODEC_ID_SHORTEN = 86031,
-        CODEC_ID_ALAC = 86032,
-        CODEC_ID_WESTWOOD_SND1 = 86033,
-        /// <summary>as in Berlin toast format</summary>
-        CODEC_ID_GSM = 86034,
-        CODEC_ID_QDM2 = 86035,
-        CODEC_ID_COOK = 86036,
-        CODEC_ID_TRUESPEECH = 86037,
-        CODEC_ID_TTA = 86038,
-        CODEC_ID_SMACKAUDIO = 86039,
-        CODEC_ID_QCELP = 86040,
-        CODEC_ID_WAVPACK = 86041,
-        CODEC_ID_DSICINAUDIO = 86042,
-        CODEC_ID_IMC = 86043,
-        CODEC_ID_MUSEPACK7 = 86044,
-        CODEC_ID_MLP = 86045,
-        CODEC_ID_GSM_MS = 86046,
-        CODEC_ID_ATRAC3 = 86047,
-        CODEC_ID_VOXWARE = 86048,
-        CODEC_ID_APE = 86049,
-        CODEC_ID_NELLYMOSER = 86050,
-        CODEC_ID_MUSEPACK8 = 86051,
-        CODEC_ID_SPEEX = 86052,
-        CODEC_ID_WMAVOICE = 86053,
-        CODEC_ID_WMAPRO = 86054,
-        CODEC_ID_WMALOSSLESS = 86055,
-        CODEC_ID_ATRAC3P = 86056,
-        CODEC_ID_EAC3 = 86057,
-        CODEC_ID_SIPR = 86058,
-        CODEC_ID_MP1 = 86059,
-        CODEC_ID_TWINVQ = 86060,
-        CODEC_ID_TRUEHD = 86061,
-        CODEC_ID_MP4ALS = 86062,
-        CODEC_ID_ATRAC1 = 86063,
-        CODEC_ID_BINKAUDIO_RDFT = 86064,
-        CODEC_ID_BINKAUDIO_DCT = 86065,
-        CODEC_ID_AAC_LATM = 86066,
-        CODEC_ID_QDMC = 86067,
-        CODEC_ID_CELT = 86068,
-        CODEC_ID_G723_1 = 86069,
-        CODEC_ID_G729 = 86070,
-        CODEC_ID_8SVX_EXP = 86071,
-        CODEC_ID_8SVX_FIB = 86072,
-        CODEC_ID_BMV_AUDIO = 86073,
-        CODEC_ID_RALF = 86074,
-        CODEC_ID_IAC = 86075,
-        CODEC_ID_ILBC = 86076,
-        CODEC_ID_FFWAVESYNTH = 1179014995,
-        CODEC_ID_SONIC = 1397706307,
-        CODEC_ID_SONIC_LS = 1397706316,
-        CODEC_ID_PAF_AUDIO = 1346455105,
-        CODEC_ID_OPUS = 1330664787,
-        /// <summary>A dummy ID pointing at the start of subtitle codecs.</summary>
-        CODEC_ID_FIRST_SUBTITLE = 94208,
-        CODEC_ID_DVD_SUBTITLE = 94208,
-        CODEC_ID_DVB_SUBTITLE = 94209,
-        /// <summary>raw UTF-8 text</summary>
-        CODEC_ID_TEXT = 94210,
-        CODEC_ID_XSUB = 94211,
-        CODEC_ID_SSA = 94212,
-        CODEC_ID_MOV_TEXT = 94213,
-        CODEC_ID_HDMV_PGS_SUBTITLE = 94214,
-        CODEC_ID_DVB_TELETEXT = 94215,
-        CODEC_ID_SRT = 94216,
-        CODEC_ID_MICRODVD = 1833195076,
-        CODEC_ID_EIA_608 = 1664495672,
-        CODEC_ID_JACOSUB = 1246975298,
-        CODEC_ID_SAMI = 1396788553,
-        CODEC_ID_REALTEXT = 1381259348,
-        CODEC_ID_SUBVIEWER = 1400201814,
-        /// <summary>A dummy ID pointing at the start of various fake codecs.</summary>
-        CODEC_ID_FIRST_UNKNOWN = 98304,
-        CODEC_ID_TTF = 98304,
-        CODEC_ID_BINTEXT = 1112823892,
-        CODEC_ID_XBIN = 1480739150,
-        CODEC_ID_IDF = 4801606,
-        CODEC_ID_OTF = 5198918,
-        /// <summary>codec_id is not known (like CODEC_ID_NONE) but lavf should attempt to identify it</summary>
-        CODEC_ID_PROBE = 102400,
-        /// <summary>_FAKE_ codec to indicate a raw MPEG-2 TS stream (only used by libavformat)</summary>
-        CODEC_ID_MPEG2TS = 131072,
-        /// <summary>_FAKE_ codec to indicate a MPEG-4 Systems stream (only used by libavformat)</summary>
-        CODEC_ID_MPEG4SYSTEMS = 131073,
-        /// <summary>Dummy codec for streams containing only metadata information.</summary>
-        CODEC_ID_FFMETADATA = 135168
-    }
+        public const sbyte FF_INPUT_BUFFER_PADDING_SIZE = 16;
 
-    /// <summary>
-    /// @}
-    /// </summary>
-    public enum AVSubtitleType
-    {
-        SUBTITLE_NONE = 0,
-        /// <summary>A bitmap, pict will be set</summary>
-        SUBTITLE_BITMAP = 1,
-        /// <summary>Plain text, the text field must be set by the decoder and is authoritative. ass and pict fields may contain approximations.</summary>
-        SUBTITLE_TEXT = 2,
-        /// <summary>Formatted text, the ass field must be set by the decoder and is authoritative. pict and text fields may contain approximations.</summary>
-        SUBTITLE_ASS = 3
-    }
+        public const short FF_MIN_BUFFER_SIZE = 16384;
 
-    /// <summary>
-    /// @defgroup lavc_packet AVPacket
-    /// 
-    /// Types and functions for working with AVPacket.
-    /// @{
-    /// </summary>
-    public enum AVPacketSideDataType
-    {
-        AV_PKT_DATA_PALETTE = 0,
-        AV_PKT_DATA_NEW_EXTRADATA = 1,
-        /// <summary>An AV_PKT_DATA_PARAM_CHANGE side data packet is laid out as follows:</summary>
-        AV_PKT_DATA_PARAM_CHANGE = 2,
-        /// <summary>An AV_PKT_DATA_H263_MB_INFO side data packet contains a number of structures with info about macroblocks relevant to splitting the packet into smaller packets on macroblock edges (e.g. as for RFC 2190). That is, it does not necessarily contain info about all macroblocks, as long as the distance between macroblocks in the info is smaller than the target payload size. Each MB info structure is 12 bytes, and is laid out as follows:</summary>
-        AV_PKT_DATA_H263_MB_INFO = 3,
-        /// <summary>Recommmends skipping the specified number of samples</summary>
-        AV_PKT_DATA_SKIP_SAMPLES = 70,
-        /// <summary>An AV_PKT_DATA_JP_DUALMONO side data packet indicates that the packet may contain "dual mono" audio specific to Japanese DTV and if it is true, recommends only the selected channel to be used.</summary>
-        AV_PKT_DATA_JP_DUALMONO = 71,
-        /// <summary>A list of zero terminated key/value strings. There is no end marker for the list, so it is required to rely on the side data size to stop.</summary>
-        AV_PKT_DATA_STRINGS_METADATA = 72,
-        /// <summary>Subtitle event position</summary>
-        AV_PKT_DATA_SUBTITLE_POSITION = 73,
-        /// <summary>Data found in BlockAdditional element of matroska container. There is no end marker for the data, so it is required to rely on the side data size to recognize the end. 8 byte id (as found in BlockAddId) followed by data.</summary>
-        AV_PKT_DATA_MATROSKA_BLOCKADDITIONAL = 74,
-        /// <summary>The optional first identifier line of a WebVTT cue.</summary>
-        AV_PKT_DATA_WEBVTT_IDENTIFIER = 75,
-        /// <summary>The optional settings (rendering instructions) that immediately follow the timestamp specifier of a WebVTT cue.</summary>
-        AV_PKT_DATA_WEBVTT_SETTINGS = 76
-    }
+        public const sbyte FF_MAX_B_FRAMES = 16;
 
-    public enum AVColorPrimaries
-    {
-        /// <summary>also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B</summary>
-        AVCOL_PRI_BT709 = 1,
-        AVCOL_PRI_UNSPECIFIED = 2,
-        AVCOL_PRI_BT470M = 4,
-        /// <summary>also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM</summary>
-        AVCOL_PRI_BT470BG = 5,
-        /// <summary>also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC</summary>
-        AVCOL_PRI_SMPTE170M = 6,
-        /// <summary>functionally identical to above</summary>
-        AVCOL_PRI_SMPTE240M = 7,
-        AVCOL_PRI_FILM = 8,
-        /// <summary>Not part of ABI</summary>
-        AVCOL_PRI_NB = 9
-    }
+        public const sbyte CODEC_FLAG_UNALIGNED = 1;
 
-    public enum AVColorTransferCharacteristic
-    {
-        /// <summary>also ITU-R BT1361</summary>
-        AVCOL_TRC_BT709 = 1,
-        AVCOL_TRC_UNSPECIFIED = 2,
-        /// <summary>also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM</summary>
-        AVCOL_TRC_GAMMA22 = 4,
-        /// <summary>also ITU-R BT470BG</summary>
-        AVCOL_TRC_GAMMA28 = 5,
-        AVCOL_TRC_SMPTE240M = 7,
-        /// <summary>Not part of ABI</summary>
-        AVCOL_TRC_NB = 8
-    }
+        public const sbyte CODEC_FLAG_QSCALE = 2;
 
-    /// <summary>
-    /// X   X      3 4 X      X are luma samples,
-    /// 1 2        1-6 are possible chroma positions
-    /// X   X      5 6 X      0 is undefined/unknown position
-    /// </summary>
-    public enum AVChromaLocation
-    {
-        AVCHROMA_LOC_UNSPECIFIED = 0,
-        /// <summary>mpeg2/4, h264 default</summary>
-        AVCHROMA_LOC_LEFT = 1,
-        /// <summary>mpeg1, jpeg, h263</summary>
-        AVCHROMA_LOC_CENTER = 2,
-        /// <summary>DV</summary>
-        AVCHROMA_LOC_TOPLEFT = 3,
-        AVCHROMA_LOC_TOP = 4,
-        AVCHROMA_LOC_BOTTOMLEFT = 5,
-        AVCHROMA_LOC_BOTTOM = 6,
-        /// <summary>Not part of ABI</summary>
-        AVCHROMA_LOC_NB = 7
-    }
+        public const sbyte CODEC_FLAG_4MV = 4;
 
-    public enum AVFieldOrder
-    {
-        AV_FIELD_UNKNOWN = 0,
-        AV_FIELD_PROGRESSIVE = 1,
-        AV_FIELD_TT = 2,
-        AV_FIELD_BB = 3,
-        AV_FIELD_TB = 4,
-        AV_FIELD_BT = 5
-    }
+        public const sbyte CODEC_FLAG_QPEL = 10;
 
-    public enum AVAudioServiceType
-    {
-        AV_AUDIO_SERVICE_TYPE_MAIN = 0,
-        AV_AUDIO_SERVICE_TYPE_EFFECTS = 1,
-        AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = 2,
-        AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED = 3,
-        AV_AUDIO_SERVICE_TYPE_DIALOGUE = 4,
-        AV_AUDIO_SERVICE_TYPE_COMMENTARY = 5,
-        AV_AUDIO_SERVICE_TYPE_EMERGENCY = 6,
-        AV_AUDIO_SERVICE_TYPE_VOICE_OVER = 7,
-        AV_AUDIO_SERVICE_TYPE_KARAOKE = 8,
-        /// <summary>Not part of ABI</summary>
-        AV_AUDIO_SERVICE_TYPE_NB = 9
-    }
+        public const sbyte CODEC_FLAG_GMC = 20;
 
-    public enum AVDiscard
-    {
-        /// <summary>discard nothing</summary>
-        AVDISCARD_NONE = -16,
-        /// <summary>discard useless packets like 0 size packets in avi</summary>
-        AVDISCARD_DEFAULT = 0,
-        /// <summary>discard all non reference</summary>
-        AVDISCARD_NONREF = 8,
-        /// <summary>discard all bidirectional frames</summary>
-        AVDISCARD_BIDIR = 16,
-        /// <summary>discard all frames except keyframes</summary>
-        AVDISCARD_NONKEY = 32,
-        /// <summary>discard all</summary>
-        AVDISCARD_ALL = 48
-    }
+        public const sbyte CODEC_FLAG_MV0 = 40;
 
-    /// <summary>
-    /// @ingroup lavc_encoding
-    /// motion estimation type.
-    /// </summary>
-    public enum Motion_Est_ID
-    {
-        /// <summary>no search, that is use 0,0 vector whenever one is needed</summary>
-        ME_ZERO = 1,
-        ME_FULL = 2,
-        ME_LOG = 3,
-        ME_PHODS = 4,
-        /// <summary>enhanced predictive zonal search</summary>
-        ME_EPZS = 5,
-        /// <summary>reserved for experiments</summary>
-        ME_X1 = 6,
-        /// <summary>hexagon based search</summary>
-        ME_HEX = 7,
-        /// <summary>uneven multi-hexagon search</summary>
-        ME_UMH = 8,
-        /// <summary>transformed exhaustive search algorithm</summary>
-        ME_TESA = 9,
-        /// <summary>iterative search</summary>
-        ME_ITER = 50
-    }
+        public const short CODEC_FLAG_INPUT_PRESERVED = 100;
 
-    [Flags]
-    public enum AVSideDataParamChangeFlags
-    {
-        AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT = 1,
-        AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_LAYOUT = 2,
-        AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE = 4,
-        AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS = 8
-    }
+        public const short CODEC_FLAG_PASS1 = 200;
 
-    /// <summary>
-    /// @defgroup lavc_parsing Frame parsing
-    /// @{
-    /// </summary>
-    public enum AVPictureStructure
-    {
-        AV_PICTURE_STRUCTURE_UNKNOWN = 0,
-        AV_PICTURE_STRUCTURE_TOP_FIELD = 1,
-        AV_PICTURE_STRUCTURE_BOTTOM_FIELD = 2,
-        AV_PICTURE_STRUCTURE_FRAME = 3
-    }
+        public const short CODEC_FLAG_PASS2 = 400;
 
-    /// <summary>
-    /// Lock operation used by lockmgr
-    /// </summary>
-    public enum AVLockOp
-    {
-        /// <summary>Create a mutex</summary>
-        AV_LOCK_CREATE = 0,
-        /// <summary>Lock the mutex</summary>
-        AV_LOCK_OBTAIN = 1,
-        /// <summary>Unlock the mutex</summary>
-        AV_LOCK_RELEASE = 2,
-        /// <summary>Free mutex resources</summary>
-        AV_LOCK_DESTROY = 3
-    }
+        public const short CODEC_FLAG_GRAY = 2000;
 
-    /// <summary>
-    /// This struct describes the properties of a single codec described by an
-    /// AVCodecID.
-    /// @see avcodec_get_descriptor()
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodecDescriptor
-    {
-        [FieldOffset(0)]
-        public AVCodecID id;
+        public const short CODEC_FLAG_EMU_EDGE = 4000;
 
-        [FieldOffset(4)]
-        public AVMediaType type;
+        public const ushort CODEC_FLAG_PSNR = 8000;
+
+        public const int CODEC_FLAG_TRUNCATED = 10000;
+
+        public const int CODEC_FLAG_NORMALIZE_AQP = 20000;
+
+        public const int CODEC_FLAG_INTERLACED_DCT = 40000;
+
+        public const int CODEC_FLAG_LOW_DELAY = 80000;
+
+        public const int CODEC_FLAG_GLOBAL_HEADER = 400000;
+
+        public const int CODEC_FLAG_BITEXACT = 800000;
+
+        public const int CODEC_FLAG_AC_PRED = 1000000;
+
+        public const short CODEC_FLAG_LOOP_FILTER = 800;
+
+        public const int CODEC_FLAG_INTERLACED_ME = 20000000;
+
+        public const uint CODEC_FLAG_CLOSED_GOP = 80000000;
+
+        public const sbyte CODEC_FLAG2_FAST = 1;
+
+        public const sbyte CODEC_FLAG2_NO_OUTPUT = 4;
+
+        public const sbyte CODEC_FLAG2_LOCAL_HEADER = 8;
+
+        public const short CODEC_FLAG2_DROP_FRAME_TIMECODE = 2000;
+
+        public const int CODEC_FLAG2_IGNORE_CROP = 10000;
+
+        public const ushort CODEC_FLAG2_CHUNKS = 8000;
+
+        public const int CODEC_FLAG2_SHOW_ALL = 400000;
+
+        public const sbyte CODEC_CAP_DRAW_HORIZ_BAND = 1;
+
+        public const sbyte CODEC_CAP_DR1 = 2;
+
+        public const sbyte CODEC_CAP_TRUNCATED = 8;
+
+        public const sbyte CODEC_CAP_HWACCEL = 10;
+
+        public const sbyte CODEC_CAP_DELAY = 20;
+
+        public const sbyte CODEC_CAP_SMALL_LAST_FRAME = 40;
+
+        public const byte CODEC_CAP_HWACCEL_VDPAU = 80;
+
+        public const short CODEC_CAP_SUBFRAMES = 100;
+
+        public const short CODEC_CAP_EXPERIMENTAL = 200;
+
+        public const short CODEC_CAP_CHANNEL_CONF = 400;
+
+        public const short CODEC_CAP_NEG_LINESIZES = 800;
+
+        public const short CODEC_CAP_FRAME_THREADS = 1000;
+
+        public const short CODEC_CAP_SLICE_THREADS = 2000;
+
+        public const short CODEC_CAP_PARAM_CHANGE = 4000;
+
+        public const ushort CODEC_CAP_AUTO_THREADS = 8000;
+
+        public const int CODEC_CAP_VARIABLE_FRAME_SIZE = 10000;
+
+        public const int CODEC_CAP_INTRA_ONLY = 40000000;
+
+        public const uint CODEC_CAP_LOSSLESS = 80000000;
+
+        public const sbyte MB_TYPE_INTRA4x4 = 1;
+
+        public const sbyte MB_TYPE_INTRA16x16 = 2;
+
+        public const sbyte MB_TYPE_INTRA_PCM = 4;
+
+        public const sbyte MB_TYPE_16x16 = 8;
+
+        public const sbyte MB_TYPE_16x8 = 10;
+
+        public const sbyte MB_TYPE_8x16 = 20;
+
+        public const sbyte MB_TYPE_8x8 = 40;
+
+        public const byte MB_TYPE_INTERLACED = 80;
+
+        public const short MB_TYPE_DIRECT2 = 100;
+
+        public const short MB_TYPE_ACPRED = 200;
+
+        public const short MB_TYPE_GMC = 400;
+
+        public const short MB_TYPE_SKIP = 800;
+
+        public const short MB_TYPE_P0L0 = 1000;
+
+        public const short MB_TYPE_P1L0 = 2000;
+
+        public const short MB_TYPE_P0L1 = 4000;
+
+        public const ushort MB_TYPE_P1L1 = 8000;
+
+        public const int MB_TYPE_QUANT = 10000;
+
+        public const int MB_TYPE_CBP = 20000;
+
+        public const sbyte FF_QSCALE_TYPE_MPEG1 = 0;
+
+        public const sbyte FF_QSCALE_TYPE_MPEG2 = 1;
+
+        public const sbyte FF_QSCALE_TYPE_H264 = 2;
+
+        public const sbyte FF_QSCALE_TYPE_VP56 = 3;
+
+        public const sbyte FF_BUFFER_TYPE_INTERNAL = 1;
+
+        public const sbyte FF_BUFFER_TYPE_USER = 2;
+
+        public const sbyte FF_BUFFER_TYPE_SHARED = 4;
+
+        public const sbyte FF_BUFFER_TYPE_COPY = 8;
+
+        public const sbyte FF_BUFFER_HINTS_VALID = 1;
+
+        public const sbyte FF_BUFFER_HINTS_READABLE = 2;
+
+        public const sbyte FF_BUFFER_HINTS_PRESERVE = 4;
+
+        public const sbyte FF_BUFFER_HINTS_REUSABLE = 8;
+
+        public const sbyte AV_PKT_FLAG_KEY = 1;
+
+        public const sbyte AV_PKT_FLAG_CORRUPT = 2;
+
+        public const sbyte FF_COMPRESSION_DEFAULT = -1;
+
+        public const sbyte FF_ASPECT_EXTENDED = 15;
+
+        public const sbyte FF_RC_STRATEGY_XVID = 1;
+
+        public const sbyte FF_PRED_LEFT = 0;
+
+        public const sbyte FF_PRED_PLANE = 1;
+
+        public const sbyte FF_PRED_MEDIAN = 2;
+
+        public const sbyte FF_CMP_SAD = 0;
+
+        public const sbyte FF_CMP_SSE = 1;
+
+        public const sbyte FF_CMP_SATD = 2;
+
+        public const sbyte FF_CMP_DCT = 3;
+
+        public const sbyte FF_CMP_PSNR = 4;
+
+        public const sbyte FF_CMP_BIT = 5;
+
+        public const sbyte FF_CMP_RD = 6;
+
+        public const sbyte FF_CMP_ZERO = 7;
+
+        public const sbyte FF_CMP_VSAD = 8;
+
+        public const sbyte FF_CMP_VSSE = 9;
+
+        public const sbyte FF_CMP_NSSE = 10;
+
+        public const sbyte FF_CMP_W53 = 11;
+
+        public const sbyte FF_CMP_W97 = 12;
+
+        public const sbyte FF_CMP_DCTMAX = 13;
+
+        public const sbyte FF_CMP_DCT264 = 14;
+
+        public const short FF_CMP_CHROMA = 256;
+
+        public const sbyte FF_DTG_AFD_SAME = 8;
+
+        public const sbyte FF_DTG_AFD_4_3 = 9;
+
+        public const sbyte FF_DTG_AFD_16_9 = 10;
+
+        public const sbyte FF_DTG_AFD_14_9 = 11;
+
+        public const sbyte FF_DTG_AFD_4_3_SP_14_9 = 13;
+
+        public const sbyte FF_DTG_AFD_16_9_SP_14_9 = 14;
+
+        public const sbyte FF_DTG_AFD_SP_4_3 = 15;
+
+        public const int FF_DEFAULT_QUANT_BIAS = 999999;
+
+        public const sbyte SLICE_FLAG_CODED_ORDER = 1;
+
+        public const sbyte SLICE_FLAG_ALLOW_FIELD = 2;
+
+        public const sbyte SLICE_FLAG_ALLOW_PLANE = 4;
+
+        public const sbyte FF_MB_DECISION_SIMPLE = 0;
+
+        public const sbyte FF_MB_DECISION_BITS = 1;
+
+        public const sbyte FF_MB_DECISION_RD = 2;
+
+        public const sbyte FF_CODER_TYPE_VLC = 0;
+
+        public const sbyte FF_CODER_TYPE_AC = 1;
+
+        public const sbyte FF_CODER_TYPE_RAW = 2;
+
+        public const sbyte FF_CODER_TYPE_RLE = 3;
+
+        public const sbyte FF_CODER_TYPE_DEFLATE = 4;
+
+        public const sbyte FF_BUG_AUTODETECT = 1;
+
+        public const sbyte FF_BUG_OLD_MSMPEG4 = 2;
+
+        public const sbyte FF_BUG_XVID_ILACE = 4;
+
+        public const sbyte FF_BUG_UMP4 = 8;
+
+        public const sbyte FF_BUG_NO_PADDING = 16;
+
+        public const sbyte FF_BUG_AMV = 32;
+
+        public const sbyte FF_BUG_AC_VLC = 0;
+
+        public const sbyte FF_BUG_QPEL_CHROMA = 64;
+
+        public const byte FF_BUG_STD_QPEL = 128;
+
+        public const short FF_BUG_QPEL_CHROMA2 = 256;
+
+        public const short FF_BUG_DIRECT_BLOCKSIZE = 512;
+
+        public const short FF_BUG_EDGE = 1024;
+
+        public const short FF_BUG_HPEL_CHROMA = 2048;
+
+        public const short FF_BUG_DC_CLIP = 4096;
+
+        public const short FF_BUG_MS = 8192;
+
+        public const short FF_BUG_TRUNCATED = 16384;
+
+        public const sbyte FF_COMPLIANCE_VERY_STRICT = 2;
+
+        public const sbyte FF_COMPLIANCE_STRICT = 1;
+
+        public const sbyte FF_COMPLIANCE_NORMAL = 0;
+
+        public const sbyte FF_COMPLIANCE_UNOFFICIAL = -1;
+
+        public const sbyte FF_COMPLIANCE_EXPERIMENTAL = -2;
+
+        public const sbyte FF_EC_GUESS_MVS = 1;
+
+        public const sbyte FF_EC_DEBLOCK = 2;
+
+        public const sbyte FF_DEBUG_PICT_INFO = 1;
+
+        public const sbyte FF_DEBUG_RC = 2;
+
+        public const sbyte FF_DEBUG_BITSTREAM = 4;
+
+        public const sbyte FF_DEBUG_MB_TYPE = 8;
+
+        public const sbyte FF_DEBUG_QP = 16;
+
+        public const sbyte FF_DEBUG_MV = 32;
+
+        public const sbyte FF_DEBUG_DCT_COEFF = 40;
+
+        public const byte FF_DEBUG_SKIP = 80;
+
+        public const short FF_DEBUG_STARTCODE = 100;
+
+        public const short FF_DEBUG_PTS = 200;
+
+        public const short FF_DEBUG_ER = 400;
+
+        public const short FF_DEBUG_MMCO = 800;
+
+        public const short FF_DEBUG_BUGS = 1000;
+
+        public const short FF_DEBUG_VIS_QP = 2000;
+
+        public const short FF_DEBUG_VIS_MB_TYPE = 4000;
+
+        public const ushort FF_DEBUG_BUFFERS = 8000;
+
+        public const int FF_DEBUG_THREADS = 10000;
+
+        public const sbyte FF_DEBUG_VIS_MV_P_FOR = 1;
+
+        public const sbyte FF_DEBUG_VIS_MV_B_FOR = 2;
+
+        public const sbyte FF_DEBUG_VIS_MV_B_BACK = 4;
+
+        public const sbyte FF_DCT_AUTO = 0;
+
+        public const sbyte FF_DCT_FASTINT = 1;
+
+        public const sbyte FF_DCT_INT = 2;
+
+        public const sbyte FF_DCT_MMX = 3;
+
+        public const sbyte FF_DCT_ALTIVEC = 5;
+
+        public const sbyte FF_DCT_FAAN = 6;
+
+        public const sbyte FF_IDCT_AUTO = 0;
+
+        public const sbyte FF_IDCT_INT = 1;
+
+        public const sbyte FF_IDCT_SIMPLE = 2;
+
+        public const sbyte FF_IDCT_SIMPLEMMX = 3;
+
+        public const sbyte FF_IDCT_ARM = 7;
+
+        public const sbyte FF_IDCT_ALTIVEC = 8;
+
+        public const sbyte FF_IDCT_SH4 = 9;
+
+        public const sbyte FF_IDCT_SIMPLEARM = 10;
+
+        public const sbyte FF_IDCT_IPP = 13;
+
+        public const sbyte FF_IDCT_XVIDMMX = 14;
+
+        public const sbyte FF_IDCT_SIMPLEARMV5TE = 16;
+
+        public const sbyte FF_IDCT_SIMPLEARMV6 = 17;
+
+        public const sbyte FF_IDCT_SIMPLEVIS = 18;
+
+        public const sbyte FF_IDCT_FAAN = 20;
+
+        public const sbyte FF_IDCT_SIMPLENEON = 22;
+
+        public const sbyte FF_IDCT_SIMPLEALPHA = 23;
+
+        public const sbyte FF_THREAD_FRAME = 1;
+
+        public const sbyte FF_THREAD_SLICE = 2;
+
+        public const sbyte FF_PROFILE_UNKNOWN = -99;
+
+        public const sbyte FF_PROFILE_RESERVED = -100;
+
+        public const sbyte FF_PROFILE_AAC_MAIN = 0;
+
+        public const sbyte FF_PROFILE_AAC_LOW = 1;
+
+        public const sbyte FF_PROFILE_AAC_SSR = 2;
+
+        public const sbyte FF_PROFILE_AAC_LTP = 3;
+
+        public const sbyte FF_PROFILE_AAC_HE = 4;
+
+        public const sbyte FF_PROFILE_AAC_HE_V2 = 28;
+
+        public const sbyte FF_PROFILE_AAC_LD = 22;
+
+        public const sbyte FF_PROFILE_AAC_ELD = 38;
+
+        public const byte FF_PROFILE_MPEG2_AAC_LOW = 128;
+
+        public const byte FF_PROFILE_MPEG2_AAC_HE = 131;
+
+        public const sbyte FF_PROFILE_DTS = 20;
+
+        public const sbyte FF_PROFILE_DTS_ES = 30;
+
+        public const sbyte FF_PROFILE_DTS_96_24 = 40;
+
+        public const sbyte FF_PROFILE_DTS_HD_HRA = 50;
+
+        public const sbyte FF_PROFILE_DTS_HD_MA = 60;
+
+        public const sbyte FF_PROFILE_MPEG2_422 = 0;
+
+        public const sbyte FF_PROFILE_MPEG2_HIGH = 1;
+
+        public const sbyte FF_PROFILE_MPEG2_SS = 2;
+
+        public const sbyte FF_PROFILE_MPEG2_SNR_SCALABLE = 3;
+
+        public const sbyte FF_PROFILE_MPEG2_MAIN = 4;
+
+        public const sbyte FF_PROFILE_MPEG2_SIMPLE = 5;
+
+        public const sbyte FF_PROFILE_H264_BASELINE = 66;
+
+        public const sbyte FF_PROFILE_H264_MAIN = 77;
+
+        public const sbyte FF_PROFILE_H264_EXTENDED = 88;
+
+        public const sbyte FF_PROFILE_H264_HIGH = 100;
+
+        public const sbyte FF_PROFILE_H264_HIGH_10 = 110;
+
+        public const sbyte FF_PROFILE_H264_HIGH_422 = 122;
+
+        public const byte FF_PROFILE_H264_HIGH_444 = 144;
+
+        public const byte FF_PROFILE_H264_HIGH_444_PREDICTIVE = 244;
+
+        public const sbyte FF_PROFILE_H264_CAVLC_444 = 44;
+
+        public const sbyte FF_PROFILE_VC1_SIMPLE = 0;
+
+        public const sbyte FF_PROFILE_VC1_MAIN = 1;
+
+        public const sbyte FF_PROFILE_VC1_COMPLEX = 2;
+
+        public const sbyte FF_PROFILE_VC1_ADVANCED = 3;
+
+        public const sbyte FF_PROFILE_MPEG4_SIMPLE = 0;
+
+        public const sbyte FF_PROFILE_MPEG4_SIMPLE_SCALABLE = 1;
+
+        public const sbyte FF_PROFILE_MPEG4_CORE = 2;
+
+        public const sbyte FF_PROFILE_MPEG4_MAIN = 3;
+
+        public const sbyte FF_PROFILE_MPEG4_N_BIT = 4;
+
+        public const sbyte FF_PROFILE_MPEG4_SCALABLE_TEXTURE = 5;
+
+        public const sbyte FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION = 6;
+
+        public const sbyte FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE = 7;
+
+        public const sbyte FF_PROFILE_MPEG4_HYBRID = 8;
+
+        public const sbyte FF_PROFILE_MPEG4_ADVANCED_REAL_TIME = 9;
+
+        public const sbyte FF_PROFILE_MPEG4_CORE_SCALABLE = 10;
+
+        public const sbyte FF_PROFILE_MPEG4_ADVANCED_CODING = 11;
+
+        public const sbyte FF_PROFILE_MPEG4_ADVANCED_CORE = 12;
+
+        public const sbyte FF_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE = 13;
+
+        public const sbyte FF_PROFILE_MPEG4_SIMPLE_STUDIO = 14;
+
+        public const sbyte FF_PROFILE_MPEG4_ADVANCED_SIMPLE = 15;
+
+        public const sbyte FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0 = 0;
+
+        public const sbyte FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1 = 1;
+
+        public const sbyte FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION = 2;
+
+        public const sbyte FF_PROFILE_JPEG2000_DCINEMA_2K = 3;
+
+        public const sbyte FF_PROFILE_JPEG2000_DCINEMA_4K = 4;
+
+        public const sbyte FF_LEVEL_UNKNOWN = -99;
+
+        public const sbyte FF_SUB_CHARENC_MODE_DO_NOTHING = -1;
+
+        public const sbyte FF_SUB_CHARENC_MODE_AUTOMATIC = 0;
+
+        public const sbyte FF_SUB_CHARENC_MODE_PRE_DECODER = 1;
+
+        public const sbyte AV_SUBTITLE_FLAG_FORCED = 1;
+
+        public const sbyte AV_PARSER_PTS_NB = 4;
+
+        public const sbyte PARSER_FLAG_COMPLETE_FRAMES = 1;
+
+        public const sbyte PARSER_FLAG_ONCE = 2;
+
+        public const sbyte PARSER_FLAG_FETCHED_OFFSET = 4;
+
+        public const short PARSER_FLAG_USE_CODEC_TS = 1000;
+
+        public const sbyte FF_LOSS_RESOLUTION = 1;
+
+        public const sbyte FF_LOSS_DEPTH = 2;
+
+        public const sbyte FF_LOSS_COLORSPACE = 4;
+
+        public const sbyte FF_LOSS_ALPHA = 8;
+
+        public const sbyte FF_LOSS_COLORQUANT = 10;
+
+        public const sbyte FF_LOSS_CHROMA = 20;
 
         /// <summary>
-        /// Name of the codec described by this descriptor. It is non-empty and
-        /// unique for each codec descriptor. It should contain alphanumeric
-        /// characters and '_' only.
-        /// </summary>
-        [FieldOffset(8)]
-        public global::System.IntPtr name;
-
-        /// <summary>
-        /// A more descriptive name for this codec. May be NULL.
-        /// </summary>
-        [FieldOffset(12)]
-        public global::System.IntPtr long_name;
-
-        /// <summary>
-        /// Codec properties, a combination of AV_CODEC_PROP_* flags.
-        /// </summary>
-        [FieldOffset(16)]
-        public int props;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct RcOverride
-    {
-        [FieldOffset(0)]
-        public int start_frame;
-
-        [FieldOffset(4)]
-        public int end_frame;
-
-        [FieldOffset(8)]
-        public int qscale;
-
-        [FieldOffset(12)]
-        public float quality_factor;
-    }
-
-    /// <summary>
-    /// Pan Scan area.
-    /// This specifies the area which should be displayed.
-    /// Note there may be multiple such areas for one frame.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVPanScan
-    {
-        /// <summary>
-        /// id
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(0)]
-        public int id;
-
-        /// <summary>
-        /// width and height in 1/16 pel
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(4)]
-        public int width;
-
-        [FieldOffset(8)]
-        public int height;
-
-        /// <summary>
-        /// position of the top left corner in 1/16 pel for up to 3
-        /// fields/frames
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(12)]
-        public fixed short position_0[2];
-
-        /// <summary>
-        /// position of the top left corner in 1/16 pel for up to 3
-        /// fields/frames
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(16)]
-        public fixed short position_1[2];
-
-        /// <summary>
-        /// position of the top left corner in 1/16 pel for up to 3
-        /// fields/frames
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(20)]
-        public fixed short position_2[2];
-
-        /// <summary>
-        /// position of the top left corner in 1/16 pel for up to 3
-        /// fields/frames
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(24)]
-        public fixed short position_3[2];
-
-        /// <summary>
-        /// position of the top left corner in 1/16 pel for up to 3
-        /// fields/frames
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(28)]
-        public fixed short position_4[2];
-
-        /// <summary>
-        /// position of the top left corner in 1/16 pel for up to 3
-        /// fields/frames
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(32)]
-        public fixed short position_5[2];
-    }
-
-    /// <summary>
-    /// This structure stores compressed data. It is typically exported by
-    /// demuxers
-    /// and then passed as input to decoders, or received as output from
-    /// encoders and
-    /// then passed to muxers.
-    /// 
-    /// For video, it should typically contain one compressed frame. For audio
-    /// it may
-    /// contain several compressed frames.
-    /// 
-    /// AVPacket is one of the few structs in FFmpeg, whose size is a part of
-    /// public
-    /// ABI. Thus it may be allocated on stack and no new fields can be added
-    /// to it
-    /// without libavcodec and libavformat major bump.
-    /// 
-    /// The semantics of data ownership depends on the buf or destruct
-    /// (deprecated)
-    /// fields. If either is set, the packet data is dynamically allocated and
-    /// is
-    /// valid indefinitely until av_free_packet() is called (which in turn
-    /// calls
-    /// av_buffer_unref()/the destruct callback to free the data). If neither
-    /// is set,
-    /// the packet data is typically backed by some static buffer somewhere and
-    /// is
-    /// only valid for a limited time (e.g. until the next read call when
-    /// demuxing).
-    /// 
-    /// The side data is always allocated with av_malloc() and is freed in
-    /// av_free_packet().
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVPacket
-    {
-        /// <summary>
-        /// A reference to the reference-counted buffer where the packet data
-        /// is
-        /// stored.
-        /// May be NULL, then the packet data is not reference-counted.
-        /// </summary>
-        [FieldOffset(0)]
-        public AVBufferRef* buf;
-
-        /// <summary>
-        /// Presentation timestamp in AVStream->time_base units; the time at
-        /// which
-        /// the decompressed packet will be presented to the user.
-        /// Can be AV_NOPTS_VALUE if it is not stored in the file.
-        /// pts MUST be larger or equal to dts as presentation cannot happen
-        /// before
-        /// decompression, unless one wants to view hex dumps. Some formats
-        /// misuse
-        /// the terms dts and pts/cts to mean something different. Such
-        /// timestamps
-        /// must be converted to true pts/dts before they are stored in
-        /// AVPacket.
-        /// </summary>
-        [FieldOffset(8)]
-        public long pts;
-
-        /// <summary>
-        /// Decompression timestamp in AVStream->time_base units; the time at
-        /// which
-        /// the packet is decompressed.
-        /// Can be AV_NOPTS_VALUE if it is not stored in the file.
-        /// </summary>
-        [FieldOffset(16)]
-        public long dts;
-
-        [FieldOffset(24)]
-        public byte* data;
-
-        [FieldOffset(28)]
-        public int size;
-
-        [FieldOffset(32)]
-        public int stream_index;
-
-        /// <summary>
-        /// A combination of AV_PKT_FLAG values
-        /// </summary>
-        [FieldOffset(36)]
-        public int flags;
-
-        [FieldOffset(40)]
-        public AVPacket.* side_data;
-
-        [FieldOffset(44)]
-        public int side_data_elems;
-
-        /// <summary>
-        /// Duration of this packet in AVStream->time_base units, 0 if unknown.
-        /// Equals next_pts - this_pts in presentation order.
-        /// </summary>
-        [FieldOffset(48)]
-        public int duration;
-
-        [FieldOffset(52)]
-        public global::System.IntPtr destruct;
-
-        [FieldOffset(56)]
-        public global::System.IntPtr priv;
-
-        /// <summary>
-        /// < byte position in stream, -1 if unknown
-        /// </summary>
-        [FieldOffset(64)]
-        public long pos;
-
-        /// <summary>
-        /// Time difference in AVStream->time_base units from the pts of this
-        /// packet to the point at which the output from the decoder has
-        /// converged
-        /// independent from the availability of previous frames. That is, the
-        /// frames are virtually identical no matter if decoding started from
-        /// the very first frame or from this keyframe.
-        /// Is AV_NOPTS_VALUE if unknown.
-        /// This field is not the display duration of the current packet.
-        /// This field has no meaning if the packet does not have
-        /// AV_PKT_FLAG_KEY
-        /// set.
+        /// Identify the syntax and semantics of the bitstream.
+        /// The principle is roughly:
+        /// Two decoders with the same ID can decode the same streams.
+        /// Two encoders with the same ID can encode compatible streams.
+        /// There may be slight deviations from the principle due to implementation
+        /// details.
         /// 
-        /// The purpose of this field is to allow seeking in streams that have
-        /// no
-        /// keyframes in the conventional sense. It corresponds to the
-        /// recovery point SEI in H.264 and match_time_delta in NUT. It is also
-        /// essential for some types of subtitle streams to ensure that all
-        /// subtitles are correctly displayed after seeking.
-        /// </summary>
-        [FieldOffset(72)]
-        public long convergence_duration;
-    }
-
-    /// <summary>
-    /// @}
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodecInternal
-    {
-    }
-
-    /// <summary>
-    /// main external API structure.
-    /// New fields can be added to the end with minor version bumps.
-    /// Removal, reordering and changes to existing fields require a major
-    /// version bump.
-    /// Please use AVOptions (av_opt* / av_set/get*()) to access these fields
-    /// from user
-    /// applications.
-    /// sizeof(AVCodecContext) must not be used outside libav*.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodecContext
-    {
-        /// <summary>
-        /// information on struct for av_log
-        /// - set by avcodec_alloc_context3
-        /// </summary>
-        [FieldOffset(0)]
-        public AVClass* av_class;
-
-        [FieldOffset(4)]
-        public int log_level_offset;
-
-        [FieldOffset(8)]
-        public AVMediaType codec_type;
-
-        [FieldOffset(12)]
-        public AVCodec* codec;
-
-        [FieldOffset(16)]
-        public fixed sbyte codec_name[32];
-
-        [FieldOffset(48)]
-        public AVCodecID codec_id;
-
-        /// <summary>
-        /// fourcc (LSB first, so "ABCD" -> ('D'<<24) + ('C'<<16) + ('B'<<8) +
-        /// 'A').
-        /// This is used to work around some encoder bugs.
-        /// A demuxer should set this to what is stored in the field used to
-        /// identify the codec.
-        /// If there are multiple such fields in a container then the demuxer
-        /// should choose the one
-        /// which maximizes the information about the used codec.
-        /// If the codec tag field in a container is larger than 32 bits then
-        /// the demuxer should
-        /// remap the longer ID to 32 bits with a table or other structure.
-        /// Alternatively a new
-        /// extra_codec_tag + size could be added but for this a clear
-        /// advantage must be demonstrated
-        /// first.
-        /// - encoding: Set by user, if not then the default based on codec_id
-        /// will be used.
-        /// - decoding: Set by user, will be converted to uppercase by
-        /// libavcodec during init.
-        /// </summary>
-        [FieldOffset(52)]
-        public uint codec_tag;
-
-        /// <summary>
-        /// fourcc from the AVI stream header (LSB first, so "ABCD" ->
-        /// ('D'<<24) + ('C'<<16) + ('B'<<8) + 'A').
-        /// This is used to work around some encoder bugs.
-        /// - encoding: unused
-        /// - decoding: Set by user, will be converted to uppercase by
-        /// libavcodec during init.
-        /// </summary>
-        [FieldOffset(56)]
-        public uint stream_codec_tag;
-
-        [FieldOffset(60)]
-        public global::System.IntPtr priv_data;
-
-        /// <summary>
-        /// Private context used for internal data.
+        /// If you add a codec ID to this list, add it so that
+        /// 1. no value of a existing codec ID changes (that would break ABI),
+        /// 2. Give it a value which when taken as ASCII is recognized uniquely by
+        /// a human as this specific codec.
+        /// This ensures that 2 forks can independently add AVCodecIDs without
+        /// producing conflicts.
         /// 
-        /// Unlike priv_data, this is not codec-specific. It is used in general
-        /// libavcodec functions.
+        /// After adding new codec IDs, do not forget to add an entry to the codec
+        /// descriptor list and bump libavcodec minor version.
         /// </summary>
-        [FieldOffset(64)]
-        public AVCodecInternal* @internal;
+        public enum AVCodecID
+        {
+            AV_CODEC_ID_NONE = 0,
+            AV_CODEC_ID_MPEG1VIDEO = 1,
+            /// <summary>preferred ID for MPEG-1/2 video decoding</summary>
+            AV_CODEC_ID_MPEG2VIDEO = 2,
+            AV_CODEC_ID_MPEG2VIDEO_XVMC = 3,
+            AV_CODEC_ID_H261 = 4,
+            AV_CODEC_ID_H263 = 5,
+            AV_CODEC_ID_RV10 = 6,
+            AV_CODEC_ID_RV20 = 7,
+            AV_CODEC_ID_MJPEG = 8,
+            AV_CODEC_ID_MJPEGB = 9,
+            AV_CODEC_ID_LJPEG = 10,
+            AV_CODEC_ID_SP5X = 11,
+            AV_CODEC_ID_JPEGLS = 12,
+            AV_CODEC_ID_MPEG4 = 13,
+            AV_CODEC_ID_RAWVIDEO = 14,
+            AV_CODEC_ID_MSMPEG4V1 = 15,
+            AV_CODEC_ID_MSMPEG4V2 = 16,
+            AV_CODEC_ID_MSMPEG4V3 = 17,
+            AV_CODEC_ID_WMV1 = 18,
+            AV_CODEC_ID_WMV2 = 19,
+            AV_CODEC_ID_H263P = 20,
+            AV_CODEC_ID_H263I = 21,
+            AV_CODEC_ID_FLV1 = 22,
+            AV_CODEC_ID_SVQ1 = 23,
+            AV_CODEC_ID_SVQ3 = 24,
+            AV_CODEC_ID_DVVIDEO = 25,
+            AV_CODEC_ID_HUFFYUV = 26,
+            AV_CODEC_ID_CYUV = 27,
+            AV_CODEC_ID_H264 = 28,
+            AV_CODEC_ID_INDEO3 = 29,
+            AV_CODEC_ID_VP3 = 30,
+            AV_CODEC_ID_THEORA = 31,
+            AV_CODEC_ID_ASV1 = 32,
+            AV_CODEC_ID_ASV2 = 33,
+            AV_CODEC_ID_FFV1 = 34,
+            AV_CODEC_ID_4XM = 35,
+            AV_CODEC_ID_VCR1 = 36,
+            AV_CODEC_ID_CLJR = 37,
+            AV_CODEC_ID_MDEC = 38,
+            AV_CODEC_ID_ROQ = 39,
+            AV_CODEC_ID_INTERPLAY_VIDEO = 40,
+            AV_CODEC_ID_XAN_WC3 = 41,
+            AV_CODEC_ID_XAN_WC4 = 42,
+            AV_CODEC_ID_RPZA = 43,
+            AV_CODEC_ID_CINEPAK = 44,
+            AV_CODEC_ID_WS_VQA = 45,
+            AV_CODEC_ID_MSRLE = 46,
+            AV_CODEC_ID_MSVIDEO1 = 47,
+            AV_CODEC_ID_IDCIN = 48,
+            AV_CODEC_ID_8BPS = 49,
+            AV_CODEC_ID_SMC = 50,
+            AV_CODEC_ID_FLIC = 51,
+            AV_CODEC_ID_TRUEMOTION1 = 52,
+            AV_CODEC_ID_VMDVIDEO = 53,
+            AV_CODEC_ID_MSZH = 54,
+            AV_CODEC_ID_ZLIB = 55,
+            AV_CODEC_ID_QTRLE = 56,
+            AV_CODEC_ID_TSCC = 57,
+            AV_CODEC_ID_ULTI = 58,
+            AV_CODEC_ID_QDRAW = 59,
+            AV_CODEC_ID_VIXL = 60,
+            AV_CODEC_ID_QPEG = 61,
+            AV_CODEC_ID_PNG = 62,
+            AV_CODEC_ID_PPM = 63,
+            AV_CODEC_ID_PBM = 64,
+            AV_CODEC_ID_PGM = 65,
+            AV_CODEC_ID_PGMYUV = 66,
+            AV_CODEC_ID_PAM = 67,
+            AV_CODEC_ID_FFVHUFF = 68,
+            AV_CODEC_ID_RV30 = 69,
+            AV_CODEC_ID_RV40 = 70,
+            AV_CODEC_ID_VC1 = 71,
+            AV_CODEC_ID_WMV3 = 72,
+            AV_CODEC_ID_LOCO = 73,
+            AV_CODEC_ID_WNV1 = 74,
+            AV_CODEC_ID_AASC = 75,
+            AV_CODEC_ID_INDEO2 = 76,
+            AV_CODEC_ID_FRAPS = 77,
+            AV_CODEC_ID_TRUEMOTION2 = 78,
+            AV_CODEC_ID_BMP = 79,
+            AV_CODEC_ID_CSCD = 80,
+            AV_CODEC_ID_MMVIDEO = 81,
+            AV_CODEC_ID_ZMBV = 82,
+            AV_CODEC_ID_AVS = 83,
+            AV_CODEC_ID_SMACKVIDEO = 84,
+            AV_CODEC_ID_NUV = 85,
+            AV_CODEC_ID_KMVC = 86,
+            AV_CODEC_ID_FLASHSV = 87,
+            AV_CODEC_ID_CAVS = 88,
+            AV_CODEC_ID_JPEG2000 = 89,
+            AV_CODEC_ID_VMNC = 90,
+            AV_CODEC_ID_VP5 = 91,
+            AV_CODEC_ID_VP6 = 92,
+            AV_CODEC_ID_VP6F = 93,
+            AV_CODEC_ID_TARGA = 94,
+            AV_CODEC_ID_DSICINVIDEO = 95,
+            AV_CODEC_ID_TIERTEXSEQVIDEO = 96,
+            AV_CODEC_ID_TIFF = 97,
+            AV_CODEC_ID_GIF = 98,
+            AV_CODEC_ID_DXA = 99,
+            AV_CODEC_ID_DNXHD = 100,
+            AV_CODEC_ID_THP = 101,
+            AV_CODEC_ID_SGI = 102,
+            AV_CODEC_ID_C93 = 103,
+            AV_CODEC_ID_BETHSOFTVID = 104,
+            AV_CODEC_ID_PTX = 105,
+            AV_CODEC_ID_TXD = 106,
+            AV_CODEC_ID_VP6A = 107,
+            AV_CODEC_ID_AMV = 108,
+            AV_CODEC_ID_VB = 109,
+            AV_CODEC_ID_PCX = 110,
+            AV_CODEC_ID_SUNRAST = 111,
+            AV_CODEC_ID_INDEO4 = 112,
+            AV_CODEC_ID_INDEO5 = 113,
+            AV_CODEC_ID_MIMIC = 114,
+            AV_CODEC_ID_RL2 = 115,
+            AV_CODEC_ID_ESCAPE124 = 116,
+            AV_CODEC_ID_DIRAC = 117,
+            AV_CODEC_ID_BFI = 118,
+            AV_CODEC_ID_CMV = 119,
+            AV_CODEC_ID_MOTIONPIXELS = 120,
+            AV_CODEC_ID_TGV = 121,
+            AV_CODEC_ID_TGQ = 122,
+            AV_CODEC_ID_TQI = 123,
+            AV_CODEC_ID_AURA = 124,
+            AV_CODEC_ID_AURA2 = 125,
+            AV_CODEC_ID_V210X = 126,
+            AV_CODEC_ID_TMV = 127,
+            AV_CODEC_ID_V210 = 128,
+            AV_CODEC_ID_DPX = 129,
+            AV_CODEC_ID_MAD = 130,
+            AV_CODEC_ID_FRWU = 131,
+            AV_CODEC_ID_FLASHSV2 = 132,
+            AV_CODEC_ID_CDGRAPHICS = 133,
+            AV_CODEC_ID_R210 = 134,
+            AV_CODEC_ID_ANM = 135,
+            AV_CODEC_ID_BINKVIDEO = 136,
+            AV_CODEC_ID_IFF_ILBM = 137,
+            AV_CODEC_ID_IFF_BYTERUN1 = 138,
+            AV_CODEC_ID_KGV1 = 139,
+            AV_CODEC_ID_YOP = 140,
+            AV_CODEC_ID_VP8 = 141,
+            AV_CODEC_ID_PICTOR = 142,
+            AV_CODEC_ID_ANSI = 143,
+            AV_CODEC_ID_A64_MULTI = 144,
+            AV_CODEC_ID_A64_MULTI5 = 145,
+            AV_CODEC_ID_R10K = 146,
+            AV_CODEC_ID_MXPEG = 147,
+            AV_CODEC_ID_LAGARITH = 148,
+            AV_CODEC_ID_PRORES = 149,
+            AV_CODEC_ID_JV = 150,
+            AV_CODEC_ID_DFA = 151,
+            AV_CODEC_ID_WMV3IMAGE = 152,
+            AV_CODEC_ID_VC1IMAGE = 153,
+            AV_CODEC_ID_UTVIDEO = 154,
+            AV_CODEC_ID_BMV_VIDEO = 155,
+            AV_CODEC_ID_VBLE = 156,
+            AV_CODEC_ID_DXTORY = 157,
+            AV_CODEC_ID_V410 = 158,
+            AV_CODEC_ID_XWD = 159,
+            AV_CODEC_ID_CDXL = 160,
+            AV_CODEC_ID_XBM = 161,
+            AV_CODEC_ID_ZEROCODEC = 162,
+            AV_CODEC_ID_MSS1 = 163,
+            AV_CODEC_ID_MSA1 = 164,
+            AV_CODEC_ID_TSCC2 = 165,
+            AV_CODEC_ID_MTS2 = 166,
+            AV_CODEC_ID_CLLC = 167,
+            AV_CODEC_ID_MSS2 = 168,
+            AV_CODEC_ID_VP9 = 169,
+            AV_CODEC_ID_AIC = 170,
+            AV_CODEC_ID_ESCAPE130_DEPRECATED = 171,
+            AV_CODEC_ID_G2M_DEPRECATED = 172,
+            AV_CODEC_ID_WEBP_DEPRECATED = 173,
+            AV_CODEC_ID_BRENDER_PIX = 1112557912,
+            AV_CODEC_ID_Y41P = 1496592720,
+            AV_CODEC_ID_ESCAPE130 = 1160852272,
+            AV_CODEC_ID_EXR = 809850962,
+            AV_CODEC_ID_AVRP = 1096176208,
+            AV_CODEC_ID_012V = 808530518,
+            AV_CODEC_ID_G2M = 4665933,
+            AV_CODEC_ID_AVUI = 1096176969,
+            AV_CODEC_ID_AYUV = 1096373590,
+            AV_CODEC_ID_TARGA_Y216 = 1412575542,
+            AV_CODEC_ID_V308 = 1446195256,
+            AV_CODEC_ID_V408 = 1446260792,
+            AV_CODEC_ID_YUV4 = 1498764852,
+            AV_CODEC_ID_SANM = 1396788813,
+            AV_CODEC_ID_PAF_VIDEO = 1346455126,
+            AV_CODEC_ID_AVRN = 1096176238,
+            AV_CODEC_ID_CPIA = 1129335105,
+            AV_CODEC_ID_XFACE = 1480999235,
+            AV_CODEC_ID_SGIRLE = 1397180754,
+            AV_CODEC_ID_MVC1 = 1297498929,
+            AV_CODEC_ID_MVC2 = 1297498930,
+            AV_CODEC_ID_SNOW = 1397641047,
+            AV_CODEC_ID_WEBP = 1464156752,
+            AV_CODEC_ID_SMVJPEG = 1397577290,
+            AV_CODEC_ID_HEVC = 1211250229,
+            /// <summary>A dummy id pointing at the start of audio codecs</summary>
+            AV_CODEC_ID_FIRST_AUDIO = 65536,
+            AV_CODEC_ID_PCM_S16LE = 65536,
+            AV_CODEC_ID_PCM_S16BE = 65537,
+            AV_CODEC_ID_PCM_U16LE = 65538,
+            AV_CODEC_ID_PCM_U16BE = 65539,
+            AV_CODEC_ID_PCM_S8 = 65540,
+            AV_CODEC_ID_PCM_U8 = 65541,
+            AV_CODEC_ID_PCM_MULAW = 65542,
+            AV_CODEC_ID_PCM_ALAW = 65543,
+            AV_CODEC_ID_PCM_S32LE = 65544,
+            AV_CODEC_ID_PCM_S32BE = 65545,
+            AV_CODEC_ID_PCM_U32LE = 65546,
+            AV_CODEC_ID_PCM_U32BE = 65547,
+            AV_CODEC_ID_PCM_S24LE = 65548,
+            AV_CODEC_ID_PCM_S24BE = 65549,
+            AV_CODEC_ID_PCM_U24LE = 65550,
+            AV_CODEC_ID_PCM_U24BE = 65551,
+            AV_CODEC_ID_PCM_S24DAUD = 65552,
+            AV_CODEC_ID_PCM_ZORK = 65553,
+            AV_CODEC_ID_PCM_S16LE_PLANAR = 65554,
+            AV_CODEC_ID_PCM_DVD = 65555,
+            AV_CODEC_ID_PCM_F32BE = 65556,
+            AV_CODEC_ID_PCM_F32LE = 65557,
+            AV_CODEC_ID_PCM_F64BE = 65558,
+            AV_CODEC_ID_PCM_F64LE = 65559,
+            AV_CODEC_ID_PCM_BLURAY = 65560,
+            AV_CODEC_ID_PCM_LXF = 65561,
+            AV_CODEC_ID_S302M = 65562,
+            AV_CODEC_ID_PCM_S8_PLANAR = 65563,
+            AV_CODEC_ID_PCM_S24LE_PLANAR_DEPRECATED = 65564,
+            AV_CODEC_ID_PCM_S32LE_PLANAR_DEPRECATED = 65565,
+            AV_CODEC_ID_PCM_S24LE_PLANAR = 407917392,
+            AV_CODEC_ID_PCM_S32LE_PLANAR = 542135120,
+            AV_CODEC_ID_PCM_S16BE_PLANAR = 1347637264,
+            AV_CODEC_ID_ADPCM_IMA_QT = 69632,
+            AV_CODEC_ID_ADPCM_IMA_WAV = 69633,
+            AV_CODEC_ID_ADPCM_IMA_DK3 = 69634,
+            AV_CODEC_ID_ADPCM_IMA_DK4 = 69635,
+            AV_CODEC_ID_ADPCM_IMA_WS = 69636,
+            AV_CODEC_ID_ADPCM_IMA_SMJPEG = 69637,
+            AV_CODEC_ID_ADPCM_MS = 69638,
+            AV_CODEC_ID_ADPCM_4XM = 69639,
+            AV_CODEC_ID_ADPCM_XA = 69640,
+            AV_CODEC_ID_ADPCM_ADX = 69641,
+            AV_CODEC_ID_ADPCM_EA = 69642,
+            AV_CODEC_ID_ADPCM_G726 = 69643,
+            AV_CODEC_ID_ADPCM_CT = 69644,
+            AV_CODEC_ID_ADPCM_SWF = 69645,
+            AV_CODEC_ID_ADPCM_YAMAHA = 69646,
+            AV_CODEC_ID_ADPCM_SBPRO_4 = 69647,
+            AV_CODEC_ID_ADPCM_SBPRO_3 = 69648,
+            AV_CODEC_ID_ADPCM_SBPRO_2 = 69649,
+            AV_CODEC_ID_ADPCM_THP = 69650,
+            AV_CODEC_ID_ADPCM_IMA_AMV = 69651,
+            AV_CODEC_ID_ADPCM_EA_R1 = 69652,
+            AV_CODEC_ID_ADPCM_EA_R3 = 69653,
+            AV_CODEC_ID_ADPCM_EA_R2 = 69654,
+            AV_CODEC_ID_ADPCM_IMA_EA_SEAD = 69655,
+            AV_CODEC_ID_ADPCM_IMA_EA_EACS = 69656,
+            AV_CODEC_ID_ADPCM_EA_XAS = 69657,
+            AV_CODEC_ID_ADPCM_EA_MAXIS_XA = 69658,
+            AV_CODEC_ID_ADPCM_IMA_ISS = 69659,
+            AV_CODEC_ID_ADPCM_G722 = 69660,
+            AV_CODEC_ID_ADPCM_IMA_APC = 69661,
+            AV_CODEC_ID_VIMA = 1447644481,
+            AV_CODEC_ID_ADPCM_AFC = 1095123744,
+            AV_CODEC_ID_ADPCM_IMA_OKI = 1330333984,
+            AV_CODEC_ID_ADPCM_DTK = 1146374944,
+            AV_CODEC_ID_ADPCM_IMA_RAD = 1380008992,
+            AV_CODEC_ID_ADPCM_G726LE = 909260615,
+            AV_CODEC_ID_AMR_NB = 73728,
+            AV_CODEC_ID_AMR_WB = 73729,
+            AV_CODEC_ID_RA_144 = 77824,
+            AV_CODEC_ID_RA_288 = 77825,
+            AV_CODEC_ID_ROQ_DPCM = 81920,
+            AV_CODEC_ID_INTERPLAY_DPCM = 81921,
+            AV_CODEC_ID_XAN_DPCM = 81922,
+            AV_CODEC_ID_SOL_DPCM = 81923,
+            AV_CODEC_ID_MP2 = 86016,
+            /// <summary>preferred ID for decoding MPEG audio layer 1, 2 or 3</summary>
+            AV_CODEC_ID_MP3 = 86017,
+            AV_CODEC_ID_AAC = 86018,
+            AV_CODEC_ID_AC3 = 86019,
+            AV_CODEC_ID_DTS = 86020,
+            AV_CODEC_ID_VORBIS = 86021,
+            AV_CODEC_ID_DVAUDIO = 86022,
+            AV_CODEC_ID_WMAV1 = 86023,
+            AV_CODEC_ID_WMAV2 = 86024,
+            AV_CODEC_ID_MACE3 = 86025,
+            AV_CODEC_ID_MACE6 = 86026,
+            AV_CODEC_ID_VMDAUDIO = 86027,
+            AV_CODEC_ID_FLAC = 86028,
+            AV_CODEC_ID_MP3ADU = 86029,
+            AV_CODEC_ID_MP3ON4 = 86030,
+            AV_CODEC_ID_SHORTEN = 86031,
+            AV_CODEC_ID_ALAC = 86032,
+            AV_CODEC_ID_WESTWOOD_SND1 = 86033,
+            /// <summary>as in Berlin toast format</summary>
+            AV_CODEC_ID_GSM = 86034,
+            AV_CODEC_ID_QDM2 = 86035,
+            AV_CODEC_ID_COOK = 86036,
+            AV_CODEC_ID_TRUESPEECH = 86037,
+            AV_CODEC_ID_TTA = 86038,
+            AV_CODEC_ID_SMACKAUDIO = 86039,
+            AV_CODEC_ID_QCELP = 86040,
+            AV_CODEC_ID_WAVPACK = 86041,
+            AV_CODEC_ID_DSICINAUDIO = 86042,
+            AV_CODEC_ID_IMC = 86043,
+            AV_CODEC_ID_MUSEPACK7 = 86044,
+            AV_CODEC_ID_MLP = 86045,
+            AV_CODEC_ID_GSM_MS = 86046,
+            AV_CODEC_ID_ATRAC3 = 86047,
+            AV_CODEC_ID_VOXWARE = 86048,
+            AV_CODEC_ID_APE = 86049,
+            AV_CODEC_ID_NELLYMOSER = 86050,
+            AV_CODEC_ID_MUSEPACK8 = 86051,
+            AV_CODEC_ID_SPEEX = 86052,
+            AV_CODEC_ID_WMAVOICE = 86053,
+            AV_CODEC_ID_WMAPRO = 86054,
+            AV_CODEC_ID_WMALOSSLESS = 86055,
+            AV_CODEC_ID_ATRAC3P = 86056,
+            AV_CODEC_ID_EAC3 = 86057,
+            AV_CODEC_ID_SIPR = 86058,
+            AV_CODEC_ID_MP1 = 86059,
+            AV_CODEC_ID_TWINVQ = 86060,
+            AV_CODEC_ID_TRUEHD = 86061,
+            AV_CODEC_ID_MP4ALS = 86062,
+            AV_CODEC_ID_ATRAC1 = 86063,
+            AV_CODEC_ID_BINKAUDIO_RDFT = 86064,
+            AV_CODEC_ID_BINKAUDIO_DCT = 86065,
+            AV_CODEC_ID_AAC_LATM = 86066,
+            AV_CODEC_ID_QDMC = 86067,
+            AV_CODEC_ID_CELT = 86068,
+            AV_CODEC_ID_G723_1 = 86069,
+            AV_CODEC_ID_G729 = 86070,
+            AV_CODEC_ID_8SVX_EXP = 86071,
+            AV_CODEC_ID_8SVX_FIB = 86072,
+            AV_CODEC_ID_BMV_AUDIO = 86073,
+            AV_CODEC_ID_RALF = 86074,
+            AV_CODEC_ID_IAC = 86075,
+            AV_CODEC_ID_ILBC = 86076,
+            AV_CODEC_ID_OPUS_DEPRECATED = 86077,
+            AV_CODEC_ID_COMFORT_NOISE = 86078,
+            AV_CODEC_ID_TAK_DEPRECATED = 86079,
+            AV_CODEC_ID_METASOUND = 86080,
+            AV_CODEC_ID_FFWAVESYNTH = 1179014995,
+            AV_CODEC_ID_SONIC = 1397706307,
+            AV_CODEC_ID_SONIC_LS = 1397706316,
+            AV_CODEC_ID_PAF_AUDIO = 1346455105,
+            AV_CODEC_ID_OPUS = 1330664787,
+            AV_CODEC_ID_TAK = 1950507339,
+            AV_CODEC_ID_EVRC = 1936029283,
+            AV_CODEC_ID_SMV = 1936944502,
+            /// <summary>A dummy ID pointing at the start of subtitle codecs.</summary>
+            AV_CODEC_ID_FIRST_SUBTITLE = 94208,
+            AV_CODEC_ID_DVD_SUBTITLE = 94208,
+            AV_CODEC_ID_DVB_SUBTITLE = 94209,
+            /// <summary>raw UTF-8 text</summary>
+            AV_CODEC_ID_TEXT = 94210,
+            AV_CODEC_ID_XSUB = 94211,
+            AV_CODEC_ID_SSA = 94212,
+            AV_CODEC_ID_MOV_TEXT = 94213,
+            AV_CODEC_ID_HDMV_PGS_SUBTITLE = 94214,
+            AV_CODEC_ID_DVB_TELETEXT = 94215,
+            AV_CODEC_ID_SRT = 94216,
+            AV_CODEC_ID_MICRODVD = 1833195076,
+            AV_CODEC_ID_EIA_608 = 1664495672,
+            AV_CODEC_ID_JACOSUB = 1246975298,
+            AV_CODEC_ID_SAMI = 1396788553,
+            AV_CODEC_ID_REALTEXT = 1381259348,
+            AV_CODEC_ID_SUBVIEWER1 = 1398953521,
+            AV_CODEC_ID_SUBVIEWER = 1400201814,
+            AV_CODEC_ID_SUBRIP = 1397909872,
+            AV_CODEC_ID_WEBVTT = 1465275476,
+            AV_CODEC_ID_MPL2 = 1297108018,
+            AV_CODEC_ID_VPLAYER = 1448111218,
+            AV_CODEC_ID_PJS = 1349012051,
+            /// <summary>ASS as defined in Matroska</summary>
+            AV_CODEC_ID_ASS = 1095979808,
+            /// <summary>A dummy ID pointing at the start of various fake codecs.</summary>
+            AV_CODEC_ID_FIRST_UNKNOWN = 98304,
+            AV_CODEC_ID_TTF = 98304,
+            AV_CODEC_ID_BINTEXT = 1112823892,
+            AV_CODEC_ID_XBIN = 1480739150,
+            AV_CODEC_ID_IDF = 4801606,
+            AV_CODEC_ID_OTF = 5198918,
+            AV_CODEC_ID_SMPTE_KLV = 1263294017,
+            AV_CODEC_ID_DVD_NAV = 1145979222,
+            /// <summary>codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it</summary>
+            AV_CODEC_ID_PROBE = 102400,
+            /// <summary>_FAKE_ codec to indicate a raw MPEG-2 TS stream (only used by libavformat)</summary>
+            AV_CODEC_ID_MPEG2TS = 131072,
+            /// <summary>_FAKE_ codec to indicate a MPEG-4 Systems stream (only used by libavformat)</summary>
+            AV_CODEC_ID_MPEG4SYSTEMS = 131073,
+            /// <summary>Dummy codec for streams containing only metadata information.</summary>
+            AV_CODEC_ID_FFMETADATA = 135168,
+            CODEC_ID_NONE = 0,
+            CODEC_ID_MPEG1VIDEO = 1,
+            /// <summary>preferred ID for MPEG-1/2 video decoding</summary>
+            CODEC_ID_MPEG2VIDEO = 2,
+            CODEC_ID_MPEG2VIDEO_XVMC = 3,
+            CODEC_ID_H261 = 4,
+            CODEC_ID_H263 = 5,
+            CODEC_ID_RV10 = 6,
+            CODEC_ID_RV20 = 7,
+            CODEC_ID_MJPEG = 8,
+            CODEC_ID_MJPEGB = 9,
+            CODEC_ID_LJPEG = 10,
+            CODEC_ID_SP5X = 11,
+            CODEC_ID_JPEGLS = 12,
+            CODEC_ID_MPEG4 = 13,
+            CODEC_ID_RAWVIDEO = 14,
+            CODEC_ID_MSMPEG4V1 = 15,
+            CODEC_ID_MSMPEG4V2 = 16,
+            CODEC_ID_MSMPEG4V3 = 17,
+            CODEC_ID_WMV1 = 18,
+            CODEC_ID_WMV2 = 19,
+            CODEC_ID_H263P = 20,
+            CODEC_ID_H263I = 21,
+            CODEC_ID_FLV1 = 22,
+            CODEC_ID_SVQ1 = 23,
+            CODEC_ID_SVQ3 = 24,
+            CODEC_ID_DVVIDEO = 25,
+            CODEC_ID_HUFFYUV = 26,
+            CODEC_ID_CYUV = 27,
+            CODEC_ID_H264 = 28,
+            CODEC_ID_INDEO3 = 29,
+            CODEC_ID_VP3 = 30,
+            CODEC_ID_THEORA = 31,
+            CODEC_ID_ASV1 = 32,
+            CODEC_ID_ASV2 = 33,
+            CODEC_ID_FFV1 = 34,
+            CODEC_ID_4XM = 35,
+            CODEC_ID_VCR1 = 36,
+            CODEC_ID_CLJR = 37,
+            CODEC_ID_MDEC = 38,
+            CODEC_ID_ROQ = 39,
+            CODEC_ID_INTERPLAY_VIDEO = 40,
+            CODEC_ID_XAN_WC3 = 41,
+            CODEC_ID_XAN_WC4 = 42,
+            CODEC_ID_RPZA = 43,
+            CODEC_ID_CINEPAK = 44,
+            CODEC_ID_WS_VQA = 45,
+            CODEC_ID_MSRLE = 46,
+            CODEC_ID_MSVIDEO1 = 47,
+            CODEC_ID_IDCIN = 48,
+            CODEC_ID_8BPS = 49,
+            CODEC_ID_SMC = 50,
+            CODEC_ID_FLIC = 51,
+            CODEC_ID_TRUEMOTION1 = 52,
+            CODEC_ID_VMDVIDEO = 53,
+            CODEC_ID_MSZH = 54,
+            CODEC_ID_ZLIB = 55,
+            CODEC_ID_QTRLE = 56,
+            CODEC_ID_TSCC = 57,
+            CODEC_ID_ULTI = 58,
+            CODEC_ID_QDRAW = 59,
+            CODEC_ID_VIXL = 60,
+            CODEC_ID_QPEG = 61,
+            CODEC_ID_PNG = 62,
+            CODEC_ID_PPM = 63,
+            CODEC_ID_PBM = 64,
+            CODEC_ID_PGM = 65,
+            CODEC_ID_PGMYUV = 66,
+            CODEC_ID_PAM = 67,
+            CODEC_ID_FFVHUFF = 68,
+            CODEC_ID_RV30 = 69,
+            CODEC_ID_RV40 = 70,
+            CODEC_ID_VC1 = 71,
+            CODEC_ID_WMV3 = 72,
+            CODEC_ID_LOCO = 73,
+            CODEC_ID_WNV1 = 74,
+            CODEC_ID_AASC = 75,
+            CODEC_ID_INDEO2 = 76,
+            CODEC_ID_FRAPS = 77,
+            CODEC_ID_TRUEMOTION2 = 78,
+            CODEC_ID_BMP = 79,
+            CODEC_ID_CSCD = 80,
+            CODEC_ID_MMVIDEO = 81,
+            CODEC_ID_ZMBV = 82,
+            CODEC_ID_AVS = 83,
+            CODEC_ID_SMACKVIDEO = 84,
+            CODEC_ID_NUV = 85,
+            CODEC_ID_KMVC = 86,
+            CODEC_ID_FLASHSV = 87,
+            CODEC_ID_CAVS = 88,
+            CODEC_ID_JPEG2000 = 89,
+            CODEC_ID_VMNC = 90,
+            CODEC_ID_VP5 = 91,
+            CODEC_ID_VP6 = 92,
+            CODEC_ID_VP6F = 93,
+            CODEC_ID_TARGA = 94,
+            CODEC_ID_DSICINVIDEO = 95,
+            CODEC_ID_TIERTEXSEQVIDEO = 96,
+            CODEC_ID_TIFF = 97,
+            CODEC_ID_GIF = 98,
+            CODEC_ID_DXA = 99,
+            CODEC_ID_DNXHD = 100,
+            CODEC_ID_THP = 101,
+            CODEC_ID_SGI = 102,
+            CODEC_ID_C93 = 103,
+            CODEC_ID_BETHSOFTVID = 104,
+            CODEC_ID_PTX = 105,
+            CODEC_ID_TXD = 106,
+            CODEC_ID_VP6A = 107,
+            CODEC_ID_AMV = 108,
+            CODEC_ID_VB = 109,
+            CODEC_ID_PCX = 110,
+            CODEC_ID_SUNRAST = 111,
+            CODEC_ID_INDEO4 = 112,
+            CODEC_ID_INDEO5 = 113,
+            CODEC_ID_MIMIC = 114,
+            CODEC_ID_RL2 = 115,
+            CODEC_ID_ESCAPE124 = 116,
+            CODEC_ID_DIRAC = 117,
+            CODEC_ID_BFI = 118,
+            CODEC_ID_CMV = 119,
+            CODEC_ID_MOTIONPIXELS = 120,
+            CODEC_ID_TGV = 121,
+            CODEC_ID_TGQ = 122,
+            CODEC_ID_TQI = 123,
+            CODEC_ID_AURA = 124,
+            CODEC_ID_AURA2 = 125,
+            CODEC_ID_V210X = 126,
+            CODEC_ID_TMV = 127,
+            CODEC_ID_V210 = 128,
+            CODEC_ID_DPX = 129,
+            CODEC_ID_MAD = 130,
+            CODEC_ID_FRWU = 131,
+            CODEC_ID_FLASHSV2 = 132,
+            CODEC_ID_CDGRAPHICS = 133,
+            CODEC_ID_R210 = 134,
+            CODEC_ID_ANM = 135,
+            CODEC_ID_BINKVIDEO = 136,
+            CODEC_ID_IFF_ILBM = 137,
+            CODEC_ID_IFF_BYTERUN1 = 138,
+            CODEC_ID_KGV1 = 139,
+            CODEC_ID_YOP = 140,
+            CODEC_ID_VP8 = 141,
+            CODEC_ID_PICTOR = 142,
+            CODEC_ID_ANSI = 143,
+            CODEC_ID_A64_MULTI = 144,
+            CODEC_ID_A64_MULTI5 = 145,
+            CODEC_ID_R10K = 146,
+            CODEC_ID_MXPEG = 147,
+            CODEC_ID_LAGARITH = 148,
+            CODEC_ID_PRORES = 149,
+            CODEC_ID_JV = 150,
+            CODEC_ID_DFA = 151,
+            CODEC_ID_WMV3IMAGE = 152,
+            CODEC_ID_VC1IMAGE = 153,
+            CODEC_ID_UTVIDEO = 154,
+            CODEC_ID_BMV_VIDEO = 155,
+            CODEC_ID_VBLE = 156,
+            CODEC_ID_DXTORY = 157,
+            CODEC_ID_V410 = 158,
+            CODEC_ID_XWD = 159,
+            CODEC_ID_CDXL = 160,
+            CODEC_ID_XBM = 161,
+            CODEC_ID_ZEROCODEC = 162,
+            CODEC_ID_MSS1 = 163,
+            CODEC_ID_MSA1 = 164,
+            CODEC_ID_TSCC2 = 165,
+            CODEC_ID_MTS2 = 166,
+            CODEC_ID_CLLC = 167,
+            CODEC_ID_Y41P = 1496592720,
+            CODEC_ID_ESCAPE130 = 1160852272,
+            CODEC_ID_EXR = 809850962,
+            CODEC_ID_AVRP = 1096176208,
+            CODEC_ID_G2M = 4665933,
+            CODEC_ID_AVUI = 1096176969,
+            CODEC_ID_AYUV = 1096373590,
+            CODEC_ID_V308 = 1446195256,
+            CODEC_ID_V408 = 1446260792,
+            CODEC_ID_YUV4 = 1498764852,
+            CODEC_ID_SANM = 1396788813,
+            CODEC_ID_PAF_VIDEO = 1346455126,
+            CODEC_ID_SNOW = 1397641047,
+            /// <summary>A dummy id pointing at the start of audio codecs</summary>
+            CODEC_ID_FIRST_AUDIO = 65536,
+            CODEC_ID_PCM_S16LE = 65536,
+            CODEC_ID_PCM_S16BE = 65537,
+            CODEC_ID_PCM_U16LE = 65538,
+            CODEC_ID_PCM_U16BE = 65539,
+            CODEC_ID_PCM_S8 = 65540,
+            CODEC_ID_PCM_U8 = 65541,
+            CODEC_ID_PCM_MULAW = 65542,
+            CODEC_ID_PCM_ALAW = 65543,
+            CODEC_ID_PCM_S32LE = 65544,
+            CODEC_ID_PCM_S32BE = 65545,
+            CODEC_ID_PCM_U32LE = 65546,
+            CODEC_ID_PCM_U32BE = 65547,
+            CODEC_ID_PCM_S24LE = 65548,
+            CODEC_ID_PCM_S24BE = 65549,
+            CODEC_ID_PCM_U24LE = 65550,
+            CODEC_ID_PCM_U24BE = 65551,
+            CODEC_ID_PCM_S24DAUD = 65552,
+            CODEC_ID_PCM_ZORK = 65553,
+            CODEC_ID_PCM_S16LE_PLANAR = 65554,
+            CODEC_ID_PCM_DVD = 65555,
+            CODEC_ID_PCM_F32BE = 65556,
+            CODEC_ID_PCM_F32LE = 65557,
+            CODEC_ID_PCM_F64BE = 65558,
+            CODEC_ID_PCM_F64LE = 65559,
+            CODEC_ID_PCM_BLURAY = 65560,
+            CODEC_ID_PCM_LXF = 65561,
+            CODEC_ID_S302M = 65562,
+            CODEC_ID_PCM_S8_PLANAR = 65563,
+            CODEC_ID_ADPCM_IMA_QT = 69632,
+            CODEC_ID_ADPCM_IMA_WAV = 69633,
+            CODEC_ID_ADPCM_IMA_DK3 = 69634,
+            CODEC_ID_ADPCM_IMA_DK4 = 69635,
+            CODEC_ID_ADPCM_IMA_WS = 69636,
+            CODEC_ID_ADPCM_IMA_SMJPEG = 69637,
+            CODEC_ID_ADPCM_MS = 69638,
+            CODEC_ID_ADPCM_4XM = 69639,
+            CODEC_ID_ADPCM_XA = 69640,
+            CODEC_ID_ADPCM_ADX = 69641,
+            CODEC_ID_ADPCM_EA = 69642,
+            CODEC_ID_ADPCM_G726 = 69643,
+            CODEC_ID_ADPCM_CT = 69644,
+            CODEC_ID_ADPCM_SWF = 69645,
+            CODEC_ID_ADPCM_YAMAHA = 69646,
+            CODEC_ID_ADPCM_SBPRO_4 = 69647,
+            CODEC_ID_ADPCM_SBPRO_3 = 69648,
+            CODEC_ID_ADPCM_SBPRO_2 = 69649,
+            CODEC_ID_ADPCM_THP = 69650,
+            CODEC_ID_ADPCM_IMA_AMV = 69651,
+            CODEC_ID_ADPCM_EA_R1 = 69652,
+            CODEC_ID_ADPCM_EA_R3 = 69653,
+            CODEC_ID_ADPCM_EA_R2 = 69654,
+            CODEC_ID_ADPCM_IMA_EA_SEAD = 69655,
+            CODEC_ID_ADPCM_IMA_EA_EACS = 69656,
+            CODEC_ID_ADPCM_EA_XAS = 69657,
+            CODEC_ID_ADPCM_EA_MAXIS_XA = 69658,
+            CODEC_ID_ADPCM_IMA_ISS = 69659,
+            CODEC_ID_ADPCM_G722 = 69660,
+            CODEC_ID_ADPCM_IMA_APC = 69661,
+            CODEC_ID_VIMA = 1447644481,
+            CODEC_ID_AMR_NB = 73728,
+            CODEC_ID_AMR_WB = 73729,
+            CODEC_ID_RA_144 = 77824,
+            CODEC_ID_RA_288 = 77825,
+            CODEC_ID_ROQ_DPCM = 81920,
+            CODEC_ID_INTERPLAY_DPCM = 81921,
+            CODEC_ID_XAN_DPCM = 81922,
+            CODEC_ID_SOL_DPCM = 81923,
+            CODEC_ID_MP2 = 86016,
+            /// <summary>preferred ID for decoding MPEG audio layer 1, 2 or 3</summary>
+            CODEC_ID_MP3 = 86017,
+            CODEC_ID_AAC = 86018,
+            CODEC_ID_AC3 = 86019,
+            CODEC_ID_DTS = 86020,
+            CODEC_ID_VORBIS = 86021,
+            CODEC_ID_DVAUDIO = 86022,
+            CODEC_ID_WMAV1 = 86023,
+            CODEC_ID_WMAV2 = 86024,
+            CODEC_ID_MACE3 = 86025,
+            CODEC_ID_MACE6 = 86026,
+            CODEC_ID_VMDAUDIO = 86027,
+            CODEC_ID_FLAC = 86028,
+            CODEC_ID_MP3ADU = 86029,
+            CODEC_ID_MP3ON4 = 86030,
+            CODEC_ID_SHORTEN = 86031,
+            CODEC_ID_ALAC = 86032,
+            CODEC_ID_WESTWOOD_SND1 = 86033,
+            /// <summary>as in Berlin toast format</summary>
+            CODEC_ID_GSM = 86034,
+            CODEC_ID_QDM2 = 86035,
+            CODEC_ID_COOK = 86036,
+            CODEC_ID_TRUESPEECH = 86037,
+            CODEC_ID_TTA = 86038,
+            CODEC_ID_SMACKAUDIO = 86039,
+            CODEC_ID_QCELP = 86040,
+            CODEC_ID_WAVPACK = 86041,
+            CODEC_ID_DSICINAUDIO = 86042,
+            CODEC_ID_IMC = 86043,
+            CODEC_ID_MUSEPACK7 = 86044,
+            CODEC_ID_MLP = 86045,
+            CODEC_ID_GSM_MS = 86046,
+            CODEC_ID_ATRAC3 = 86047,
+            CODEC_ID_VOXWARE = 86048,
+            CODEC_ID_APE = 86049,
+            CODEC_ID_NELLYMOSER = 86050,
+            CODEC_ID_MUSEPACK8 = 86051,
+            CODEC_ID_SPEEX = 86052,
+            CODEC_ID_WMAVOICE = 86053,
+            CODEC_ID_WMAPRO = 86054,
+            CODEC_ID_WMALOSSLESS = 86055,
+            CODEC_ID_ATRAC3P = 86056,
+            CODEC_ID_EAC3 = 86057,
+            CODEC_ID_SIPR = 86058,
+            CODEC_ID_MP1 = 86059,
+            CODEC_ID_TWINVQ = 86060,
+            CODEC_ID_TRUEHD = 86061,
+            CODEC_ID_MP4ALS = 86062,
+            CODEC_ID_ATRAC1 = 86063,
+            CODEC_ID_BINKAUDIO_RDFT = 86064,
+            CODEC_ID_BINKAUDIO_DCT = 86065,
+            CODEC_ID_AAC_LATM = 86066,
+            CODEC_ID_QDMC = 86067,
+            CODEC_ID_CELT = 86068,
+            CODEC_ID_G723_1 = 86069,
+            CODEC_ID_G729 = 86070,
+            CODEC_ID_8SVX_EXP = 86071,
+            CODEC_ID_8SVX_FIB = 86072,
+            CODEC_ID_BMV_AUDIO = 86073,
+            CODEC_ID_RALF = 86074,
+            CODEC_ID_IAC = 86075,
+            CODEC_ID_ILBC = 86076,
+            CODEC_ID_FFWAVESYNTH = 1179014995,
+            CODEC_ID_SONIC = 1397706307,
+            CODEC_ID_SONIC_LS = 1397706316,
+            CODEC_ID_PAF_AUDIO = 1346455105,
+            CODEC_ID_OPUS = 1330664787,
+            /// <summary>A dummy ID pointing at the start of subtitle codecs.</summary>
+            CODEC_ID_FIRST_SUBTITLE = 94208,
+            CODEC_ID_DVD_SUBTITLE = 94208,
+            CODEC_ID_DVB_SUBTITLE = 94209,
+            /// <summary>raw UTF-8 text</summary>
+            CODEC_ID_TEXT = 94210,
+            CODEC_ID_XSUB = 94211,
+            CODEC_ID_SSA = 94212,
+            CODEC_ID_MOV_TEXT = 94213,
+            CODEC_ID_HDMV_PGS_SUBTITLE = 94214,
+            CODEC_ID_DVB_TELETEXT = 94215,
+            CODEC_ID_SRT = 94216,
+            CODEC_ID_MICRODVD = 1833195076,
+            CODEC_ID_EIA_608 = 1664495672,
+            CODEC_ID_JACOSUB = 1246975298,
+            CODEC_ID_SAMI = 1396788553,
+            CODEC_ID_REALTEXT = 1381259348,
+            CODEC_ID_SUBVIEWER = 1400201814,
+            /// <summary>A dummy ID pointing at the start of various fake codecs.</summary>
+            CODEC_ID_FIRST_UNKNOWN = 98304,
+            CODEC_ID_TTF = 98304,
+            CODEC_ID_BINTEXT = 1112823892,
+            CODEC_ID_XBIN = 1480739150,
+            CODEC_ID_IDF = 4801606,
+            CODEC_ID_OTF = 5198918,
+            /// <summary>codec_id is not known (like CODEC_ID_NONE) but lavf should attempt to identify it</summary>
+            CODEC_ID_PROBE = 102400,
+            /// <summary>_FAKE_ codec to indicate a raw MPEG-2 TS stream (only used by libavformat)</summary>
+            CODEC_ID_MPEG2TS = 131072,
+            /// <summary>_FAKE_ codec to indicate a MPEG-4 Systems stream (only used by libavformat)</summary>
+            CODEC_ID_MPEG4SYSTEMS = 131073,
+            /// <summary>Dummy codec for streams containing only metadata information.</summary>
+            CODEC_ID_FFMETADATA = 135168
+        }
 
         /// <summary>
-        /// Private data of the user, can be used to carry app specific stuff.
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
+        /// @ingroup lavc_encoding
+        /// motion estimation type.
         /// </summary>
-        [FieldOffset(68)]
-        public global::System.IntPtr opaque;
+        public enum Motion_Est_ID
+        {
+            /// <summary>no search, that is use 0,0 vector whenever one is needed</summary>
+            ME_ZERO = 1,
+            ME_FULL = 2,
+            ME_LOG = 3,
+            ME_PHODS = 4,
+            /// <summary>enhanced predictive zonal search</summary>
+            ME_EPZS = 5,
+            /// <summary>reserved for experiments</summary>
+            ME_X1 = 6,
+            /// <summary>hexagon based search</summary>
+            ME_HEX = 7,
+            /// <summary>uneven multi-hexagon search</summary>
+            ME_UMH = 8,
+            /// <summary>transformed exhaustive search algorithm</summary>
+            ME_TESA = 9,
+            /// <summary>iterative search</summary>
+            ME_ITER = 50
+        }
+
+        public enum AVDiscard
+        {
+            /// <summary>discard nothing</summary>
+            AVDISCARD_NONE = -16,
+            /// <summary>discard useless packets like 0 size packets in avi</summary>
+            AVDISCARD_DEFAULT = 0,
+            /// <summary>discard all non reference</summary>
+            AVDISCARD_NONREF = 8,
+            /// <summary>discard all bidirectional frames</summary>
+            AVDISCARD_BIDIR = 16,
+            /// <summary>discard all frames except keyframes</summary>
+            AVDISCARD_NONKEY = 32,
+            /// <summary>discard all</summary>
+            AVDISCARD_ALL = 48
+        }
+
+        public enum AVColorPrimaries
+        {
+            /// <summary>also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B</summary>
+            AVCOL_PRI_BT709 = 1,
+            AVCOL_PRI_UNSPECIFIED = 2,
+            AVCOL_PRI_BT470M = 4,
+            /// <summary>also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM</summary>
+            AVCOL_PRI_BT470BG = 5,
+            /// <summary>also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC</summary>
+            AVCOL_PRI_SMPTE170M = 6,
+            /// <summary>functionally identical to above</summary>
+            AVCOL_PRI_SMPTE240M = 7,
+            AVCOL_PRI_FILM = 8,
+            /// <summary>Not part of ABI</summary>
+            AVCOL_PRI_NB = 9
+        }
+
+        public enum AVColorTransferCharacteristic
+        {
+            /// <summary>also ITU-R BT1361</summary>
+            AVCOL_TRC_BT709 = 1,
+            AVCOL_TRC_UNSPECIFIED = 2,
+            /// <summary>also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM</summary>
+            AVCOL_TRC_GAMMA22 = 4,
+            /// <summary>also ITU-R BT470BG</summary>
+            AVCOL_TRC_GAMMA28 = 5,
+            AVCOL_TRC_SMPTE240M = 7,
+            /// <summary>Not part of ABI</summary>
+            AVCOL_TRC_NB = 8
+        }
 
         /// <summary>
-        /// the average bitrate
-        /// - encoding: Set by user; unused for constant quantizer encoding.
-        /// - decoding: Set by libavcodec. 0 or some bitrate if this info is
-        /// available in the stream.
+        /// X   X      3 4 X      X are luma samples,
+        /// 1 2        1-6 are possible chroma positions
+        /// X   X      5 6 X      0 is undefined/unknown position
         /// </summary>
-        [FieldOffset(72)]
-        public int bit_rate;
+        public enum AVChromaLocation
+        {
+            AVCHROMA_LOC_UNSPECIFIED = 0,
+            /// <summary>mpeg2/4, h264 default</summary>
+            AVCHROMA_LOC_LEFT = 1,
+            /// <summary>mpeg1, jpeg, h263</summary>
+            AVCHROMA_LOC_CENTER = 2,
+            /// <summary>DV</summary>
+            AVCHROMA_LOC_TOPLEFT = 3,
+            AVCHROMA_LOC_TOP = 4,
+            AVCHROMA_LOC_BOTTOMLEFT = 5,
+            AVCHROMA_LOC_BOTTOM = 6,
+            /// <summary>Not part of ABI</summary>
+            AVCHROMA_LOC_NB = 7
+        }
+
+        public enum AVAudioServiceType
+        {
+            AV_AUDIO_SERVICE_TYPE_MAIN = 0,
+            AV_AUDIO_SERVICE_TYPE_EFFECTS = 1,
+            AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = 2,
+            AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED = 3,
+            AV_AUDIO_SERVICE_TYPE_DIALOGUE = 4,
+            AV_AUDIO_SERVICE_TYPE_COMMENTARY = 5,
+            AV_AUDIO_SERVICE_TYPE_EMERGENCY = 6,
+            AV_AUDIO_SERVICE_TYPE_VOICE_OVER = 7,
+            AV_AUDIO_SERVICE_TYPE_KARAOKE = 8,
+            /// <summary>Not part of ABI</summary>
+            AV_AUDIO_SERVICE_TYPE_NB = 9
+        }
 
         /// <summary>
-        /// number of bits the bitstream is allowed to diverge from the
-        /// reference.
-        /// the reference can be CBR (for CBR pass1) or VBR (for pass2)
-        /// - encoding: Set by user; unused for constant quantizer encoding.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(76)]
-        public int bit_rate_tolerance;
-
-        /// <summary>
-        /// Global quality for codecs which cannot change it per frame.
-        /// This should be proportional to MPEG-1/2/4 qscale.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(80)]
-        public int global_quality;
-
-        /// <summary>
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(84)]
-        public int compression_level;
-
-        /// <summary>
-        /// CODEC_FLAG_*.
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(88)]
-        public int flags;
-
-        /// <summary>
-        /// CODEC_FLAG2_*
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(92)]
-        public int flags2;
-
-        /// <summary>
-        /// some codecs need / can use extradata like Huffman tables.
-        /// mjpeg: Huffman tables
-        /// rv10: additional flags
-        /// mpeg4: global headers (they can be in the bitstream or here)
-        /// The allocated memory should be FF_INPUT_BUFFER_PADDING_SIZE bytes
-        /// larger
-        /// than extradata_size to avoid problems if it is read with the
-        /// bitstream reader.
-        /// The bytewise contents of extradata must not depend on the
-        /// architecture or CPU endianness.
-        /// - encoding: Set/allocated/freed by libavcodec.
-        /// - decoding: Set/allocated/freed by user.
-        /// </summary>
-        [FieldOffset(96)]
-        public byte* extradata;
-
-        [FieldOffset(100)]
-        public int extradata_size;
-
-        /// <summary>
-        /// This is the fundamental unit of time (in seconds) in terms
-        /// of which frame timestamps are represented. For fixed-fps content,
-        /// timebase should be 1/framerate and timestamp increments should be
-        /// identically 1.
-        /// - encoding: MUST be set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(104)]
-        public AVRational* time_base;
-
-        /// <summary>
-        /// For some codecs, the time base is closer to the field rate than the
-        /// frame rate.
-        /// Most notably, H.264 and MPEG-2 specify time_base as half of frame
-        /// duration
-        /// if no telecine is used ...
+        /// @defgroup lavc_packet AVPacket
         /// 
-        /// Set to time_base ticks per frame. Default 1, e.g., H.264/MPEG-2 set
-        /// it to 2.
-        /// </summary>
-        [FieldOffset(112)]
-        public int ticks_per_frame;
-
-        /// <summary>
-        /// Codec delay.
-        /// 
-        /// Encoding: Number of frames delay there will be from the encoder
-        /// input to
-        /// the decoder output. (we assume the decoder matches the spec)
-        /// Decoding: Number of frames delay in addition to what a standard
-        /// decoder
-        /// as specified in the spec would produce.
-        /// 
-        /// Video:
-        /// Number of frames the decoded output will be delayed relative to the
-        /// encoded input.
-        /// 
-        /// Audio:
-        /// For encoding, this is the number of "priming" samples added to the
-        /// beginning of the stream. The decoded output will be delayed by this
-        /// many samples relative to the input to the encoder. Note that this
-        /// field is purely informational and does not directly affect the pts
-        /// output by the encoder, which should always be based on the actual
-        /// presentation time, including any delay.
-        /// For decoding, this is the number of samples the decoder needs to
-        /// output before the decoder's output is valid. When seeking, you
-        /// should
-        /// start decoding this many samples prior to your desired seek point.
-        /// 
-        /// - encoding: Set by libavcodec.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(116)]
-        public int delay;
-
-        /// <summary>
-        /// picture width / height.
-        /// - encoding: MUST be set by user.
-        /// - decoding: May be set by the user before opening the decoder if
-        /// known e.g.
-        /// from the container. Some decoders will require the dimensions
-        /// to be set by the caller. During decoding, the decoder may
-        /// overwrite those values as required.
-        /// </summary>
-        [FieldOffset(120)]
-        public int width;
-
-        /// <summary>
-        /// picture width / height.
-        /// - encoding: MUST be set by user.
-        /// - decoding: May be set by the user before opening the decoder if
-        /// known e.g.
-        /// from the container. Some decoders will require the dimensions
-        /// to be set by the caller. During decoding, the decoder may
-        /// overwrite those values as required.
-        /// </summary>
-        [FieldOffset(124)]
-        public int height;
-
-        /// <summary>
-        /// Bitstream width / height, may be different from width/height e.g.
-        /// when
-        /// the decoded frame is cropped before being output or lowres is
-        /// enabled.
-        /// - encoding: unused
-        /// - decoding: May be set by the user before opening the decoder if
-        /// known
-        /// e.g. from the container. During decoding, the decoder may
-        /// overwrite those values as required.
-        /// </summary>
-        [FieldOffset(128)]
-        public int coded_width;
-
-        /// <summary>
-        /// Bitstream width / height, may be different from width/height e.g.
-        /// when
-        /// the decoded frame is cropped before being output or lowres is
-        /// enabled.
-        /// - encoding: unused
-        /// - decoding: May be set by the user before opening the decoder if
-        /// known
-        /// e.g. from the container. During decoding, the decoder may
-        /// overwrite those values as required.
-        /// </summary>
-        [FieldOffset(132)]
-        public int coded_height;
-
-        /// <summary>
-        /// the number of pictures in a group of pictures, or 0 for intra_only
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(136)]
-        public int gop_size;
-
-        /// <summary>
-        /// Pixel format, see AV_PIX_FMT_xxx.
-        /// May be set by the demuxer if known from headers.
-        /// May be overridden by the decoder if it knows better.
-        /// - encoding: Set by user.
-        /// - decoding: Set by user if known, overridden by libavcodec if known
-        /// </summary>
-        [FieldOffset(140)]
-        public AVPixelFormat pix_fmt;
-
-        /// <summary>
-        /// Motion estimation algorithm used for video coding.
-        /// 1 (zero), 2 (full), 3 (log), 4 (phods), 5 (epzs), 6 (x1), 7 (hex),
-        /// 8 (umh), 9 (iter), 10 (tesa) [7, 8, 10 are x264 specific, 9 is snow
-        /// specific]
-        /// - encoding: MUST be set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(144)]
-        public int me_method;
-
-        /// <summary>
-        /// If non NULL, 'draw_horiz_band' is called by the libavcodec
-        /// decoder to draw a horizontal band. It improves cache usage. Not
-        /// all codecs can do that. You must check the codec capabilities
-        /// beforehand.
-        /// When multithreading is used, it may be called from multiple threads
-        /// at the same time; threads might draw different parts of the same
-        /// AVFrame,
-        /// or multiple AVFrames, and there is no guarantee that slices will be
-        /// drawn
-        /// in order.
-        /// The function is also used by hardware acceleration APIs.
-        /// It is called at least once during frame decoding to pass
-        /// the data needed for hardware render.
-        /// In that mode instead of pixel data, AVFrame points to
-        /// a structure specific to the acceleration API. The application
-        /// reads the structure and can change some fields to indicate progress
-        /// or mark state.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// @param height the height of the slice
-        /// @param y the y position of the slice
-        /// @param type 1->top field, 2->bottom field, 3->frame
-        /// @param offset offset into the AVFrame.data from which the slice
-        /// should be read
-        /// </summary>
-        [FieldOffset(148)]
-        public global::System.IntPtr draw_horiz_band;
-
-        /// <summary>
-        /// callback to negotiate the pixelFormat
-        /// @param fmt is the list of formats which are supported by the codec,
-        /// it is terminated by -1 as 0 is a valid format, the formats are
-        /// ordered by quality.
-        /// The first is always the native one.
-        /// @return the chosen format
-        /// - encoding: unused
-        /// - decoding: Set by user, if not set the native format will be
-        /// chosen.
-        /// </summary>
-        [FieldOffset(152)]
-        public global::System.IntPtr get_format;
-
-        /// <summary>
-        /// maximum number of B-frames between non-B-frames
-        /// Note: The output will be delayed by max_b_frames+1 relative to the
-        /// input.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(156)]
-        public int max_b_frames;
-
-        /// <summary>
-        /// qscale factor between IP and B-frames
-        /// If > 0 then the last P-frame quantizer will be used (q=
-        /// lastp_q*factor+offset).
-        /// If < 0 then normal ratecontrol will be done (q=
-        /// -normal_q*factor+offset).
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(160)]
-        public float b_quant_factor;
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(164)]
-        public int rc_strategy;
-
-        [FieldOffset(168)]
-        public int b_frame_strategy;
-
-        /// <summary>
-        /// qscale offset between IP and B-frames
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(172)]
-        public float b_quant_offset;
-
-        /// <summary>
-        /// Size of the frame reordering buffer in the decoder.
-        /// For MPEG-2 it is 1 IPB or 0 low delay IP.
-        /// - encoding: Set by libavcodec.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(176)]
-        public int has_b_frames;
-
-        /// <summary>
-        /// 0-> h263 quant 1-> mpeg quant
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(180)]
-        public int mpeg_quant;
-
-        /// <summary>
-        /// qscale factor between P and I-frames
-        /// If > 0 then the last p frame quantizer will be used (q=
-        /// lastp_q*factor+offset).
-        /// If < 0 then normal ratecontrol will be done (q=
-        /// -normal_q*factor+offset).
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(184)]
-        public float i_quant_factor;
-
-        /// <summary>
-        /// qscale offset between P and I-frames
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(188)]
-        public float i_quant_offset;
-
-        /// <summary>
-        /// luminance masking (0-> disabled)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(192)]
-        public float lumi_masking;
-
-        /// <summary>
-        /// temporary complexity masking (0-> disabled)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(196)]
-        public float temporal_cplx_masking;
-
-        /// <summary>
-        /// spatial complexity masking (0-> disabled)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(200)]
-        public float spatial_cplx_masking;
-
-        /// <summary>
-        /// p block masking (0-> disabled)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(204)]
-        public float p_masking;
-
-        /// <summary>
-        /// darkness masking (0-> disabled)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(208)]
-        public float dark_masking;
-
-        /// <summary>
-        /// slice count
-        /// - encoding: Set by libavcodec.
-        /// - decoding: Set by user (or 0).
-        /// </summary>
-        [FieldOffset(212)]
-        public int slice_count;
-
-        /// <summary>
-        /// prediction method (needed for huffyuv)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(216)]
-        public int prediction_method;
-
-        /// <summary>
-        /// slice offsets in the frame in bytes
-        /// - encoding: Set/allocated by libavcodec.
-        /// - decoding: Set/allocated by user (or NULL).
-        /// </summary>
-        [FieldOffset(220)]
-        public int* slice_offset;
-
-        /// <summary>
-        /// sample aspect ratio (0 if unknown)
-        /// That is the width of a pixel divided by the height of the pixel.
-        /// Numerator and denominator must be relatively prime and smaller than
-        /// 256 for some video standards.
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(224)]
-        public AVRational* sample_aspect_ratio;
-
-        /// <summary>
-        /// motion estimation comparison function
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(232)]
-        public int me_cmp;
-
-        /// <summary>
-        /// subpixel motion estimation comparison function
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(236)]
-        public int me_sub_cmp;
-
-        /// <summary>
-        /// macroblock comparison function (not supported yet)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(240)]
-        public int mb_cmp;
-
-        /// <summary>
-        /// interlaced DCT comparison function
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(244)]
-        public int ildct_cmp;
-
-        /// <summary>
-        /// ME diamond size & shape
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(248)]
-        public int dia_size;
-
-        /// <summary>
-        /// amount of previous MV predictors (2a+1 x 2a+1 square)
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(252)]
-        public int last_predictor_count;
-
-        /// <summary>
-        /// prepass for motion estimation
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(256)]
-        public int pre_me;
-
-        /// <summary>
-        /// motion estimation prepass comparison function
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(260)]
-        public int me_pre_cmp;
-
-        /// <summary>
-        /// ME prepass diamond size & shape
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(264)]
-        public int pre_dia_size;
-
-        /// <summary>
-        /// subpel ME quality
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(268)]
-        public int me_subpel_quality;
-
-        /// <summary>
-        /// DTG active format information (additional aspect ratio
-        /// information only used in DVB MPEG-2 transport streams)
-        /// 0 if not set.
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by decoder.
-        /// </summary>
-        [FieldOffset(272)]
-        public int dtg_active_format;
-
-        /// <summary>
-        /// maximum motion estimation search range in subpel units
-        /// If 0 then no limit.
-        /// 
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(276)]
-        public int me_range;
-
-        /// <summary>
-        /// intra quantizer bias
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(280)]
-        public int intra_quant_bias;
-
-        /// <summary>
-        /// inter quantizer bias
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(284)]
-        public int inter_quant_bias;
-
-        /// <summary>
-        /// slice flags
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(288)]
-        public int slice_flags;
-
-        /// <summary>
-        /// XVideo Motion Acceleration
-        /// - encoding: forbidden
-        /// - decoding: set by decoder
-        /// </summary>
-        [FieldOffset(292)]
-        public int xvmc_acceleration;
-
-        /// <summary>
-        /// macroblock decision mode
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(296)]
-        public int mb_decision;
-
-        /// <summary>
-        /// custom intra quantization matrix
-        /// - encoding: Set by user, can be NULL.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(300)]
-        public ushort* intra_matrix;
-
-        /// <summary>
-        /// custom inter quantization matrix
-        /// - encoding: Set by user, can be NULL.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(304)]
-        public ushort* inter_matrix;
-
-        /// <summary>
-        /// scene change detection threshold
-        /// 0 is default, larger means fewer detected scene changes.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(308)]
-        public int scenechange_threshold;
-
-        /// <summary>
-        /// noise reduction strength
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(312)]
-        public int noise_reduction;
-
-        /// <summary>
-        /// Motion estimation threshold below which no motion estimation is
-        /// performed, but instead the user specified motion vectors are used.
-        /// 
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(316)]
-        public int me_threshold;
-
-        /// <summary>
-        /// Macroblock threshold below which the user specified macroblock
-        /// types will be used.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(320)]
-        public int mb_threshold;
-
-        /// <summary>
-        /// precision of the intra DC coefficient - 8
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(324)]
-        public int intra_dc_precision;
-
-        /// <summary>
-        /// Number of macroblock rows at the top which are skipped.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(328)]
-        public int skip_top;
-
-        /// <summary>
-        /// Number of macroblock rows at the bottom which are skipped.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(332)]
-        public int skip_bottom;
-
-        /// <summary>
-        /// Border processing masking, raises the quantizer for mbs on the
-        /// borders
-        /// of the picture.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(336)]
-        public float border_masking;
-
-        /// <summary>
-        /// minimum MB lagrange multipler
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(340)]
-        public int mb_lmin;
-
-        /// <summary>
-        /// maximum MB lagrange multipler
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(344)]
-        public int mb_lmax;
-
-        /// <summary>
-        /// 
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(348)]
-        public int me_penalty_compensation;
-
-        /// <summary>
-        /// 
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(352)]
-        public int bidir_refine;
-
-        /// <summary>
-        /// 
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(356)]
-        public int brd_scale;
-
-        /// <summary>
-        /// minimum GOP size
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(360)]
-        public int keyint_min;
-
-        /// <summary>
-        /// number of reference frames
-        /// - encoding: Set by user.
-        /// - decoding: Set by lavc.
-        /// </summary>
-        [FieldOffset(364)]
-        public int refs;
-
-        /// <summary>
-        /// chroma qp offset from luma
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(368)]
-        public int chromaoffset;
-
-        /// <summary>
-        /// Multiplied by qscale for each frame and added to
-        /// scene_change_score.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(372)]
-        public int scenechange_factor;
-
-        /// <summary>
-        /// 
-        /// Note: Value depends upon the compare function used for fullpel ME.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(376)]
-        public int mv0_threshold;
-
-        /// <summary>
-        /// Adjust sensitivity of b_frame_strategy 1.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(380)]
-        public int b_sensitivity;
-
-        /// <summary>
-        /// Chromaticity coordinates of the source primaries.
-        /// - encoding: Set by user
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(384)]
-        public AVColorPrimaries color_primaries;
-
-        /// <summary>
-        /// Color Transfer Characteristic.
-        /// - encoding: Set by user
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(388)]
-        public AVColorTransferCharacteristic color_trc;
-
-        /// <summary>
-        /// YUV colorspace type.
-        /// - encoding: Set by user
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(392)]
-        public AVColorSpace colorspace;
-
-        /// <summary>
-        /// MPEG vs JPEG YUV range.
-        /// - encoding: Set by user
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(396)]
-        public AVColorRange color_range;
-
-        /// <summary>
-        /// This defines the location of chroma samples.
-        /// - encoding: Set by user
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(400)]
-        public AVChromaLocation chroma_sample_location;
-
-        /// <summary>
-        /// Number of slices.
-        /// Indicates number of picture subdivisions. Used for parallelized
-        /// decoding.
-        /// - encoding: Set by user
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(404)]
-        public int slices;
-
-        /// <summary>
-        /// - encoding: set by libavcodec
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(408)]
-        public AVFieldOrder field_order;
-
-        /// <summary>
-        /// < samples per second
-        /// </summary>
-        [FieldOffset(412)]
-        public int sample_rate;
-
-        /// <summary>
-        /// < number of audio channels
-        /// </summary>
-        [FieldOffset(416)]
-        public int channels;
-
-        /// <summary>
-        /// < sample format
-        /// </summary>
-        [FieldOffset(420)]
-        public AVSampleFormat sample_fmt;
-
-        /// <summary>
-        /// Number of samples per channel in an audio frame.
-        /// 
-        /// - encoding: set by libavcodec in avcodec_open2(). Each submitted
-        /// frame
-        /// except the last must contain exactly frame_size samples per
-        /// channel.
-        /// May be 0 when the codec has CODEC_CAP_VARIABLE_FRAME_SIZE set, then
-        /// the
-        /// frame size is not restricted.
-        /// - decoding: may be set by some decoders to indicate constant frame
-        /// size
-        /// </summary>
-        [FieldOffset(424)]
-        public int frame_size;
-
-        /// <summary>
-        /// Frame counter, set by libavcodec.
-        /// 
-        /// - decoding: total number of frames returned from the decoder so
-        /// far.
-        /// - encoding: total number of frames passed to the encoder so far.
-        /// 
-        /// @note the counter is not incremented if encoding/decoding resulted
-        /// in
-        /// an error.
-        /// </summary>
-        [FieldOffset(428)]
-        public int frame_number;
-
-        /// <summary>
-        /// number of bytes per packet if constant and known or 0
-        /// Used by some WAV based audio codecs.
-        /// </summary>
-        [FieldOffset(432)]
-        public int block_align;
-
-        /// <summary>
-        /// Audio cutoff bandwidth (0 means "automatic")
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(436)]
-        public int cutoff;
-
-        /// <summary>
-        /// Decoder should decode to this many channels if it can (0 for
-        /// default)
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// @deprecated Deprecated in favor of request_channel_layout.
-        /// </summary>
-        [FieldOffset(440)]
-        public int request_channels;
-
-        /// <summary>
-        /// Audio channel layout.
-        /// - encoding: set by user.
-        /// - decoding: set by user, may be overwritten by libavcodec.
-        /// </summary>
-        [FieldOffset(448)]
-        public ulong channel_layout;
-
-        /// <summary>
-        /// Request decoder to use this channel layout if it can (0 for
-        /// default)
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(456)]
-        public ulong request_channel_layout;
-
-        /// <summary>
-        /// Type of service that the audio stream conveys.
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(464)]
-        public AVAudioServiceType audio_service_type;
-
-        /// <summary>
-        /// desired sample format
-        /// - encoding: Not used.
-        /// - decoding: Set by user.
-        /// Decoder will decode to this format if it can.
-        /// </summary>
-        [FieldOffset(468)]
-        public AVSampleFormat request_sample_fmt;
-
-        /// <summary>
-        /// Called at the beginning of each frame to get a buffer for it.
-        /// 
-        /// The function will set AVFrame.data[], AVFrame.linesize[].
-        /// AVFrame.extended_data[] must also be set, but it should be the same
-        /// as
-        /// AVFrame.data[] except for planar audio with more channels than can
-        /// fit
-        /// in AVFrame.data[]. In that case, AVFrame.data[] shall still contain
-        /// as
-        /// many data pointers as it can hold.
-        /// 
-        /// if CODEC_CAP_DR1 is not set then get_buffer() must call
-        /// avcodec_default_get_buffer() instead of providing buffers allocated
-        /// by
-        /// some other means.
-        /// 
-        /// AVFrame.data[] should be 32- or 16-byte-aligned unless the CPU
-        /// doesn't
-        /// need it. avcodec_default_get_buffer() aligns the output buffer
-        /// properly,
-        /// but if get_buffer() is overridden then alignment considerations
-        /// should
-        /// be taken into account.
-        /// 
-        /// @see avcodec_default_get_buffer()
-        /// 
-        /// Video:
-        /// 
-        /// If pic.reference is set then the frame will be read later by
-        /// libavcodec.
-        /// avcodec_align_dimensions2() should be used to find the required
-        /// width and
-        /// height, as they normally need to be rounded up to the next multiple
-        /// of 16.
-        /// 
-        /// If frame multithreading is used and thread_safe_callbacks is set,
-        /// it may be called from a different thread, but not from more than
-        /// one at
-        /// once. Does not need to be reentrant.
-        /// 
-        /// @see release_buffer(), reget_buffer()
-        /// @see avcodec_align_dimensions2()
-        /// 
-        /// Audio:
-        /// 
-        /// Decoders request a buffer of a particular size by setting
-        /// AVFrame.nb_samples prior to calling get_buffer(). The decoder may,
-        /// however, utilize only part of the buffer by setting
-        /// AVFrame.nb_samples
-        /// to a smaller value in the output frame.
-        /// 
-        /// Decoders cannot use the buffer after returning from
-        /// avcodec_decode_audio4(), so they will not call release_buffer(), as
-        /// it
-        /// is assumed to be released immediately upon return. In some rare
-        /// cases,
-        /// a decoder may need to call get_buffer() more than once in a single
-        /// call to avcodec_decode_audio4(). In that case, when get_buffer() is
-        /// called again after it has already been called once, the previously
-        /// acquired buffer is assumed to be released at that time and may not
-        /// be
-        /// reused by the decoder.
-        /// 
-        /// As a convenience, av_samples_get_buffer_size() and
-        /// av_samples_fill_arrays() in libavutil may be used by custom
-        /// get_buffer()
-        /// functions to find the required data size and to fill data pointers
-        /// and
-        /// linesize. In AVFrame.linesize, only linesize[0] may be set for
-        /// audio
-        /// since all planes must be the same size.
-        /// 
-        /// @see av_samples_get_buffer_size(), av_samples_fill_arrays()
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec, user can override.
-        /// 
-        /// @deprecated use get_buffer2()
-        /// </summary>
-        [FieldOffset(472)]
-        public global::System.IntPtr get_buffer;
-
-        /// <summary>
-        /// Called to release buffers which were allocated with get_buffer.
-        /// A released buffer can be reused in get_buffer().
-        /// pic.data[*] must be set to NULL.
-        /// May be called from a different thread if frame multithreading is
-        /// used,
-        /// but not by more than one thread at once, so does not need to be
-        /// reentrant.
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec, user can override.
-        /// 
-        /// @deprecated custom freeing callbacks should be set from
-        /// get_buffer2()
-        /// </summary>
-        [FieldOffset(476)]
-        public global::System.IntPtr release_buffer;
-
-        /// <summary>
-        /// Called at the beginning of a frame to get cr buffer for it.
-        /// Buffer type (size, hints) must be the same. libavcodec won't check
-        /// it.
-        /// libavcodec will pass previous buffer in pic, function should return
-        /// same buffer or new buffer with old frame "painted" into it.
-        /// If pic.data[0] == NULL must behave like get_buffer().
-        /// if CODEC_CAP_DR1 is not set then reget_buffer() must call
-        /// avcodec_default_reget_buffer() instead of providing buffers
-        /// allocated by
-        /// some other means.
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec, user can override.
-        /// </summary>
-        [FieldOffset(480)]
-        public global::System.IntPtr reget_buffer;
-
-        /// <summary>
-        /// This callback is called at the beginning of each frame to get data
-        /// buffer(s) for it. There may be one contiguous buffer for all the
-        /// data or
-        /// there may be a buffer per each data plane or anything in between.
-        /// What
-        /// this means is, you may set however many entries in buf[] you feel
-        /// necessary.
-        /// Each buffer must be reference-counted using the AVBuffer API (see
-        /// description
-        /// of buf[] below).
-        /// 
-        /// The following fields will be set in the frame before this callback
-        /// is
-        /// called:
-        /// - format
-        /// - width, height (video only)
-        /// - sample_rate, channel_layout, nb_samples (audio only)
-        /// Their values may differ from the corresponding values in
-        /// AVCodecContext. This callback must use the frame values, not the
-        /// codec
-        /// context values, to calculate the required buffer size.
-        /// 
-        /// This callback must fill the following fields in the frame:
-        /// - data[]
-        /// - linesize[]
-        /// - extended_data:
-        /// if the data is planar audio with more than 8 channels, then this
-        /// callback must allocate and fill extended_data to contain all
-        /// pointers
-        /// to all data planes. data[] must hold as many pointers as it can.
-        /// extended_data must be allocated with av_malloc() and will be freed
-        /// in
-        /// av_frame_unref().
-        /// otherwise exended_data must point to data
-        /// - buf[] must contain one or more pointers to AVBufferRef
-        /// structures. Each of
-        /// the frame's data and extended_data pointers must be contained in
-        /// these. That
-        /// is, one AVBufferRef for each allocated chunk of memory, not
-        /// necessarily one
-        /// AVBufferRef per data[] entry. See: av_buffer_create(),
-        /// av_buffer_alloc(),
-        /// and av_buffer_ref().
-        /// - extended_buf and nb_extended_buf must be allocated with
-        /// av_malloc() by
-        /// this callback and filled with the extra buffers if there are more
-        /// buffers than buf[] can hold. extended_buf will be freed in
-        /// av_frame_unref().
-        /// 
-        /// If CODEC_CAP_DR1 is not set then get_buffer2() must call
-        /// avcodec_default_get_buffer2() instead of providing buffers
-        /// allocated by
-        /// some other means.
-        /// 
-        /// Each data plane must be aligned to the maximum required by the
-        /// target
-        /// CPU.
-        /// 
-        /// @see avcodec_default_get_buffer2()
-        /// 
-        /// Video:
-        /// 
-        /// If AV_GET_BUFFER_FLAG_REF is set in flags then the frame may be
-        /// reused
-        /// (read and/or written to if it is writable) later by libavcodec.
-        /// 
-        /// If CODEC_FLAG_EMU_EDGE is not set in s->flags, the buffer must
-        /// contain an
-        /// edge of the size returned by avcodec_get_edge_width() on all sides.
-        /// 
-        /// avcodec_align_dimensions2() should be used to find the required
-        /// width and
-        /// height, as they normally need to be rounded up to the next multiple
-        /// of 16.
-        /// 
-        /// If frame multithreading is used and thread_safe_callbacks is set,
-        /// this callback may be called from a different thread, but not from
-        /// more
-        /// than one at once. Does not need to be reentrant.
-        /// 
-        /// @see avcodec_align_dimensions2()
-        /// 
-        /// Audio:
-        /// 
-        /// Decoders request a buffer of a particular size by setting
-        /// AVFrame.nb_samples prior to calling get_buffer2(). The decoder may,
-        /// however, utilize only part of the buffer by setting
-        /// AVFrame.nb_samples
-        /// to a smaller value in the output frame.
-        /// 
-        /// As a convenience, av_samples_get_buffer_size() and
-        /// av_samples_fill_arrays() in libavutil may be used by custom
-        /// get_buffer2()
-        /// functions to find the required data size and to fill data pointers
-        /// and
-        /// linesize. In AVFrame.linesize, only linesize[0] may be set for
-        /// audio
-        /// since all planes must be the same size.
-        /// 
-        /// @see av_samples_get_buffer_size(), av_samples_fill_arrays()
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec, user can override.
-        /// </summary>
-        [FieldOffset(484)]
-        public global::System.IntPtr get_buffer2;
-
-        /// <summary>
-        /// If non-zero, the decoded audio and video frames returned from
-        /// avcodec_decode_video2() and avcodec_decode_audio4() are
-        /// reference-counted
-        /// and are valid indefinitely. The caller must free them with
-        /// av_frame_unref() when they are not needed anymore.
-        /// Otherwise, the decoded frames must not be freed by the caller and
-        /// are
-        /// only valid until the next decode call.
-        /// 
-        /// - encoding: unused
-        /// - decoding: set by the caller before avcodec_open2().
-        /// </summary>
-        [FieldOffset(488)]
-        public int refcounted_frames;
-
-        /// <summary>
-        /// < amount of qscale change between easy & hard scenes (0.0-1.0)
-        /// </summary>
-        [FieldOffset(492)]
-        public float qcompress;
-
-        /// <summary>
-        /// < amount of qscale smoothing over time (0.0-1.0)
-        /// </summary>
-        [FieldOffset(496)]
-        public float qblur;
-
-        /// <summary>
-        /// minimum quantizer
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(500)]
-        public int qmin;
-
-        /// <summary>
-        /// maximum quantizer
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(504)]
-        public int qmax;
-
-        /// <summary>
-        /// maximum quantizer difference between frames
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(508)]
-        public int max_qdiff;
-
-        /// <summary>
-        /// ratecontrol qmin qmax limiting method
-        /// 0-> clipping, 1-> use a nice continuous function to limit qscale
-        /// wthin qmin/qmax.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(512)]
-        public float rc_qsquish;
-
-        [FieldOffset(516)]
-        public float rc_qmod_amp;
-
-        [FieldOffset(520)]
-        public int rc_qmod_freq;
-
-        /// <summary>
-        /// decoder bitstream buffer size
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(524)]
-        public int rc_buffer_size;
-
-        /// <summary>
-        /// ratecontrol override, see RcOverride
-        /// - encoding: Allocated/set/freed by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(528)]
-        public int rc_override_count;
-
-        [FieldOffset(532)]
-        public RcOverride* rc_override;
-
-        /// <summary>
-        /// rate control equation
-        /// - encoding: Set by user
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(536)]
-        public global::System.IntPtr rc_eq;
-
-        /// <summary>
-        /// maximum bitrate
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(540)]
-        public int rc_max_rate;
-
-        /// <summary>
-        /// minimum bitrate
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(544)]
-        public int rc_min_rate;
-
-        [FieldOffset(548)]
-        public float rc_buffer_aggressivity;
-
-        /// <summary>
-        /// initial complexity for pass1 ratecontrol
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(552)]
-        public float rc_initial_cplx;
-
-        /// <summary>
-        /// Ratecontrol attempt to use, at maximum, <value> of what can be used
-        /// without an underflow.
-        /// - encoding: Set by user.
-        /// - decoding: unused.
-        /// </summary>
-        [FieldOffset(556)]
-        public float rc_max_available_vbv_use;
-
-        /// <summary>
-        /// Ratecontrol attempt to use, at least, <value> times the amount
-        /// needed to prevent a vbv overflow.
-        /// - encoding: Set by user.
-        /// - decoding: unused.
-        /// </summary>
-        [FieldOffset(560)]
-        public float rc_min_vbv_overflow_use;
-
-        /// <summary>
-        /// Number of bits which should be loaded into the rc buffer before
-        /// decoding starts.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(564)]
-        public int rc_initial_buffer_occupancy;
-
-        /// <summary>
-        /// coder type
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(568)]
-        public int coder_type;
-
-        /// <summary>
-        /// context model
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(572)]
-        public int context_model;
-
-        /// <summary>
-        /// minimum Lagrange multipler
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(576)]
-        public int lmin;
-
-        /// <summary>
-        /// maximum Lagrange multipler
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(580)]
-        public int lmax;
-
-        /// <summary>
-        /// frame skip threshold
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(584)]
-        public int frame_skip_threshold;
-
-        /// <summary>
-        /// frame skip factor
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(588)]
-        public int frame_skip_factor;
-
-        /// <summary>
-        /// frame skip exponent
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(592)]
-        public int frame_skip_exp;
-
-        /// <summary>
-        /// frame skip comparison function
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(596)]
-        public int frame_skip_cmp;
-
-        /// <summary>
-        /// trellis RD quantization
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(600)]
-        public int trellis;
-
-        /// <summary>
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(604)]
-        public int min_prediction_order;
-
-        /// <summary>
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(608)]
-        public int max_prediction_order;
-
-        /// <summary>
-        /// GOP timecode frame start number
-        /// - encoding: Set by user, in non drop frame format
-        /// - decoding: Set by libavcodec (timecode in the 25 bits format, -1
-        /// if unset)
-        /// </summary>
-        [FieldOffset(616)]
-        public long timecode_frame_start;
-
-        [FieldOffset(624)]
-        public global::System.IntPtr rtp_callback;
-
-        [FieldOffset(628)]
-        public int rtp_payload_size;
-
-        [FieldOffset(632)]
-        public int mv_bits;
-
-        [FieldOffset(636)]
-        public int header_bits;
-
-        [FieldOffset(640)]
-        public int i_tex_bits;
-
-        [FieldOffset(644)]
-        public int p_tex_bits;
-
-        [FieldOffset(648)]
-        public int i_count;
-
-        [FieldOffset(652)]
-        public int p_count;
-
-        [FieldOffset(656)]
-        public int skip_count;
-
-        [FieldOffset(660)]
-        public int misc_bits;
-
-        /// <summary>
-        /// number of bits used for the previously encoded frame
-        /// - encoding: Set by libavcodec.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(664)]
-        public int frame_bits;
-
-        /// <summary>
-        /// pass1 encoding statistics output buffer
-        /// - encoding: Set by libavcodec.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(668)]
-        public sbyte* stats_out;
-
-        /// <summary>
-        /// pass2 encoding statistics input buffer
-        /// Concatenated stuff from stats_out of pass1 should be placed here.
-        /// - encoding: Allocated/set/freed by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(672)]
-        public sbyte* stats_in;
-
-        /// <summary>
-        /// Work around bugs in encoders which sometimes cannot be detected
-        /// automatically.
-        /// - encoding: Set by user
-        /// - decoding: Set by user
-        /// </summary>
-        [FieldOffset(676)]
-        public int workaround_bugs;
-
-        /// <summary>
-        /// strictly follow the standard (MPEG4, ...).
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// Setting this to STRICT or higher means the encoder and decoder will
-        /// generally do stupid things, whereas setting it to unofficial or
-        /// lower
-        /// will mean the encoder might produce output that is not supported by
-        /// all
-        /// spec-compliant decoders. Decoders don't differentiate between
-        /// normal,
-        /// unofficial and experimental (that is, they always try to decode
-        /// things
-        /// when they can) unless they are explicitly asked to behave stupidly
-        /// (=strictly conform to the specs)
-        /// </summary>
-        [FieldOffset(680)]
-        public int strict_std_compliance;
-
-        /// <summary>
-        /// error concealment flags
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(684)]
-        public int error_concealment;
-
-        /// <summary>
-        /// debug
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(688)]
-        public int debug;
-
-        /// <summary>
-        /// debug
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(692)]
-        public int debug_mv;
-
-        /// <summary>
-        /// Error recognition; may misdetect some more or less valid parts as
-        /// errors.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(696)]
-        public int err_recognition;
-
-        /// <summary>
-        /// opaque 64bit number (generally a PTS) that will be reordered and
-        /// output in AVFrame.reordered_opaque
-        /// @deprecated in favor of pkt_pts
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(704)]
-        public long reordered_opaque;
-
-        /// <summary>
-        /// Hardware accelerator in use
-        /// - encoding: unused.
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(712)]
-        public AVHWAccel* hwaccel;
-
-        /// <summary>
-        /// Hardware accelerator context.
-        /// For some hardware accelerators, a global context needs to be
-        /// provided by the user. In that case, this holds display-dependent
-        /// data FFmpeg cannot instantiate itself. Please refer to the
-        /// FFmpeg HW accelerator documentation to know how to fill this
-        /// is. e.g. for VA API, this is a struct vaapi_context.
-        /// - encoding: unused
-        /// - decoding: Set by user
-        /// </summary>
-        [FieldOffset(716)]
-        public global::System.IntPtr hwaccel_context;
-
-        /// <summary>
-        /// error
-        /// - encoding: Set by libavcodec if flags&CODEC_FLAG_PSNR.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(720)]
-        public fixed ulong error[8];
-
-        /// <summary>
-        /// DCT algorithm, see FF_DCT_* below
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(784)]
-        public int dct_algo;
-
-        /// <summary>
-        /// IDCT algorithm, see FF_IDCT_* below.
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(788)]
-        public int idct_algo;
-
-        /// <summary>
-        /// bits per sample/pixel from the demuxer (needed for huffyuv).
-        /// - encoding: Set by libavcodec.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(792)]
-        public int bits_per_coded_sample;
-
-        /// <summary>
-        /// Bits per sample/pixel of internal libavcodec pixel/sample format.
-        /// - encoding: set by user.
-        /// - decoding: set by libavcodec.
-        /// </summary>
-        [FieldOffset(796)]
-        public int bits_per_raw_sample;
-
-        /// <summary>
-        /// low resolution decoding, 1-> 1/2 size, 2->1/4 size
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// Code outside libavcodec should access this field using:
-        /// av_codec_{get,set}_lowres(avctx)
-        /// </summary>
-        [FieldOffset(800)]
-        public int lowres;
-
-        /// <summary>
-        /// the picture in the bitstream
-        /// - encoding: Set by libavcodec.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(804)]
-        public AVFrame* coded_frame;
-
-        /// <summary>
-        /// thread count
-        /// is used to decide how many independent tasks should be passed to
-        /// execute()
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(808)]
-        public int thread_count;
-
-        /// <summary>
-        /// Which multithreading methods to use.
-        /// Use of FF_THREAD_FRAME will increase decoding delay by one frame
-        /// per thread,
-        /// so clients which cannot provide future frames should not use it.
-        /// 
-        /// - encoding: Set by user, otherwise the default is used.
-        /// - decoding: Set by user, otherwise the default is used.
-        /// </summary>
-        [FieldOffset(812)]
-        public int thread_type;
-
-        /// <summary>
-        /// Which multithreading methods are in use by the codec.
-        /// - encoding: Set by libavcodec.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(816)]
-        public int active_thread_type;
-
-        /// <summary>
-        /// Set by the client if its custom get_buffer() callback can be called
-        /// synchronously from another thread, which allows faster
-        /// multithreaded decoding.
-        /// draw_horiz_band() will be called from other threads regardless of
-        /// this setting.
-        /// Ignored if the default get_buffer() is used.
-        /// - encoding: Set by user.
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(820)]
-        public int thread_safe_callbacks;
-
-        /// <summary>
-        /// The codec may call this to execute several independent things.
-        /// It will return only after finishing all tasks.
-        /// The user may replace this with some multithreaded implementation,
-        /// the default implementation will execute the parts serially.
-        /// @param count the number of things to execute
-        /// - encoding: Set by libavcodec, user can override.
-        /// - decoding: Set by libavcodec, user can override.
-        /// </summary>
-        [FieldOffset(824)]
-        public global::System.IntPtr execute;
-
-        /// <summary>
-        /// The codec may call this to execute several independent things.
-        /// It will return only after finishing all tasks.
-        /// The user may replace this with some multithreaded implementation,
-        /// the default implementation will execute the parts serially.
-        /// Also see avcodec_thread_init and e.g. the --enable-pthread
-        /// configure option.
-        /// @param c context passed also to func
-        /// @param count the number of things to execute
-        /// @param arg2 argument passed unchanged to func
-        /// @param ret return values of executed functions, must have space for
-        /// "count" values. May be NULL.
-        /// @param func function that will be called count times, with jobnr
-        /// from 0 to count-1.
-        /// threadnr will be in the range 0 to c->thread_count-1 < MAX_THREADS
-        /// and so that no
-        /// two instances of func executing at the same time will have the same
-        /// threadnr.
-        /// @return always 0 currently, but code should handle a future
-        /// improvement where when any call to func
-        /// returns < 0 no further calls to func may be done and < 0 is
-        /// returned.
-        /// - encoding: Set by libavcodec, user can override.
-        /// - decoding: Set by libavcodec, user can override.
-        /// </summary>
-        [FieldOffset(828)]
-        public global::System.IntPtr execute2;
-
-        /// <summary>
-        /// thread opaque
-        /// Can be used by execute() to store some per AVCodecContext stuff.
-        /// - encoding: set by execute()
-        /// - decoding: set by execute()
-        /// </summary>
-        [FieldOffset(832)]
-        public global::System.IntPtr thread_opaque;
-
-        /// <summary>
-        /// noise vs. sse weight for the nsse comparsion function
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(836)]
-        public int nsse_weight;
-
-        /// <summary>
-        /// profile
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(840)]
-        public int profile;
-
-        /// <summary>
-        /// level
-        /// - encoding: Set by user.
-        /// - decoding: Set by libavcodec.
-        /// </summary>
-        [FieldOffset(844)]
-        public int level;
-
-        /// <summary>
-        /// Skip loop filtering for selected frames.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(848)]
-        public AVDiscard skip_loop_filter;
-
-        /// <summary>
-        /// Skip IDCT/dequantization for selected frames.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(852)]
-        public AVDiscard skip_idct;
-
-        /// <summary>
-        /// Skip decoding for selected frames.
-        /// - encoding: unused
-        /// - decoding: Set by user.
-        /// </summary>
-        [FieldOffset(856)]
-        public AVDiscard skip_frame;
-
-        /// <summary>
-        /// Header containing style information for text subtitles.
-        /// For SUBTITLE_ASS subtitle type, it should contain the whole ASS
-        /// [Script Info] and [V4+ Styles] section, plus the [Events] line and
-        /// the Format line following. It shouldn't include any Dialogue line.
-        /// - encoding: Set/allocated/freed by user (before avcodec_open2())
-        /// - decoding: Set/allocated/freed by libavcodec (by avcodec_open2())
-        /// </summary>
-        [FieldOffset(860)]
-        public byte* subtitle_header;
-
-        [FieldOffset(864)]
-        public int subtitle_header_size;
-
-        /// <summary>
-        /// Simulates errors in the bitstream to test error concealment.
-        /// - encoding: Set by user.
-        /// - decoding: unused
-        /// </summary>
-        [FieldOffset(868)]
-        public int error_rate;
-
-        /// <summary>
-        /// Current packet as passed into the decoder, to avoid having
-        /// to pass the packet into every function. Currently only valid
-        /// inside lavc and get/release_buffer callbacks.
-        /// - decoding: set by avcodec_decode_*, read by get_buffer() for
-        /// setting pkt_pts
-        /// - encoding: unused
-        /// </summary>
-        [FieldOffset(872)]
-        public AVPacket* pkt;
-
-        /// <summary>
-        /// VBV delay coded in the last frame (in periods of a 27 MHz clock).
-        /// Used for compliant TS muxing.
-        /// - encoding: Set by libavcodec.
-        /// - decoding: unused.
-        /// </summary>
-        [FieldOffset(880)]
-        public ulong vbv_delay;
-
-        /// <summary>
-        /// Timebase in which pkt_dts/pts and AVPacket.dts/pts are.
-        /// Code outside libavcodec should access this field using:
-        /// av_codec_{get,set}_pkt_timebase(avctx)
-        /// - encoding unused.
-        /// - decoding set by user.
-        /// </summary>
-        [FieldOffset(888)]
-        public AVRational* pkt_timebase;
-
-        /// <summary>
-        /// AVCodecDescriptor
-        /// Code outside libavcodec should access this field using:
-        /// av_codec_{get,set}_codec_descriptor(avctx)
-        /// - encoding: unused.
-        /// - decoding: set by libavcodec.
-        /// </summary>
-        [FieldOffset(896)]
-        public AVCodecDescriptor* codec_descriptor;
-
-        /// <summary>
-        /// Current statistics for PTS correction.
-        /// - decoding: maintained and used by libavcodec, not intended to be
-        /// used by user apps
-        /// - encoding: unused
-        /// </summary>
-        [FieldOffset(904)]
-        public long pts_correction_num_faulty_pts;
-
-        /// <summary>
-        /// Number of incorrect PTS values so far
-        /// </summary>
-        [FieldOffset(912)]
-        public long pts_correction_num_faulty_dts;
-
-        /// <summary>
-        /// Number of incorrect DTS values so far
-        /// </summary>
-        [FieldOffset(920)]
-        public long pts_correction_last_pts;
-
-        /// <summary>
-        /// PTS of the last frame
-        /// </summary>
-        [FieldOffset(928)]
-        public long pts_correction_last_dts;
-
-        /// <summary>
-        /// Character encoding of the input subtitles file.
-        /// - decoding: set by user
-        /// - encoding: unused
-        /// </summary>
-        [FieldOffset(936)]
-        public sbyte* sub_charenc;
-
-        /// <summary>
-        /// Subtitles character encoding mode. Formats or codecs might be
-        /// adjusting
-        /// this setting (if they are doing the conversion themselves for
-        /// instance).
-        /// - decoding: set by libavcodec
-        /// - encoding: unused
-        /// </summary>
-        [FieldOffset(940)]
-        public int sub_charenc_mode;
-
-        /// <summary>
-        /// Skip processing alpha if supported by codec.
-        /// Note that if the format uses pre-multiplied alpha (common with VP6,
-        /// and recommended due to better video quality/compression)
-        /// the image will look as if alpha-blended onto a black background.
-        /// However for formats that do not use pre-multiplied alpha
-        /// there might be serious artefacts (though e.g. libswscale currently
-        /// assumes pre-multiplied alpha anyway).
-        /// Code outside libavcodec should access this field using AVOptions
-        /// 
-        /// - decoding: set by user
-        /// - encoding: unused
-        /// </summary>
-        [FieldOffset(944)]
-        public int skip_alpha;
-
-        /// <summary>
-        /// Number of samples to skip after a discontinuity
-        /// - decoding: unused
-        /// - encoding: set by libavcodec
-        /// </summary>
-        [FieldOffset(948)]
-        public int seek_preroll;
-    }
-
-    /// <summary>
-    /// AVProfile.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVProfile
-    {
-        [FieldOffset(0)]
-        public int profile;
-
-        /// <summary>
-        /// < short name for the profile
-        /// </summary>
-        [FieldOffset(4)]
-        public global::System.IntPtr name;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodecDefault
-    {
-    }
-
-    /// <summary>
-    /// AVCodec.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodec
-    {
-        /// <summary>
-        /// Name of the codec implementation.
-        /// The name is globally unique among encoders and among decoders (but
-        /// an
-        /// encoder and a decoder can share the same name).
-        /// This is the primary way to find a codec from the user perspective.
-        /// </summary>
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
-
-        /// <summary>
-        /// Descriptive name for the codec, meant to be more human readable
-        /// than name.
-        /// You should use the NULL_IF_CONFIG_SMALL() macro to define it.
-        /// </summary>
-        [FieldOffset(4)]
-        public global::System.IntPtr long_name;
-
-        [FieldOffset(8)]
-        public AVMediaType type;
-
-        [FieldOffset(12)]
-        public AVCodecID id;
-
-        /// <summary>
-        /// Codec capabilities.
-        /// see CODEC_CAP_*
-        /// </summary>
-        [FieldOffset(16)]
-        public int capabilities;
-
-        /// <summary>
-        /// < array of supported framerates, or NULL if any, array is
-        /// terminated by {0,0}
-        /// </summary>
-        [FieldOffset(20)]
-        public AVRational* supported_framerates;
-
-        /// <summary>
-        /// < array of supported pixel formats, or NULL if unknown, array is
-        /// terminated by -1
-        /// </summary>
-        [FieldOffset(24)]
-        public AVPixelFormat pix_fmts;
-
-        /// <summary>
-        /// < array of supported audio samplerates, or NULL if unknown, array
-        /// is terminated by 0
-        /// </summary>
-        [FieldOffset(28)]
-        public int* supported_samplerates;
-
-        /// <summary>
-        /// < array of supported sample formats, or NULL if unknown, array is
-        /// terminated by -1
-        /// </summary>
-        [FieldOffset(32)]
-        public AVSampleFormat sample_fmts;
-
-        /// <summary>
-        /// < array of support channel layouts, or NULL if unknown. array is
-        /// terminated by 0
-        /// </summary>
-        [FieldOffset(36)]
-        public ulong* channel_layouts;
-
-        /// <summary>
-        /// < maximum value for lowres supported by the decoder, no direct
-        /// access, use av_codec_get_max_lowres()
-        /// </summary>
-        [FieldOffset(40)]
-        public byte max_lowres;
-
-        /// <summary>
-        /// < AVClass for the private context
-        /// </summary>
-        [FieldOffset(44)]
-        public AVClass* priv_class;
-
-        /// <summary>
-        /// < array of recognized profiles, or NULL if unknown, array is
-        /// terminated by {FF_PROFILE_UNKNOWN}
-        /// </summary>
-        [FieldOffset(48)]
-        public AVProfile* profiles;
-
-        /// <summary>
-        /// No fields below this line are part of the public API. They
-        /// may not be used outside of libavcodec and can be changed and
-        /// removed at will.
-        /// New public fields should be added right above.
-        /// 
-        /// </summary>
-        [FieldOffset(52)]
-        public int priv_data_size;
-
-        [FieldOffset(56)]
-        public AVCodec* next;
-
-        /// <summary>
-        /// @name Frame-level threading support functions
+        /// Types and functions for working with AVPacket.
         /// @{
+        /// </summary>
+        public enum AVPacketSideDataType
+        {
+            AV_PKT_DATA_PALETTE = 0,
+            AV_PKT_DATA_NEW_EXTRADATA = 1,
+            /// <summary>An AV_PKT_DATA_PARAM_CHANGE side data packet is laid out as follows:</summary>
+            AV_PKT_DATA_PARAM_CHANGE = 2,
+            /// <summary>An AV_PKT_DATA_H263_MB_INFO side data packet contains a number of structures with info about macroblocks relevant to splitting the packet into smaller packets on macroblock edges (e.g. as for RFC 2190). That is, it does not necessarily contain info about all macroblocks, as long as the distance between macroblocks in the info is smaller than the target payload size. Each MB info structure is 12 bytes, and is laid out as follows:</summary>
+            AV_PKT_DATA_H263_MB_INFO = 3,
+            /// <summary>Recommmends skipping the specified number of samples</summary>
+            AV_PKT_DATA_SKIP_SAMPLES = 70,
+            /// <summary>An AV_PKT_DATA_JP_DUALMONO side data packet indicates that the packet may contain "dual mono" audio specific to Japanese DTV and if it is true, recommends only the selected channel to be used.</summary>
+            AV_PKT_DATA_JP_DUALMONO = 71,
+            /// <summary>A list of zero terminated key/value strings. There is no end marker for the list, so it is required to rely on the side data size to stop.</summary>
+            AV_PKT_DATA_STRINGS_METADATA = 72,
+            /// <summary>Subtitle event position</summary>
+            AV_PKT_DATA_SUBTITLE_POSITION = 73,
+            /// <summary>Data found in BlockAdditional element of matroska container. There is no end marker for the data, so it is required to rely on the side data size to recognize the end. 8 byte id (as found in BlockAddId) followed by data.</summary>
+            AV_PKT_DATA_MATROSKA_BLOCKADDITIONAL = 74,
+            /// <summary>The optional first identifier line of a WebVTT cue.</summary>
+            AV_PKT_DATA_WEBVTT_IDENTIFIER = 75,
+            /// <summary>The optional settings (rendering instructions) that immediately follow the timestamp specifier of a WebVTT cue.</summary>
+            AV_PKT_DATA_WEBVTT_SETTINGS = 76
+        }
+
+        [Flags]
+        public enum AVSideDataParamChangeFlags
+        {
+            AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT = 1,
+            AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_LAYOUT = 2,
+            AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE = 4,
+            AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS = 8
+        }
+
+        public enum AVFieldOrder
+        {
+            AV_FIELD_UNKNOWN = 0,
+            AV_FIELD_PROGRESSIVE = 1,
+            AV_FIELD_TT = 2,
+            AV_FIELD_BB = 3,
+            AV_FIELD_TB = 4,
+            AV_FIELD_BT = 5
+        }
+
+        /// <summary>
+        /// @}
+        /// </summary>
+        public enum AVSubtitleType
+        {
+            SUBTITLE_NONE = 0,
+            /// <summary>A bitmap, pict will be set</summary>
+            SUBTITLE_BITMAP = 1,
+            /// <summary>Plain text, the text field must be set by the decoder and is authoritative. ass and pict fields may contain approximations.</summary>
+            SUBTITLE_TEXT = 2,
+            /// <summary>Formatted text, the ass field must be set by the decoder and is authoritative. pict and text fields may contain approximations.</summary>
+            SUBTITLE_ASS = 3
+        }
+
+        /// <summary>
+        /// @defgroup lavc_parsing Frame parsing
+        /// @{
+        /// </summary>
+        public enum AVPictureStructure
+        {
+            AV_PICTURE_STRUCTURE_UNKNOWN = 0,
+            AV_PICTURE_STRUCTURE_TOP_FIELD = 1,
+            AV_PICTURE_STRUCTURE_BOTTOM_FIELD = 2,
+            AV_PICTURE_STRUCTURE_FRAME = 3
+        }
+
+        /// <summary>
+        /// Lock operation used by lockmgr
+        /// </summary>
+        public enum AVLockOp
+        {
+            /// <summary>Create a mutex</summary>
+            AV_LOCK_CREATE = 0,
+            /// <summary>Lock the mutex</summary>
+            AV_LOCK_OBTAIN = 1,
+            /// <summary>Unlock the mutex</summary>
+            AV_LOCK_RELEASE = 2,
+            /// <summary>Free mutex resources</summary>
+            AV_LOCK_DESTROY = 3
+        }
+
+        /// <summary>
+        /// This struct describes the properties of a single codec described by an
+        /// AVCodecID.
+        /// @see avcodec_get_descriptor()
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodecDescriptor
+        {
+            public libavcodec.AVCodecID id;
+
+            public libavutil.AVMediaType type;
+
+            /// <summary>
+            /// Name of the codec described by this descriptor. It is non-empty and
+            /// unique for each codec descriptor. It should contain alphanumeric
+            /// characters and '_' only.
+            /// </summary>
+            public sbyte* name;
+
+            /// <summary>
+            /// A more descriptive name for this codec. May be NULL.
+            /// </summary>
+            public sbyte* long_name;
+
+            /// <summary>
+            /// Codec properties, a combination of AV_CODEC_PROP_* flags.
+            /// </summary>
+            public int props;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct RcOverride
+        {
+            public int start_frame;
+
+            public int end_frame;
+
+            public int qscale;
+
+            public float quality_factor;
+        }
+
+        /// <summary>
+        /// Pan Scan area.
+        /// This specifies the area which should be displayed.
+        /// Note there may be multiple such areas for one frame.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVPanScan
+        {
+            /// <summary>
+            /// id
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public int id;
+
+            /// <summary>
+            /// width and height in 1/16 pel
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public int width;
+
+            public int height;
+
+            /// <summary>
+            /// position of the top left corner in 1/16 pel for up to 3 fields/frames
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public libavutil.ArrayWrapper_Short__3 position;
+        }
+
+        /// <summary>
+        /// This structure stores compressed data. It is typically exported by
+        /// demuxers
+        /// and then passed as input to decoders, or received as output from
+        /// encoders and
+        /// then passed to muxers.
         /// 
+        /// For video, it should typically contain one compressed frame. For audio
+        /// it may
+        /// contain several compressed frames.
         /// 
-        /// If defined, called on thread contexts when they are created.
-        /// If the codec allocates writable tables in init(), re-allocate them
-        /// here.
-        /// priv_data will be set to a copy of the original.
-        /// </summary>
-        [FieldOffset(60)]
-        public global::System.IntPtr init_thread_copy;
-
-        /// <summary>
-        /// Copy necessary context variables from a previous thread context to
-        /// the current one.
-        /// If not defined, the next thread will start automatically;
-        /// otherwise, the codec
-        /// must call ff_thread_finish_setup().
+        /// AVPacket is one of the few structs in FFmpeg, whose size is a part of
+        /// public
+        /// ABI. Thus it may be allocated on stack and no new fields can be added
+        /// to it
+        /// without libavcodec and libavformat major bump.
         /// 
-        /// dst and src will (rarely) point to the same context, in which case
-        /// memcpy should be skipped.
-        /// </summary>
-        [FieldOffset(64)]
-        public global::System.IntPtr update_thread_context;
-
-        /// <summary>
-        /// Private codec-specific defaults.
-        /// </summary>
-        [FieldOffset(68)]
-        public AVCodecDefault* defaults;
-
-        /// <summary>
-        /// Initialize codec static data, called from avcodec_register().
-        /// </summary>
-        [FieldOffset(72)]
-        public global::System.IntPtr init_static_data;
-
-        [FieldOffset(76)]
-        public global::System.IntPtr init;
-
-        [FieldOffset(80)]
-        public global::System.IntPtr encode_sub;
-
-        /// <summary>
-        /// Encode data to an AVPacket.
+        /// The semantics of data ownership depends on the buf or destruct
+        /// (deprecated)
+        /// fields. If either is set, the packet data is dynamically allocated and
+        /// is
+        /// valid indefinitely until av_free_packet() is called (which in turn
+        /// calls
+        /// av_buffer_unref()/the destruct callback to free the data). If neither
+        /// is set,
+        /// the packet data is typically backed by some static buffer somewhere and
+        /// is
+        /// only valid for a limited time (e.g. until the next read call when
+        /// demuxing).
         /// 
-        /// @param      avctx          codec context
-        /// @param      avpkt          output AVPacket (may contain a
-        /// user-provided buffer)
-        /// @param[in]  frame          AVFrame containing the raw data to be
-        /// encoded
-        /// @param[out] got_packet_ptr encoder sets to 0 or 1 to indicate that
-        /// a
-        /// non-empty packet was returned in avpkt.
-        /// @return 0 on success, negative error code on failure
+        /// The side data is always allocated with av_malloc() and is freed in
+        /// av_free_packet().
         /// </summary>
-        [FieldOffset(84)]
-        public global::System.IntPtr encode2;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVPacket
+        {
+            /// <summary>
+            /// A reference to the reference-counted buffer where the packet data is
+            /// stored.
+            /// May be NULL, then the packet data is not reference-counted.
+            /// </summary>
+            public libavutil.AVBufferRef* buf;
 
-        [FieldOffset(88)]
-        public global::System.IntPtr decode;
+            /// <summary>
+            /// Presentation timestamp in AVStream->time_base units; the time at which
+            /// the decompressed packet will be presented to the user.
+            /// Can be AV_NOPTS_VALUE if it is not stored in the file.
+            /// pts MUST be larger or equal to dts as presentation cannot happen before
+            /// decompression, unless one wants to view hex dumps. Some formats misuse
+            /// the terms dts and pts/cts to mean something different. Such timestamps
+            /// must be converted to true pts/dts before they are stored in AVPacket.
+            /// </summary>
+            public long pts;
 
-        [FieldOffset(92)]
-        public global::System.IntPtr close;
+            /// <summary>
+            /// Decompression timestamp in AVStream->time_base units; the time at which
+            /// the packet is decompressed.
+            /// Can be AV_NOPTS_VALUE if it is not stored in the file.
+            /// </summary>
+            public long dts;
+
+            public byte* data;
+
+            public int size;
+
+            public int stream_index;
+
+            /// <summary>
+            /// A combination of AV_PKT_FLAG values
+            /// </summary>
+            public int flags;
+
+            public libavcodec.AVPacket.AVPacket_anon* side_data;
+
+            public int side_data_elems;
+
+            /// <summary>
+            /// Duration of this packet in AVStream->time_base units, 0 if unknown.
+            /// Equals next_pts - this_pts in presentation order.
+            /// </summary>
+            public int duration;
+
+            public global::System.IntPtr destruct;
+
+            public void* priv;
+
+            /// <summary>
+            /// byte position in stream, -1 if unknown
+            /// </summary>
+            public long pos;
+
+            /// <summary>
+            /// Time difference in AVStream->time_base units from the pts of this
+            /// packet to the point at which the output from the decoder has converged
+            /// independent from the availability of previous frames. That is, the
+            /// frames are virtually identical no matter if decoding started from
+            /// the very first frame or from this keyframe.
+            /// Is AV_NOPTS_VALUE if unknown.
+            /// This field is not the display duration of the current packet.
+            /// This field has no meaning if the packet does not have AV_PKT_FLAG_KEY
+            /// set.
+            /// 
+            /// The purpose of this field is to allow seeking in streams that have no
+            /// keyframes in the conventional sense. It corresponds to the
+            /// recovery point SEI in H.264 and match_time_delta in NUT. It is also
+            /// essential for some types of subtitle streams to ensure that all
+            /// subtitles are correctly displayed after seeking.
+            /// </summary>
+            public long convergence_duration;
+
+            /// <summary>
+            /// Additional packet data that can be provided by the container.
+            /// Packet can contain several types of side information.
+            /// </summary>
+            [StructLayout(LayoutKind.Sequential)]
+            public unsafe partial struct AVPacket_anon
+            {
+                public byte* data;
+
+                public int size;
+
+                public libavcodec.AVPacketSideDataType type;
+            }
+        }
 
         /// <summary>
-        /// Flush buffers.
-        /// Will be called when seeking
+        /// @}
         /// </summary>
-        [FieldOffset(96)]
-        public global::System.IntPtr flush;
-    }
-
-    /// <summary>
-    /// AVHWAccel.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVHWAccel
-    {
-        /// <summary>
-        /// Name of the hardware accelerated codec.
-        /// The name is globally unique among encoders and among decoders (but
-        /// an
-        /// encoder and a decoder can share the same name).
-        /// </summary>
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodecInternal
+        {
+        }
 
         /// <summary>
-        /// Type of codec implemented by the hardware accelerator.
+        /// main external API structure.
+        /// New fields can be added to the end with minor version bumps.
+        /// Removal, reordering and changes to existing fields require a major
+        /// version bump.
+        /// Please use AVOptions (av_opt* / av_set/get*()) to access these fields
+        /// from user
+        /// applications.
+        /// sizeof(AVCodecContext) must not be used outside libav*.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodecContext
+        {
+            /// <summary>
+            /// information on struct for av_log
+            /// - set by avcodec_alloc_context3
+            /// </summary>
+            public libavutil.AVClass* av_class;
+
+            public int log_level_offset;
+
+            public libavutil.AVMediaType codec_type;
+
+            public libavcodec.AVCodec* codec;
+
+            public fixed sbyte codec_name[32];
+
+            public libavcodec.AVCodecID codec_id;
+
+            /// <summary>
+            /// fourcc (LSB first, so "ABCD" -> ('D'<<24) + ('C'<<16) + ('B'<<8) +
+            /// 'A').
+            /// This is used to work around some encoder bugs.
+            /// A demuxer should set this to what is stored in the field used to
+            /// identify the codec.
+            /// If there are multiple such fields in a container then the demuxer
+            /// should choose the one
+            /// which maximizes the information about the used codec.
+            /// If the codec tag field in a container is larger than 32 bits then the
+            /// demuxer should
+            /// remap the longer ID to 32 bits with a table or other structure.
+            /// Alternatively a new
+            /// extra_codec_tag + size could be added but for this a clear advantage
+            /// must be demonstrated
+            /// first.
+            /// - encoding: Set by user, if not then the default based on codec_id will
+            /// be used.
+            /// - decoding: Set by user, will be converted to uppercase by libavcodec
+            /// during init.
+            /// </summary>
+            public uint codec_tag;
+
+            /// <summary>
+            /// fourcc from the AVI stream header (LSB first, so "ABCD" -> ('D'<<24) +
+            /// ('C'<<16) + ('B'<<8) + 'A').
+            /// This is used to work around some encoder bugs.
+            /// - encoding: unused
+            /// - decoding: Set by user, will be converted to uppercase by libavcodec
+            /// during init.
+            /// </summary>
+            public uint stream_codec_tag;
+
+            public void* priv_data;
+
+            /// <summary>
+            /// Private context used for internal data.
+            /// 
+            /// Unlike priv_data, this is not codec-specific. It is used in general
+            /// libavcodec functions.
+            /// </summary>
+            public libavcodec.AVCodecInternal* @internal;
+
+            /// <summary>
+            /// Private data of the user, can be used to carry app specific stuff.
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public void* opaque;
+
+            /// <summary>
+            /// the average bitrate
+            /// - encoding: Set by user; unused for constant quantizer encoding.
+            /// - decoding: Set by libavcodec. 0 or some bitrate if this info is
+            /// available in the stream.
+            /// </summary>
+            public int bit_rate;
+
+            /// <summary>
+            /// number of bits the bitstream is allowed to diverge from the reference.
+            /// the reference can be CBR (for CBR pass1) or VBR (for pass2)
+            /// - encoding: Set by user; unused for constant quantizer encoding.
+            /// - decoding: unused
+            /// </summary>
+            public int bit_rate_tolerance;
+
+            /// <summary>
+            /// Global quality for codecs which cannot change it per frame.
+            /// This should be proportional to MPEG-1/2/4 qscale.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int global_quality;
+
+            /// <summary>
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int compression_level;
+
+            /// <summary>
+            /// CODEC_FLAG_*.
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int flags;
+
+            /// <summary>
+            /// CODEC_FLAG2_
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int flags2;
+
+            /// <summary>
+            /// some codecs need / can use extradata like Huffman tables.
+            /// mjpeg: Huffman tables
+            /// rv10: additional flags
+            /// mpeg4: global headers (they can be in the bitstream or here)
+            /// The allocated memory should be FF_INPUT_BUFFER_PADDING_SIZE bytes
+            /// larger
+            /// than extradata_size to avoid problems if it is read with the bitstream
+            /// reader.
+            /// The bytewise contents of extradata must not depend on the architecture
+            /// or CPU endianness.
+            /// - encoding: Set/allocated/freed by libavcodec.
+            /// - decoding: Set/allocated/freed by user.
+            /// </summary>
+            public byte* extradata;
+
+            public int extradata_size;
+
+            /// <summary>
+            /// This is the fundamental unit of time (in seconds) in terms
+            /// of which frame timestamps are represented. For fixed-fps content,
+            /// timebase should be 1/framerate and timestamp increments should be
+            /// identically 1.
+            /// - encoding: MUST be set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public libavutil.AVRational time_base;
+
+            /// <summary>
+            /// For some codecs, the time base is closer to the field rate than the
+            /// frame rate.
+            /// Most notably, H.264 and MPEG-2 specify time_base as half of frame
+            /// duration
+            /// if no telecine is used ...
+            /// 
+            /// Set to time_base ticks per frame. Default 1, e.g., H.264/MPEG-2 set it
+            /// to 2.
+            /// </summary>
+            public int ticks_per_frame;
+
+            /// <summary>
+            /// Codec delay.
+            /// 
+            /// Encoding: Number of frames delay there will be from the encoder input
+            /// to
+            /// the decoder output. (we assume the decoder matches the spec)
+            /// Decoding: Number of frames delay in addition to what a standard decoder
+            /// as specified in the spec would produce.
+            /// 
+            /// Video:
+            /// Number of frames the decoded output will be delayed relative to the
+            /// encoded input.
+            /// 
+            /// Audio:
+            /// For encoding, this is the number of "priming" samples added to the
+            /// beginning of the stream. The decoded output will be delayed by this
+            /// many samples relative to the input to the encoder. Note that this
+            /// field is purely informational and does not directly affect the pts
+            /// output by the encoder, which should always be based on the actual
+            /// presentation time, including any delay.
+            /// For decoding, this is the number of samples the decoder needs to
+            /// output before the decoder's output is valid. When seeking, you should
+            /// start decoding this many samples prior to your desired seek point.
+            /// 
+            /// - encoding: Set by libavcodec.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public int delay;
+
+            /// <summary>
+            /// picture width / height.
+            /// - encoding: MUST be set by user.
+            /// - decoding: May be set by the user before opening the decoder if known
+            /// e.g.
+            /// from the container. Some decoders will require the dimensions
+            /// to be set by the caller. During decoding, the decoder may
+            /// overwrite those values as required.
+            /// </summary>
+            public int width;
+
+            /// <summary>
+            /// picture width / height.
+            /// - encoding: MUST be set by user.
+            /// - decoding: May be set by the user before opening the decoder if known
+            /// e.g.
+            /// from the container. Some decoders will require the dimensions
+            /// to be set by the caller. During decoding, the decoder may
+            /// overwrite those values as required.
+            /// </summary>
+            public int height;
+
+            /// <summary>
+            /// Bitstream width / height, may be different from width/height e.g. when
+            /// the decoded frame is cropped before being output or lowres is enabled.
+            /// - encoding: unused
+            /// - decoding: May be set by the user before opening the decoder if known
+            /// e.g. from the container. During decoding, the decoder may
+            /// overwrite those values as required.
+            /// </summary>
+            public int coded_width;
+
+            /// <summary>
+            /// Bitstream width / height, may be different from width/height e.g. when
+            /// the decoded frame is cropped before being output or lowres is enabled.
+            /// - encoding: unused
+            /// - decoding: May be set by the user before opening the decoder if known
+            /// e.g. from the container. During decoding, the decoder may
+            /// overwrite those values as required.
+            /// </summary>
+            public int coded_height;
+
+            /// <summary>
+            /// the number of pictures in a group of pictures, or 0 for intra_only
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int gop_size;
+
+            /// <summary>
+            /// Pixel format, see AV_PIX_FMT_xxx.
+            /// May be set by the demuxer if known from headers.
+            /// May be overridden by the decoder if it knows better.
+            /// - encoding: Set by user.
+            /// - decoding: Set by user if known, overridden by libavcodec if known
+            /// </summary>
+            public libavutil.AVPixelFormat pix_fmt;
+
+            /// <summary>
+            /// Motion estimation algorithm used for video coding.
+            /// 1 (zero), 2 (full), 3 (log), 4 (phods), 5 (epzs), 6 (x1), 7 (hex),
+            /// 8 (umh), 9 (iter), 10 (tesa) [7, 8, 10 are x264 specific, 9 is snow
+            /// specific]
+            /// - encoding: MUST be set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_method;
+
+            /// <summary>
+            /// If non NULL, 'draw_horiz_band' is called by the libavcodec
+            /// decoder to draw a horizontal band. It improves cache usage. Not
+            /// all codecs can do that. You must check the codec capabilities
+            /// beforehand.
+            /// When multithreading is used, it may be called from multiple threads
+            /// at the same time; threads might draw different parts of the same
+            /// AVFrame,
+            /// or multiple AVFrames, and there is no guarantee that slices will be
+            /// drawn
+            /// in order.
+            /// The function is also used by hardware acceleration APIs.
+            /// It is called at least once during frame decoding to pass
+            /// the data needed for hardware render.
+            /// In that mode instead of pixel data, AVFrame points to
+            /// a structure specific to the acceleration API. The application
+            /// reads the structure and can change some fields to indicate progress
+            /// or mark state.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// @param height the height of the slice
+            /// @param y the y position of the slice
+            /// @param type 1->top field, 2->bottom field, 3->frame
+            /// @param offset offset into the AVFrame.data from which the slice should
+            /// be read
+            /// </summary>
+            public global::System.IntPtr draw_horiz_band;
+
+            /// <summary>
+            /// callback to negotiate the pixelFormat
+            /// @param fmt is the list of formats which are supported by the codec,
+            /// it is terminated by -1 as 0 is a valid format, the formats are ordered
+            /// by quality.
+            /// The first is always the native one.
+            /// @return the chosen format
+            /// - encoding: unused
+            /// - decoding: Set by user, if not set the native format will be chosen.
+            /// </summary>
+            public global::System.IntPtr get_format;
+
+            /// <summary>
+            /// maximum number of B-frames between non-B-frames
+            /// Note: The output will be delayed by max_b_frames+1 relative to the
+            /// input.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int max_b_frames;
+
+            /// <summary>
+            /// qscale factor between IP and B-frames
+            /// If > 0 then the last P-frame quantizer will be used (q=
+            /// lastp_q*factor+offset).
+            /// If < 0 then normal ratecontrol will be done (q=
+            /// -normal_q*factor+offset).
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float b_quant_factor;
+
+            /// <summary>
+            /// obsolete FIXME remove
+            /// </summary>
+            public int rc_strategy;
+
+            public int b_frame_strategy;
+
+            /// <summary>
+            /// qscale offset between IP and B-frames
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float b_quant_offset;
+
+            /// <summary>
+            /// Size of the frame reordering buffer in the decoder.
+            /// For MPEG-2 it is 1 IPB or 0 low delay IP.
+            /// - encoding: Set by libavcodec.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public int has_b_frames;
+
+            /// <summary>
+            /// 0-> h263 quant 1-> mpeg quant
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int mpeg_quant;
+
+            /// <summary>
+            /// qscale factor between P and I-frames
+            /// If > 0 then the last p frame quantizer will be used (q=
+            /// lastp_q*factor+offset).
+            /// If < 0 then normal ratecontrol will be done (q=
+            /// -normal_q*factor+offset).
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float i_quant_factor;
+
+            /// <summary>
+            /// qscale offset between P and I-frames
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float i_quant_offset;
+
+            /// <summary>
+            /// luminance masking (0-> disabled)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float lumi_masking;
+
+            /// <summary>
+            /// temporary complexity masking (0-> disabled)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float temporal_cplx_masking;
+
+            /// <summary>
+            /// spatial complexity masking (0-> disabled)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float spatial_cplx_masking;
+
+            /// <summary>
+            /// p block masking (0-> disabled)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float p_masking;
+
+            /// <summary>
+            /// darkness masking (0-> disabled)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float dark_masking;
+
+            /// <summary>
+            /// slice count
+            /// - encoding: Set by libavcodec.
+            /// - decoding: Set by user (or 0).
+            /// </summary>
+            public int slice_count;
+
+            /// <summary>
+            /// prediction method (needed for huffyuv)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int prediction_method;
+
+            /// <summary>
+            /// slice offsets in the frame in bytes
+            /// - encoding: Set/allocated by libavcodec.
+            /// - decoding: Set/allocated by user (or NULL).
+            /// </summary>
+            public int* slice_offset;
+
+            /// <summary>
+            /// sample aspect ratio (0 if unknown)
+            /// That is the width of a pixel divided by the height of the pixel.
+            /// Numerator and denominator must be relatively prime and smaller than 256
+            /// for some video standards.
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public libavutil.AVRational sample_aspect_ratio;
+
+            /// <summary>
+            /// motion estimation comparison function
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_cmp;
+
+            /// <summary>
+            /// subpixel motion estimation comparison function
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_sub_cmp;
+
+            /// <summary>
+            /// macroblock comparison function (not supported yet)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int mb_cmp;
+
+            /// <summary>
+            /// interlaced DCT comparison function
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int ildct_cmp;
+
+            /// <summary>
+            /// ME diamond size & shape
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int dia_size;
+
+            /// <summary>
+            /// amount of previous MV predictors (2a+1 x 2a+1 square)
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int last_predictor_count;
+
+            /// <summary>
+            /// prepass for motion estimation
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int pre_me;
+
+            /// <summary>
+            /// motion estimation prepass comparison function
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_pre_cmp;
+
+            /// <summary>
+            /// ME prepass diamond size & shape
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int pre_dia_size;
+
+            /// <summary>
+            /// subpel ME quality
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_subpel_quality;
+
+            /// <summary>
+            /// DTG active format information (additional aspect ratio
+            /// information only used in DVB MPEG-2 transport streams)
+            /// 0 if not set.
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by decoder.
+            /// </summary>
+            public int dtg_active_format;
+
+            /// <summary>
+            /// maximum motion estimation search range in subpel units
+            /// If 0 then no limit.
+            /// 
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_range;
+
+            /// <summary>
+            /// intra quantizer bias
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int intra_quant_bias;
+
+            /// <summary>
+            /// inter quantizer bias
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int inter_quant_bias;
+
+            /// <summary>
+            /// slice flags
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public int slice_flags;
+
+            /// <summary>
+            /// XVideo Motion Acceleration
+            /// - encoding: forbidden
+            /// - decoding: set by decoder
+            /// </summary>
+            public int xvmc_acceleration;
+
+            /// <summary>
+            /// macroblock decision mode
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int mb_decision;
+
+            /// <summary>
+            /// custom intra quantization matrix
+            /// - encoding: Set by user, can be NULL.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public ushort* intra_matrix;
+
+            /// <summary>
+            /// custom inter quantization matrix
+            /// - encoding: Set by user, can be NULL.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public ushort* inter_matrix;
+
+            /// <summary>
+            /// scene change detection threshold
+            /// 0 is default, larger means fewer detected scene changes.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int scenechange_threshold;
+
+            /// <summary>
+            /// noise reduction strength
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int noise_reduction;
+
+            /// <summary>
+            /// Motion estimation threshold below which no motion estimation is
+            /// performed, but instead the user specified motion vectors are used.
+            /// 
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_threshold;
+
+            /// <summary>
+            /// Macroblock threshold below which the user specified macroblock types
+            /// will be used.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int mb_threshold;
+
+            /// <summary>
+            /// precision of the intra DC coefficient - 8
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int intra_dc_precision;
+
+            /// <summary>
+            /// Number of macroblock rows at the top which are skipped.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public int skip_top;
+
+            /// <summary>
+            /// Number of macroblock rows at the bottom which are skipped.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public int skip_bottom;
+
+            /// <summary>
+            /// Border processing masking, raises the quantizer for mbs on the borders
+            /// of the picture.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float border_masking;
+
+            /// <summary>
+            /// minimum MB lagrange multipler
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int mb_lmin;
+
+            /// <summary>
+            /// maximum MB lagrange multipler
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int mb_lmax;
+
+            /// <summary>
+            /// 
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int me_penalty_compensation;
+
+            /// <summary>
+            /// 
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int bidir_refine;
+
+            /// <summary>
+            /// 
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int brd_scale;
+
+            /// <summary>
+            /// minimum GOP size
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int keyint_min;
+
+            /// <summary>
+            /// number of reference frames
+            /// - encoding: Set by user.
+            /// - decoding: Set by lavc.
+            /// </summary>
+            public int refs;
+
+            /// <summary>
+            /// chroma qp offset from luma
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int chromaoffset;
+
+            /// <summary>
+            /// Multiplied by qscale for each frame and added to scene_change_score.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int scenechange_factor;
+
+            /// <summary>
+            /// 
+            /// Note: Value depends upon the compare function used for fullpel ME.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int mv0_threshold;
+
+            /// <summary>
+            /// Adjust sensitivity of b_frame_strategy 1.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int b_sensitivity;
+
+            /// <summary>
+            /// Chromaticity coordinates of the source primaries.
+            /// - encoding: Set by user
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public libavcodec.AVColorPrimaries color_primaries;
+
+            /// <summary>
+            /// Color Transfer Characteristic.
+            /// - encoding: Set by user
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public libavcodec.AVColorTransferCharacteristic color_trc;
+
+            /// <summary>
+            /// YUV colorspace type.
+            /// - encoding: Set by user
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public libavutil.AVColorSpace colorspace;
+
+            /// <summary>
+            /// MPEG vs JPEG YUV range.
+            /// - encoding: Set by user
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public libavutil.AVColorRange color_range;
+
+            /// <summary>
+            /// This defines the location of chroma samples.
+            /// - encoding: Set by user
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public libavcodec.AVChromaLocation chroma_sample_location;
+
+            /// <summary>
+            /// Number of slices.
+            /// Indicates number of picture subdivisions. Used for parallelized
+            /// decoding.
+            /// - encoding: Set by user
+            /// - decoding: unused
+            /// </summary>
+            public int slices;
+
+            /// <summary>
+            /// Field order
+            /// - encoding: set by libavcodec
+            /// - decoding: Set by user.
+            /// </summary>
+            public libavcodec.AVFieldOrder field_order;
+
+            /// <summary>
+            /// samples per second
+            /// </summary>
+            public int sample_rate;
+
+            /// <summary>
+            /// number of audio channels
+            /// </summary>
+            public int channels;
+
+            /// <summary>
+            /// sample format
+            /// </summary>
+            public libavutil.AVSampleFormat sample_fmt;
+
+            /// <summary>
+            /// Number of samples per channel in an audio frame.
+            /// 
+            /// - encoding: set by libavcodec in avcodec_open2(). Each submitted frame
+            /// except the last must contain exactly frame_size samples per channel.
+            /// May be 0 when the codec has CODEC_CAP_VARIABLE_FRAME_SIZE set, then the
+            /// frame size is not restricted.
+            /// - decoding: may be set by some decoders to indicate constant frame size
+            /// </summary>
+            public int frame_size;
+
+            /// <summary>
+            /// Frame counter, set by libavcodec.
+            /// 
+            /// - decoding: total number of frames returned from the decoder so far.
+            /// - encoding: total number of frames passed to the encoder so far.
+            /// 
+            /// @note the counter is not incremented if encoding/decoding resulted in
+            /// an error.
+            /// </summary>
+            public int frame_number;
+
+            /// <summary>
+            /// number of bytes per packet if constant and known or 0
+            /// Used by some WAV based audio codecs.
+            /// </summary>
+            public int block_align;
+
+            /// <summary>
+            /// Audio cutoff bandwidth (0 means "automatic")
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int cutoff;
+
+            /// <summary>
+            /// Decoder should decode to this many channels if it can (0 for default)
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// @deprecated Deprecated in favor of request_channel_layout.
+            /// </summary>
+            public int request_channels;
+
+            /// <summary>
+            /// Audio channel layout.
+            /// - encoding: set by user.
+            /// - decoding: set by user, may be overwritten by libavcodec.
+            /// </summary>
+            public ulong channel_layout;
+
+            /// <summary>
+            /// Request decoder to use this channel layout if it can (0 for default)
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public ulong request_channel_layout;
+
+            /// <summary>
+            /// Type of service that the audio stream conveys.
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public libavcodec.AVAudioServiceType audio_service_type;
+
+            /// <summary>
+            /// desired sample format
+            /// - encoding: Not used.
+            /// - decoding: Set by user.
+            /// Decoder will decode to this format if it can.
+            /// </summary>
+            public libavutil.AVSampleFormat request_sample_fmt;
+
+            /// <summary>
+            /// Called at the beginning of each frame to get a buffer for it.
+            /// 
+            /// The function will set AVFrame.data[], AVFrame.linesize[].
+            /// AVFrame.extended_data[] must also be set, but it should be the same as
+            /// AVFrame.data[] except for planar audio with more channels than can fit
+            /// in AVFrame.data[]. In that case, AVFrame.data[] shall still contain as
+            /// many data pointers as it can hold.
+            /// 
+            /// if CODEC_CAP_DR1 is not set then get_buffer() must call
+            /// avcodec_default_get_buffer() instead of providing buffers allocated by
+            /// some other means.
+            /// 
+            /// AVFrame.data[] should be 32- or 16-byte-aligned unless the CPU doesn't
+            /// need it. avcodec_default_get_buffer() aligns the output buffer
+            /// properly,
+            /// but if get_buffer() is overridden then alignment considerations should
+            /// be taken into account.
+            /// 
+            /// @see avcodec_default_get_buffer()
+            /// 
+            /// Video:
+            /// 
+            /// If pic.reference is set then the frame will be read later by
+            /// libavcodec.
+            /// avcodec_align_dimensions2() should be used to find the required width
+            /// and
+            /// height, as they normally need to be rounded up to the next multiple of
+            /// 16.
+            /// 
+            /// If frame multithreading is used and thread_safe_callbacks is set,
+            /// it may be called from a different thread, but not from more than one at
+            /// once. Does not need to be reentrant.
+            /// 
+            /// @see release_buffer(), reget_buffer()
+            /// @see avcodec_align_dimensions2()
+            /// 
+            /// Audio:
+            /// 
+            /// Decoders request a buffer of a particular size by setting
+            /// AVFrame.nb_samples prior to calling get_buffer(). The decoder may,
+            /// however, utilize only part of the buffer by setting AVFrame.nb_samples
+            /// to a smaller value in the output frame.
+            /// 
+            /// Decoders cannot use the buffer after returning from
+            /// avcodec_decode_audio4(), so they will not call release_buffer(), as it
+            /// is assumed to be released immediately upon return. In some rare cases,
+            /// a decoder may need to call get_buffer() more than once in a single
+            /// call to avcodec_decode_audio4(). In that case, when get_buffer() is
+            /// called again after it has already been called once, the previously
+            /// acquired buffer is assumed to be released at that time and may not be
+            /// reused by the decoder.
+            /// 
+            /// As a convenience, av_samples_get_buffer_size() and
+            /// av_samples_fill_arrays() in libavutil may be used by custom
+            /// get_buffer()
+            /// functions to find the required data size and to fill data pointers and
+            /// linesize. In AVFrame.linesize, only linesize[0] may be set for audio
+            /// since all planes must be the same size.
+            /// 
+            /// @see av_samples_get_buffer_size(), av_samples_fill_arrays()
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec, user can override.
+            /// 
+            /// @deprecated use get_buffer2()
+            /// </summary>
+            public global::System.IntPtr get_buffer;
+
+            /// <summary>
+            /// Called to release buffers which were allocated with get_buffer.
+            /// A released buffer can be reused in get_buffer().
+            /// pic.data[*] must be set to NULL.
+            /// May be called from a different thread if frame multithreading is used,
+            /// but not by more than one thread at once, so does not need to be
+            /// reentrant.
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec, user can override.
+            /// 
+            /// @deprecated custom freeing callbacks should be set from get_buffer2()
+            /// </summary>
+            public global::System.IntPtr release_buffer;
+
+            /// <summary>
+            /// Called at the beginning of a frame to get cr buffer for it.
+            /// Buffer type (size, hints) must be the same. libavcodec won't check it.
+            /// libavcodec will pass previous buffer in pic, function should return
+            /// same buffer or new buffer with old frame "painted" into it.
+            /// If pic.data[0] == NULL must behave like get_buffer().
+            /// if CODEC_CAP_DR1 is not set then reget_buffer() must call
+            /// avcodec_default_reget_buffer() instead of providing buffers allocated
+            /// by
+            /// some other means.
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec, user can override.
+            /// </summary>
+            public global::System.IntPtr reget_buffer;
+
+            /// <summary>
+            /// This callback is called at the beginning of each frame to get data
+            /// buffer(s) for it. There may be one contiguous buffer for all the data
+            /// or
+            /// there may be a buffer per each data plane or anything in between. What
+            /// this means is, you may set however many entries in buf[] you feel
+            /// necessary.
+            /// Each buffer must be reference-counted using the AVBuffer API (see
+            /// description
+            /// of buf[] below).
+            /// 
+            /// The following fields will be set in the frame before this callback is
+            /// called:
+            /// - format
+            /// - width, height (video only)
+            /// - sample_rate, channel_layout, nb_samples (audio only)
+            /// Their values may differ from the corresponding values in
+            /// AVCodecContext. This callback must use the frame values, not the codec
+            /// context values, to calculate the required buffer size.
+            /// 
+            /// This callback must fill the following fields in the frame:
+            /// - data[]
+            /// - linesize[]
+            /// - extended_data:
+            /// if the data is planar audio with more than 8 channels, then this
+            /// callback must allocate and fill extended_data to contain all pointers
+            /// to all data planes. data[] must hold as many pointers as it can.
+            /// extended_data must be allocated with av_malloc() and will be freed in
+            /// av_frame_unref().
+            /// otherwise exended_data must point to data
+            /// - buf[] must contain one or more pointers to AVBufferRef structures.
+            /// Each of
+            /// the frame's data and extended_data pointers must be contained in these.
+            /// That
+            /// is, one AVBufferRef for each allocated chunk of memory, not necessarily
+            /// one
+            /// AVBufferRef per data[] entry. See: av_buffer_create(),
+            /// av_buffer_alloc(),
+            /// and av_buffer_ref().
+            /// - extended_buf and nb_extended_buf must be allocated with av_malloc()
+            /// by
+            /// this callback and filled with the extra buffers if there are more
+            /// buffers than buf[] can hold. extended_buf will be freed in
+            /// av_frame_unref().
+            /// 
+            /// If CODEC_CAP_DR1 is not set then get_buffer2() must call
+            /// avcodec_default_get_buffer2() instead of providing buffers allocated by
+            /// some other means.
+            /// 
+            /// Each data plane must be aligned to the maximum required by the target
+            /// CPU.
+            /// 
+            /// @see avcodec_default_get_buffer2()
+            /// 
+            /// Video:
+            /// 
+            /// If AV_GET_BUFFER_FLAG_REF is set in flags then the frame may be reused
+            /// (read and/or written to if it is writable) later by libavcodec.
+            /// 
+            /// If CODEC_FLAG_EMU_EDGE is not set in s->flags, the buffer must contain
+            /// an
+            /// edge of the size returned by avcodec_get_edge_width() on all sides.
+            /// 
+            /// avcodec_align_dimensions2() should be used to find the required width
+            /// and
+            /// height, as they normally need to be rounded up to the next multiple of
+            /// 16.
+            /// 
+            /// If frame multithreading is used and thread_safe_callbacks is set,
+            /// this callback may be called from a different thread, but not from more
+            /// than one at once. Does not need to be reentrant.
+            /// 
+            /// @see avcodec_align_dimensions2()
+            /// 
+            /// Audio:
+            /// 
+            /// Decoders request a buffer of a particular size by setting
+            /// AVFrame.nb_samples prior to calling get_buffer2(). The decoder may,
+            /// however, utilize only part of the buffer by setting AVFrame.nb_samples
+            /// to a smaller value in the output frame.
+            /// 
+            /// As a convenience, av_samples_get_buffer_size() and
+            /// av_samples_fill_arrays() in libavutil may be used by custom
+            /// get_buffer2()
+            /// functions to find the required data size and to fill data pointers and
+            /// linesize. In AVFrame.linesize, only linesize[0] may be set for audio
+            /// since all planes must be the same size.
+            /// 
+            /// @see av_samples_get_buffer_size(), av_samples_fill_arrays()
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec, user can override.
+            /// </summary>
+            public global::System.IntPtr get_buffer2;
+
+            /// <summary>
+            /// If non-zero, the decoded audio and video frames returned from
+            /// avcodec_decode_video2() and avcodec_decode_audio4() are
+            /// reference-counted
+            /// and are valid indefinitely. The caller must free them with
+            /// av_frame_unref() when they are not needed anymore.
+            /// Otherwise, the decoded frames must not be freed by the caller and are
+            /// only valid until the next decode call.
+            /// 
+            /// - encoding: unused
+            /// - decoding: set by the caller before avcodec_open2().
+            /// </summary>
+            public int refcounted_frames;
+
+            /// <summary>
+            /// amount of qscale change between easy & hard scenes (0.0-1.0)
+            /// </summary>
+            public float qcompress;
+
+            /// <summary>
+            /// amount of qscale smoothing over time (0.0-1.0)
+            /// </summary>
+            public float qblur;
+
+            /// <summary>
+            /// minimum quantizer
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int qmin;
+
+            /// <summary>
+            /// maximum quantizer
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int qmax;
+
+            /// <summary>
+            /// maximum quantizer difference between frames
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int max_qdiff;
+
+            /// <summary>
+            /// ratecontrol qmin qmax limiting method
+            /// 0-> clipping, 1-> use a nice continuous function to limit qscale wthin
+            /// qmin/qmax.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float rc_qsquish;
+
+            public float rc_qmod_amp;
+
+            public int rc_qmod_freq;
+
+            /// <summary>
+            /// decoder bitstream buffer size
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int rc_buffer_size;
+
+            /// <summary>
+            /// ratecontrol override, see RcOverride
+            /// - encoding: Allocated/set/freed by user.
+            /// - decoding: unused
+            /// </summary>
+            public int rc_override_count;
+
+            public libavcodec.RcOverride* rc_override;
+
+            /// <summary>
+            /// rate control equation
+            /// - encoding: Set by user
+            /// - decoding: unused
+            /// </summary>
+            public sbyte* rc_eq;
+
+            /// <summary>
+            /// maximum bitrate
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int rc_max_rate;
+
+            /// <summary>
+            /// minimum bitrate
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int rc_min_rate;
+
+            public float rc_buffer_aggressivity;
+
+            /// <summary>
+            /// initial complexity for pass1 ratecontrol
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public float rc_initial_cplx;
+
+            /// <summary>
+            /// Ratecontrol attempt to use, at maximum, <value> of what can be used
+            /// without an underflow.
+            /// - encoding: Set by user.
+            /// - decoding: unused.
+            /// </summary>
+            public float rc_max_available_vbv_use;
+
+            /// <summary>
+            /// Ratecontrol attempt to use, at least, <value> times the amount needed
+            /// to prevent a vbv overflow.
+            /// - encoding: Set by user.
+            /// - decoding: unused.
+            /// </summary>
+            public float rc_min_vbv_overflow_use;
+
+            /// <summary>
+            /// Number of bits which should be loaded into the rc buffer before
+            /// decoding starts.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int rc_initial_buffer_occupancy;
+
+            /// <summary>
+            /// coder type
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int coder_type;
+
+            /// <summary>
+            /// context model
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int context_model;
+
+            /// <summary>
+            /// minimum Lagrange multipler
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int lmin;
+
+            /// <summary>
+            /// maximum Lagrange multipler
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int lmax;
+
+            /// <summary>
+            /// frame skip threshold
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int frame_skip_threshold;
+
+            /// <summary>
+            /// frame skip factor
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int frame_skip_factor;
+
+            /// <summary>
+            /// frame skip exponent
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int frame_skip_exp;
+
+            /// <summary>
+            /// frame skip comparison function
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int frame_skip_cmp;
+
+            /// <summary>
+            /// trellis RD quantization
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int trellis;
+
+            /// <summary>
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int min_prediction_order;
+
+            /// <summary>
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int max_prediction_order;
+
+            /// <summary>
+            /// GOP timecode frame start number
+            /// - encoding: Set by user, in non drop frame format
+            /// - decoding: Set by libavcodec (timecode in the 25 bits format, -1 if
+            /// unset)
+            /// </summary>
+            public long timecode_frame_start;
+
+            public global::System.IntPtr rtp_callback;
+
+            public int rtp_payload_size;
+
+            public int mv_bits;
+
+            public int header_bits;
+
+            public int i_tex_bits;
+
+            public int p_tex_bits;
+
+            public int i_count;
+
+            public int p_count;
+
+            public int skip_count;
+
+            public int misc_bits;
+
+            /// <summary>
+            /// number of bits used for the previously encoded frame
+            /// - encoding: Set by libavcodec.
+            /// - decoding: unused
+            /// </summary>
+            public int frame_bits;
+
+            /// <summary>
+            /// pass1 encoding statistics output buffer
+            /// - encoding: Set by libavcodec.
+            /// - decoding: unused
+            /// </summary>
+            public sbyte* stats_out;
+
+            /// <summary>
+            /// pass2 encoding statistics input buffer
+            /// Concatenated stuff from stats_out of pass1 should be placed here.
+            /// - encoding: Allocated/set/freed by user.
+            /// - decoding: unused
+            /// </summary>
+            public sbyte* stats_in;
+
+            /// <summary>
+            /// Work around bugs in encoders which sometimes cannot be detected
+            /// automatically.
+            /// - encoding: Set by user
+            /// - decoding: Set by user
+            /// </summary>
+            public int workaround_bugs;
+
+            /// <summary>
+            /// strictly follow the standard (MPEG4, ...).
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// Setting this to STRICT or higher means the encoder and decoder will
+            /// generally do stupid things, whereas setting it to unofficial or lower
+            /// will mean the encoder might produce output that is not supported by all
+            /// spec-compliant decoders. Decoders don't differentiate between normal,
+            /// unofficial and experimental (that is, they always try to decode things
+            /// when they can) unless they are explicitly asked to behave stupidly
+            /// (=strictly conform to the specs)
+            /// </summary>
+            public int strict_std_compliance;
+
+            /// <summary>
+            /// error concealment flags
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public int error_concealment;
+
+            /// <summary>
+            /// debug
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int debug;
+
+            /// <summary>
+            /// debug
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int debug_mv;
+
+            /// <summary>
+            /// Error recognition; may misdetect some more or less valid parts as
+            /// errors.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public int err_recognition;
+
+            /// <summary>
+            /// opaque 64bit number (generally a PTS) that will be reordered and
+            /// output in AVFrame.reordered_opaque
+            /// @deprecated in favor of pkt_pts
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public long reordered_opaque;
+
+            /// <summary>
+            /// Hardware accelerator in use
+            /// - encoding: unused.
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public libavcodec.AVHWAccel* hwaccel;
+
+            /// <summary>
+            /// Hardware accelerator context.
+            /// For some hardware accelerators, a global context needs to be
+            /// provided by the user. In that case, this holds display-dependent
+            /// data FFmpeg cannot instantiate itself. Please refer to the
+            /// FFmpeg HW accelerator documentation to know how to fill this
+            /// is. e.g. for VA API, this is a struct vaapi_context.
+            /// - encoding: unused
+            /// - decoding: Set by user
+            /// </summary>
+            public void* hwaccel_context;
+
+            /// <summary>
+            /// error
+            /// - encoding: Set by libavcodec if flags&CODEC_FLAG_PSNR.
+            /// - decoding: unused
+            /// </summary>
+            public fixed ulong error[8];
+
+            /// <summary>
+            /// DCT algorithm, see FF_DCT_* below
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int dct_algo;
+
+            /// <summary>
+            /// IDCT algorithm, see FF_IDCT_* below.
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int idct_algo;
+
+            /// <summary>
+            /// bits per sample/pixel from the demuxer (needed for huffyuv).
+            /// - encoding: Set by libavcodec.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int bits_per_coded_sample;
+
+            /// <summary>
+            /// Bits per sample/pixel of internal libavcodec pixel/sample format.
+            /// - encoding: set by user.
+            /// - decoding: set by libavcodec.
+            /// </summary>
+            public int bits_per_raw_sample;
+
+            /// <summary>
+            /// low resolution decoding, 1-> 1/2 size, 2->1/4 size
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// Code outside libavcodec should access this field using:
+            /// av_codec_{get,set}_lowres(avctx)
+            /// </summary>
+            public int lowres;
+
+            /// <summary>
+            /// the picture in the bitstream
+            /// - encoding: Set by libavcodec.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public libavutil.AVFrame* coded_frame;
+
+            /// <summary>
+            /// thread count
+            /// is used to decide how many independent tasks should be passed to
+            /// execute()
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int thread_count;
+
+            /// <summary>
+            /// Which multithreading methods to use.
+            /// Use of FF_THREAD_FRAME will increase decoding delay by one frame per
+            /// thread,
+            /// so clients which cannot provide future frames should not use it.
+            /// 
+            /// - encoding: Set by user, otherwise the default is used.
+            /// - decoding: Set by user, otherwise the default is used.
+            /// </summary>
+            public int thread_type;
+
+            /// <summary>
+            /// Which multithreading methods are in use by the codec.
+            /// - encoding: Set by libavcodec.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public int active_thread_type;
+
+            /// <summary>
+            /// Set by the client if its custom get_buffer() callback can be called
+            /// synchronously from another thread, which allows faster multithreaded
+            /// decoding.
+            /// draw_horiz_band() will be called from other threads regardless of this
+            /// setting.
+            /// Ignored if the default get_buffer() is used.
+            /// - encoding: Set by user.
+            /// - decoding: Set by user.
+            /// </summary>
+            public int thread_safe_callbacks;
+
+            /// <summary>
+            /// The codec may call this to execute several independent things.
+            /// It will return only after finishing all tasks.
+            /// The user may replace this with some multithreaded implementation,
+            /// the default implementation will execute the parts serially.
+            /// @param count the number of things to execute
+            /// - encoding: Set by libavcodec, user can override.
+            /// - decoding: Set by libavcodec, user can override.
+            /// </summary>
+            public global::System.IntPtr execute;
+
+            /// <summary>
+            /// The codec may call this to execute several independent things.
+            /// It will return only after finishing all tasks.
+            /// The user may replace this with some multithreaded implementation,
+            /// the default implementation will execute the parts serially.
+            /// Also see avcodec_thread_init and e.g. the --enable-pthread configure
+            /// option.
+            /// @param c context passed also to func
+            /// @param count the number of things to execute
+            /// @param arg2 argument passed unchanged to func
+            /// @param ret return values of executed functions, must have space for
+            /// "count" values. May be NULL.
+            /// @param func function that will be called count times, with jobnr from 0
+            /// to count-1.
+            /// threadnr will be in the range 0 to c->thread_count-1 < MAX_THREADS and
+            /// so that no
+            /// two instances of func executing at the same time will have the same
+            /// threadnr.
+            /// @return always 0 currently, but code should handle a future improvement
+            /// where when any call to func
+            /// returns < 0 no further calls to func may be done and < 0 is returned.
+            /// - encoding: Set by libavcodec, user can override.
+            /// - decoding: Set by libavcodec, user can override.
+            /// </summary>
+            public global::System.IntPtr execute2;
+
+            /// <summary>
+            /// thread opaque
+            /// Can be used by execute() to store some per AVCodecContext stuff.
+            /// - encoding: set by execute()
+            /// - decoding: set by execute()
+            /// </summary>
+            public void* thread_opaque;
+
+            /// <summary>
+            /// noise vs. sse weight for the nsse comparsion function
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int nsse_weight;
+
+            /// <summary>
+            /// profile
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public int profile;
+
+            /// <summary>
+            /// level
+            /// - encoding: Set by user.
+            /// - decoding: Set by libavcodec.
+            /// </summary>
+            public int level;
+
+            /// <summary>
+            /// Skip loop filtering for selected frames.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public libavcodec.AVDiscard skip_loop_filter;
+
+            /// <summary>
+            /// Skip IDCT/dequantization for selected frames.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public libavcodec.AVDiscard skip_idct;
+
+            /// <summary>
+            /// Skip decoding for selected frames.
+            /// - encoding: unused
+            /// - decoding: Set by user.
+            /// </summary>
+            public libavcodec.AVDiscard skip_frame;
+
+            /// <summary>
+            /// Header containing style information for text subtitles.
+            /// For SUBTITLE_ASS subtitle type, it should contain the whole ASS
+            /// [Script Info] and [V4+ Styles] section, plus the [Events] line and
+            /// the Format line following. It shouldn't include any Dialogue line.
+            /// - encoding: Set/allocated/freed by user (before avcodec_open2())
+            /// - decoding: Set/allocated/freed by libavcodec (by avcodec_open2())
+            /// </summary>
+            public byte* subtitle_header;
+
+            public int subtitle_header_size;
+
+            /// <summary>
+            /// Simulates errors in the bitstream to test error concealment.
+            /// - encoding: Set by user.
+            /// - decoding: unused
+            /// </summary>
+            public int error_rate;
+
+            /// <summary>
+            /// Current packet as passed into the decoder, to avoid having
+            /// to pass the packet into every function. Currently only valid
+            /// inside lavc and get/release_buffer callbacks.
+            /// - decoding: set by avcodec_decode_*, read by get_buffer() for setting
+            /// pkt_pts
+            /// - encoding: unused
+            /// </summary>
+            public libavcodec.AVPacket* pkt;
+
+            /// <summary>
+            /// VBV delay coded in the last frame (in periods of a 27 MHz clock).
+            /// Used for compliant TS muxing.
+            /// - encoding: Set by libavcodec.
+            /// - decoding: unused.
+            /// </summary>
+            public ulong vbv_delay;
+
+            /// <summary>
+            /// Timebase in which pkt_dts/pts and AVPacket.dts/pts are.
+            /// Code outside libavcodec should access this field using:
+            /// av_codec_{get,set}_pkt_timebase(avctx)
+            /// - encoding unused.
+            /// - decoding set by user.
+            /// </summary>
+            public libavutil.AVRational pkt_timebase;
+
+            /// <summary>
+            /// AVCodecDescriptor
+            /// Code outside libavcodec should access this field using:
+            /// av_codec_{get,set}_codec_descriptor(avctx)
+            /// - encoding: unused.
+            /// - decoding: set by libavcodec.
+            /// </summary>
+            public libavcodec.AVCodecDescriptor* codec_descriptor;
+
+            /// <summary>
+            /// Current statistics for PTS correction.
+            /// - decoding: maintained and used by libavcodec, not intended to be used
+            /// by user apps
+            /// - encoding: unused
+            /// </summary>
+            public long pts_correction_num_faulty_pts;
+
+            /// <summary>
+            /// Number of incorrect PTS values so far
+            /// </summary>
+            public long pts_correction_num_faulty_dts;
+
+            /// <summary>
+            /// Number of incorrect DTS values so far
+            /// </summary>
+            public long pts_correction_last_pts;
+
+            /// <summary>
+            /// PTS of the last frame
+            /// </summary>
+            public long pts_correction_last_dts;
+
+            /// <summary>
+            /// Character encoding of the input subtitles file.
+            /// - decoding: set by user
+            /// - encoding: unused
+            /// </summary>
+            public sbyte* sub_charenc;
+
+            /// <summary>
+            /// Subtitles character encoding mode. Formats or codecs might be adjusting
+            /// this setting (if they are doing the conversion themselves for
+            /// instance).
+            /// - decoding: set by libavcodec
+            /// - encoding: unused
+            /// </summary>
+            public int sub_charenc_mode;
+
+            /// <summary>
+            /// Skip processing alpha if supported by codec.
+            /// Note that if the format uses pre-multiplied alpha (common with VP6,
+            /// and recommended due to better video quality/compression)
+            /// the image will look as if alpha-blended onto a black background.
+            /// However for formats that do not use pre-multiplied alpha
+            /// there might be serious artefacts (though e.g. libswscale currently
+            /// assumes pre-multiplied alpha anyway).
+            /// Code outside libavcodec should access this field using AVOptions
+            /// 
+            /// - decoding: set by user
+            /// - encoding: unused
+            /// </summary>
+            public int skip_alpha;
+
+            /// <summary>
+            /// Number of samples to skip after a discontinuity
+            /// - decoding: unused
+            /// - encoding: set by libavcodec
+            /// </summary>
+            public int seek_preroll;
+        }
+
+        /// <summary>
+        /// AVProfile.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVProfile
+        {
+            public int profile;
+
+            /// <summary>
+            /// short name for the profile
+            /// </summary>
+            public sbyte* name;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodecDefault
+        {
+        }
+
+        /// <summary>
+        /// AVCodec.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodec
+        {
+            /// <summary>
+            /// Name of the codec implementation.
+            /// The name is globally unique among encoders and among decoders (but an
+            /// encoder and a decoder can share the same name).
+            /// This is the primary way to find a codec from the user perspective.
+            /// </summary>
+            public sbyte* name;
+
+            /// <summary>
+            /// Descriptive name for the codec, meant to be more human readable than
+            /// name.
+            /// You should use the NULL_IF_CONFIG_SMALL() macro to define it.
+            /// </summary>
+            public sbyte* long_name;
+
+            public libavutil.AVMediaType type;
+
+            public libavcodec.AVCodecID id;
+
+            /// <summary>
+            /// Codec capabilities.
+            /// see CODEC_CAP_
+            /// </summary>
+            public int capabilities;
+
+            /// <summary>
+            /// array of supported framerates, or NULL if any, array is terminated by
+            /// {0,0}
+            /// </summary>
+            public libavutil.AVRational* supported_framerates;
+
+            /// <summary>
+            /// array of supported pixel formats, or NULL if unknown, array is
+            /// terminated by -1
+            /// </summary>
+            public libavutil.AVPixelFormat* pix_fmts;
+
+            /// <summary>
+            /// array of supported audio samplerates, or NULL if unknown, array is
+            /// terminated by 0
+            /// </summary>
+            public int* supported_samplerates;
+
+            /// <summary>
+            /// array of supported sample formats, or NULL if unknown, array is
+            /// terminated by -1
+            /// </summary>
+            public libavutil.AVSampleFormat* sample_fmts;
+
+            /// <summary>
+            /// array of support channel layouts, or NULL if unknown. array is
+            /// terminated by 0
+            /// </summary>
+            public ulong* channel_layouts;
+
+            /// <summary>
+            /// maximum value for lowres supported by the decoder, no direct access,
+            /// use av_codec_get_max_lowres()
+            /// </summary>
+            public byte max_lowres;
+
+            /// <summary>
+            /// AVClass for the private context
+            /// </summary>
+            public libavutil.AVClass* priv_class;
+
+            /// <summary>
+            /// array of recognized profiles, or NULL if unknown, array is terminated
+            /// by {FF_PROFILE_UNKNOWN}
+            /// </summary>
+            public libavcodec.AVProfile* profiles;
+
+            /// <summary>
+            /// 
+            /// No fields below this line are part of the public API. They
+            /// may not be used outside of libavcodec and can be changed and
+            /// removed at will.
+            /// New public fields should be added right above.
+            /// 
+            /// </summary>
+            public int priv_data_size;
+
+            public libavcodec.AVCodec* next;
+
+            /// <summary>
+            /// @name Frame-level threading support functions
+            /// @{
+            /// 
+            /// 
+            /// If defined, called on thread contexts when they are created.
+            /// If the codec allocates writable tables in init(), re-allocate them
+            /// here.
+            /// priv_data will be set to a copy of the original.
+            /// </summary>
+            public global::System.IntPtr init_thread_copy;
+
+            /// <summary>
+            /// Copy necessary context variables from a previous thread context to the
+            /// current one.
+            /// If not defined, the next thread will start automatically; otherwise,
+            /// the codec
+            /// must call ff_thread_finish_setup().
+            /// 
+            /// dst and src will (rarely) point to the same context, in which case
+            /// memcpy should be skipped.
+            /// </summary>
+            public global::System.IntPtr update_thread_context;
+
+            /// <summary>
+            /// Private codec-specific defaults.
+            /// </summary>
+            public libavcodec.AVCodecDefault* defaults;
+
+            /// <summary>
+            /// Initialize codec static data, called from avcodec_register().
+            /// </summary>
+            public global::System.IntPtr init_static_data;
+
+            public global::System.IntPtr init;
+
+            public global::System.IntPtr encode_sub;
+
+            /// <summary>
+            /// Encode data to an AVPacket.
+            /// 
+            /// @param      avctx          codec context
+            /// @param      avpkt          output AVPacket (may contain a user-provided
+            /// buffer)
+            /// @param[in]  frame          AVFrame containing the raw data to be
+            /// encoded
+            /// @param[out] got_packet_ptr encoder sets to 0 or 1 to indicate that a
+            /// non-empty packet was returned in avpkt.
+            /// @return 0 on success, negative error code on failure
+            /// </summary>
+            public global::System.IntPtr encode2;
+
+            public global::System.IntPtr decode;
+
+            public global::System.IntPtr close;
+
+            /// <summary>
+            /// Flush buffers.
+            /// Will be called when seeking
+            /// </summary>
+            public global::System.IntPtr flush;
+        }
+
+        /// <summary>
+        /// AVHWAccel.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVHWAccel
+        {
+            /// <summary>
+            /// Name of the hardware accelerated codec.
+            /// The name is globally unique among encoders and among decoders (but an
+            /// encoder and a decoder can share the same name).
+            /// </summary>
+            public sbyte* name;
+
+            /// <summary>
+            /// Type of codec implemented by the hardware accelerator.
+            /// 
+            /// See AVMEDIA_TYPE_xxx
+            /// </summary>
+            public libavutil.AVMediaType type;
+
+            /// <summary>
+            /// Codec implemented by the hardware accelerator.
+            /// 
+            /// See AV_CODEC_ID_xxx
+            /// </summary>
+            public libavcodec.AVCodecID id;
+
+            /// <summary>
+            /// Supported pixel format.
+            /// 
+            /// Only hardware accelerated formats are supported here.
+            /// </summary>
+            public libavutil.AVPixelFormat pix_fmt;
+
+            /// <summary>
+            /// Hardware accelerated codec capabilities.
+            /// see FF_HWACCEL_CODEC_CAP_
+            /// </summary>
+            public int capabilities;
+
+            public libavcodec.AVHWAccel* next;
+
+            /// <summary>
+            /// Called at the beginning of each frame or field picture.
+            /// 
+            /// Meaningful frame information (codec specific) is guaranteed to
+            /// be parsed at this point. This function is mandatory.
+            /// 
+            /// Note that buf can be NULL along with buf_size set to 0.
+            /// Otherwise, this means the whole frame is available at this point.
+            /// 
+            /// @param avctx the codec context
+            /// @param buf the frame data buffer base
+            /// @param buf_size the size of the frame in bytes
+            /// @return zero if successful, a negative value otherwise
+            /// </summary>
+            public global::System.IntPtr start_frame;
+
+            /// <summary>
+            /// Callback for each slice.
+            /// 
+            /// Meaningful slice information (codec specific) is guaranteed to
+            /// be parsed at this point. This function is mandatory.
+            /// 
+            /// @param avctx the codec context
+            /// @param buf the slice data buffer base
+            /// @param buf_size the size of the slice in bytes
+            /// @return zero if successful, a negative value otherwise
+            /// </summary>
+            public global::System.IntPtr decode_slice;
+
+            /// <summary>
+            /// Called at the end of each frame or field picture.
+            /// 
+            /// The whole picture is parsed at this point and can now be sent
+            /// to the hardware accelerator. This function is mandatory.
+            /// 
+            /// @param avctx the codec context
+            /// @return zero if successful, a negative value otherwise
+            /// </summary>
+            public global::System.IntPtr end_frame;
+
+            /// <summary>
+            /// Size of HW accelerator private data.
+            /// 
+            /// Private data is allocated with av_mallocz() before
+            /// AVCodecContext.get_buffer() and deallocated after
+            /// AVCodecContext.release_buffer().
+            /// </summary>
+            public int priv_data_size;
+        }
+
+        /// <summary>
+        /// Picture data structure.
         /// 
-        /// See AVMEDIA_TYPE_xxx
+        /// Up to four components can be stored into it, the last component is
+        /// alpha.
         /// </summary>
-        [FieldOffset(4)]
-        public AVMediaType type;
-
-        /// <summary>
-        /// Codec implemented by the hardware accelerator.
-        /// 
-        /// See AV_CODEC_ID_xxx
-        /// </summary>
-        [FieldOffset(8)]
-        public AVCodecID id;
-
-        /// <summary>
-        /// Supported pixel format.
-        /// 
-        /// Only hardware accelerated formats are supported here.
-        /// </summary>
-        [FieldOffset(12)]
-        public AVPixelFormat pix_fmt;
-
-        /// <summary>
-        /// Hardware accelerated codec capabilities.
-        /// see FF_HWACCEL_CODEC_CAP_*
-        /// </summary>
-        [FieldOffset(16)]
-        public int capabilities;
-
-        [FieldOffset(20)]
-        public AVHWAccel* next;
-
-        /// <summary>
-        /// Called at the beginning of each frame or field picture.
-        /// 
-        /// Meaningful frame information (codec specific) is guaranteed to
-        /// be parsed at this point. This function is mandatory.
-        /// 
-        /// Note that buf can be NULL along with buf_size set to 0.
-        /// Otherwise, this means the whole frame is available at this point.
-        /// 
-        /// @param avctx the codec context
-        /// @param buf the frame data buffer base
-        /// @param buf_size the size of the frame in bytes
-        /// @return zero if successful, a negative value otherwise
-        /// </summary>
-        [FieldOffset(24)]
-        public global::System.IntPtr start_frame;
-
-        /// <summary>
-        /// Callback for each slice.
-        /// 
-        /// Meaningful slice information (codec specific) is guaranteed to
-        /// be parsed at this point. This function is mandatory.
-        /// 
-        /// @param avctx the codec context
-        /// @param buf the slice data buffer base
-        /// @param buf_size the size of the slice in bytes
-        /// @return zero if successful, a negative value otherwise
-        /// </summary>
-        [FieldOffset(28)]
-        public global::System.IntPtr decode_slice;
-
-        /// <summary>
-        /// Called at the end of each frame or field picture.
-        /// 
-        /// The whole picture is parsed at this point and can now be sent
-        /// to the hardware accelerator. This function is mandatory.
-        /// 
-        /// @param avctx the codec context
-        /// @return zero if successful, a negative value otherwise
-        /// </summary>
-        [FieldOffset(32)]
-        public global::System.IntPtr end_frame;
-
-        /// <summary>
-        /// Size of HW accelerator private data.
-        /// 
-        /// Private data is allocated with av_mallocz() before
-        /// AVCodecContext.get_buffer() and deallocated after
-        /// AVCodecContext.release_buffer().
-        /// </summary>
-        [FieldOffset(36)]
-        public int priv_data_size;
-    }
-
-    /// <summary>
-    /// Picture data structure.
-    /// 
-    /// Up to four components can be stored into it, the last component is
-    /// alpha.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVPicture
-    {
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(0)]
-        public byte* data_0;
-
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(4)]
-        public byte* data_1;
-
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(8)]
-        public byte* data_2;
-
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(12)]
-        public byte* data_3;
-
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(16)]
-        public byte* data_4;
-
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(20)]
-        public byte* data_5;
-
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(24)]
-        public byte* data_6;
-
-        /// <summary>
-        /// < pointers to the image data planes
-        /// </summary>
-        [FieldOffset(28)]
-        public byte* data_7;
-
-        /// <summary>
-        /// < number of bytes per line
-        /// </summary>
-        [FieldOffset(32)]
-        public fixed int linesize[8];
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVSubtitleRect
-    {
-        /// <summary>
-        /// < top left corner  of pict, undefined when pict is not set
-        /// </summary>
-        [FieldOffset(0)]
-        public int x;
-
-        /// <summary>
-        /// < top left corner  of pict, undefined when pict is not set
-        /// </summary>
-        [FieldOffset(4)]
-        public int y;
-
-        /// <summary>
-        /// < width            of pict, undefined when pict is not set
-        /// </summary>
-        [FieldOffset(8)]
-        public int w;
-
-        /// <summary>
-        /// < height           of pict, undefined when pict is not set
-        /// </summary>
-        [FieldOffset(12)]
-        public int h;
-
-        /// <summary>
-        /// < number of colors in pict, undefined when pict is not set
-        /// </summary>
-        [FieldOffset(16)]
-        public int nb_colors;
-
-        /// <summary>
-        /// data+linesize for the bitmap of this subtitle.
-        /// can be set for text/ass as well once they where rendered
-        /// </summary>
-        [FieldOffset(20)]
-        public AVPicture* pict;
-
-        [FieldOffset(84)]
-        public AVSubtitleType type;
-
-        /// <summary>
-        /// < 0 terminated plain UTF-8 text
-        /// </summary>
-        [FieldOffset(88)]
-        public sbyte* text;
-
-        /// <summary>
-        /// 0 terminated ASS/SSA compatible event line.
-        /// The presentation of this is unaffected by the other values in this
-        /// struct.
-        /// </summary>
-        [FieldOffset(92)]
-        public sbyte* ass;
-
-        [FieldOffset(96)]
-        public int flags;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVSubtitle
-    {
-        [FieldOffset(0)]
-        public ushort format;
-
-        [FieldOffset(4)]
-        public uint start_display_time;
-
-        [FieldOffset(8)]
-        public uint end_display_time;
-
-        [FieldOffset(12)]
-        public uint num_rects;
-
-        [FieldOffset(16)]
-        public AVSubtitleRect* rects;
-
-        /// <summary>
-        /// < Same as packet pts, in AV_TIME_BASE
-        /// </summary>
-        [FieldOffset(24)]
-        public long pts;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodecParserContext
-    {
-        [FieldOffset(0)]
-        public global::System.IntPtr priv_data;
-
-        [FieldOffset(4)]
-        public AVCodecParser* parser;
-
-        [FieldOffset(8)]
-        public long frame_offset;
-
-        [FieldOffset(16)]
-        public long cur_offset;
-
-        [FieldOffset(24)]
-        public long next_frame_offset;
-
-        [FieldOffset(32)]
-        public int pict_type;
-
-        /// <summary>
-        /// This field is used for proper frame duration computation in lavf.
-        /// It signals, how much longer the frame duration of the current frame
-        /// is compared to normal frame duration.
-        /// 
-        /// frame_duration = (1 + repeat_pict) * time_base
-        /// 
-        /// It is used by codecs like H.264 to display telecined material.
-        /// </summary>
-        [FieldOffset(36)]
-        public int repeat_pict;
-
-        [FieldOffset(40)]
-        public long pts;
-
-        [FieldOffset(48)]
-        public long dts;
-
-        [FieldOffset(56)]
-        public long last_pts;
-
-        [FieldOffset(64)]
-        public long last_dts;
-
-        [FieldOffset(72)]
-        public int fetch_timestamp;
-
-        [FieldOffset(76)]
-        public int cur_frame_start_index;
-
-        [FieldOffset(80)]
-        public fixed long cur_frame_offset[4];
-
-        [FieldOffset(112)]
-        public fixed long cur_frame_pts[4];
-
-        [FieldOffset(144)]
-        public fixed long cur_frame_dts[4];
-
-        [FieldOffset(176)]
-        public int flags;
-
-        /// <summary>
-        /// < byte offset from starting packet start
-        /// </summary>
-        [FieldOffset(184)]
-        public long offset;
-
-        [FieldOffset(192)]
-        public fixed long cur_frame_end[4];
-
-        /// <summary>
-        /// Set by parser to 1 for key frames and 0 for non-key frames.
-        /// It is initialized to -1, so if the parser doesn't set this flag,
-        /// old-style fallback using AV_PICTURE_TYPE_I picture type as key
-        /// frames
-        /// will be used.
-        /// </summary>
-        [FieldOffset(224)]
-        public int key_frame;
-
-        /// <summary>
-        /// Time difference in stream time base units from the pts of this
-        /// packet to the point at which the output from the decoder has
-        /// converged
-        /// independent from the availability of previous frames. That is, the
-        /// frames are virtually identical no matter if decoding started from
-        /// the very first frame or from this keyframe.
-        /// Is AV_NOPTS_VALUE if unknown.
-        /// This field is not the display duration of the current frame.
-        /// This field has no meaning if the packet does not have
-        /// AV_PKT_FLAG_KEY
-        /// set.
-        /// 
-        /// The purpose of this field is to allow seeking in streams that have
-        /// no
-        /// keyframes in the conventional sense. It corresponds to the
-        /// recovery point SEI in H.264 and match_time_delta in NUT. It is also
-        /// essential for some types of subtitle streams to ensure that all
-        /// subtitles are correctly displayed after seeking.
-        /// </summary>
-        [FieldOffset(232)]
-        public long convergence_duration;
-
-        /// <summary>
-        /// Synchronization point for start of timestamp generation.
-        /// 
-        /// Set to >0 for sync point, 0 for no sync point and <0 for undefined
-        /// (default).
-        /// 
-        /// For example, this corresponds to presence of H.264 buffering period
-        /// SEI message.
-        /// </summary>
-        [FieldOffset(240)]
-        public int dts_sync_point;
-
-        /// <summary>
-        /// Offset of the current timestamp against last timestamp sync point
-        /// in
-        /// units of AVCodecContext.time_base.
-        /// 
-        /// Set to INT_MIN when dts_sync_point unused. Otherwise, it must
-        /// contain a valid timestamp offset.
-        /// 
-        /// Note that the timestamp of sync point has usually a nonzero
-        /// dts_ref_dts_delta, which refers to the previous sync point. Offset
-        /// of
-        /// the next frame after timestamp sync point will be usually 1.
-        /// 
-        /// For example, this corresponds to H.264 cpb_removal_delay.
-        /// </summary>
-        [FieldOffset(244)]
-        public int dts_ref_dts_delta;
-
-        /// <summary>
-        /// Presentation delay of current frame in units of
-        /// AVCodecContext.time_base.
-        /// 
-        /// Set to INT_MIN when dts_sync_point unused. Otherwise, it must
-        /// contain valid non-negative timestamp delta (presentation time of a
-        /// frame
-        /// must not lie in the past).
-        /// 
-        /// This delay represents the difference between decoding and
-        /// presentation
-        /// time of the frame.
-        /// 
-        /// For example, this corresponds to H.264 dpb_output_delay.
-        /// </summary>
-        [FieldOffset(248)]
-        public int pts_dts_delta;
-
-        /// <summary>
-        /// Position of the packet in file.
-        /// 
-        /// Analogous to cur_frame_pts/dts
-        /// </summary>
-        [FieldOffset(256)]
-        public fixed long cur_frame_pos[4];
-
-        /// <summary>
-        /// Byte position of currently parsed frame in stream.
-        /// </summary>
-        [FieldOffset(288)]
-        public long pos;
-
-        /// <summary>
-        /// Previous frame byte position.
-        /// </summary>
-        [FieldOffset(296)]
-        public long last_pos;
-
-        /// <summary>
-        /// Duration of the current frame.
-        /// For audio, this is in units of 1 / AVCodecContext.sample_rate.
-        /// For all other types, this is in units of AVCodecContext.time_base.
-        /// </summary>
-        [FieldOffset(304)]
-        public int duration;
-
-        [FieldOffset(308)]
-        public AVFieldOrder field_order;
-
-        /// <summary>
-        /// Indicate whether a picture is coded as a frame, top field or bottom
-        /// field.
-        /// 
-        /// For example, H.264 field_pic_flag equal to 0 corresponds to
-        /// AV_PICTURE_STRUCTURE_FRAME. An H.264 picture with field_pic_flag
-        /// equal to 1 and bottom_field_flag equal to 0 corresponds to
-        /// AV_PICTURE_STRUCTURE_TOP_FIELD.
-        /// </summary>
-        [FieldOffset(312)]
-        public AVPictureStructure picture_structure;
-
-        /// <summary>
-        /// Picture number incremented in presentation or output order.
-        /// This field may be reinitialized at the first picture of a new
-        /// sequence.
-        /// 
-        /// For example, this corresponds to H.264 PicOrderCnt.
-        /// </summary>
-        [FieldOffset(316)]
-        public int output_picture_number;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVCodecParser
-    {
-        [FieldOffset(0)]
-        public fixed int codec_ids[5];
-
-        [FieldOffset(20)]
-        public int priv_data_size;
-
-        [FieldOffset(24)]
-        public global::System.IntPtr parser_init;
-
-        [FieldOffset(28)]
-        public global::System.IntPtr parser_parse;
-
-        [FieldOffset(32)]
-        public global::System.IntPtr parser_close;
-
-        [FieldOffset(36)]
-        public global::System.IntPtr split;
-
-        [FieldOffset(40)]
-        public AVCodecParser* next;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct ReSampleContext
-    {
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVResampleContext
-    {
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVBitStreamFilterContext
-    {
-        [FieldOffset(0)]
-        public global::System.IntPtr priv_data;
-
-        [FieldOffset(4)]
-        public AVBitStreamFilter* filter;
-
-        [FieldOffset(8)]
-        public AVCodecParserContext* parser;
-
-        [FieldOffset(12)]
-        public AVBitStreamFilterContext* next;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVBitStreamFilter
-    {
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
-
-        [FieldOffset(4)]
-        public int priv_data_size;
-
-        [FieldOffset(8)]
-        public global::System.IntPtr filter;
-
-        [FieldOffset(12)]
-        public global::System.IntPtr close;
-
-        [FieldOffset(16)]
-        public AVBitStreamFilter* next;
-    }
-
-    public unsafe partial class libavcodec
-    {
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVPicture
+        {
+            /// <summary>
+            /// pointers to the image data planes
+            /// </summary>
+            public libavutil.ArrayWrapper_BytePtr8 data;
+
+            /// <summary>
+            /// number of bytes per line
+            /// </summary>
+            public fixed int linesize[8];
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVSubtitleRect
+        {
+            /// <summary>
+            /// top left corner  of pict, undefined when pict is not set
+            /// </summary>
+            public int x;
+
+            /// <summary>
+            /// top left corner  of pict, undefined when pict is not set
+            /// </summary>
+            public int y;
+
+            /// <summary>
+            /// width            of pict, undefined when pict is not set
+            /// </summary>
+            public int w;
+
+            /// <summary>
+            /// height           of pict, undefined when pict is not set
+            /// </summary>
+            public int h;
+
+            /// <summary>
+            /// number of colors in pict, undefined when pict is not set
+            /// </summary>
+            public int nb_colors;
+
+            /// <summary>
+            /// data+linesize for the bitmap of this subtitle.
+            /// can be set for text/ass as well once they where rendered
+            /// </summary>
+            public libavcodec.AVPicture pict;
+
+            public libavcodec.AVSubtitleType type;
+
+            /// <summary>
+            /// 0 terminated plain UTF-8 text
+            /// </summary>
+            public sbyte* text;
+
+            /// <summary>
+            /// 0 terminated ASS/SSA compatible event line.
+            /// The presentation of this is unaffected by the other values in this
+            /// struct.
+            /// </summary>
+            public sbyte* ass;
+
+            public int flags;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVSubtitle
+        {
+            public ushort format;
+
+            public uint start_display_time;
+
+            public uint end_display_time;
+
+            public uint num_rects;
+
+            public libavcodec.AVSubtitleRect** rects;
+
+            /// <summary>
+            /// Same as packet pts, in AV_TIME_BASE
+            /// </summary>
+            public long pts;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodecParserContext
+        {
+            public void* priv_data;
+
+            public libavcodec.AVCodecParser* parser;
+
+            public long frame_offset;
+
+            public long cur_offset;
+
+            public long next_frame_offset;
+
+            public int pict_type;
+
+            /// <summary>
+            /// This field is used for proper frame duration computation in lavf.
+            /// It signals, how much longer the frame duration of the current frame
+            /// is compared to normal frame duration.
+            /// 
+            /// frame_duration = (1 + repeat_pict) * time_base
+            /// 
+            /// It is used by codecs like H.264 to display telecined material.
+            /// </summary>
+            public int repeat_pict;
+
+            public long pts;
+
+            public long dts;
+
+            public long last_pts;
+
+            public long last_dts;
+
+            public int fetch_timestamp;
+
+            public int cur_frame_start_index;
+
+            public fixed long cur_frame_offset[4];
+
+            public fixed long cur_frame_pts[4];
+
+            public fixed long cur_frame_dts[4];
+
+            public int flags;
+
+            /// <summary>
+            /// byte offset from starting packet start
+            /// </summary>
+            public long offset;
+
+            public fixed long cur_frame_end[4];
+
+            /// <summary>
+            /// Set by parser to 1 for key frames and 0 for non-key frames.
+            /// It is initialized to -1, so if the parser doesn't set this flag,
+            /// old-style fallback using AV_PICTURE_TYPE_I picture type as key frames
+            /// will be used.
+            /// </summary>
+            public int key_frame;
+
+            /// <summary>
+            /// Time difference in stream time base units from the pts of this
+            /// packet to the point at which the output from the decoder has converged
+            /// independent from the availability of previous frames. That is, the
+            /// frames are virtually identical no matter if decoding started from
+            /// the very first frame or from this keyframe.
+            /// Is AV_NOPTS_VALUE if unknown.
+            /// This field is not the display duration of the current frame.
+            /// This field has no meaning if the packet does not have AV_PKT_FLAG_KEY
+            /// set.
+            /// 
+            /// The purpose of this field is to allow seeking in streams that have no
+            /// keyframes in the conventional sense. It corresponds to the
+            /// recovery point SEI in H.264 and match_time_delta in NUT. It is also
+            /// essential for some types of subtitle streams to ensure that all
+            /// subtitles are correctly displayed after seeking.
+            /// </summary>
+            public long convergence_duration;
+
+            /// <summary>
+            /// Synchronization point for start of timestamp generation.
+            /// 
+            /// Set to >0 for sync point, 0 for no sync point and <0 for undefined
+            /// (default).
+            /// 
+            /// For example, this corresponds to presence of H.264 buffering period
+            /// SEI message.
+            /// </summary>
+            public int dts_sync_point;
+
+            /// <summary>
+            /// Offset of the current timestamp against last timestamp sync point in
+            /// units of AVCodecContext.time_base.
+            /// 
+            /// Set to INT_MIN when dts_sync_point unused. Otherwise, it must
+            /// contain a valid timestamp offset.
+            /// 
+            /// Note that the timestamp of sync point has usually a nonzero
+            /// dts_ref_dts_delta, which refers to the previous sync point. Offset of
+            /// the next frame after timestamp sync point will be usually 1.
+            /// 
+            /// For example, this corresponds to H.264 cpb_removal_delay.
+            /// </summary>
+            public int dts_ref_dts_delta;
+
+            /// <summary>
+            /// Presentation delay of current frame in units of
+            /// AVCodecContext.time_base.
+            /// 
+            /// Set to INT_MIN when dts_sync_point unused. Otherwise, it must
+            /// contain valid non-negative timestamp delta (presentation time of a
+            /// frame
+            /// must not lie in the past).
+            /// 
+            /// This delay represents the difference between decoding and presentation
+            /// time of the frame.
+            /// 
+            /// For example, this corresponds to H.264 dpb_output_delay.
+            /// </summary>
+            public int pts_dts_delta;
+
+            /// <summary>
+            /// Position of the packet in file.
+            /// 
+            /// Analogous to cur_frame_pts/dts
+            /// </summary>
+            public fixed long cur_frame_pos[4];
+
+            /// <summary>
+            /// Byte position of currently parsed frame in stream.
+            /// </summary>
+            public long pos;
+
+            /// <summary>
+            /// Previous frame byte position.
+            /// </summary>
+            public long last_pos;
+
+            /// <summary>
+            /// Duration of the current frame.
+            /// For audio, this is in units of 1 / AVCodecContext.sample_rate.
+            /// For all other types, this is in units of AVCodecContext.time_base.
+            /// </summary>
+            public int duration;
+
+            public libavcodec.AVFieldOrder field_order;
+
+            /// <summary>
+            /// Indicate whether a picture is coded as a frame, top field or bottom
+            /// field.
+            /// 
+            /// For example, H.264 field_pic_flag equal to 0 corresponds to
+            /// AV_PICTURE_STRUCTURE_FRAME. An H.264 picture with field_pic_flag
+            /// equal to 1 and bottom_field_flag equal to 0 corresponds to
+            /// AV_PICTURE_STRUCTURE_TOP_FIELD.
+            /// </summary>
+            public libavcodec.AVPictureStructure picture_structure;
+
+            /// <summary>
+            /// Picture number incremented in presentation or output order.
+            /// This field may be reinitialized at the first picture of a new sequence.
+            /// 
+            /// For example, this corresponds to H.264 PicOrderCnt.
+            /// </summary>
+            public int output_picture_number;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVCodecParser
+        {
+            public fixed int codec_ids[5];
+
+            public int priv_data_size;
+
+            public global::System.IntPtr parser_init;
+
+            public global::System.IntPtr parser_parse;
+
+            public global::System.IntPtr parser_close;
+
+            public global::System.IntPtr split;
+
+            public libavcodec.AVCodecParser* next;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct ReSampleContext
+        {
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVResampleContext
+        {
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVBitStreamFilterContext
+        {
+            public void* priv_data;
+
+            public libavcodec.AVBitStreamFilter* filter;
+
+            public libavcodec.AVCodecParserContext* parser;
+
+            public libavcodec.AVBitStreamFilterContext* next;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVBitStreamFilter
+        {
+            public sbyte* name;
+
+            public int priv_data_size;
+
+            public global::System.IntPtr filter;
+
+            public global::System.IntPtr close;
+
+            public libavcodec.AVBitStreamFilter* next;
+        }
+
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_pkt_timebase")]
-        internal static extern AVRational* av_codec_get_pkt_timebase(AVCodecContext* avctx);
+        public static extern libavutil.AVRational av_codec_get_pkt_timebase(libavcodec.AVCodecContext* avctx);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_set_pkt_timebase")]
-        internal static extern void av_codec_set_pkt_timebase(AVCodecContext* avctx, AVRational* val);
+        public static extern void av_codec_set_pkt_timebase(libavcodec.AVCodecContext* avctx, libavutil.AVRational val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_codec_descriptor")]
-        internal static extern AVCodecDescriptor* av_codec_get_codec_descriptor(AVCodecContext* avctx);
+        public static extern libavcodec.AVCodecDescriptor* av_codec_get_codec_descriptor(libavcodec.AVCodecContext* avctx);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_set_codec_descriptor")]
-        internal static extern void av_codec_set_codec_descriptor(AVCodecContext* avctx, AVCodecDescriptor* desc);
+        public static extern void av_codec_set_codec_descriptor(libavcodec.AVCodecContext* avctx, libavcodec.AVCodecDescriptor* desc);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_lowres")]
-        internal static extern int av_codec_get_lowres(AVCodecContext* avctx);
+        public static extern int av_codec_get_lowres(libavcodec.AVCodecContext* avctx);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_set_lowres")]
-        internal static extern void av_codec_set_lowres(AVCodecContext* avctx, int val);
+        public static extern void av_codec_set_lowres(libavcodec.AVCodecContext* avctx, int val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_seek_preroll")]
-        internal static extern int av_codec_get_seek_preroll(AVCodecContext* avctx);
+        public static extern int av_codec_get_seek_preroll(libavcodec.AVCodecContext* avctx);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_set_seek_preroll")]
-        internal static extern void av_codec_set_seek_preroll(AVCodecContext* avctx, int val);
+        public static extern void av_codec_set_seek_preroll(libavcodec.AVCodecContext* avctx, int val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_get_max_lowres")]
-        internal static extern int av_codec_get_max_lowres(AVCodec* codec);
+        public static extern int av_codec_get_max_lowres(libavcodec.AVCodec* codec);
 
         /// <summary>
         /// If c is NULL, returns the first registered codec,
@@ -3955,33 +4016,37 @@ namespace libavcodec
         /// or NULL if c is the last one.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_next")]
-        internal static extern AVCodec* av_codec_next(AVCodec* c);
+        public static extern libavcodec.AVCodec* av_codec_next(libavcodec.AVCodec* c);
 
         /// <summary>
         /// Return the LIBAVCODEC_VERSION_INT constant.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_version")]
-        internal static extern uint avcodec_version();
+        public static extern uint avcodec_version();
 
         /// <summary>
         /// Return the libavcodec build-time configuration.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_configuration")]
-        internal static extern global::System.IntPtr avcodec_configuration();
+        public static extern sbyte* avcodec_configuration();
 
         /// <summary>
         /// Return the libavcodec license.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_license")]
-        internal static extern global::System.IntPtr avcodec_license();
+        public static extern sbyte* avcodec_license();
 
         /// <summary>
         /// Register the codec codec and initialize libavcodec.
@@ -3992,9 +4057,10 @@ namespace libavcodec
         /// @see avcodec_register_all()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_register")]
-        internal static extern void avcodec_register(AVCodec* codec);
+        public static extern void avcodec_register(libavcodec.AVCodec* codec);
 
         /// <summary>
         /// Register all the codecs, parsers and bitstream filters which were
@@ -4009,9 +4075,10 @@ namespace libavcodec
         /// @see av_register_bitstream_filter
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_register_all")]
-        internal static extern void avcodec_register_all();
+        public static extern void avcodec_register_all();
 
         /// <summary>
         /// Allocate an AVCodecContext and set its fields to default values.  The
@@ -4031,9 +4098,10 @@ namespace libavcodec
         /// @see avcodec_get_context_defaults
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_alloc_context3")]
-        internal static extern AVCodecContext* avcodec_alloc_context3(AVCodec* codec);
+        public static extern libavcodec.AVCodecContext* avcodec_alloc_context3(libavcodec.AVCodec* codec);
 
         /// <summary>
         /// Set the fields of the given AVCodecContext to default values
@@ -4046,9 +4114,10 @@ namespace libavcodec
         /// different codec on this AVCodecContext.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_context_defaults3")]
-        internal static extern int avcodec_get_context_defaults3(AVCodecContext* s, AVCodec* codec);
+        public static extern int avcodec_get_context_defaults3(libavcodec.AVCodecContext* s, libavcodec.AVCodec* codec);
 
         /// <summary>
         /// Get the AVClass for AVCodecContext. It can be used in combination with
@@ -4057,9 +4126,10 @@ namespace libavcodec
         /// @see av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_class")]
-        internal static extern AVClass* avcodec_get_class();
+        public static extern libavutil.AVClass* avcodec_get_class();
 
         /// <summary>
         /// Get the AVClass for AVFrame. It can be used in combination with
@@ -4068,9 +4138,10 @@ namespace libavcodec
         /// @see av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_frame_class")]
-        internal static extern AVClass* avcodec_get_frame_class();
+        public static extern libavutil.AVClass* avcodec_get_frame_class();
 
         /// <summary>
         /// Get the AVClass for AVSubtitleRect. It can be used in combination with
@@ -4079,9 +4150,10 @@ namespace libavcodec
         /// @see av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_subtitle_rect_class")]
-        internal static extern AVClass* avcodec_get_subtitle_rect_class();
+        public static extern libavutil.AVClass* avcodec_get_subtitle_rect_class();
 
         /// <summary>
         /// Copy the settings of the source AVCodecContext into the destination
@@ -4095,9 +4167,10 @@ namespace libavcodec
         /// @return AVERROR() on error (e.g. memory allocation error), 0 on success
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_copy_context")]
-        internal static extern int avcodec_copy_context(AVCodecContext* dest, AVCodecContext* src);
+        public static extern int avcodec_copy_context(libavcodec.AVCodecContext* dest, libavcodec.AVCodecContext* src);
 
         /// <summary>
         /// Allocate an AVFrame and set its fields to default values.  The
@@ -4108,9 +4181,10 @@ namespace libavcodec
         /// @see avcodec_get_frame_defaults
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_alloc_frame")]
-        internal static extern AVFrame* avcodec_alloc_frame();
+        public static extern libavutil.AVFrame* avcodec_alloc_frame();
 
         /// <summary>
         /// Set the fields of the given AVFrame to default values.
@@ -4119,9 +4193,10 @@ namespace libavcodec
         /// values.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_frame_defaults")]
-        internal static extern void avcodec_get_frame_defaults(AVFrame* frame);
+        public static extern void avcodec_get_frame_defaults(libavutil.AVFrame* frame);
 
         /// <summary>
         /// Free the frame and any dynamically allocated objects in it,
@@ -4134,9 +4209,26 @@ namespace libavcodec
         /// a custom get_buffer()).
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_free_frame")]
-        internal static extern void avcodec_free_frame(AVFrame* frame);
+        public static extern void avcodec_free_frame(libavutil.AVFrame** frame);
+
+        /// <summary>
+        /// Free the frame and any dynamically allocated objects in it,
+        /// e.g. extended_data.
+        /// 
+        /// @param frame frame to be freed. The pointer will be set to NULL.
+        /// 
+        /// @warning this function does NOT free the data buffers themselves
+        /// (it does not know how, since they might have been allocated with
+        /// a custom get_buffer()).
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avcodec_free_frame")]
+        public static extern void avcodec_free_frame(ref libavutil.AVFrame* frame);
 
         /// <summary>
         /// Initialize the AVCodecContext to use the given AVCodec. Prior to using
@@ -4181,9 +4273,58 @@ namespace libavcodec
         /// av_dict_set(), av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_open2")]
-        internal static extern int avcodec_open2(AVCodecContext* avctx, AVCodec* codec, AVDictionary* options);
+        public static extern int avcodec_open2(libavcodec.AVCodecContext* avctx, libavcodec.AVCodec* codec, libavutil.AVDictionary** options);
+
+        /// <summary>
+        /// Initialize the AVCodecContext to use the given AVCodec. Prior to using
+        /// this
+        /// function the context has to be allocated with avcodec_alloc_context3().
+        /// 
+        /// The functions avcodec_find_decoder_by_name(),
+        /// avcodec_find_encoder_by_name(),
+        /// avcodec_find_decoder() and avcodec_find_encoder() provide an easy way
+        /// for
+        /// retrieving a codec.
+        /// 
+        /// @warning This function is not thread safe!
+        /// 
+        /// @code
+        /// avcodec_register_all();
+        /// av_dict_set(&opts, "b", "2.5M", 0);
+        /// codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+        /// if (!codec)
+        /// exit(1);
+        /// 
+        /// context = avcodec_alloc_context3(codec);
+        /// 
+        /// if (avcodec_open2(context, codec, opts) < 0)
+        /// exit(1);
+        /// @endcode
+        /// 
+        /// @param avctx The context to initialize.
+        /// @param codec The codec to open this context for. If a non-NULL codec
+        /// has been
+        /// previously passed to avcodec_alloc_context3() or
+        /// avcodec_get_context_defaults3() for this context, then this
+        /// parameter MUST be either NULL or equal to the previously passed
+        /// codec.
+        /// @param options A dictionary filled with AVCodecContext and
+        /// codec-private options.
+        /// On return this object will be filled with options that were not found.
+        /// 
+        /// @return zero on success, a negative value on error
+        /// @see avcodec_alloc_context3(), avcodec_find_decoder(),
+        /// avcodec_find_encoder(),
+        /// av_dict_set(), av_opt_find().
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avcodec_open2")]
+        public static extern int avcodec_open2(libavcodec.AVCodecContext* avctx, libavcodec.AVCodec* codec, ref libavutil.AVDictionary* options);
 
         /// <summary>
         /// Close a given AVCodecContext and free all the data associated with it
@@ -4191,15 +4332,16 @@ namespace libavcodec
         /// 
         /// Calling this function on an AVCodecContext that hasn't been opened will
         /// free
-        /// the codec-specific data allocated in avcodec_alloc_context3() /
+        /// the codec-specific data allocated in avcodec_alloc_context3()
         /// avcodec_get_context_defaults3() with a non-NULL codec. Subsequent calls
         /// will
         /// do nothing.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_close")]
-        internal static extern int avcodec_close(AVCodecContext* avctx);
+        public static extern int avcodec_close(libavcodec.AVCodecContext* avctx);
 
         /// <summary>
         /// Free all allocated data in the given subtitle struct.
@@ -4207,18 +4349,20 @@ namespace libavcodec
         /// @param sub AVSubtitle to free.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avsubtitle_free")]
-        internal static extern void avsubtitle_free(AVSubtitle* sub);
+        public static extern void avsubtitle_free(libavcodec.AVSubtitle* sub);
 
         /// <summary>
         /// Default packet destructor.
         /// @deprecated use the AVBuffer API instead
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_destruct_packet")]
-        internal static extern void av_destruct_packet(AVPacket* pkt);
+        public static extern void av_destruct_packet(libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Initialize optional fields of a packet with default values.
@@ -4229,9 +4373,10 @@ namespace libavcodec
         /// @param pkt packet
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_init_packet")]
-        internal static extern void av_init_packet(AVPacket* pkt);
+        public static extern void av_init_packet(libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Allocate the payload of a packet and initialize its fields with
@@ -4242,9 +4387,10 @@ namespace libavcodec
         /// @return 0 if OK, AVERROR_xxx otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_new_packet")]
-        internal static extern int av_new_packet(AVPacket* pkt, int size);
+        public static extern int av_new_packet(libavcodec.AVPacket* pkt, int size);
 
         /// <summary>
         /// Reduce packet size, correctly zeroing padding
@@ -4253,9 +4399,10 @@ namespace libavcodec
         /// @param size new size
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_shrink_packet")]
-        internal static extern void av_shrink_packet(AVPacket* pkt, int size);
+        public static extern void av_shrink_packet(libavcodec.AVPacket* pkt, int size);
 
         /// <summary>
         /// Increase packet size, correctly zeroing padding
@@ -4265,9 +4412,10 @@ namespace libavcodec
         /// packet
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_grow_packet")]
-        internal static extern int av_grow_packet(AVPacket* pkt, int grow_by);
+        public static extern int av_grow_packet(libavcodec.AVPacket* pkt, int grow_by);
 
         /// <summary>
         /// Initialize a reference-counted packet from av_malloc()ed data.
@@ -4287,14 +4435,16 @@ namespace libavcodec
         /// @return 0 on success, a negative AVERROR on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_from_data")]
-        internal static extern int av_packet_from_data(AVPacket* pkt, byte* data, int size);
+        public static extern int av_packet_from_data(libavcodec.AVPacket* pkt, byte* data, int size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_dup_packet")]
-        internal static extern int av_dup_packet(AVPacket* pkt);
+        public static extern int av_dup_packet(libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Copy packet, including contents
@@ -4302,9 +4452,10 @@ namespace libavcodec
         /// @return 0 on success, negative AVERROR on fail
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_copy_packet")]
-        internal static extern int av_copy_packet(AVPacket* dst, AVPacket* src);
+        public static extern int av_copy_packet(libavcodec.AVPacket* dst, libavcodec.AVPacket* src);
 
         /// <summary>
         /// Copy packet side data
@@ -4312,9 +4463,10 @@ namespace libavcodec
         /// @return 0 on success, negative AVERROR on fail
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_copy_packet_side_data")]
-        internal static extern int av_copy_packet_side_data(AVPacket* dst, AVPacket* src);
+        public static extern int av_copy_packet_side_data(libavcodec.AVPacket* dst, libavcodec.AVPacket* src);
 
         /// <summary>
         /// Free a packet.
@@ -4322,9 +4474,10 @@ namespace libavcodec
         /// @param pkt packet to free
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_free_packet")]
-        internal static extern void av_free_packet(AVPacket* pkt);
+        public static extern void av_free_packet(libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Allocate new information of a packet.
@@ -4335,9 +4488,10 @@ namespace libavcodec
         /// @return pointer to fresh allocated data or NULL otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_new_side_data")]
-        internal static extern byte* av_packet_new_side_data(AVPacket* pkt, AVPacketSideDataType type, int size);
+        public static extern byte* av_packet_new_side_data(libavcodec.AVPacket* pkt, libavcodec.AVPacketSideDataType type, int size);
 
         /// <summary>
         /// Shrink the already allocated side data buffer
@@ -4348,9 +4502,10 @@ namespace libavcodec
         /// @return 0 on success, < 0 on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_shrink_side_data")]
-        internal static extern int av_packet_shrink_side_data(AVPacket* pkt, AVPacketSideDataType type, int size);
+        public static extern int av_packet_shrink_side_data(libavcodec.AVPacket* pkt, libavcodec.AVPacketSideDataType type, int size);
 
         /// <summary>
         /// Get side information from packet.
@@ -4361,19 +4516,22 @@ namespace libavcodec
         /// @return pointer to data if present or NULL otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_get_side_data")]
-        internal static extern byte* av_packet_get_side_data(AVPacket* pkt, AVPacketSideDataType type, int* size);
+        public static extern byte* av_packet_get_side_data(libavcodec.AVPacket* pkt, libavcodec.AVPacketSideDataType type, int* size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_merge_side_data")]
-        internal static extern int av_packet_merge_side_data(AVPacket* pkt);
+        public static extern int av_packet_merge_side_data(libavcodec.AVPacket* pkt);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_split_side_data")]
-        internal static extern int av_packet_split_side_data(AVPacket* pkt);
+        public static extern int av_packet_split_side_data(libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Convenience function to free all the side data stored.
@@ -4382,9 +4540,10 @@ namespace libavcodec
         /// @param pkt packet
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_free_side_data")]
-        internal static extern void av_packet_free_side_data(AVPacket* pkt);
+        public static extern void av_packet_free_side_data(libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Setup a new reference to the data described by a given packet
@@ -4403,9 +4562,10 @@ namespace libavcodec
         /// @return 0 on success, a negative AVERROR on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_ref")]
-        internal static extern int av_packet_ref(AVPacket* dst, AVPacket* src);
+        public static extern int av_packet_ref(libavcodec.AVPacket* dst, libavcodec.AVPacket* src);
 
         /// <summary>
         /// Wipe the packet.
@@ -4416,9 +4576,10 @@ namespace libavcodec
         /// @param pkt The packet to be unreferenced.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_unref")]
-        internal static extern void av_packet_unref(AVPacket* pkt);
+        public static extern void av_packet_unref(libavcodec.AVPacket* pkt);
 
         /// <summary>
         /// Move every field in src to dst and reset src.
@@ -4429,9 +4590,10 @@ namespace libavcodec
         /// @param dst Destination packet
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_move_ref")]
-        internal static extern void av_packet_move_ref(AVPacket* dst, AVPacket* src);
+        public static extern void av_packet_move_ref(libavcodec.AVPacket* dst, libavcodec.AVPacket* src);
 
         /// <summary>
         /// Copy only "properties" fields from src to dst.
@@ -4446,9 +4608,10 @@ namespace libavcodec
         /// 
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_packet_copy_props")]
-        internal static extern int av_packet_copy_props(AVPacket* dst, AVPacket* src);
+        public static extern int av_packet_copy_props(libavcodec.AVPacket* dst, libavcodec.AVPacket* src);
 
         /// <summary>
         /// Find a registered decoder with a matching codec ID.
@@ -4457,9 +4620,10 @@ namespace libavcodec
         /// @return A decoder if one was found, NULL otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_find_decoder")]
-        internal static extern AVCodec* avcodec_find_decoder(AVCodecID id);
+        public static extern libavcodec.AVCodec* avcodec_find_decoder(libavcodec.AVCodecID id);
 
         /// <summary>
         /// Find a registered decoder with the specified name.
@@ -4468,24 +4632,28 @@ namespace libavcodec
         /// @return A decoder if one was found, NULL otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_find_decoder_by_name")]
-        internal static extern AVCodec* avcodec_find_decoder_by_name(global::System.IntPtr name);
+        public static extern libavcodec.AVCodec* avcodec_find_decoder_by_name(string name);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_get_buffer")]
-        internal static extern int avcodec_default_get_buffer(AVCodecContext* s, AVFrame* pic);
+        public static extern int avcodec_default_get_buffer(libavcodec.AVCodecContext* s, libavutil.AVFrame* pic);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_release_buffer")]
-        internal static extern void avcodec_default_release_buffer(AVCodecContext* s, AVFrame* pic);
+        public static extern void avcodec_default_release_buffer(libavcodec.AVCodecContext* s, libavutil.AVFrame* pic);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_reget_buffer")]
-        internal static extern int avcodec_default_reget_buffer(AVCodecContext* s, AVFrame* pic);
+        public static extern int avcodec_default_reget_buffer(libavcodec.AVCodecContext* s, libavutil.AVFrame* pic);
 
         /// <summary>
         /// The default callback for AVCodecContext.get_buffer2(). It is made
@@ -4495,9 +4663,10 @@ namespace libavcodec
         /// CODEC_CAP_DR1 set.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_get_buffer2")]
-        internal static extern int avcodec_default_get_buffer2(AVCodecContext* s, AVFrame* frame, int flags);
+        public static extern int avcodec_default_get_buffer2(libavcodec.AVCodecContext* s, libavutil.AVFrame* frame, int flags);
 
         /// <summary>
         /// Return the amount of padding in pixels which the get_buffer callback
@@ -4508,9 +4677,10 @@ namespace libavcodec
         /// @return Required padding in pixels.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_edge_width")]
-        internal static extern uint avcodec_get_edge_width();
+        public static extern uint avcodec_get_edge_width();
 
         /// <summary>
         /// Modify width and height values so that they will result in a memory
@@ -4524,9 +4694,10 @@ namespace libavcodec
         /// according to avcodec_get_edge_width() before.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_align_dimensions")]
-        internal static extern void avcodec_align_dimensions(AVCodecContext* s, int* width, int* height);
+        public static extern void avcodec_align_dimensions(libavcodec.AVCodecContext* s, int* width, int* height);
 
         /// <summary>
         /// Modify width and height values so that they will result in a memory
@@ -4539,9 +4710,10 @@ namespace libavcodec
         /// according to avcodec_get_edge_width() before.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_align_dimensions2")]
-        internal static extern void avcodec_align_dimensions2(AVCodecContext* s, int* width, int* height, int* linesize_align);
+        public static extern void avcodec_align_dimensions2(libavcodec.AVCodecContext* s, int* width, int* height, int* linesize_align);
 
         /// <summary>
         /// Converts AVChromaLocation to swscale x/y chroma position.
@@ -4555,9 +4727,10 @@ namespace libavcodec
         /// @param ypos  vertical   chroma sample position
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_enum_to_chroma_pos")]
-        internal static extern int avcodec_enum_to_chroma_pos(int* xpos, int* ypos, AVChromaLocation pos);
+        public static extern int avcodec_enum_to_chroma_pos(int* xpos, int* ypos, libavcodec.AVChromaLocation pos);
 
         /// <summary>
         /// Converts swscale x/y chroma position to AVChromaLocation.
@@ -4571,9 +4744,10 @@ namespace libavcodec
         /// @param ypos  vertical   chroma sample position
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_chroma_pos_to_enum")]
-        internal static extern AVChromaLocation avcodec_chroma_pos_to_enum(int xpos, int ypos);
+        public static extern libavcodec.AVChromaLocation avcodec_chroma_pos_to_enum(int xpos, int ypos);
 
         /// <summary>
         /// Wrapper function which calls avcodec_decode_audio4.
@@ -4640,9 +4814,10 @@ namespace libavcodec
         /// AVPacket.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_decode_audio3")]
-        internal static extern int avcodec_decode_audio3(AVCodecContext* avctx, short* samples, int* frame_size_ptr, AVPacket* avpkt);
+        public static extern int avcodec_decode_audio3(libavcodec.AVCodecContext* avctx, short* samples, int* frame_size_ptr, libavcodec.AVPacket* avpkt);
 
         /// <summary>
         /// Decode the audio frame of size avpkt->size from avpkt->data into frame.
@@ -4702,9 +4877,10 @@ namespace libavcodec
         /// AVPacket is returned.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_decode_audio4")]
-        internal static extern int avcodec_decode_audio4(AVCodecContext* avctx, AVFrame* frame, int* got_frame_ptr, AVPacket* avpkt);
+        public static extern int avcodec_decode_audio4(libavcodec.AVCodecContext* avctx, libavutil.AVFrame* frame, int* got_frame_ptr, libavcodec.AVPacket* avpkt);
 
         /// <summary>
         /// Decode the video frame of size avpkt->size from avpkt->data into
@@ -4754,9 +4930,10 @@ namespace libavcodec
         /// used or zero if no frame could be decompressed.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_decode_video2")]
-        internal static extern int avcodec_decode_video2(AVCodecContext* avctx, AVFrame* picture, int* got_picture_ptr, AVPacket* avpkt);
+        public static extern int avcodec_decode_video2(libavcodec.AVCodecContext* avctx, libavutil.AVFrame* picture, int* got_picture_ptr, libavcodec.AVPacket* avpkt);
 
         /// <summary>
         /// Decode a subtitle message.
@@ -4793,24 +4970,28 @@ namespace libavcodec
         /// @param[in] avpkt The input AVPacket containing the input buffer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_decode_subtitle2")]
-        internal static extern int avcodec_decode_subtitle2(AVCodecContext* avctx, AVSubtitle* sub, int* got_sub_ptr, AVPacket* avpkt);
+        public static extern int avcodec_decode_subtitle2(libavcodec.AVCodecContext* avctx, libavcodec.AVSubtitle* sub, int* got_sub_ptr, libavcodec.AVPacket* avpkt);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parser_next")]
-        internal static extern AVCodecParser* av_parser_next(AVCodecParser* c);
+        public static extern libavcodec.AVCodecParser* av_parser_next(libavcodec.AVCodecParser* c);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_register_codec_parser")]
-        internal static extern void av_register_codec_parser(AVCodecParser* parser);
+        public static extern void av_register_codec_parser(libavcodec.AVCodecParser* parser);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parser_init")]
-        internal static extern AVCodecParserContext* av_parser_init(int codec_id);
+        public static extern libavcodec.AVCodecParserContext* av_parser_init(int codec_id);
 
         /// <summary>
         /// Parse a packet.
@@ -4844,9 +5025,47 @@ namespace libavcodec
         /// @endcode
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parser_parse2")]
-        internal static extern int av_parser_parse2(AVCodecParserContext* s, AVCodecContext* avctx, byte* poutbuf, int* poutbuf_size, byte* buf, int buf_size, long pts, long dts, long pos);
+        public static extern int av_parser_parse2(libavcodec.AVCodecParserContext* s, libavcodec.AVCodecContext* avctx, byte** poutbuf, int* poutbuf_size, byte* buf, int buf_size, long pts, long dts, long pos);
+
+        /// <summary>
+        /// Parse a packet.
+        /// 
+        /// @param s             parser context.
+        /// @param avctx         codec context.
+        /// @param poutbuf       set to pointer to parsed buffer or NULL if not yet
+        /// finished.
+        /// @param poutbuf_size  set to size of parsed buffer or zero if not yet
+        /// finished.
+        /// @param buf           input buffer.
+        /// @param buf_size      input length, to signal EOF, this should be 0 (so
+        /// that the last frame can be output).
+        /// @param pts           input presentation timestamp.
+        /// @param dts           input decoding timestamp.
+        /// @param pos           input byte position in stream.
+        /// @return the number of bytes of the input bitstream used.
+        /// 
+        /// Example:
+        /// @code
+        /// while(in_len){
+        /// len = av_parser_parse2(myparser, AVCodecContext, &data, &size,
+        /// in_data, in_len,
+        /// pts, dts, pos);
+        /// in_data += len;
+        /// in_len  -= len;
+        /// 
+        /// if(size)
+        /// decode_frame(data, size);
+        /// }
+        /// @endcode
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_parser_parse2")]
+        public static extern int av_parser_parse2(libavcodec.AVCodecParserContext* s, libavcodec.AVCodecContext* avctx, ref byte* poutbuf, int* poutbuf_size, byte* buf, int buf_size, long pts, long dts, long pos);
 
         /// <summary>
         /// @return 0 if the output buffer is a subset of the input, 1 if it is
@@ -4854,14 +5073,27 @@ namespace libavcodec
         /// @deprecated use AVBitStreamFilter
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parser_change")]
-        internal static extern int av_parser_change(AVCodecParserContext* s, AVCodecContext* avctx, byte* poutbuf, int* poutbuf_size, byte* buf, int buf_size, int keyframe);
+        public static extern int av_parser_change(libavcodec.AVCodecParserContext* s, libavcodec.AVCodecContext* avctx, byte** poutbuf, int* poutbuf_size, byte* buf, int buf_size, int keyframe);
+
+        /// <summary>
+        /// @return 0 if the output buffer is a subset of the input, 1 if it is
+        /// allocated and must be freed
+        /// @deprecated use AVBitStreamFilter
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_parser_change")]
+        public static extern int av_parser_change(libavcodec.AVCodecParserContext* s, libavcodec.AVCodecContext* avctx, ref byte* poutbuf, int* poutbuf_size, byte* buf, int buf_size, int keyframe);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parser_close")]
-        internal static extern void av_parser_close(AVCodecParserContext* s);
+        public static extern void av_parser_close(libavcodec.AVCodecParserContext* s);
 
         /// <summary>
         /// Find a registered encoder with a matching codec ID.
@@ -4870,9 +5102,10 @@ namespace libavcodec
         /// @return An encoder if one was found, NULL otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_find_encoder")]
-        internal static extern AVCodec* avcodec_find_encoder(AVCodecID id);
+        public static extern libavcodec.AVCodec* avcodec_find_encoder(libavcodec.AVCodecID id);
 
         /// <summary>
         /// Find a registered encoder with the specified name.
@@ -4881,9 +5114,10 @@ namespace libavcodec
         /// @return An encoder if one was found, NULL otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_find_encoder_by_name")]
-        internal static extern AVCodec* avcodec_find_encoder_by_name(global::System.IntPtr name);
+        public static extern libavcodec.AVCodec* avcodec_find_encoder_by_name(string name);
 
         /// <summary>
         /// Encode an audio frame from samples into buf.
@@ -4917,9 +5151,10 @@ namespace libavcodec
         /// of bytes used to encode the data read from the input buffer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_encode_audio")]
-        internal static extern int avcodec_encode_audio(AVCodecContext* avctx, byte* buf, int buf_size, short* samples);
+        public static extern int avcodec_encode_audio(libavcodec.AVCodecContext* avctx, byte* buf, int buf_size, short* samples);
 
         /// <summary>
         /// Encode a frame of audio.
@@ -4963,9 +5198,10 @@ namespace libavcodec
         /// @return          0 on success, negative error code on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_encode_audio2")]
-        internal static extern int avcodec_encode_audio2(AVCodecContext* avctx, AVPacket* avpkt, AVFrame* frame, int* got_packet_ptr);
+        public static extern int avcodec_encode_audio2(libavcodec.AVCodecContext* avctx, libavcodec.AVPacket* avpkt, libavutil.AVFrame* frame, int* got_packet_ptr);
 
         /// <summary>
         /// @deprecated use avcodec_encode_video2() instead.
@@ -4983,9 +5219,10 @@ namespace libavcodec
         /// of bytes used from the output buffer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_encode_video")]
-        internal static extern int avcodec_encode_video(AVCodecContext* avctx, byte* buf, int buf_size, AVFrame* pict);
+        public static extern int avcodec_encode_video(libavcodec.AVCodecContext* avctx, byte* buf, int buf_size, libavutil.AVFrame* pict);
 
         /// <summary>
         /// Encode a frame of video.
@@ -5024,14 +5261,16 @@ namespace libavcodec
         /// @return          0 on success, negative error code on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_encode_video2")]
-        internal static extern int avcodec_encode_video2(AVCodecContext* avctx, AVPacket* avpkt, AVFrame* frame, int* got_packet_ptr);
+        public static extern int avcodec_encode_video2(libavcodec.AVCodecContext* avctx, libavcodec.AVPacket* avpkt, libavutil.AVFrame* frame, int* got_packet_ptr);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_encode_subtitle")]
-        internal static extern int avcodec_encode_subtitle(AVCodecContext* avctx, byte* buf, int buf_size, AVSubtitle* sub);
+        public static extern int avcodec_encode_subtitle(libavcodec.AVCodecContext* avctx, byte* buf, int buf_size, libavcodec.AVSubtitle* sub);
 
         /// <summary>
         /// Initialize audio resampling context.
@@ -5054,14 +5293,16 @@ namespace libavcodec
         /// @return allocated ReSampleContext, NULL if error occurred
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_resample_init")]
-        internal static extern ReSampleContext* av_audio_resample_init(int output_channels, int input_channels, int output_rate, int input_rate, AVSampleFormat sample_fmt_out, AVSampleFormat sample_fmt_in, int filter_length, int log2_phase_count, int linear, double cutoff);
+        public static extern libavcodec.ReSampleContext* av_audio_resample_init(int output_channels, int input_channels, int output_rate, int input_rate, libavutil.AVSampleFormat sample_fmt_out, libavutil.AVSampleFormat sample_fmt_in, int filter_length, int log2_phase_count, int linear, double cutoff);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="audio_resample")]
-        internal static extern int audio_resample(ReSampleContext* s, short* output, short* input, int nb_samples);
+        public static extern int audio_resample(libavcodec.ReSampleContext* s, short* output, short* input, int nb_samples);
 
         /// <summary>
         /// Free resample context.
@@ -5070,9 +5311,10 @@ namespace libavcodec
         /// created with av_audio_resample_init()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="audio_resample_close")]
-        internal static extern void audio_resample_close(ReSampleContext* s);
+        public static extern void audio_resample_close(libavcodec.ReSampleContext* s);
 
         /// <summary>
         /// Initialize an audio resampler.
@@ -5089,9 +5331,10 @@ namespace libavcodec
         /// sampling rate
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_resample_init")]
-        internal static extern AVResampleContext* av_resample_init(int out_rate, int in_rate, int filter_length, int log2_phase_count, int linear, double cutoff);
+        public static extern libavcodec.AVResampleContext* av_resample_init(int out_rate, int in_rate, int filter_length, int log2_phase_count, int linear, double cutoff);
 
         /// <summary>
         /// Resample an array of samples using a previously configured context.
@@ -5105,9 +5348,10 @@ namespace libavcodec
         /// @return the number of samples written in dst or -1 if an error occurred
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_resample")]
-        internal static extern int av_resample(AVResampleContext* c, short* dst, short* src, int* consumed, int src_size, int dst_size, int update_ctx);
+        public static extern int av_resample(libavcodec.AVResampleContext* c, short* dst, short* src, int* consumed, int src_size, int dst_size, int update_ctx);
 
         /// <summary>
         /// Compensate samplerate/timestamp drift. The compensation is done by
@@ -5128,14 +5372,16 @@ namespace libavcodec
         /// during init is small
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_resample_compensate")]
-        internal static extern void av_resample_compensate(AVResampleContext* c, int sample_delta, int compensation_distance);
+        public static extern void av_resample_compensate(libavcodec.AVResampleContext* c, int sample_delta, int compensation_distance);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_resample_close")]
-        internal static extern void av_resample_close(AVResampleContext* c);
+        public static extern void av_resample_close(libavcodec.AVResampleContext* c);
 
         /// <summary>
         /// Allocate memory for the pixels of a picture and setup the AVPicture
@@ -5152,9 +5398,10 @@ namespace libavcodec
         /// @see av_image_alloc(), avpicture_fill()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avpicture_alloc")]
-        internal static extern int avpicture_alloc(AVPicture* picture, AVPixelFormat pix_fmt, int width, int height);
+        public static extern int avpicture_alloc(libavcodec.AVPicture* picture, libavutil.AVPixelFormat pix_fmt, int width, int height);
 
         /// <summary>
         /// Free a picture previously allocated by avpicture_alloc().
@@ -5165,9 +5412,10 @@ namespace libavcodec
         /// @param picture the AVPicture to be freed
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avpicture_free")]
-        internal static extern void avpicture_free(AVPicture* picture);
+        public static extern void avpicture_free(libavcodec.AVPicture* picture);
 
         /// <summary>
         /// Setup the picture fields based on the specified image parameters
@@ -5193,9 +5441,10 @@ namespace libavcodec
         /// @see av_image_fill_arrays()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avpicture_fill")]
-        internal static extern int avpicture_fill(AVPicture* picture, byte* ptr, AVPixelFormat pix_fmt, int width, int height);
+        public static extern int avpicture_fill(libavcodec.AVPicture* picture, byte* ptr, libavutil.AVPixelFormat pix_fmt, int width, int height);
 
         /// <summary>
         /// Copy pixel data from an AVPicture into a buffer.
@@ -5216,9 +5465,10 @@ namespace libavcodec
         /// @see av_image_copy_to_buffer()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avpicture_layout")]
-        internal static extern int avpicture_layout(AVPicture* src, AVPixelFormat pix_fmt, int width, int height, byte* dest, int dest_size);
+        public static extern int avpicture_layout(libavcodec.AVPicture* src, libavutil.AVPixelFormat pix_fmt, int width, int height, byte* dest, int dest_size);
 
         /// <summary>
         /// Calculate the size in bytes that a picture of the given width and
@@ -5234,9 +5484,10 @@ namespace libavcodec
         /// @see av_image_get_buffer_size().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avpicture_get_size")]
-        internal static extern int avpicture_get_size(AVPixelFormat pix_fmt, int width, int height);
+        public static extern int avpicture_get_size(libavutil.AVPixelFormat pix_fmt, int width, int height);
 
         /// <summary>
         /// deinterlace - if not supported return -1
@@ -5244,33 +5495,37 @@ namespace libavcodec
         /// @deprecated - use yadif (in libavfilter) instead
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avpicture_deinterlace")]
-        internal static extern int avpicture_deinterlace(AVPicture* dst, AVPicture* src, AVPixelFormat pix_fmt, int width, int height);
+        public static extern int avpicture_deinterlace(libavcodec.AVPicture* dst, libavcodec.AVPicture* src, libavutil.AVPixelFormat pix_fmt, int width, int height);
 
         /// <summary>
         /// Copy image src to dst. Wraps av_image_copy().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_picture_copy")]
-        internal static extern void av_picture_copy(AVPicture* dst, AVPicture* src, AVPixelFormat pix_fmt, int width, int height);
+        public static extern void av_picture_copy(libavcodec.AVPicture* dst, libavcodec.AVPicture* src, libavutil.AVPixelFormat pix_fmt, int width, int height);
 
         /// <summary>
         /// Crop image top and left side.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_picture_crop")]
-        internal static extern int av_picture_crop(AVPicture* dst, AVPicture* src, AVPixelFormat pix_fmt, int top_band, int left_band);
+        public static extern int av_picture_crop(libavcodec.AVPicture* dst, libavcodec.AVPicture* src, libavutil.AVPixelFormat pix_fmt, int top_band, int left_band);
 
         /// <summary>
         /// Pad image.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_picture_pad")]
-        internal static extern int av_picture_pad(AVPicture* dst, AVPicture* src, int height, int width, AVPixelFormat pix_fmt, int padtop, int padbottom, int padleft, int padright, int* color);
+        public static extern int av_picture_pad(libavcodec.AVPicture* dst, libavcodec.AVPicture* src, int height, int width, libavutil.AVPixelFormat pix_fmt, int padtop, int padbottom, int padleft, int padright, int* color);
 
         /// <summary>
         /// Utility function to access log2_chroma_w log2_chroma_h from
@@ -5288,9 +5543,10 @@ namespace libavcodec
         /// @see av_pix_fmt_get_chroma_sub_sample
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_chroma_sub_sample")]
-        internal static extern void avcodec_get_chroma_sub_sample(AVPixelFormat pix_fmt, int* h_shift, int* v_shift);
+        public static extern void avcodec_get_chroma_sub_sample(libavutil.AVPixelFormat pix_fmt, int* h_shift, int* v_shift);
 
         /// <summary>
         /// Return a value representing the fourCC code associated to the
@@ -5298,9 +5554,10 @@ namespace libavcodec
         /// found.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_pix_fmt_to_codec_tag")]
-        internal static extern uint avcodec_pix_fmt_to_codec_tag(AVPixelFormat pix_fmt);
+        public static extern uint avcodec_pix_fmt_to_codec_tag(libavutil.AVPixelFormat pix_fmt);
 
         /// <summary>
         /// Compute what kind of losses will occur when converting from one
@@ -5330,9 +5587,10 @@ namespace libavcodec
         /// (maximum loss for an invalid dst_pix_fmt).
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_pix_fmt_loss")]
-        internal static extern int avcodec_get_pix_fmt_loss(AVPixelFormat dst_pix_fmt, AVPixelFormat src_pix_fmt, int has_alpha);
+        public static extern int avcodec_get_pix_fmt_loss(libavutil.AVPixelFormat dst_pix_fmt, libavutil.AVPixelFormat src_pix_fmt, int has_alpha);
 
         /// <summary>
         /// Find the best pixel format to convert to given a certain source pixel
@@ -5359,9 +5617,10 @@ namespace libavcodec
         /// @return The best pixel format to convert to or -1 if none was found.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_find_best_pix_fmt_of_list")]
-        internal static extern AVPixelFormat avcodec_find_best_pix_fmt_of_list(AVPixelFormat pix_fmt_list, AVPixelFormat src_pix_fmt, int has_alpha, int* loss_ptr);
+        public static extern libavutil.AVPixelFormat avcodec_find_best_pix_fmt_of_list(libavutil.AVPixelFormat* pix_fmt_list, libavutil.AVPixelFormat src_pix_fmt, int has_alpha, int* loss_ptr);
 
         /// <summary>
         /// Find the best pixel format to convert to given a certain source pixel
@@ -5407,27 +5666,31 @@ namespace libavcodec
         /// @return The best pixel format to convert to or -1 if none was found.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_find_best_pix_fmt_of_2")]
-        internal static extern AVPixelFormat avcodec_find_best_pix_fmt_of_2(AVPixelFormat dst_pix_fmt1, AVPixelFormat dst_pix_fmt2, AVPixelFormat src_pix_fmt, int has_alpha, int* loss_ptr);
+        public static extern libavutil.AVPixelFormat avcodec_find_best_pix_fmt_of_2(libavutil.AVPixelFormat dst_pix_fmt1, libavutil.AVPixelFormat dst_pix_fmt2, libavutil.AVPixelFormat src_pix_fmt, int has_alpha, int* loss_ptr);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_find_best_pix_fmt2")]
-        internal static extern AVPixelFormat avcodec_find_best_pix_fmt2(AVPixelFormat dst_pix_fmt1, AVPixelFormat dst_pix_fmt2, AVPixelFormat src_pix_fmt, int has_alpha, int* loss_ptr);
+        public static extern libavutil.AVPixelFormat avcodec_find_best_pix_fmt2(libavutil.AVPixelFormat dst_pix_fmt1, libavutil.AVPixelFormat dst_pix_fmt2, libavutil.AVPixelFormat src_pix_fmt, int has_alpha, int* loss_ptr);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_get_format")]
-        internal static extern AVPixelFormat avcodec_default_get_format(AVCodecContext* s, AVPixelFormat fmt);
+        public static extern libavutil.AVPixelFormat avcodec_default_get_format(libavcodec.AVCodecContext* s, libavutil.AVPixelFormat* fmt);
 
         /// <summary>
         /// @}
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_set_dimensions")]
-        internal static extern void avcodec_set_dimensions(AVCodecContext* s, int width, int height);
+        public static extern void avcodec_set_dimensions(libavcodec.AVCodecContext* s, int width, int height);
 
         /// <summary>
         /// Put a string representing the codec tag codec_tag in buf.
@@ -5437,14 +5700,16 @@ namespace libavcodec
         /// enough space had been available, excluding the trailing null
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_codec_tag_string")]
-        internal static extern uint av_get_codec_tag_string(sbyte* buf, uint buf_size, uint codec_tag);
+        public static extern global::System.UIntPtr av_get_codec_tag_string(System.Text.StringBuilder buf, global::System.UIntPtr buf_size, uint codec_tag);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_string")]
-        internal static extern void avcodec_string(sbyte* buf, int buf_size, AVCodecContext* enc, int encode);
+        public static extern void avcodec_string(System.Text.StringBuilder buf, int buf_size, libavcodec.AVCodecContext* enc, int encode);
 
         /// <summary>
         /// Return a name for the specified profile, if available.
@@ -5454,19 +5719,22 @@ namespace libavcodec
         /// @return A name for the profile if found, NULL otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_profile_name")]
-        internal static extern global::System.IntPtr av_get_profile_name(AVCodec* codec, int profile);
+        public static extern sbyte* av_get_profile_name(libavcodec.AVCodec* codec, int profile);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_execute")]
-        internal static extern int avcodec_default_execute(AVCodecContext* c, global::System.IntPtr func, global::System.IntPtr arg, int* ret, int count, int size);
+        public static extern int avcodec_default_execute(libavcodec.AVCodecContext* c, global::System.IntPtr func, void* arg, int* ret, int count, int size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_execute2")]
-        internal static extern int avcodec_default_execute2(AVCodecContext* c, global::System.IntPtr func, global::System.IntPtr arg, int* ret, int count);
+        public static extern int avcodec_default_execute2(libavcodec.AVCodecContext* c, global::System.IntPtr func, void* arg, int* ret, int count);
 
         /// <summary>
         /// Fill AVFrame audio data and linesize pointers.
@@ -5492,9 +5760,10 @@ namespace libavcodec
         /// case of success, at the next libavutil bump
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_fill_audio_frame")]
-        internal static extern int avcodec_fill_audio_frame(AVFrame* frame, int nb_channels, AVSampleFormat sample_fmt, byte* buf, int buf_size, int align);
+        public static extern int avcodec_fill_audio_frame(libavutil.AVFrame* frame, int nb_channels, libavutil.AVSampleFormat sample_fmt, byte* buf, int buf_size, int align);
 
         /// <summary>
         /// Reset the internal decoder state / flush internal buffers. Should be
@@ -5509,9 +5778,10 @@ namespace libavcodec
         /// keep internally, but the caller's reference remains valid.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_flush_buffers")]
-        internal static extern void avcodec_flush_buffers(AVCodecContext* avctx);
+        public static extern void avcodec_flush_buffers(libavcodec.AVCodecContext* avctx);
 
         /// <summary>
         /// Return codec bits per sample.
@@ -5521,9 +5791,10 @@ namespace libavcodec
         /// codec.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_bits_per_sample")]
-        internal static extern int av_get_bits_per_sample(AVCodecID codec_id);
+        public static extern int av_get_bits_per_sample(libavcodec.AVCodecID codec_id);
 
         /// <summary>
         /// Return the PCM codec associated with a sample format.
@@ -5532,9 +5803,10 @@ namespace libavcodec
         /// @return  AV_CODEC_ID_PCM_* or AV_CODEC_ID_NONE
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_pcm_codec")]
-        internal static extern AVCodecID av_get_pcm_codec(AVSampleFormat fmt, int be);
+        public static extern libavcodec.AVCodecID av_get_pcm_codec(libavutil.AVSampleFormat fmt, int be);
 
         /// <summary>
         /// Return codec bits per sample.
@@ -5546,9 +5818,10 @@ namespace libavcodec
         /// codec.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_exact_bits_per_sample")]
-        internal static extern int av_get_exact_bits_per_sample(AVCodecID codec_id);
+        public static extern int av_get_exact_bits_per_sample(libavcodec.AVCodecID codec_id);
 
         /// <summary>
         /// Return audio frame duration.
@@ -5560,9 +5833,10 @@ namespace libavcodec
         /// determine.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_audio_frame_duration")]
-        internal static extern int av_get_audio_frame_duration(AVCodecContext* avctx, int frame_bytes);
+        public static extern int av_get_audio_frame_duration(libavcodec.AVCodecContext* avctx, int frame_bytes);
 
         /// <summary>
         /// Register a bitstream filter.
@@ -5574,9 +5848,10 @@ namespace libavcodec
         /// @see avcodec_register_all()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_register_bitstream_filter")]
-        internal static extern void av_register_bitstream_filter(AVBitStreamFilter* bsf);
+        public static extern void av_register_bitstream_filter(libavcodec.AVBitStreamFilter* bsf);
 
         /// <summary>
         /// Create and initialize a bitstream filter context given a bitstream
@@ -5589,9 +5864,10 @@ namespace libavcodec
         /// and successfully initialized, NULL otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_bitstream_filter_init")]
-        internal static extern AVBitStreamFilterContext* av_bitstream_filter_init(global::System.IntPtr name);
+        public static extern libavcodec.AVBitStreamFilterContext* av_bitstream_filter_init(string name);
 
         /// <summary>
         /// Filter bitstream.
@@ -5629,9 +5905,51 @@ namespace libavcodec
         /// its starting address).
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_bitstream_filter_filter")]
-        internal static extern int av_bitstream_filter_filter(AVBitStreamFilterContext* bsfc, AVCodecContext* avctx, global::System.IntPtr args, byte* poutbuf, int* poutbuf_size, byte* buf, int buf_size, int keyframe);
+        public static extern int av_bitstream_filter_filter(libavcodec.AVBitStreamFilterContext* bsfc, libavcodec.AVCodecContext* avctx, string args, byte** poutbuf, int* poutbuf_size, byte* buf, int buf_size, int keyframe);
+
+        /// <summary>
+        /// Filter bitstream.
+        /// 
+        /// This function filters the buffer buf with size buf_size, and places the
+        /// filtered buffer in the buffer pointed to by poutbuf.
+        /// 
+        /// The output buffer must be freed by the caller.
+        /// 
+        /// @param bsfc            bitstream filter context created by
+        /// av_bitstream_filter_init()
+        /// @param avctx           AVCodecContext accessed by the filter, may be
+        /// NULL.
+        /// If specified, this must point to the encoder context of the
+        /// output stream the packet is sent to.
+        /// @param args            arguments which specify the filter
+        /// configuration, may be NULL
+        /// @param poutbuf         pointer which is updated to point to the
+        /// filtered buffer
+        /// @param poutbuf_size    pointer which is updated to the filtered buffer
+        /// size in bytes
+        /// @param buf             buffer containing the data to filter
+        /// @param buf_size        size in bytes of buf
+        /// @param keyframe        set to non-zero if the buffer to filter
+        /// corresponds to a key-frame packet data
+        /// @return >= 0 in case of success, or a negative error code in case of
+        /// failure
+        /// 
+        /// If the return value is positive, an output buffer is allocated and
+        /// is availble in *poutbuf, and is distinct from the input buffer.
+        /// 
+        /// If the return value is 0, the output buffer is not allocated and
+        /// should be considered identical to the input buffer, or in case
+        /// poutbuf was set it points to the input buffer (not necessarily to
+        /// its starting address).
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_bitstream_filter_filter")]
+        public static extern int av_bitstream_filter_filter(libavcodec.AVBitStreamFilterContext* bsfc, libavcodec.AVCodecContext* avctx, string args, ref byte* poutbuf, int* poutbuf_size, byte* buf, int buf_size, int keyframe);
 
         /// <summary>
         /// Release bitstream filter context.
@@ -5640,9 +5958,10 @@ namespace libavcodec
         /// av_bitstream_filter_init(), can be NULL
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_bitstream_filter_close")]
-        internal static extern void av_bitstream_filter_close(AVBitStreamFilterContext* bsf);
+        public static extern void av_bitstream_filter_close(libavcodec.AVBitStreamFilterContext* bsf);
 
         /// <summary>
         /// If f is NULL, return the first registered bitstream filter,
@@ -5653,9 +5972,10 @@ namespace libavcodec
         /// filters.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_bitstream_filter_next")]
-        internal static extern AVBitStreamFilter* av_bitstream_filter_next(AVBitStreamFilter* f);
+        public static extern libavcodec.AVBitStreamFilter* av_bitstream_filter_next(libavcodec.AVBitStreamFilter* f);
 
         /// <summary>
         /// Reallocate the given block if it is not large enough, otherwise do
@@ -5664,9 +5984,10 @@ namespace libavcodec
         /// @see av_realloc
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fast_realloc")]
-        internal static extern global::System.IntPtr av_fast_realloc(global::System.IntPtr ptr, uint* size, uint min_size);
+        public static extern void* av_fast_realloc(void* ptr, uint* size, global::System.UIntPtr min_size);
 
         /// <summary>
         /// Allocate a buffer, reusing the given one if large enough.
@@ -5683,9 +6004,10 @@ namespace libavcodec
         /// size 0 if an error occurred.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fast_malloc")]
-        internal static extern void av_fast_malloc(global::System.IntPtr ptr, uint* size, uint min_size);
+        public static extern void av_fast_malloc(void* ptr, uint* size, global::System.UIntPtr min_size);
 
         /// <summary>
         /// Same behaviour av_fast_malloc but the buffer has additional
@@ -5695,18 +6017,20 @@ namespace libavcodec
         /// be 0-initialized so that no uninitialized data will ever appear.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fast_padded_malloc")]
-        internal static extern void av_fast_padded_malloc(global::System.IntPtr ptr, uint* size, uint min_size);
+        public static extern void av_fast_padded_malloc(void* ptr, uint* size, global::System.UIntPtr min_size);
 
         /// <summary>
         /// Same behaviour av_fast_padded_malloc except that buffer will always
         /// be 0-initialized after call.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fast_padded_mallocz")]
-        internal static extern void av_fast_padded_mallocz(global::System.IntPtr ptr, uint* size, uint min_size);
+        public static extern void av_fast_padded_mallocz(void* ptr, uint* size, global::System.UIntPtr min_size);
 
         /// <summary>
         /// Encode extradata length to a buffer. Used by xiph codecs.
@@ -5716,9 +6040,10 @@ namespace libavcodec
         /// @return number of bytes written to the buffer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_xiphlacing")]
-        internal static extern uint av_xiphlacing(byte* s, uint v);
+        public static extern uint av_xiphlacing(byte* s, uint v);
 
         /// <summary>
         /// Log a generic warning message about a missing feature. This function is
@@ -5737,9 +6062,10 @@ namespace libavcodec
         /// @deprecated Use avpriv_report_missing_feature() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_log_missing_feature")]
-        internal static extern void av_log_missing_feature(global::System.IntPtr avc, global::System.IntPtr feature, int want_sample);
+        public static extern void av_log_missing_feature(void* avc, string feature, int want_sample);
 
         /// <summary>
         /// Log a generic warning message asking for a sample. This function is
@@ -5754,17 +6080,19 @@ namespace libavcodec
         /// @deprecated Use avpriv_request_sample() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_log_ask_for_sample")]
-        internal static extern void av_log_ask_for_sample(global::System.IntPtr avc, global::System.IntPtr msg);
+        public static extern void av_log_ask_for_sample(void* avc, string msg);
 
         /// <summary>
         /// Register the hardware accelerator hwaccel.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_register_hwaccel")]
-        internal static extern void av_register_hwaccel(AVHWAccel* hwaccel);
+        public static extern void av_register_hwaccel(libavcodec.AVHWAccel* hwaccel);
 
         /// <summary>
         /// If hwaccel is NULL, returns the first registered hardware accelerator,
@@ -5773,9 +6101,10 @@ namespace libavcodec
         /// after hwaccel, or NULL if hwaccel is the last one.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hwaccel_next")]
-        internal static extern AVHWAccel* av_hwaccel_next(AVHWAccel* hwaccel);
+        public static extern libavcodec.AVHWAccel* av_hwaccel_next(libavcodec.AVHWAccel* hwaccel);
 
         /// <summary>
         /// Register a user provided lock manager supporting the operations
@@ -5791,26 +6120,29 @@ namespace libavcodec
         /// lockmgr callback may also be invoked.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_lockmgr_register")]
-        internal static extern int av_lockmgr_register(global::System.IntPtr cb);
+        public static extern int av_lockmgr_register(global::System.IntPtr cb);
 
         /// <summary>
         /// Get the type of the given codec.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_type")]
-        internal static extern AVMediaType avcodec_get_type(AVCodecID codec_id);
+        public static extern libavutil.AVMediaType avcodec_get_type(libavcodec.AVCodecID codec_id);
 
         /// <summary>
         /// Get the name of a codec.
         /// @return  a static string identifying the codec; never NULL
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_get_name")]
-        internal static extern global::System.IntPtr avcodec_get_name(AVCodecID id);
+        public static extern sbyte* avcodec_get_name(libavcodec.AVCodecID id);
 
         /// <summary>
         /// @return a positive value if s is open (i.e. avcodec_open2() was called
@@ -5818,33 +6150,37 @@ namespace libavcodec
         /// with no corresponding avcodec_close()), 0 otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_is_open")]
-        internal static extern int avcodec_is_open(AVCodecContext* s);
+        public static extern int avcodec_is_open(libavcodec.AVCodecContext* s);
 
         /// <summary>
         /// @return a non-zero number if codec is an encoder, zero otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_is_encoder")]
-        internal static extern int av_codec_is_encoder(AVCodec* codec);
+        public static extern int av_codec_is_encoder(libavcodec.AVCodec* codec);
 
         /// <summary>
         /// @return a non-zero number if codec is a decoder, zero otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_codec_is_decoder")]
-        internal static extern int av_codec_is_decoder(AVCodec* codec);
+        public static extern int av_codec_is_decoder(libavcodec.AVCodec* codec);
 
         /// <summary>
         /// @return descriptor for given codec ID or NULL if no descriptor exists.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_descriptor_get")]
-        internal static extern AVCodecDescriptor* avcodec_descriptor_get(AVCodecID id);
+        public static extern libavcodec.AVCodecDescriptor* avcodec_descriptor_get(libavcodec.AVCodecID id);
 
         /// <summary>
         /// Iterate over all codec descriptors known to libavcodec.
@@ -5854,9 +6190,10 @@ namespace libavcodec
         /// @return next descriptor or NULL after the last descriptor
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_descriptor_next")]
-        internal static extern AVCodecDescriptor* avcodec_descriptor_next(AVCodecDescriptor* prev);
+        public static extern libavcodec.AVCodecDescriptor* avcodec_descriptor_next(libavcodec.AVCodecDescriptor* prev);
 
         /// <summary>
         /// @return codec descriptor with the given name or NULL if no such
@@ -5864,8 +6201,9 @@ namespace libavcodec
         /// exists.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_descriptor_get_by_name")]
-        internal static extern AVCodecDescriptor* avcodec_descriptor_get_by_name(global::System.IntPtr name);
+        public static extern libavcodec.AVCodecDescriptor* avcodec_descriptor_get_by_name(string name);
     }
 }

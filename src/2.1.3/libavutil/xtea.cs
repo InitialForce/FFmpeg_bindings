@@ -6,22 +6,21 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    /// <summary>
-    /// @defgroup lavu_xtea XTEA
-    /// @ingroup lavu_crypto
-    /// @{
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVXTEA
+    public unsafe static partial class libavutil
     {
-        [FieldOffset(0)]
-        public fixed uint key[16];
-    }
+        /// <summary>
+        /// @defgroup lavu_xtea XTEA
+        /// @ingroup lavu_crypto
+        /// @{
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVXTEA
+        {
+            public fixed uint key[16];
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Initialize an AVXTEA context.
         /// 
@@ -29,9 +28,10 @@ namespace libavutil
         /// @param key a key of 16 bytes used for encryption/decryption
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_xtea_init")]
-        internal static extern void av_xtea_init(AVXTEA* ctx, byte* key);
+        public static extern void av_xtea_init(libavutil.AVXTEA* ctx, byte* key);
 
         /// <summary>
         /// Encrypt or decrypt a buffer using a previously initialized context.
@@ -45,8 +45,9 @@ namespace libavutil
         /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_xtea_crypt")]
-        internal static extern void av_xtea_crypt(AVXTEA* ctx, byte* dst, byte* src, int count, byte* iv, int decrypt);
+        public static extern void av_xtea_crypt(libavutil.AVXTEA* ctx, byte* dst, byte* src, int count, byte* iv, int decrypt);
     }
 }

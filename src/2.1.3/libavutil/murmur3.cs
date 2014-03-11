@@ -6,38 +6,43 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVMurMur3
+    public unsafe static partial class libavutil
     {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVMurMur3
+        {
+        }
 
-    public unsafe partial class libavutil
-    {
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_murmur3_alloc")]
-        internal static extern AVMurMur3* av_murmur3_alloc();
+        public static extern libavutil.AVMurMur3* av_murmur3_alloc();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_murmur3_init_seeded")]
-        internal static extern void av_murmur3_init_seeded(AVMurMur3* c, ulong seed);
+        public static extern void av_murmur3_init_seeded(libavutil.AVMurMur3* c, ulong seed);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_murmur3_init")]
-        internal static extern void av_murmur3_init(AVMurMur3* c);
+        public static extern void av_murmur3_init(libavutil.AVMurMur3* c);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_murmur3_update")]
-        internal static extern void av_murmur3_update(AVMurMur3* c, byte* src, int len);
+        public static extern void av_murmur3_update(libavutil.AVMurMur3* c, byte* src, int len);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_murmur3_final")]
-        internal static extern void av_murmur3_final(AVMurMur3* c, byte* dst);
+        public static extern void av_murmur3_final(libavutil.AVMurMur3* c, byte* dst);
     }
 }

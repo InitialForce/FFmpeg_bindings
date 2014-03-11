@@ -6,89 +6,44 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct av_alias64
+    public unsafe static partial class libavutil
     {
-        [FieldOffset(0)]
-        public ulong u64;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct av_alias64
+        {
+            public ulong u64;
 
-        [FieldOffset(0)]
-        public fixed uint u32[2];
+            public fixed uint u32[2];
 
-        [FieldOffset(0)]
-        public fixed ushort u16[4];
+            public fixed ushort u16[4];
 
-        [FieldOffset(0)]
-        public fixed byte u8[8];
+            public fixed byte u8[8];
 
-        [FieldOffset(0)]
-        public double f64;
+            public double f64;
 
-        [FieldOffset(0)]
-        public fixed float f32[2];
+            public fixed float f32[2];
+        }
 
-        [FieldOffset(0)]
-        private ulong u64;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct av_alias32
+        {
+            public uint u32;
 
-        [FieldOffset(0)]
-        private uint[] u32;
+            public fixed ushort u16[2];
 
-        [FieldOffset(0)]
-        private ushort[] u16;
+            public fixed byte u8[4];
 
-        [FieldOffset(0)]
-        private byte[] u8;
+            public float f32;
+        }
 
-        [FieldOffset(0)]
-        private double f64;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct av_alias16
+        {
+            public ushort u16;
 
-        [FieldOffset(0)]
-        private float[] f32;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct av_alias32
-    {
-        [FieldOffset(0)]
-        public uint u32;
-
-        [FieldOffset(0)]
-        public fixed ushort u16[2];
-
-        [FieldOffset(0)]
-        public fixed byte u8[4];
-
-        [FieldOffset(0)]
-        public float f32;
-
-        [FieldOffset(0)]
-        private uint u32;
-
-        [FieldOffset(0)]
-        private ushort[] u16;
-
-        [FieldOffset(0)]
-        private byte[] u8;
-
-        [FieldOffset(0)]
-        private float f32;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct av_alias16
-    {
-        [FieldOffset(0)]
-        public ushort u16;
-
-        [FieldOffset(0)]
-        public fixed byte u8[2];
-
-        [FieldOffset(0)]
-        private ushort u16;
-
-        [FieldOffset(0)]
-        private byte[] u8;
+            public fixed byte u8[2];
+        }
     }
 }

@@ -6,10 +6,22 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
+        public const sbyte AV_LZO_INPUT_DEPLETED = 1;
+
+        public const sbyte AV_LZO_OUTPUT_FULL = 2;
+
+        public const sbyte AV_LZO_INVALID_BACKPTR = 4;
+
+        public const sbyte AV_LZO_ERROR = 8;
+
+        public const sbyte AV_LZO_INPUT_PADDING = 8;
+
+        public const sbyte AV_LZO_OUTPUT_PADDING = 12;
+
         /// <summary>
         /// @brief Decodes LZO 1x compressed data.
         /// @param out output buffer
@@ -25,8 +37,9 @@ namespace libavutil
         /// bytes.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_lzo1x_decode")]
-        internal static extern int av_lzo1x_decode(global::System.IntPtr @out, int* outlen, global::System.IntPtr @in, int* inlen);
+        public static extern int av_lzo1x_decode(void* _out, int* outlen, void* _in, int* inlen);
     }
 }

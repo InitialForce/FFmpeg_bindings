@@ -6,10 +6,12 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
+        public const sbyte AV_ERROR_MAX_STRING_SIZE = 64;
+
         /// <summary>
         /// Put a description of the AVERROR code errnum in errbuf.
         /// In case of failure the global variable errno is set to indicate the
@@ -23,9 +25,10 @@ namespace libavutil
         /// cannot be found
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strerror")]
-        internal static extern int av_strerror(int errnum, sbyte* errbuf, uint errbuf_size);
+        public static extern int av_strerror(int errnum, System.Text.StringBuilder errbuf, global::System.UIntPtr errbuf_size);
 
         /// <summary>
         /// Fill the provided buffer with a string containing an error string
@@ -38,8 +41,9 @@ namespace libavutil
         /// @see av_strerror()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_make_error_string")]
-        internal static extern sbyte* av_make_error_string(sbyte* errbuf, uint errbuf_size, int errnum);
+        public static extern sbyte* av_make_error_string(System.Text.StringBuilder errbuf, global::System.UIntPtr errbuf_size, int errnum);
     }
 }

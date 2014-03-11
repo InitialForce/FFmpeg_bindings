@@ -6,47 +6,49 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    /// <summary>
-    /// @defgroup lavu_hmac HMAC
-    /// @ingroup lavu_crypto
-    /// @{
-    /// </summary>
-    public enum AVHMACType
+    public unsafe static partial class libavutil
     {
-        AV_HMAC_MD5 = 0,
-        AV_HMAC_SHA1 = 1,
-        AV_HMAC_SHA224 = 10,
-        AV_HMAC_SHA256 = 11,
-        AV_HMAC_SHA384 = 12,
-        AV_HMAC_SHA512 = 13
-    }
+        /// <summary>
+        /// @defgroup lavu_hmac HMAC
+        /// @ingroup lavu_crypto
+        /// @{
+        /// </summary>
+        public enum AVHMACType
+        {
+            AV_HMAC_MD5 = 0,
+            AV_HMAC_SHA1 = 1,
+            AV_HMAC_SHA224 = 10,
+            AV_HMAC_SHA256 = 11,
+            AV_HMAC_SHA384 = 12,
+            AV_HMAC_SHA512 = 13
+        }
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVHMAC
-    {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVHMAC
+        {
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Allocate an AVHMAC context.
         /// @param type The hash function used for the HMAC.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hmac_alloc")]
-        internal static extern AVHMAC* av_hmac_alloc(AVHMACType type);
+        public static extern libavutil.AVHMAC* av_hmac_alloc(libavutil.AVHMACType type);
 
         /// <summary>
         /// Free an AVHMAC context.
         /// @param ctx The context to free, may be NULL
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hmac_free")]
-        internal static extern void av_hmac_free(AVHMAC* ctx);
+        public static extern void av_hmac_free(libavutil.AVHMAC* ctx);
 
         /// <summary>
         /// Initialize an AVHMAC context with an authentication key.
@@ -55,9 +57,10 @@ namespace libavutil
         /// @param keylen The length of the key, in bytes
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hmac_init")]
-        internal static extern void av_hmac_init(AVHMAC* ctx, byte* key, uint keylen);
+        public static extern void av_hmac_init(libavutil.AVHMAC* ctx, byte* key, uint keylen);
 
         /// <summary>
         /// Hash data with the HMAC.
@@ -66,9 +69,10 @@ namespace libavutil
         /// @param len  The length of the data, in bytes
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hmac_update")]
-        internal static extern void av_hmac_update(AVHMAC* ctx, byte* data, uint len);
+        public static extern void av_hmac_update(libavutil.AVHMAC* ctx, byte* data, uint len);
 
         /// <summary>
         /// Finish hashing and output the HMAC digest.
@@ -79,9 +83,10 @@ namespace libavutil
         /// code.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hmac_final")]
-        internal static extern int av_hmac_final(AVHMAC* ctx, byte* @out, uint outlen);
+        public static extern int av_hmac_final(libavutil.AVHMAC* ctx, byte* _out, uint outlen);
 
         /// <summary>
         /// Hash an array of data with a key.
@@ -96,8 +101,9 @@ namespace libavutil
         /// code.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_hmac_calc")]
-        internal static extern int av_hmac_calc(AVHMAC* ctx, byte* data, uint len, byte* key, uint keylen, byte* @out, uint outlen);
+        public static extern int av_hmac_calc(libavutil.AVHMAC* ctx, byte* data, uint len, byte* key, uint keylen, byte* _out, uint outlen);
     }
 }

@@ -6,26 +6,26 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public enum AVCRCId
-    {
-        AV_CRC_8_ATM = 0,
-        AV_CRC_16_ANSI = 1,
-        AV_CRC_16_CCITT = 2,
-        AV_CRC_32_IEEE = 3,
-        AV_CRC_32_IEEE_LE = 4,
-        AV_CRC_24_IEEE = 12,
-        AV_CRC_MAX = 13
-    }
-
     /// <summary>
     /// @defgroup lavu_crc32 CRC32
     /// @ingroup lavu_crypto
     /// @{
     /// </summary>
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
+        public enum AVCRCId
+        {
+            AV_CRC_8_ATM = 0,
+            AV_CRC_16_ANSI = 1,
+            AV_CRC_16_CCITT = 2,
+            AV_CRC_32_IEEE = 3,
+            AV_CRC_32_IEEE_LE = 4,
+            AV_CRC_24_IEEE = 12,
+            AV_CRC_MAX = 13
+        }
+
         /// <summary>
         /// Initialize a CRC table.
         /// @param ctx must be an array of size sizeof(AVCRC)*257 or
@@ -46,9 +46,10 @@ namespace libavutil
         /// @return <0 on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_crc_init")]
-        internal static extern int av_crc_init(uint* ctx, int le, int bits, uint poly, int ctx_size);
+        public static extern int av_crc_init(uint* ctx, int le, int bits, uint poly, int ctx_size);
 
         /// <summary>
         /// Get an initialized standard CRC table.
@@ -56,9 +57,10 @@ namespace libavutil
         /// @return a pointer to the CRC table or NULL on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_crc_get_table")]
-        internal static extern uint* av_crc_get_table(AVCRCId crc_id);
+        public static extern uint* av_crc_get_table(libavutil.AVCRCId crc_id);
 
         /// <summary>
         /// Calculate the CRC of a block.
@@ -68,8 +70,9 @@ namespace libavutil
         /// @see av_crc_init() "le" parameter
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_crc")]
-        internal static extern uint av_crc(uint* ctx, uint crc, byte* buffer, uint length);
+        public static extern uint av_crc(uint* ctx, uint crc, byte* buffer, global::System.UIntPtr length);
     }
 }

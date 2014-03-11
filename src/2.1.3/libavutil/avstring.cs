@@ -6,20 +6,24 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public enum AVEscapeMode
+    public unsafe static partial class libavutil
     {
-        /// <summary>Use auto-selected escaping mode.</summary>
-        AV_ESCAPE_MODE_AUTO = 0,
-        /// <summary>Use backslash escaping.</summary>
-        AV_ESCAPE_MODE_BACKSLASH = 1,
-        /// <summary>Use single-quote escaping.</summary>
-        AV_ESCAPE_MODE_QUOTE = 2
-    }
+        public const sbyte AV_ESCAPE_FLAG_WHITESPACE = 1;
 
-    public unsafe partial class libavutil
-    {
+        public const sbyte AV_ESCAPE_FLAG_STRICT = 2;
+
+        public enum AVEscapeMode
+        {
+            /// <summary>Use auto-selected escaping mode.</summary>
+            AV_ESCAPE_MODE_AUTO = 0,
+            /// <summary>Use backslash escaping.</summary>
+            AV_ESCAPE_MODE_BACKSLASH = 1,
+            /// <summary>Use single-quote escaping.</summary>
+            AV_ESCAPE_MODE_QUOTE = 2
+        }
+
         /// <summary>
         /// Return non-zero if pfx is a prefix of str. If it is, *ptr is set to
         /// the address of the first character in str after the prefix.
@@ -30,9 +34,25 @@ namespace libavutil
         /// @return non-zero if the prefix matches, zero otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strstart")]
-        internal static extern int av_strstart(global::System.IntPtr str, global::System.IntPtr pfx, global::System.IntPtr ptr);
+        public static extern int av_strstart(string str, string pfx, sbyte** ptr);
+
+        /// <summary>
+        /// Return non-zero if pfx is a prefix of str. If it is, *ptr is set to
+        /// the address of the first character in str after the prefix.
+        /// 
+        /// @param str input string
+        /// @param pfx prefix to test
+        /// @param ptr updated if the prefix is matched inside str
+        /// @return non-zero if the prefix matches, zero otherwise
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_strstart")]
+        public static extern int av_strstart(string str, string pfx, ref string ptr);
 
         /// <summary>
         /// Return non-zero if pfx is a prefix of str independent of case. If
@@ -45,9 +65,26 @@ namespace libavutil
         /// @return non-zero if the prefix matches, zero otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_stristart")]
-        internal static extern int av_stristart(global::System.IntPtr str, global::System.IntPtr pfx, global::System.IntPtr ptr);
+        public static extern int av_stristart(string str, string pfx, sbyte** ptr);
+
+        /// <summary>
+        /// Return non-zero if pfx is a prefix of str independent of case. If
+        /// it is, *ptr is set to the address of the first character in str
+        /// after the prefix.
+        /// 
+        /// @param str input string
+        /// @param pfx prefix to test
+        /// @param ptr updated if the prefix is matched inside str
+        /// @return non-zero if the prefix matches, zero otherwise
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_stristart")]
+        public static extern int av_stristart(string str, string pfx, ref string ptr);
 
         /// <summary>
         /// Locate the first case-independent occurrence in the string haystack
@@ -62,9 +99,10 @@ namespace libavutil
         /// or a null pointer if no match
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_stristr")]
-        internal static extern sbyte* av_stristr(global::System.IntPtr haystack, global::System.IntPtr needle);
+        public static extern sbyte* av_stristr(string haystack, string needle);
 
         /// <summary>
         /// Locate the first occurrence of the string needle in the string haystack
@@ -80,9 +118,10 @@ namespace libavutil
         /// or a null pointer if no match
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strnstr")]
-        internal static extern sbyte* av_strnstr(global::System.IntPtr haystack, global::System.IntPtr needle, uint hay_length);
+        public static extern sbyte* av_strnstr(string haystack, string needle, global::System.UIntPtr hay_length);
 
         /// <summary>
         /// Copy the string src to dst, but no more than size - 1 bytes, and
@@ -101,9 +140,10 @@ namespace libavutil
         /// the end of the buffer and possibly crash.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strlcpy")]
-        internal static extern uint av_strlcpy(sbyte* dst, global::System.IntPtr src, uint size);
+        public static extern global::System.UIntPtr av_strlcpy(System.Text.StringBuilder dst, string src, global::System.UIntPtr size);
 
         /// <summary>
         /// Append the string src to the string dst, but to a total length of
@@ -122,9 +162,10 @@ namespace libavutil
         /// will read beyond the end of the buffer and possibly crash.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strlcat")]
-        internal static extern uint av_strlcat(sbyte* dst, global::System.IntPtr src, uint size);
+        public static extern global::System.UIntPtr av_strlcat(System.Text.StringBuilder dst, string src, global::System.UIntPtr size);
 
         /// <summary>
         /// Append output to a string, according to a format. Never write out of
@@ -139,9 +180,10 @@ namespace libavutil
         /// if enough space had been available
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strlcatf")]
-        internal static extern uint av_strlcatf(sbyte* dst, uint size, global::System.IntPtr fmt);
+        public static extern global::System.UIntPtr av_strlcatf(System.Text.StringBuilder dst, global::System.UIntPtr size, string fmt);
 
         /// <summary>
         /// Print arguments following specified format into a large enough auto
@@ -152,17 +194,19 @@ namespace libavutil
         /// @note You have to free the string yourself with av_free().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_asprintf")]
-        internal static extern sbyte* av_asprintf(global::System.IntPtr fmt);
+        public static extern sbyte* av_asprintf(string fmt);
 
         /// <summary>
         /// Convert a number to a av_malloced string.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_d2str")]
-        internal static extern sbyte* av_d2str(double d);
+        public static extern sbyte* av_d2str(double d);
 
         /// <summary>
         /// Unescape the given string until a non escaped terminating char,
@@ -179,9 +223,30 @@ namespace libavutil
         /// the user, NULL in case of allocation failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_token")]
-        internal static extern sbyte* av_get_token(global::System.IntPtr buf, global::System.IntPtr term);
+        public static extern sbyte* av_get_token(sbyte** buf, string term);
+
+        /// <summary>
+        /// Unescape the given string until a non escaped terminating char,
+        /// and return the token corresponding to the unescaped string.
+        /// 
+        /// The normal \ and ' escaping is supported. Leading and trailing
+        /// whitespaces are removed, unless they are escaped with '\' or are
+        /// enclosed between ''.
+        /// 
+        /// @param buf the buffer to parse, buf will be updated to point to the
+        /// terminating char
+        /// @param term a 0-terminated list of terminating chars
+        /// @return the malloced unescaped string, which must be av_freed by
+        /// the user, NULL in case of allocation failure
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_get_token")]
+        public static extern sbyte* av_get_token(ref string buf, string term);
 
         /// <summary>
         /// Split the string into several tokens which can be accessed by
@@ -206,75 +271,112 @@ namespace libavutil
         /// @return the found token, or NULL when no token is found
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strtok")]
-        internal static extern sbyte* av_strtok(sbyte* s, global::System.IntPtr delim, sbyte* saveptr);
+        public static extern sbyte* av_strtok(System.Text.StringBuilder s, string delim, sbyte** saveptr);
+
+        /// <summary>
+        /// Split the string into several tokens which can be accessed by
+        /// successive calls to av_strtok().
+        /// 
+        /// A token is defined as a sequence of characters not belonging to the
+        /// set specified in delim.
+        /// 
+        /// On the first call to av_strtok(), s should point to the string to
+        /// parse, and the value of saveptr is ignored. In subsequent calls, s
+        /// should be NULL, and saveptr should be unchanged since the previous
+        /// call.
+        /// 
+        /// This function is similar to strtok_r() defined in POSIX.1.
+        /// 
+        /// @param s the string to parse, may be NULL
+        /// @param delim 0-terminated list of token delimiters, must be non-NULL
+        /// @param saveptr user-provided pointer which points to stored
+        /// information necessary for av_strtok() to continue scanning the same
+        /// string. saveptr is updated to point to the next character after the
+        /// first delimiter found, or to NULL if the string was terminated
+        /// @return the found token, or NULL when no token is found
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_strtok")]
+        public static extern sbyte* av_strtok(System.Text.StringBuilder s, string delim, ref System.Text.StringBuilder saveptr);
 
         /// <summary>
         /// Locale-independent conversion of ASCII isdigit.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_isdigit")]
-        internal static extern int av_isdigit(int c);
+        public static extern int av_isdigit(int c);
 
         /// <summary>
         /// Locale-independent conversion of ASCII isgraph.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_isgraph")]
-        internal static extern int av_isgraph(int c);
+        public static extern int av_isgraph(int c);
 
         /// <summary>
         /// Locale-independent conversion of ASCII isspace.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_isspace")]
-        internal static extern int av_isspace(int c);
+        public static extern int av_isspace(int c);
 
         /// <summary>
         /// Locale-independent conversion of ASCII characters to uppercase.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_toupper")]
-        internal static extern int av_toupper(int c);
+        public static extern int av_toupper(int c);
 
         /// <summary>
         /// Locale-independent conversion of ASCII characters to lowercase.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_tolower")]
-        internal static extern int av_tolower(int c);
+        public static extern int av_tolower(int c);
 
         /// <summary>
         /// Locale-independent conversion of ASCII isxdigit.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_isxdigit")]
-        internal static extern int av_isxdigit(int c);
+        public static extern int av_isxdigit(int c);
 
         /// <summary>
         /// Locale-independent case-insensitive compare.
         /// @note This means only ASCII-range characters are case-insensitive
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strcasecmp")]
-        internal static extern int av_strcasecmp(global::System.IntPtr a, global::System.IntPtr b);
+        public static extern int av_strcasecmp(string a, string b);
 
         /// <summary>
         /// Locale-independent case-insensitive compare.
         /// @note This means only ASCII-range characters are case-insensitive
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strncasecmp")]
-        internal static extern int av_strncasecmp(global::System.IntPtr a, global::System.IntPtr b, uint n);
+        public static extern int av_strncasecmp(string a, string b, global::System.UIntPtr n);
 
         /// <summary>
         /// Thread safe basename.
@@ -282,9 +384,10 @@ namespace libavutil
         /// @return pointer to the basename substring.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_basename")]
-        internal static extern global::System.IntPtr av_basename(global::System.IntPtr path);
+        public static extern sbyte* av_basename(string path);
 
         /// <summary>
         /// Thread safe dirname.
@@ -294,9 +397,10 @@ namespace libavutil
         /// @note the function may change the input string.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_dirname")]
-        internal static extern global::System.IntPtr av_dirname(sbyte* path);
+        public static extern sbyte* av_dirname(System.Text.StringBuilder path);
 
         /// <summary>
         /// Escape string in src, and put the escaped string in an allocated
@@ -318,8 +422,34 @@ namespace libavutil
         /// @see av_bprint_escape()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_escape")]
-        internal static extern int av_escape(sbyte* dst, global::System.IntPtr src, global::System.IntPtr special_chars, AVEscapeMode mode, int flags);
+        public static extern int av_escape(sbyte** dst, string src, string special_chars, libavutil.AVEscapeMode mode, int flags);
+
+        /// <summary>
+        /// Escape string in src, and put the escaped string in an allocated
+        /// string in *dst, which must be freed with av_free().
+        /// 
+        /// @param dst           pointer where an allocated string is put
+        /// @param src           string to escape, must be non-NULL
+        /// @param special_chars string containing the special characters which
+        /// need to be escaped, can be NULL
+        /// @param mode          escape mode to employ, see AV_ESCAPE_MODE_*
+        /// macros.
+        /// Any unknown value for mode will be considered equivalent to
+        /// AV_ESCAPE_MODE_BACKSLASH, but this behaviour can change without
+        /// notice.
+        /// @param flags         flags which control how to escape, see
+        /// AV_ESCAPE_FLAG_ macros
+        /// @return the length of the allocated string, or a negative error code in
+        /// case of error
+        /// @see av_bprint_escape()
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_escape")]
+        public static extern int av_escape(ref System.Text.StringBuilder dst, string src, string special_chars, libavutil.AVEscapeMode mode, int flags);
     }
 }

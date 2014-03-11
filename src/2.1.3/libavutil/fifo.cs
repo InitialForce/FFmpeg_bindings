@@ -6,50 +6,46 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFifoBuffer
+    public unsafe static partial class libavutil
     {
-        [FieldOffset(0)]
-        public byte* buffer;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFifoBuffer
+        {
+            public byte* buffer;
 
-        [FieldOffset(4)]
-        public byte* rptr;
+            public byte* rptr;
 
-        [FieldOffset(8)]
-        public byte* wptr;
+            public byte* wptr;
 
-        [FieldOffset(12)]
-        public byte* end;
+            public byte* end;
 
-        [FieldOffset(16)]
-        public uint rndx;
+            public uint rndx;
 
-        [FieldOffset(20)]
-        public uint wndx;
-    }
+            public uint wndx;
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Initialize an AVFifoBuffer.
         /// @param size of FIFO
         /// @return AVFifoBuffer or NULL in case of memory allocation failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_alloc")]
-        internal static extern AVFifoBuffer* av_fifo_alloc(uint size);
+        public static extern libavutil.AVFifoBuffer* av_fifo_alloc(uint size);
 
         /// <summary>
         /// Free an AVFifoBuffer.
         /// @param f AVFifoBuffer to free
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_free")]
-        internal static extern void av_fifo_free(AVFifoBuffer* f);
+        public static extern void av_fifo_free(libavutil.AVFifoBuffer* f);
 
         /// <summary>
         /// Reset the AVFifoBuffer to the state right after av_fifo_alloc, in
@@ -57,9 +53,10 @@ namespace libavutil
         /// @param f AVFifoBuffer to reset
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_reset")]
-        internal static extern void av_fifo_reset(AVFifoBuffer* f);
+        public static extern void av_fifo_reset(libavutil.AVFifoBuffer* f);
 
         /// <summary>
         /// Return the amount of data in bytes in the AVFifoBuffer, that is the
@@ -68,9 +65,10 @@ namespace libavutil
         /// @return size
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_size")]
-        internal static extern int av_fifo_size(AVFifoBuffer* f);
+        public static extern int av_fifo_size(libavutil.AVFifoBuffer* f);
 
         /// <summary>
         /// Return the amount of space in bytes in the AVFifoBuffer, that is the
@@ -79,9 +77,10 @@ namespace libavutil
         /// @return size
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_space")]
-        internal static extern int av_fifo_space(AVFifoBuffer* f);
+        public static extern int av_fifo_space(libavutil.AVFifoBuffer* f);
 
         /// <summary>
         /// Feed data from an AVFifoBuffer to a user-supplied callback.
@@ -91,9 +90,10 @@ namespace libavutil
         /// @param dest data destination
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_generic_read")]
-        internal static extern int av_fifo_generic_read(AVFifoBuffer* f, global::System.IntPtr dest, int buf_size, global::System.IntPtr func);
+        public static extern int av_fifo_generic_read(libavutil.AVFifoBuffer* f, void* dest, int buf_size, global::System.IntPtr func);
 
         /// <summary>
         /// Feed data from a user-supplied callback to an AVFifoBuffer.
@@ -110,9 +110,10 @@ namespace libavutil
         /// @return the number of bytes written to the FIFO
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_generic_write")]
-        internal static extern int av_fifo_generic_write(AVFifoBuffer* f, global::System.IntPtr src, int size, global::System.IntPtr func);
+        public static extern int av_fifo_generic_write(libavutil.AVFifoBuffer* f, void* src, int size, global::System.IntPtr func);
 
         /// <summary>
         /// Resize an AVFifoBuffer.
@@ -123,9 +124,10 @@ namespace libavutil
         /// @return <0 for failure, >=0 otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_realloc2")]
-        internal static extern int av_fifo_realloc2(AVFifoBuffer* f, uint size);
+        public static extern int av_fifo_realloc2(libavutil.AVFifoBuffer* f, uint size);
 
         /// <summary>
         /// Enlarge an AVFifoBuffer.
@@ -138,9 +140,10 @@ namespace libavutil
         /// @return <0 for failure, >=0 otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_grow")]
-        internal static extern int av_fifo_grow(AVFifoBuffer* f, uint additional_space);
+        public static extern int av_fifo_grow(libavutil.AVFifoBuffer* f, uint additional_space);
 
         /// <summary>
         /// Read and discard the specified amount of data from an AVFifoBuffer.
@@ -148,9 +151,10 @@ namespace libavutil
         /// @param size amount of data to read in bytes
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_drain")]
-        internal static extern void av_fifo_drain(AVFifoBuffer* f, int size);
+        public static extern void av_fifo_drain(libavutil.AVFifoBuffer* f, int size);
 
         /// <summary>
         /// Return a pointer to the data stored in a FIFO buffer at a certain
@@ -164,8 +168,9 @@ namespace libavutil
         /// The used buffer size can be checked with av_fifo_size().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fifo_peek2")]
-        internal static extern byte* av_fifo_peek2(AVFifoBuffer* f, int offs);
+        public static extern byte* av_fifo_peek2(libavutil.AVFifoBuffer* f, int offs);
     }
 }

@@ -5,17 +5,10 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavfilter
+namespace FFmpeg
 {
-    public enum AVFILTER_AUTO_CONVERT
-    {
-        /// <summary>all automatic conversions enabled</summary>
-        AVFILTER_AUTO_CONVERT_ALL = 0,
-        /// <summary>all automatic conversions disabled</summary>
-        AVFILTER_AUTO_CONVERT_NONE = -1
-    }
-
     /// <summary>
     /// A function executing multiple jobs, possibly in parallel.
     /// 
@@ -42,1355 +35,1122 @@ namespace libavfilter
     /// 
     /// @return 0 on success, a negative AVERROR on error
     /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterChannelLayouts
+    public unsafe static partial class libavfilter
     {
-    }
+        public const sbyte AV_PERM_READ = 1;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterPool
-    {
-    }
+        public const sbyte AV_PERM_WRITE = 2;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterCommand
-    {
-    }
+        public const sbyte AV_PERM_PRESERVE = 4;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterFormats
-    {
-    }
+        public const sbyte AV_PERM_REUSE = 8;
 
-    /// <summary>
-    /// A reference-counted buffer data type used by the filter system. Filters
-    /// should not store pointers to this structure directly, but instead use
-    /// the
-    /// AVFilterBufferRef structure below.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterBuffer
-    {
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(0)]
-        public byte* data_0;
+        public const sbyte AV_PERM_REUSE2 = 10;
 
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(4)]
-        public byte* data_1;
+        public const sbyte AV_PERM_NEG_LINESIZES = 20;
 
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(8)]
-        public byte* data_2;
+        public const sbyte AV_PERM_ALIGN = 40;
 
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(12)]
-        public byte* data_3;
+        public const sbyte AVFILTER_ALIGN = 16;
 
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(16)]
-        public byte* data_4;
+        public const sbyte AVFILTER_CMD_FLAG_ONE = 1;
 
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(20)]
-        public byte* data_5;
+        public const sbyte AVFILTER_CMD_FLAG_FAST = 2;
 
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(24)]
-        public byte* data_6;
-
-        /// <summary>
-        /// < buffer data for each plane/channel
-        /// </summary>
-        [FieldOffset(28)]
-        public byte* data_7;
-
-        /// <summary>
-        /// pointers to the data planes/channels.
-        /// 
-        /// For video, this should simply point to data[].
-        /// 
-        /// For planar audio, each channel has a separate data pointer, and
-        /// linesize[0] contains the size of each channel buffer.
-        /// For packed audio, there is just one data pointer, and linesize[0]
-        /// contains the total size of the buffer for all channels.
-        /// 
-        /// Note: Both data and extended_data will always be set, but for
-        /// planar
-        /// audio with more channels that can fit in data, extended_data must
-        /// be used
-        /// in order to access all channels.
-        /// </summary>
-        [FieldOffset(32)]
-        public byte* extended_data;
-
-        /// <summary>
-        /// < number of bytes per line
-        /// </summary>
-        [FieldOffset(36)]
-        public fixed int linesize[8];
-
-        /// <summary>
-        /// </summary>
-        [FieldOffset(68)]
-        public global::System.IntPtr priv;
-
-        /// <summary>
-        /// A pointer to the function to deallocate this buffer if the default
-        /// function is not sufficient. This could, for example, add the memory
-        /// back into a memory pool to be reused later without the overhead of
-        /// reallocating it from scratch.
-        /// </summary>
-        [FieldOffset(72)]
-        public global::System.IntPtr free;
-
-        /// <summary>
-        /// < media format
-        /// </summary>
-        [FieldOffset(76)]
-        public int format;
-
-        /// <summary>
-        /// < width and height of the allocated buffer
-        /// </summary>
-        [FieldOffset(80)]
-        public int w;
-
-        /// <summary>
-        /// < width and height of the allocated buffer
-        /// </summary>
-        [FieldOffset(84)]
-        public int h;
-
-        /// <summary>
-        /// < number of references to this buffer
-        /// </summary>
-        [FieldOffset(88)]
-        public uint refcount;
-    }
-
-    /// <summary>
-    /// Audio specific properties in a reference to an AVFilterBuffer. Since
-    /// AVFilterBufferRef is common to different media formats, audio specific
-    /// per reference properties must be separated out.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterBufferRefAudioProps
-    {
-        /// <summary>
-        /// < channel layout of audio buffer
-        /// </summary>
-        [FieldOffset(0)]
-        public ulong channel_layout;
-
-        /// <summary>
-        /// < number of audio samples per channel
-        /// </summary>
-        [FieldOffset(8)]
-        public int nb_samples;
-
-        /// <summary>
-        /// < audio buffer sample rate
-        /// </summary>
-        [FieldOffset(12)]
-        public int sample_rate;
-
-        /// <summary>
-        /// < number of channels (do not access directly)
-        /// </summary>
-        [FieldOffset(16)]
-        public int channels;
-    }
-
-    /// <summary>
-    /// Video specific properties in a reference to an AVFilterBuffer. Since
-    /// AVFilterBufferRef is common to different media formats, video specific
-    /// per reference properties must be separated out.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterBufferRefVideoProps
-    {
-        /// <summary>
-        /// < image width
-        /// </summary>
-        [FieldOffset(0)]
-        public int w;
-
-        /// <summary>
-        /// < image height
-        /// </summary>
-        [FieldOffset(4)]
-        public int h;
-
-        /// <summary>
-        /// < sample aspect ratio
-        /// </summary>
-        [FieldOffset(8)]
-        public AVRational* sample_aspect_ratio;
-
-        /// <summary>
-        /// < is frame interlaced
-        /// </summary>
-        [FieldOffset(16)]
-        public int interlaced;
-
-        /// <summary>
-        /// < field order
-        /// </summary>
-        [FieldOffset(20)]
-        public int top_field_first;
-
-        /// <summary>
-        /// < picture type of the frame
-        /// </summary>
-        [FieldOffset(24)]
-        public AVPictureType pict_type;
-
-        /// <summary>
-        /// < 1 -> keyframe, 0-> not
-        /// </summary>
-        [FieldOffset(28)]
-        public int key_frame;
-
-        /// <summary>
-        /// < qp_table stride
-        /// </summary>
-        [FieldOffset(32)]
-        public int qp_table_linesize;
-
-        /// <summary>
-        /// < qp_table size
-        /// </summary>
-        [FieldOffset(36)]
-        public int qp_table_size;
-
-        /// <summary>
-        /// < array of Quantization Parameters
-        /// </summary>
-        [FieldOffset(40)]
-        public sbyte* qp_table;
-    }
-
-    /// <summary>
-    /// A reference to an AVFilterBuffer. Since filters can manipulate the
-    /// origin of
-    /// a buffer to, for example, crop image without any memcpy, the buffer
-    /// origin
-    /// and dimensions are per-reference properties. Linesize is also useful
-    /// for
-    /// image flipping, frame to field filters, etc, and so is also
-    /// per-reference.
-    /// 
-    /// TODO: add anything necessary for frame reordering
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterBufferRef
-    {
-        /// <summary>
-        /// < the buffer that this is a reference to
-        /// </summary>
-        [FieldOffset(0)]
-        public AVFilterBuffer* buf;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(4)]
-        public byte* data_0;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(8)]
-        public byte* data_1;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(12)]
-        public byte* data_2;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(16)]
-        public byte* data_3;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(20)]
-        public byte* data_4;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(24)]
-        public byte* data_5;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(28)]
-        public byte* data_6;
-
-        /// <summary>
-        /// < picture/audio data for each plane
-        /// </summary>
-        [FieldOffset(32)]
-        public byte* data_7;
-
-        /// <summary>
-        /// pointers to the data planes/channels.
-        /// 
-        /// For video, this should simply point to data[].
-        /// 
-        /// For planar audio, each channel has a separate data pointer, and
-        /// linesize[0] contains the size of each channel buffer.
-        /// For packed audio, there is just one data pointer, and linesize[0]
-        /// contains the total size of the buffer for all channels.
-        /// 
-        /// Note: Both data and extended_data will always be set, but for
-        /// planar
-        /// audio with more channels that can fit in data, extended_data must
-        /// be used
-        /// in order to access all channels.
-        /// </summary>
-        [FieldOffset(36)]
-        public byte* extended_data;
-
-        /// <summary>
-        /// < number of bytes per line
-        /// </summary>
-        [FieldOffset(40)]
-        public fixed int linesize[8];
-
-        /// <summary>
-        /// < video buffer specific properties
-        /// </summary>
-        [FieldOffset(72)]
-        public AVFilterBufferRefVideoProps* video;
-
-        /// <summary>
-        /// < audio buffer specific properties
-        /// </summary>
-        [FieldOffset(76)]
-        public AVFilterBufferRefAudioProps* audio;
-
-        /// <summary>
-        /// presentation timestamp. The time unit may change during
-        /// filtering, as it is specified in the link and the filter code
-        /// may need to rescale the PTS accordingly.
-        /// </summary>
-        [FieldOffset(80)]
-        public long pts;
-
-        /// <summary>
-        /// < byte position in stream, -1 if unknown
-        /// </summary>
-        [FieldOffset(88)]
-        public long pos;
-
-        /// <summary>
-        /// < media format
-        /// </summary>
-        [FieldOffset(96)]
-        public int format;
-
-        /// <summary>
-        /// < permissions, see the AV_PERM_* flags
-        /// </summary>
-        [FieldOffset(100)]
-        public int perms;
-
-        /// <summary>
-        /// < media type of buffer data
-        /// </summary>
-        [FieldOffset(104)]
-        public AVMediaType type;
-
-        /// <summary>
-        /// < dictionary containing metadata key=value tags
-        /// </summary>
-        [FieldOffset(108)]
-        public AVDictionary* metadata;
-    }
-
-    /// <summary>
-    /// A filter pad used for either input or output.
-    /// 
-    /// See doc/filter_design.txt for details on how to implement the methods.
-    /// 
-    /// @warning this struct might be removed from public API.
-    /// users should call avfilter_pad_get_name() and avfilter_pad_get_type()
-    /// to access the name and type fields; there should be no need to access
-    /// any other fields from outside of libavfilter.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterPad
-    {
-        /// <summary>
-        /// Pad name. The name is unique among inputs and among outputs, but an
-        /// input may have the same name as an output. This may be NULL if this
-        /// pad has no need to ever be referenced by name.
-        /// </summary>
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
-
-        /// <summary>
-        /// AVFilterPad type.
-        /// </summary>
-        [FieldOffset(4)]
-        public AVMediaType type;
-
-        /// <summary>
-        /// Input pads:
-        /// Minimum required permissions on incoming buffers. Any buffer with
-        /// insufficient permissions will be automatically copied by the filter
-        /// system to a new buffer which provides the needed access
-        /// permissions.
-        /// 
-        /// Output pads:
-        /// Guaranteed permissions on outgoing buffers. Any buffer pushed on
-        /// the
-        /// link must have at least these permissions; this fact is checked by
-        /// asserts. It can be used to optimize buffer allocation.
-        /// </summary>
-        [FieldOffset(8)]
-        public int min_perms;
-
-        /// <summary>
-        /// Input pads:
-        /// Permissions which are not accepted on incoming buffers. Any buffer
-        /// which has any of these permissions set will be automatically copied
-        /// by the filter system to a new buffer which does not have those
-        /// permissions. This can be used to easily disallow buffers with
-        /// AV_PERM_REUSE.
-        /// 
-        /// Output pads:
-        /// Permissions which are automatically removed on outgoing buffers. It
-        /// can be used to optimize buffer allocation.
-        /// </summary>
-        [FieldOffset(12)]
-        public int rej_perms;
-
-        [FieldOffset(16)]
-        public global::System.IntPtr start_frame;
-
-        /// <summary>
-        /// Callback function to get a video buffer. If NULL, the filter system
-        /// will
-        /// use ff_default_get_video_buffer().
-        /// 
-        /// Input video pads only.
-        /// </summary>
-        [FieldOffset(20)]
-        public global::System.IntPtr get_video_buffer;
-
-        /// <summary>
-        /// Callback function to get an audio buffer. If NULL, the filter
-        /// system will
-        /// use ff_default_get_audio_buffer().
-        /// 
-        /// Input audio pads only.
-        /// </summary>
-        [FieldOffset(24)]
-        public global::System.IntPtr get_audio_buffer;
-
-        [FieldOffset(28)]
-        public global::System.IntPtr end_frame;
-
-        [FieldOffset(32)]
-        public global::System.IntPtr draw_slice;
-
-        /// <summary>
-        /// Filtering callback. This is where a filter receives a frame with
-        /// audio/video data and should do its processing.
-        /// 
-        /// Input pads only.
-        /// 
-        /// @return >= 0 on success, a negative AVERROR on error. This function
-        /// must ensure that frame is properly unreferenced on error if it
-        /// hasn't been passed on to another filter.
-        /// </summary>
-        [FieldOffset(36)]
-        public global::System.IntPtr filter_frame;
-
-        /// <summary>
-        /// Frame poll callback. This returns the number of immediately
-        /// available
-        /// samples. It should return a positive value if the next
-        /// request_frame()
-        /// is guaranteed to return one frame (with no delay).
-        /// 
-        /// Defaults to just calling the source poll_frame() method.
-        /// 
-        /// Output pads only.
-        /// </summary>
-        [FieldOffset(40)]
-        public global::System.IntPtr poll_frame;
-
-        /// <summary>
-        /// Frame request callback. A call to this should result in at least
-        /// one
-        /// frame being output over the given link. This should return zero on
-        /// success, and another value on error.
-        /// See ff_request_frame() for the error codes with a specific
-        /// meaning.
-        /// 
-        /// Output pads only.
-        /// </summary>
-        [FieldOffset(44)]
-        public global::System.IntPtr request_frame;
-
-        /// <summary>
-        /// Link configuration callback.
-        /// 
-        /// For output pads, this should set the following link properties:
-        /// video: width, height, sample_aspect_ratio, time_base
-        /// audio: sample_rate.
-        /// 
-        /// This should NOT set properties such as format, channel_layout, etc
-        /// which
-        /// are negotiated between filters by the filter system using the
-        /// query_formats() callback before this function is called.
-        /// 
-        /// For input pads, this should check the properties of the link, and
-        /// update
-        /// the filter's internal state as necessary.
-        /// 
-        /// For both input and output pads, this should return zero on success,
-        /// and another value on error.
-        /// </summary>
-        [FieldOffset(48)]
-        public global::System.IntPtr config_props;
-
-        /// <summary>
-        /// The filter expects a fifo to be inserted on its input link,
-        /// typically because it has a delay.
-        /// 
-        /// input pads only.
-        /// </summary>
-        [FieldOffset(52)]
-        public int needs_fifo;
-
-        [FieldOffset(56)]
-        public int needs_writable;
-    }
-
-    /// <summary>
-    /// Filter definition. This defines the pads a filter contains, and all the
-    /// callback functions used to interact with the filter.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilter
-    {
-        /// <summary>
-        /// Filter name. Must be non-NULL and unique among filters.
-        /// </summary>
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
-
-        /// <summary>
-        /// A description of the filter. May be NULL.
-        /// 
-        /// You should use the NULL_IF_CONFIG_SMALL() macro to define it.
-        /// </summary>
-        [FieldOffset(4)]
-        public global::System.IntPtr description;
-
-        /// <summary>
-        /// List of inputs, terminated by a zeroed element.
-        /// 
-        /// NULL if there are no (static) inputs. Instances of filters with
-        /// AVFILTER_FLAG_DYNAMIC_INPUTS set may have more inputs than present
-        /// in
-        /// this list.
-        /// </summary>
-        [FieldOffset(8)]
-        public AVFilterPad* inputs;
-
-        /// <summary>
-        /// List of outputs, terminated by a zeroed element.
-        /// 
-        /// NULL if there are no (static) outputs. Instances of filters with
-        /// AVFILTER_FLAG_DYNAMIC_OUTPUTS set may have more outputs than
-        /// present in
-        /// this list.
-        /// </summary>
-        [FieldOffset(12)]
-        public AVFilterPad* outputs;
-
-        /// <summary>
-        /// A class for the private data, used to declare filter private
-        /// AVOptions.
-        /// This field is NULL for filters that do not declare any options.
-        /// 
-        /// If this field is non-NULL, the first member of the filter private
-        /// data
-        /// must be a pointer to AVClass, which will be set by libavfilter
-        /// generic
-        /// code to this class.
-        /// </summary>
-        [FieldOffset(16)]
-        public AVClass* priv_class;
-
-        /// <summary>
-        /// A combination of AVFILTER_FLAG_*
-        /// </summary>
-        [FieldOffset(20)]
-        public int flags;
-
-        /// <summary>
-        /// Filter initialization function.
-        /// 
-        /// This callback will be called only once during the filter lifetime,
-        /// after
-        /// all the options have been set, but before links between filters are
-        /// established and format negotiation is done.
-        /// 
-        /// Basic filter initialization should be done here. Filters with
-        /// dynamic
-        /// inputs and/or outputs should create those inputs/outputs here based
-        /// on
-        /// provided options. No more changes to this filter's inputs/outputs
-        /// can be
-        /// done after this callback.
-        /// 
-        /// This callback must not assume that the filter links exist or frame
-        /// parameters are known.
-        /// 
-        /// @ref AVFilter.uninit "uninit" is guaranteed to be called even if
-        /// initialization fails, so this callback does not have to clean up on
-        /// failure.
-        /// 
-        /// @return 0 on success, a negative AVERROR on failure
-        /// </summary>
-        [FieldOffset(24)]
-        public global::System.IntPtr init;
-
-        /// <summary>
-        /// Should be set instead of @ref AVFilter.init "init" by the filters
-        /// that
-        /// want to pass a dictionary of AVOptions to nested contexts that are
-        /// allocated during init.
-        /// 
-        /// On return, the options dict should be freed and replaced with one
-        /// that
-        /// contains all the options which could not be processed by this
-        /// filter (or
-        /// with NULL if all the options were processed).
-        /// 
-        /// Otherwise the semantics is the same as for @ref AVFilter.init
-        /// "init".
-        /// </summary>
-        [FieldOffset(28)]
-        public global::System.IntPtr init_dict;
-
-        /// <summary>
-        /// Filter uninitialization function.
-        /// 
-        /// Called only once right before the filter is freed. Should
-        /// deallocate any
-        /// memory held by the filter, release any buffer references, etc. It
-        /// does
-        /// not need to deallocate the AVFilterContext.priv memory itself.
-        /// 
-        /// This callback may be called even if @ref AVFilter.init "init" was
-        /// not
-        /// called or failed, so it must be prepared to handle such a
-        /// situation.
-        /// </summary>
-        [FieldOffset(32)]
-        public global::System.IntPtr uninit;
-
-        /// <summary>
-        /// Query formats supported by the filter on its inputs and outputs.
-        /// 
-        /// This callback is called after the filter is initialized (so the
-        /// inputs
-        /// and outputs are fixed), shortly before the format negotiation. This
-        /// callback may be called more than once.
-        /// 
-        /// This callback must set AVFilterLink.out_formats on every input link
-        /// and
-        /// AVFilterLink.in_formats on every output link to a list of
-        /// pixel/sample
-        /// formats that the filter supports on that link. For audio links,
-        /// this
-        /// filter must also set @ref AVFilterLink.in_samplerates
-        /// "in_samplerates" /
-        /// @ref AVFilterLink.out_samplerates "out_samplerates" and
-        /// @ref AVFilterLink.in_channel_layouts "in_channel_layouts" /
-        /// @ref AVFilterLink.out_channel_layouts "out_channel_layouts"
-        /// analogously.
-        /// 
-        /// This callback may be NULL for filters with one input, in which case
-        /// libavfilter assumes that it supports all input formats and
-        /// preserves
-        /// them on output.
-        /// 
-        /// @return zero on success, a negative value corresponding to an
-        /// AVERROR code otherwise
-        /// </summary>
-        [FieldOffset(36)]
-        public global::System.IntPtr query_formats;
-
-        /// <summary>
-        /// < size of private data to allocate for the filter
-        /// </summary>
-        [FieldOffset(40)]
-        public int priv_size;
-
-        /// <summary>
-        /// Used by the filter registration system. Must not be touched by any
-        /// other
-        /// code.
-        /// </summary>
-        [FieldOffset(44)]
-        public AVFilter* next;
-
-        /// <summary>
-        /// Make the filter instance process a command.
-        /// 
-        /// @param cmd    the command to process, for handling simplicity all
-        /// commands must be alphanumeric only
-        /// @param arg    the argument for the command
-        /// @param res    a buffer with size res_size where the filter(s) can
-        /// return a response. This must not change when the command is not
-        /// supported.
-        /// @param flags  if AVFILTER_CMD_FLAG_FAST is set and the command
-        /// would be
-        /// time consuming then a filter should treat it like an unsupported
-        /// command
-        /// 
-        /// @returns >=0 on success otherwise an error code.
-        /// AVERROR(ENOSYS) on unsupported commands
-        /// </summary>
-        [FieldOffset(48)]
-        public global::System.IntPtr process_command;
-
-        /// <summary>
-        /// Filter initialization function, alternative to the init()
-        /// callback. Args contains the user-supplied parameters, opaque is
-        /// used for providing binary data.
-        /// </summary>
-        [FieldOffset(52)]
-        public global::System.IntPtr init_opaque;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterInternal
-    {
-    }
-
-    /// <summary>
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterContext
-    {
-        /// <summary>
-        /// < needed for av_log() and filters common options
-        /// </summary>
-        [FieldOffset(0)]
-        public AVClass* av_class;
-
-        /// <summary>
-        /// < the AVFilter of which this is an instance
-        /// </summary>
-        [FieldOffset(4)]
-        public AVFilter* filter;
-
-        /// <summary>
-        /// < name of this filter instance
-        /// </summary>
-        [FieldOffset(8)]
-        public sbyte* name;
-
-        /// <summary>
-        /// < array of input pads
-        /// </summary>
-        [FieldOffset(12)]
-        public AVFilterPad* input_pads;
-
-        /// <summary>
-        /// < array of pointers to input links
-        /// </summary>
-        [FieldOffset(16)]
-        public AVFilterLink* inputs;
-
-        [FieldOffset(20)]
-        public uint input_count;
-
-        /// <summary>
-        /// < number of input pads
-        /// </summary>
-        [FieldOffset(24)]
-        public uint nb_inputs;
-
-        /// <summary>
-        /// < array of output pads
-        /// </summary>
-        [FieldOffset(28)]
-        public AVFilterPad* output_pads;
-
-        /// <summary>
-        /// < array of pointers to output links
-        /// </summary>
-        [FieldOffset(32)]
-        public AVFilterLink* outputs;
-
-        [FieldOffset(36)]
-        public uint output_count;
-
-        /// <summary>
-        /// < number of output pads
-        /// </summary>
-        [FieldOffset(40)]
-        public uint nb_outputs;
-
-        /// <summary>
-        /// < private data for use by the filter
-        /// </summary>
-        [FieldOffset(44)]
-        public global::System.IntPtr priv;
-
-        /// <summary>
-        /// < filtergraph this filter belongs to
-        /// </summary>
-        [FieldOffset(48)]
-        public AVFilterGraph* graph;
-
-        /// <summary>
-        /// Type of multithreading being allowed/used. A combination of
-        /// AVFILTER_THREAD_* flags.
-        /// 
-        /// May be set by the caller before initializing the filter to forbid
-        /// some
-        /// or all kinds of multithreading for this filter. The default is
-        /// allowing
-        /// everything.
-        /// 
-        /// When the filter is initialized, this field is combined using bit
-        /// AND with
-        /// AVFilterGraph.thread_type to get the final mask used for
-        /// determining
-        /// allowed threading types. I.e. a threading type needs to be set in
-        /// both
-        /// to be allowed.
-        /// 
-        /// After the filter is initialzed, libavfilter sets this field to the
-        /// threading type that is actually used (0 for no multithreading).
-        /// </summary>
-        [FieldOffset(52)]
-        public int thread_type;
-
-        /// <summary>
-        /// An opaque struct for libavfilter internal use.
-        /// </summary>
-        [FieldOffset(56)]
-        public AVFilterInternal* @internal;
-
-        [FieldOffset(60)]
-        public AVFilterCommand* command_queue;
-
-        /// <summary>
-        /// < enable expression string
-        /// </summary>
-        [FieldOffset(64)]
-        public sbyte* enable_str;
-
-        /// <summary>
-        /// < parsed expression (AVExpr*)
-        /// </summary>
-        [FieldOffset(68)]
-        public global::System.IntPtr enable;
-
-        /// <summary>
-        /// < variable values for the enable expression
-        /// </summary>
-        [FieldOffset(72)]
-        public double* var_values;
-
-        /// <summary>
-        /// < the enabled state from the last expression evaluation
-        /// </summary>
-        [FieldOffset(76)]
-        public int is_disabled;
-    }
-
-    /// <summary>
-    /// A link between two filters. This contains pointers to the source and
-    /// destination filters between which this link exists, and the indexes of
-    /// the pads involved. In addition, this link also contains the parameters
-    /// which have been negotiated and agreed upon between the filter, such as
-    /// image dimensions, format, etc.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterLink
-    {
-        /// <summary>
-        /// < source filter
-        /// </summary>
-        [FieldOffset(0)]
-        public AVFilterContext* src;
-
-        /// <summary>
-        /// < output pad on the source filter
-        /// </summary>
-        [FieldOffset(4)]
-        public AVFilterPad* srcpad;
-
-        /// <summary>
-        /// < dest filter
-        /// </summary>
-        [FieldOffset(8)]
-        public AVFilterContext* dst;
-
-        /// <summary>
-        /// < input pad on the dest filter
-        /// </summary>
-        [FieldOffset(12)]
-        public AVFilterPad* dstpad;
-
-        /// <summary>
-        /// < filter media type
-        /// </summary>
-        [FieldOffset(16)]
-        public AVMediaType type;
-
-        /// <summary>
-        /// < agreed upon image width
-        /// </summary>
-        [FieldOffset(20)]
-        public int w;
-
-        /// <summary>
-        /// < agreed upon image height
-        /// </summary>
-        [FieldOffset(24)]
-        public int h;
-
-        /// <summary>
-        /// < agreed upon sample aspect ratio
-        /// </summary>
-        [FieldOffset(28)]
-        public AVRational* sample_aspect_ratio;
-
-        /// <summary>
-        /// < channel layout of current buffer (see libavutil/channel_layout.h)
-        /// </summary>
-        [FieldOffset(40)]
-        public ulong channel_layout;
-
-        /// <summary>
-        /// < samples per second
-        /// </summary>
-        [FieldOffset(48)]
-        public int sample_rate;
-
-        /// <summary>
-        /// < agreed upon media format
-        /// </summary>
-        [FieldOffset(52)]
-        public int format;
-
-        /// <summary>
-        /// Define the time base used by the PTS of the frames/samples
-        /// which will pass through this link.
-        /// During the configuration stage, each filter is supposed to
-        /// change only the output timebase, while the timebase of the
-        /// input link is assumed to be an unchangeable property.
-        /// </summary>
-        [FieldOffset(56)]
-        public AVRational* time_base;
-
-        /// <summary>
-        /// All fields below this line are not part of the public API. They
-        /// may not be used outside of libavfilter and can be changed and
-        /// removed at will.
-        /// New public fields should be added right above.
-        /// 
-        /// 
-        /// 
-        /// Lists of formats and channel layouts supported by the input and
-        /// output
-        /// filters respectively. These lists are used for negotiating the
-        /// format
-        /// to actually be used, which will be loaded into the format and
-        /// channel_layout members, above, when chosen.
-        /// 
-        /// </summary>
-        [FieldOffset(64)]
-        public AVFilterFormats* in_formats;
-
-        [FieldOffset(68)]
-        public AVFilterFormats* out_formats;
-
-        /// <summary>
-        /// Lists of channel layouts and sample rates used for automatic
-        /// negotiation.
-        /// </summary>
-        [FieldOffset(72)]
-        public AVFilterFormats* in_samplerates;
-
-        [FieldOffset(76)]
-        public AVFilterFormats* out_samplerates;
-
-        [FieldOffset(80)]
-        public AVFilterChannelLayouts* in_channel_layouts;
-
-        [FieldOffset(84)]
-        public AVFilterChannelLayouts* out_channel_layouts;
-
-        /// <summary>
-        /// Audio only, the destination filter sets this to a non-zero value to
-        /// request that buffers with the given number of samples should be
-        /// sent to
-        /// it. AVFilterPad.needs_fifo must also be set on the corresponding
-        /// input
-        /// pad.
-        /// Last buffer before EOF will be padded with silence.
-        /// </summary>
-        [FieldOffset(88)]
-        public int request_samples;
-
-        [FieldOffset(92)]
-        public AVFilterLink.AVLINK init_state;
-
-        [FieldOffset(96)]
-        public AVFilterPool* pool;
-
-        /// <summary>
-        /// Graph the filter belongs to.
-        /// </summary>
-        [FieldOffset(100)]
-        public AVFilterGraph* graph;
-
-        /// <summary>
-        /// Current timestamp of the link, as defined by the most recent
-        /// frame(s), in AV_TIME_BASE units.
-        /// </summary>
-        [FieldOffset(104)]
-        public long current_pts;
-
-        /// <summary>
-        /// Index in the age array.
-        /// </summary>
-        [FieldOffset(112)]
-        public int age_index;
-
-        /// <summary>
-        /// Frame rate of the stream on the link, or 1/0 if unknown;
-        /// if left to 0/0, will be automatically be copied from the first
-        /// input
-        /// of the source filter if it exists.
-        /// 
-        /// Sources should set it to the best estimation of the real frame
-        /// rate.
-        /// Filters should update it if necessary depending on their function.
-        /// Sinks can use it to set a default output frame rate.
-        /// It is similar to the r_frame_rate field in AVStream.
-        /// </summary>
-        [FieldOffset(116)]
-        public AVRational* frame_rate;
-
-        /// <summary>
-        /// Buffer partially filled with samples to achieve a fixed/minimum
-        /// size.
-        /// </summary>
-        [FieldOffset(124)]
-        public AVFrame* partial_buf;
-
-        /// <summary>
-        /// Size of the partial buffer to allocate.
-        /// Must be between min_samples and max_samples.
-        /// </summary>
-        [FieldOffset(128)]
-        public int partial_buf_size;
-
-        /// <summary>
-        /// Minimum number of samples to filter at once. If filter_frame() is
-        /// called with fewer samples, it will accumulate them in partial_buf.
-        /// This field and the related ones must not be changed after filtering
-        /// has started.
-        /// If 0, all related fields are ignored.
-        /// </summary>
-        [FieldOffset(132)]
-        public int min_samples;
-
-        /// <summary>
-        /// Maximum number of samples to filter at once. If filter_frame() is
-        /// called with more samples, it will split them.
-        /// </summary>
-        [FieldOffset(136)]
-        public int max_samples;
-
-        /// <summary>
-        /// The buffer reference currently being received across the link by
-        /// the
-        /// destination filter. This is used internally by the filter system to
-        /// allow automatic copying of buffers which do not have sufficient
-        /// permissions for the destination. This should not be accessed
-        /// directly
-        /// by the filters.
-        /// </summary>
-        [FieldOffset(140)]
-        public AVFilterBufferRef* cur_buf_copy;
-
-        /// <summary>
-        /// True if the link is closed.
-        /// If set, all attemps of start_frame, filter_frame or request_frame
-        /// will fail with AVERROR_EOF, and if necessary the reference will be
-        /// destroyed.
-        /// If request_frame returns AVERROR_EOF, this flag is set on the
-        /// corresponding link.
-        /// It can be set also be set by either the source or the destination
-        /// filter.
-        /// </summary>
-        [FieldOffset(144)]
-        public int closed;
-
-        /// <summary>
-        /// Number of channels.
-        /// </summary>
-        [FieldOffset(148)]
-        public int channels;
-
-        /// <summary>
-        /// True if a frame is being requested on the link.
-        /// Used internally by the framework.
-        /// </summary>
-        [FieldOffset(152)]
-        public uint frame_requested;
-
-        /// <summary>
-        /// Link processing flags.
-        /// </summary>
-        [FieldOffset(156)]
-        public uint flags;
-
-        /// <summary>
-        /// Number of past frames sent through the link.
-        /// </summary>
-        [FieldOffset(160)]
-        public long frame_count;
-
-        /// <summary>
-        /// </summary>
-        public enum AVLINK
+        public enum AVFILTER_AUTO_CONVERT
         {
-            /// <summary>not started</summary>
-            AVLINK_UNINIT = 0,
-            /// <summary>started, but incomplete</summary>
-            AVLINK_STARTINIT = 1,
-            /// <summary>complete</summary>
-            AVLINK_INIT = 2
+            /// <summary>all automatic conversions enabled</summary>
+            AVFILTER_AUTO_CONVERT_ALL = 0,
+            /// <summary>all automatic conversions disabled</summary>
+            AVFILTER_AUTO_CONVERT_NONE = -1
         }
-    }
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterGraphInternal
-    {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterChannelLayouts
+        {
+        }
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterGraph
-    {
-        [FieldOffset(0)]
-        public AVClass* av_class;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterPool
+        {
+        }
 
-        [FieldOffset(4)]
-        public uint filter_count_unused;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterCommand
+        {
+        }
 
-        [FieldOffset(8)]
-        public AVFilterContext* filters;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterFormats
+        {
+        }
 
         /// <summary>
-        /// < sws options to use for the auto-inserted scale filters
+        /// A reference-counted buffer data type used by the filter system. Filters
+        /// should not store pointers to this structure directly, but instead use
+        /// the
+        /// AVFilterBufferRef structure below.
         /// </summary>
-        [FieldOffset(12)]
-        public sbyte* scale_sws_opts;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterBuffer
+        {
+            /// <summary>
+            /// buffer data for each plane/channel
+            /// </summary>
+            public libavutil.ArrayWrapper_BytePtr8 data;
+
+            /// <summary>
+            /// pointers to the data planes/channels.
+            /// 
+            /// For video, this should simply point to data[].
+            /// 
+            /// For planar audio, each channel has a separate data pointer, and
+            /// linesize[0] contains the size of each channel buffer.
+            /// For packed audio, there is just one data pointer, and linesize[0]
+            /// contains the total size of the buffer for all channels.
+            /// 
+            /// Note: Both data and extended_data will always be set, but for planar
+            /// audio with more channels that can fit in data, extended_data must be
+            /// used
+            /// in order to access all channels.
+            /// </summary>
+            public byte** extended_data;
+
+            /// <summary>
+            /// number of bytes per line
+            /// </summary>
+            public fixed int linesize[8];
+
+            /// <summary>
+            /// private data to be used by a custom free function
+            /// </summary>
+            public void* priv;
+
+            /// <summary>
+            /// A pointer to the function to deallocate this buffer if the default
+            /// function is not sufficient. This could, for example, add the memory
+            /// back into a memory pool to be reused later without the overhead of
+            /// reallocating it from scratch.
+            /// </summary>
+            public global::System.IntPtr free;
+
+            /// <summary>
+            /// media format
+            /// </summary>
+            public int format;
+
+            /// <summary>
+            /// width and height of the allocated buffer
+            /// </summary>
+            public int w;
+
+            /// <summary>
+            /// width and height of the allocated buffer
+            /// </summary>
+            public int h;
+
+            /// <summary>
+            /// number of references to this buffer
+            /// </summary>
+            public uint refcount;
+        }
 
         /// <summary>
-        /// < libavresample options to use for the auto-inserted resample
-        /// filters
+        /// Audio specific properties in a reference to an AVFilterBuffer. Since
+        /// AVFilterBufferRef is common to different media formats, audio specific
+        /// per reference properties must be separated out.
         /// </summary>
-        [FieldOffset(16)]
-        public sbyte* resample_lavr_opts;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterBufferRefAudioProps
+        {
+            /// <summary>
+            /// channel layout of audio buffer
+            /// </summary>
+            public ulong channel_layout;
 
-        [FieldOffset(20)]
-        public uint nb_filters;
+            /// <summary>
+            /// number of audio samples per channel
+            /// </summary>
+            public int nb_samples;
+
+            /// <summary>
+            /// audio buffer sample rate
+            /// </summary>
+            public int sample_rate;
+
+            /// <summary>
+            /// number of channels (do not access directly)
+            /// </summary>
+            public int channels;
+        }
 
         /// <summary>
-        /// Type of multithreading allowed for filters in this graph. A
-        /// combination
-        /// of AVFILTER_THREAD_* flags.
-        /// 
-        /// May be set by the caller at any point, the setting will apply to
-        /// all
-        /// filters initialized after that. The default is allowing everything.
-        /// 
-        /// When a filter in this graph is initialized, this field is combined
-        /// using
-        /// bit AND with AVFilterContext.thread_type to get the final mask used
+        /// Video specific properties in a reference to an AVFilterBuffer. Since
+        /// AVFilterBufferRef is common to different media formats, video specific
+        /// per reference properties must be separated out.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterBufferRefVideoProps
+        {
+            /// <summary>
+            /// image width
+            /// </summary>
+            public int w;
+
+            /// <summary>
+            /// image height
+            /// </summary>
+            public int h;
+
+            /// <summary>
+            /// sample aspect ratio
+            /// </summary>
+            public libavutil.AVRational sample_aspect_ratio;
+
+            /// <summary>
+            /// is frame interlaced
+            /// </summary>
+            public int interlaced;
+
+            /// <summary>
+            /// field order
+            /// </summary>
+            public int top_field_first;
+
+            /// <summary>
+            /// picture type of the frame
+            /// </summary>
+            public libavutil.AVPictureType pict_type;
+
+            /// <summary>
+            /// 1 -> keyframe, 0-> not
+            /// </summary>
+            public int key_frame;
+
+            /// <summary>
+            /// qp_table stride
+            /// </summary>
+            public int qp_table_linesize;
+
+            /// <summary>
+            /// qp_table size
+            /// </summary>
+            public int qp_table_size;
+
+            /// <summary>
+            /// array of Quantization Parameters
+            /// </summary>
+            public sbyte* qp_table;
+        }
+
+        /// <summary>
+        /// A reference to an AVFilterBuffer. Since filters can manipulate the
+        /// origin of
+        /// a buffer to, for example, crop image without any memcpy, the buffer
+        /// origin
+        /// and dimensions are per-reference properties. Linesize is also useful
         /// for
-        /// determining allowed threading types. I.e. a threading type needs to
-        /// be
-        /// set in both to be allowed.
-        /// </summary>
-        [FieldOffset(24)]
-        public int thread_type;
-
-        /// <summary>
-        /// Maximum number of threads used by filters in this graph. May be set
-        /// by
-        /// the caller before adding any filters to the filtergraph. Zero (the
-        /// default) means that the number of threads is determined
-        /// automatically.
-        /// </summary>
-        [FieldOffset(28)]
-        public int nb_threads;
-
-        /// <summary>
-        /// Opaque object for libavfilter internal use.
-        /// </summary>
-        [FieldOffset(32)]
-        public AVFilterGraphInternal* @internal;
-
-        /// <summary>
-        /// Opaque user data. May be set by the caller to an arbitrary value,
-        /// e.g. to
-        /// be used from callbacks like @ref AVFilterGraph.execute.
-        /// Libavfilter will not touch this field in any way.
-        /// </summary>
-        [FieldOffset(36)]
-        public global::System.IntPtr opaque;
-
-        /// <summary>
-        /// This callback may be set by the caller immediately after allocating
-        /// the
-        /// graph and before adding any filters to it, to provide a custom
-        /// multithreading implementation.
+        /// image flipping, frame to field filters, etc, and so is also
+        /// per-reference.
         /// 
-        /// If set, filters with slice threading capability will call this
-        /// callback
-        /// to execute multiple jobs in parallel.
+        /// TODO: add anything necessary for frame reordering
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterBufferRef
+        {
+            /// <summary>
+            /// the buffer that this is a reference to
+            /// </summary>
+            public libavfilter.AVFilterBuffer* buf;
+
+            /// <summary>
+            /// picture/audio data for each plane
+            /// </summary>
+            public libavutil.ArrayWrapper_BytePtr8 data;
+
+            /// <summary>
+            /// pointers to the data planes/channels.
+            /// 
+            /// For video, this should simply point to data[].
+            /// 
+            /// For planar audio, each channel has a separate data pointer, and
+            /// linesize[0] contains the size of each channel buffer.
+            /// For packed audio, there is just one data pointer, and linesize[0]
+            /// contains the total size of the buffer for all channels.
+            /// 
+            /// Note: Both data and extended_data will always be set, but for planar
+            /// audio with more channels that can fit in data, extended_data must be
+            /// used
+            /// in order to access all channels.
+            /// </summary>
+            public byte** extended_data;
+
+            /// <summary>
+            /// number of bytes per line
+            /// </summary>
+            public fixed int linesize[8];
+
+            /// <summary>
+            /// video buffer specific properties
+            /// </summary>
+            public libavfilter.AVFilterBufferRefVideoProps* video;
+
+            /// <summary>
+            /// audio buffer specific properties
+            /// </summary>
+            public libavfilter.AVFilterBufferRefAudioProps* audio;
+
+            /// <summary>
+            /// presentation timestamp. The time unit may change during
+            /// filtering, as it is specified in the link and the filter code
+            /// may need to rescale the PTS accordingly.
+            /// </summary>
+            public long pts;
+
+            /// <summary>
+            /// byte position in stream, -1 if unknown
+            /// </summary>
+            public long pos;
+
+            /// <summary>
+            /// media format
+            /// </summary>
+            public int format;
+
+            /// <summary>
+            /// permissions, see the AV_PERM_* flags
+            /// </summary>
+            public int perms;
+
+            /// <summary>
+            /// media type of buffer data
+            /// </summary>
+            public libavutil.AVMediaType type;
+
+            /// <summary>
+            /// dictionary containing metadata key=value tags
+            /// </summary>
+            public libavutil.AVDictionary* metadata;
+        }
+
+        /// <summary>
+        /// A filter pad used for either input or output.
         /// 
-        /// If this field is left unset, libavfilter will use its internal
-        /// implementation, which may or may not be multithreaded depending on
-        /// the
-        /// platform and build options.
-        /// </summary>
-        [FieldOffset(40)]
-        public global::System.IntPtr execute;
-
-        /// <summary>
-        /// < swr options to use for the auto-inserted aresample filters,
-        /// Access ONLY through AVOptions
-        /// </summary>
-        [FieldOffset(44)]
-        public sbyte* aresample_swr_opts;
-
-        /// <summary>
-        /// Private fields
+        /// See doc/filter_design.txt for details on how to implement the methods.
         /// 
-        /// The following fields are for internal use only.
-        /// Their type, offset, number and semantic can change without notice.
+        /// @warning this struct might be removed from public API.
+        /// users should call avfilter_pad_get_name() and avfilter_pad_get_type()
+        /// to access the name and type fields; there should be no need to access
+        /// any other fields from outside of libavfilter.
         /// </summary>
-        [FieldOffset(48)]
-        public AVFilterLink* sink_links;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterPad
+        {
+            /// <summary>
+            /// Pad name. The name is unique among inputs and among outputs, but an
+            /// input may have the same name as an output. This may be NULL if this
+            /// pad has no need to ever be referenced by name.
+            /// </summary>
+            public sbyte* name;
 
-        [FieldOffset(52)]
-        public int sink_links_count;
+            /// <summary>
+            /// AVFilterPad type.
+            /// </summary>
+            public libavutil.AVMediaType type;
 
-        [FieldOffset(56)]
-        public uint disable_auto_convert;
-    }
+            /// <summary>
+            /// Input pads:
+            /// Minimum required permissions on incoming buffers. Any buffer with
+            /// insufficient permissions will be automatically copied by the filter
+            /// system to a new buffer which provides the needed access permissions.
+            /// 
+            /// Output pads:
+            /// Guaranteed permissions on outgoing buffers. Any buffer pushed on the
+            /// link must have at least these permissions; this fact is checked by
+            /// asserts. It can be used to optimize buffer allocation.
+            /// </summary>
+            public int min_perms;
 
-    /// <summary>
-    /// A linked-list of the inputs/outputs of the filter chain.
-    /// 
-    /// This is mainly useful for avfilter_graph_parse() /
-    /// avfilter_graph_parse2(),
-    /// where it is used to communicate open (unlinked) inputs and outputs from
-    /// and
-    /// to the caller.
-    /// This struct specifies, per each not connected pad contained in the
-    /// graph, the
-    /// filter context and the pad index required for establishing a link.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVFilterInOut
-    {
+            /// <summary>
+            /// Input pads:
+            /// Permissions which are not accepted on incoming buffers. Any buffer
+            /// which has any of these permissions set will be automatically copied
+            /// by the filter system to a new buffer which does not have those
+            /// permissions. This can be used to easily disallow buffers with
+            /// AV_PERM_REUSE.
+            /// 
+            /// Output pads:
+            /// Permissions which are automatically removed on outgoing buffers. It
+            /// can be used to optimize buffer allocation.
+            /// </summary>
+            public int rej_perms;
+
+            public global::System.IntPtr start_frame;
+
+            /// <summary>
+            /// Callback function to get a video buffer. If NULL, the filter system
+            /// will
+            /// use ff_default_get_video_buffer().
+            /// 
+            /// Input video pads only.
+            /// </summary>
+            public global::System.IntPtr get_video_buffer;
+
+            /// <summary>
+            /// Callback function to get an audio buffer. If NULL, the filter system
+            /// will
+            /// use ff_default_get_audio_buffer().
+            /// 
+            /// Input audio pads only.
+            /// </summary>
+            public global::System.IntPtr get_audio_buffer;
+
+            public global::System.IntPtr end_frame;
+
+            public global::System.IntPtr draw_slice;
+
+            /// <summary>
+            /// Filtering callback. This is where a filter receives a frame with
+            /// audio/video data and should do its processing.
+            /// 
+            /// Input pads only.
+            /// 
+            /// @return >= 0 on success, a negative AVERROR on error. This function
+            /// must ensure that frame is properly unreferenced on error if it
+            /// hasn't been passed on to another filter.
+            /// </summary>
+            public global::System.IntPtr filter_frame;
+
+            /// <summary>
+            /// Frame poll callback. This returns the number of immediately available
+            /// samples. It should return a positive value if the next request_frame()
+            /// is guaranteed to return one frame (with no delay).
+            /// 
+            /// Defaults to just calling the source poll_frame() method.
+            /// 
+            /// Output pads only.
+            /// </summary>
+            public global::System.IntPtr poll_frame;
+
+            /// <summary>
+            /// Frame request callback. A call to this should result in at least one
+            /// frame being output over the given link. This should return zero on
+            /// success, and another value on error.
+            /// See ff_request_frame() for the error codes with a specific
+            /// meaning.
+            /// 
+            /// Output pads only.
+            /// </summary>
+            public global::System.IntPtr request_frame;
+
+            /// <summary>
+            /// Link configuration callback.
+            /// 
+            /// For output pads, this should set the following link properties:
+            /// video: width, height, sample_aspect_ratio, time_base
+            /// audio: sample_rate.
+            /// 
+            /// This should NOT set properties such as format, channel_layout, etc
+            /// which
+            /// are negotiated between filters by the filter system using the
+            /// query_formats() callback before this function is called.
+            /// 
+            /// For input pads, this should check the properties of the link, and
+            /// update
+            /// the filter's internal state as necessary.
+            /// 
+            /// For both input and output pads, this should return zero on success,
+            /// and another value on error.
+            /// </summary>
+            public global::System.IntPtr config_props;
+
+            /// <summary>
+            /// The filter expects a fifo to be inserted on its input link,
+            /// typically because it has a delay.
+            /// 
+            /// input pads only.
+            /// </summary>
+            public int needs_fifo;
+
+            public int needs_writable;
+        }
+
         /// <summary>
+        /// Filter definition. This defines the pads a filter contains, and all the
+        /// callback functions used to interact with the filter.
         /// </summary>
-        [FieldOffset(0)]
-        public sbyte* name;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilter
+        {
+            /// <summary>
+            /// Filter name. Must be non-NULL and unique among filters.
+            /// </summary>
+            public sbyte* name;
+
+            /// <summary>
+            /// A description of the filter. May be NULL.
+            /// 
+            /// You should use the NULL_IF_CONFIG_SMALL() macro to define it.
+            /// </summary>
+            public sbyte* description;
+
+            /// <summary>
+            /// List of inputs, terminated by a zeroed element.
+            /// 
+            /// NULL if there are no (static) inputs. Instances of filters with
+            /// AVFILTER_FLAG_DYNAMIC_INPUTS set may have more inputs than present in
+            /// this list.
+            /// </summary>
+            public libavfilter.AVFilterPad* inputs;
+
+            /// <summary>
+            /// List of outputs, terminated by a zeroed element.
+            /// 
+            /// NULL if there are no (static) outputs. Instances of filters with
+            /// AVFILTER_FLAG_DYNAMIC_OUTPUTS set may have more outputs than present in
+            /// this list.
+            /// </summary>
+            public libavfilter.AVFilterPad* outputs;
+
+            /// <summary>
+            /// A class for the private data, used to declare filter private AVOptions.
+            /// This field is NULL for filters that do not declare any options.
+            /// 
+            /// If this field is non-NULL, the first member of the filter private data
+            /// must be a pointer to AVClass, which will be set by libavfilter generic
+            /// code to this class.
+            /// </summary>
+            public libavutil.AVClass* priv_class;
+
+            /// <summary>
+            /// A combination of AVFILTER_FLAG_
+            /// </summary>
+            public int flags;
+
+            /// <summary>
+            /// Filter initialization function.
+            /// 
+            /// This callback will be called only once during the filter lifetime,
+            /// after
+            /// all the options have been set, but before links between filters are
+            /// established and format negotiation is done.
+            /// 
+            /// Basic filter initialization should be done here. Filters with dynamic
+            /// inputs and/or outputs should create those inputs/outputs here based on
+            /// provided options. No more changes to this filter's inputs/outputs can
+            /// be
+            /// done after this callback.
+            /// 
+            /// This callback must not assume that the filter links exist or frame
+            /// parameters are known.
+            /// 
+            /// @ref AVFilter.uninit "uninit" is guaranteed to be called even if
+            /// initialization fails, so this callback does not have to clean up on
+            /// failure.
+            /// 
+            /// @return 0 on success, a negative AVERROR on failure
+            /// </summary>
+            public global::System.IntPtr init;
+
+            /// <summary>
+            /// Should be set instead of @ref AVFilter.init "init" by the filters that
+            /// want to pass a dictionary of AVOptions to nested contexts that are
+            /// allocated during init.
+            /// 
+            /// On return, the options dict should be freed and replaced with one that
+            /// contains all the options which could not be processed by this filter
+            /// (or
+            /// with NULL if all the options were processed).
+            /// 
+            /// Otherwise the semantics is the same as for @ref AVFilter.init "init".
+            /// </summary>
+            public global::System.IntPtr init_dict;
+
+            /// <summary>
+            /// Filter uninitialization function.
+            /// 
+            /// Called only once right before the filter is freed. Should deallocate
+            /// any
+            /// memory held by the filter, release any buffer references, etc. It does
+            /// not need to deallocate the AVFilterContext.priv memory itself.
+            /// 
+            /// This callback may be called even if @ref AVFilter.init "init" was not
+            /// called or failed, so it must be prepared to handle such a situation.
+            /// </summary>
+            public global::System.IntPtr uninit;
+
+            /// <summary>
+            /// Query formats supported by the filter on its inputs and outputs.
+            /// 
+            /// This callback is called after the filter is initialized (so the inputs
+            /// and outputs are fixed), shortly before the format negotiation. This
+            /// callback may be called more than once.
+            /// 
+            /// This callback must set AVFilterLink.out_formats on every input link and
+            /// AVFilterLink.in_formats on every output link to a list of pixel/sample
+            /// formats that the filter supports on that link. For audio links, this
+            /// filter must also set @ref AVFilterLink.in_samplerates "in_samplerates"
+            /// @ref AVFilterLink.out_samplerates "out_samplerates" and
+            /// @ref AVFilterLink.in_channel_layouts "in_channel_layouts"
+            /// @ref AVFilterLink.out_channel_layouts "out_channel_layouts"
+            /// analogously.
+            /// 
+            /// This callback may be NULL for filters with one input, in which case
+            /// libavfilter assumes that it supports all input formats and preserves
+            /// them on output.
+            /// 
+            /// @return zero on success, a negative value corresponding to an
+            /// AVERROR code otherwise
+            /// </summary>
+            public global::System.IntPtr query_formats;
+
+            /// <summary>
+            /// size of private data to allocate for the filter
+            /// </summary>
+            public int priv_size;
+
+            /// <summary>
+            /// Used by the filter registration system. Must not be touched by any
+            /// other
+            /// code.
+            /// </summary>
+            public libavfilter.AVFilter* next;
+
+            /// <summary>
+            /// Make the filter instance process a command.
+            /// 
+            /// @param cmd    the command to process, for handling simplicity all
+            /// commands must be alphanumeric only
+            /// @param arg    the argument for the command
+            /// @param res    a buffer with size res_size where the filter(s) can
+            /// return a response. This must not change when the command is not supported.
+            /// @param flags  if AVFILTER_CMD_FLAG_FAST is set and the command would be
+            /// time consuming then a filter should treat it like an unsupported
+            /// command
+            /// 
+            /// @returns >=0 on success otherwise an error code.
+            /// AVERROR(ENOSYS) on unsupported commands
+            /// </summary>
+            public global::System.IntPtr process_command;
+
+            /// <summary>
+            /// Filter initialization function, alternative to the init()
+            /// callback. Args contains the user-supplied parameters, opaque is
+            /// used for providing binary data.
+            /// </summary>
+            public global::System.IntPtr init_opaque;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterInternal
+        {
+        }
 
         /// <summary>
+        /// An instance of a filter
         /// </summary>
-        [FieldOffset(4)]
-        public AVFilterContext* filter_ctx;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterContext
+        {
+            /// <summary>
+            /// needed for av_log() and filters common options
+            /// </summary>
+            public libavutil.AVClass* av_class;
+
+            /// <summary>
+            /// the AVFilter of which this is an instance
+            /// </summary>
+            public libavfilter.AVFilter* filter;
+
+            /// <summary>
+            /// name of this filter instance
+            /// </summary>
+            public sbyte* name;
+
+            /// <summary>
+            /// array of input pads
+            /// </summary>
+            public libavfilter.AVFilterPad* input_pads;
+
+            /// <summary>
+            /// array of pointers to input links
+            /// </summary>
+            public libavfilter.AVFilterLink** inputs;
+
+            public uint input_count;
+
+            /// <summary>
+            /// number of input pads
+            /// </summary>
+            public uint nb_inputs;
+
+            /// <summary>
+            /// array of output pads
+            /// </summary>
+            public libavfilter.AVFilterPad* output_pads;
+
+            /// <summary>
+            /// array of pointers to output links
+            /// </summary>
+            public libavfilter.AVFilterLink** outputs;
+
+            public uint output_count;
+
+            /// <summary>
+            /// number of output pads
+            /// </summary>
+            public uint nb_outputs;
+
+            /// <summary>
+            /// private data for use by the filter
+            /// </summary>
+            public void* priv;
+
+            /// <summary>
+            /// filtergraph this filter belongs to
+            /// </summary>
+            public libavfilter.AVFilterGraph* graph;
+
+            /// <summary>
+            /// Type of multithreading being allowed/used. A combination of
+            /// AVFILTER_THREAD_* flags.
+            /// 
+            /// May be set by the caller before initializing the filter to forbid some
+            /// or all kinds of multithreading for this filter. The default is allowing
+            /// everything.
+            /// 
+            /// When the filter is initialized, this field is combined using bit AND
+            /// with
+            /// AVFilterGraph.thread_type to get the final mask used for determining
+            /// allowed threading types. I.e. a threading type needs to be set in both
+            /// to be allowed.
+            /// 
+            /// After the filter is initialzed, libavfilter sets this field to the
+            /// threading type that is actually used (0 for no multithreading).
+            /// </summary>
+            public int thread_type;
+
+            /// <summary>
+            /// An opaque struct for libavfilter internal use.
+            /// </summary>
+            public libavfilter.AVFilterInternal* @internal;
+
+            public libavfilter.AVFilterCommand* command_queue;
+
+            /// <summary>
+            /// enable expression string
+            /// </summary>
+            public sbyte* enable_str;
+
+            /// <summary>
+            /// parsed expression (AVExpr*)
+            /// </summary>
+            public void* enable;
+
+            /// <summary>
+            /// variable values for the enable expression
+            /// </summary>
+            public double* var_values;
+
+            /// <summary>
+            /// the enabled state from the last expression evaluation
+            /// </summary>
+            public int is_disabled;
+        }
 
         /// <summary>
+        /// A link between two filters. This contains pointers to the source and
+        /// destination filters between which this link exists, and the indexes of
+        /// the pads involved. In addition, this link also contains the parameters
+        /// which have been negotiated and agreed upon between the filter, such as
+        /// image dimensions, format, etc.
         /// </summary>
-        [FieldOffset(8)]
-        public int pad_idx;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterLink
+        {
+            /// <summary>
+            /// source filter
+            /// </summary>
+            public libavfilter.AVFilterContext* src;
+
+            /// <summary>
+            /// output pad on the source filter
+            /// </summary>
+            public libavfilter.AVFilterPad* srcpad;
+
+            /// <summary>
+            /// dest filter
+            /// </summary>
+            public libavfilter.AVFilterContext* dst;
+
+            /// <summary>
+            /// input pad on the dest filter
+            /// </summary>
+            public libavfilter.AVFilterPad* dstpad;
+
+            /// <summary>
+            /// filter media type
+            /// </summary>
+            public libavutil.AVMediaType type;
+
+            /// <summary>
+            /// agreed upon image width
+            /// </summary>
+            public int w;
+
+            /// <summary>
+            /// agreed upon image height
+            /// </summary>
+            public int h;
+
+            /// <summary>
+            /// agreed upon sample aspect ratio
+            /// </summary>
+            public libavutil.AVRational sample_aspect_ratio;
+
+            /// <summary>
+            /// channel layout of current buffer (see libavutil/channel_layout.h)
+            /// </summary>
+            public ulong channel_layout;
+
+            /// <summary>
+            /// samples per second
+            /// </summary>
+            public int sample_rate;
+
+            /// <summary>
+            /// agreed upon media format
+            /// </summary>
+            public int format;
+
+            /// <summary>
+            /// Define the time base used by the PTS of the frames/samples
+            /// which will pass through this link.
+            /// During the configuration stage, each filter is supposed to
+            /// change only the output timebase, while the timebase of the
+            /// input link is assumed to be an unchangeable property.
+            /// </summary>
+            public libavutil.AVRational time_base;
+
+            /// <summary>
+            /// 
+            /// All fields below this line are not part of the public API. They
+            /// may not be used outside of libavfilter and can be changed and
+            /// removed at will.
+            /// New public fields should be added right above.
+            /// 
+            /// 
+            /// 
+            /// Lists of formats and channel layouts supported by the input and output
+            /// filters respectively. These lists are used for negotiating the format
+            /// to actually be used, which will be loaded into the format and
+            /// channel_layout members, above, when chosen.
+            /// 
+            /// </summary>
+            public libavfilter.AVFilterFormats* in_formats;
+
+            public libavfilter.AVFilterFormats* out_formats;
+
+            /// <summary>
+            /// Lists of channel layouts and sample rates used for automatic
+            /// negotiation.
+            /// </summary>
+            public libavfilter.AVFilterFormats* in_samplerates;
+
+            public libavfilter.AVFilterFormats* out_samplerates;
+
+            public libavfilter.AVFilterChannelLayouts* in_channel_layouts;
+
+            public libavfilter.AVFilterChannelLayouts* out_channel_layouts;
+
+            /// <summary>
+            /// Audio only, the destination filter sets this to a non-zero value to
+            /// request that buffers with the given number of samples should be sent to
+            /// it. AVFilterPad.needs_fifo must also be set on the corresponding input
+            /// pad.
+            /// Last buffer before EOF will be padded with silence.
+            /// </summary>
+            public int request_samples;
+
+            public libavfilter.AVFilterLink.AVLINK init_state;
+
+            public libavfilter.AVFilterPool* pool;
+
+            /// <summary>
+            /// Graph the filter belongs to.
+            /// </summary>
+            public libavfilter.AVFilterGraph* graph;
+
+            /// <summary>
+            /// Current timestamp of the link, as defined by the most recent
+            /// frame(s), in AV_TIME_BASE units.
+            /// </summary>
+            public long current_pts;
+
+            /// <summary>
+            /// Index in the age array.
+            /// </summary>
+            public int age_index;
+
+            /// <summary>
+            /// Frame rate of the stream on the link, or 1/0 if unknown;
+            /// if left to 0/0, will be automatically be copied from the first input
+            /// of the source filter if it exists.
+            /// 
+            /// Sources should set it to the best estimation of the real frame rate.
+            /// Filters should update it if necessary depending on their function.
+            /// Sinks can use it to set a default output frame rate.
+            /// It is similar to the r_frame_rate field in AVStream.
+            /// </summary>
+            public libavutil.AVRational frame_rate;
+
+            /// <summary>
+            /// Buffer partially filled with samples to achieve a fixed/minimum size.
+            /// </summary>
+            public libavutil.AVFrame* partial_buf;
+
+            /// <summary>
+            /// Size of the partial buffer to allocate.
+            /// Must be between min_samples and max_samples.
+            /// </summary>
+            public int partial_buf_size;
+
+            /// <summary>
+            /// Minimum number of samples to filter at once. If filter_frame() is
+            /// called with fewer samples, it will accumulate them in partial_buf.
+            /// This field and the related ones must not be changed after filtering
+            /// has started.
+            /// If 0, all related fields are ignored.
+            /// </summary>
+            public int min_samples;
+
+            /// <summary>
+            /// Maximum number of samples to filter at once. If filter_frame() is
+            /// called with more samples, it will split them.
+            /// </summary>
+            public int max_samples;
+
+            /// <summary>
+            /// The buffer reference currently being received across the link by the
+            /// destination filter. This is used internally by the filter system to
+            /// allow automatic copying of buffers which do not have sufficient
+            /// permissions for the destination. This should not be accessed directly
+            /// by the filters.
+            /// </summary>
+            public libavfilter.AVFilterBufferRef* cur_buf_copy;
+
+            /// <summary>
+            /// True if the link is closed.
+            /// If set, all attemps of start_frame, filter_frame or request_frame
+            /// will fail with AVERROR_EOF, and if necessary the reference will be
+            /// destroyed.
+            /// If request_frame returns AVERROR_EOF, this flag is set on the
+            /// corresponding link.
+            /// It can be set also be set by either the source or the destination
+            /// filter.
+            /// </summary>
+            public int closed;
+
+            /// <summary>
+            /// Number of channels.
+            /// </summary>
+            public int channels;
+
+            /// <summary>
+            /// True if a frame is being requested on the link.
+            /// Used internally by the framework.
+            /// </summary>
+            public uint frame_requested;
+
+            /// <summary>
+            /// Link processing flags.
+            /// </summary>
+            public uint flags;
+
+            /// <summary>
+            /// Number of past frames sent through the link.
+            /// </summary>
+            public long frame_count;
+
+            /// <summary>
+            /// stage of the initialization of the link properties (dimensions, etc)
+            /// </summary>
+            public enum AVLINK
+            {
+                /// <summary>not started</summary>
+                AVLINK_UNINIT = 0,
+                /// <summary>started, but incomplete</summary>
+                AVLINK_STARTINIT = 1,
+                /// <summary>complete</summary>
+                AVLINK_INIT = 2
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterGraphInternal
+        {
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterGraph
+        {
+            public libavutil.AVClass* av_class;
+
+            public uint filter_count_unused;
+
+            public libavfilter.AVFilterContext** filters;
+
+            /// <summary>
+            /// sws options to use for the auto-inserted scale filters
+            /// </summary>
+            public sbyte* scale_sws_opts;
+
+            /// <summary>
+            /// libavresample options to use for the auto-inserted resample filters
+            /// </summary>
+            public sbyte* resample_lavr_opts;
+
+            public uint nb_filters;
+
+            /// <summary>
+            /// Type of multithreading allowed for filters in this graph. A combination
+            /// of AVFILTER_THREAD_* flags.
+            /// 
+            /// May be set by the caller at any point, the setting will apply to all
+            /// filters initialized after that. The default is allowing everything.
+            /// 
+            /// When a filter in this graph is initialized, this field is combined
+            /// using
+            /// bit AND with AVFilterContext.thread_type to get the final mask used for
+            /// determining allowed threading types. I.e. a threading type needs to be
+            /// set in both to be allowed.
+            /// </summary>
+            public int thread_type;
+
+            /// <summary>
+            /// Maximum number of threads used by filters in this graph. May be set by
+            /// the caller before adding any filters to the filtergraph. Zero (the
+            /// default) means that the number of threads is determined automatically.
+            /// </summary>
+            public int nb_threads;
+
+            /// <summary>
+            /// Opaque object for libavfilter internal use.
+            /// </summary>
+            public libavfilter.AVFilterGraphInternal* @internal;
+
+            /// <summary>
+            /// Opaque user data. May be set by the caller to an arbitrary value, e.g.
+            /// to
+            /// be used from callbacks like @ref AVFilterGraph.execute.
+            /// Libavfilter will not touch this field in any way.
+            /// </summary>
+            public void* opaque;
+
+            /// <summary>
+            /// This callback may be set by the caller immediately after allocating the
+            /// graph and before adding any filters to it, to provide a custom
+            /// multithreading implementation.
+            /// 
+            /// If set, filters with slice threading capability will call this callback
+            /// to execute multiple jobs in parallel.
+            /// 
+            /// If this field is left unset, libavfilter will use its internal
+            /// implementation, which may or may not be multithreaded depending on the
+            /// platform and build options.
+            /// </summary>
+            public global::System.IntPtr execute;
+
+            /// <summary>
+            /// swr options to use for the auto-inserted aresample filters, Access ONLY
+            /// through AVOptions
+            /// </summary>
+            public sbyte* aresample_swr_opts;
+
+            /// <summary>
+            /// Private fields
+            /// 
+            /// The following fields are for internal use only.
+            /// Their type, offset, number and semantic can change without notice.
+            /// </summary>
+            public libavfilter.AVFilterLink** sink_links;
+
+            public int sink_links_count;
+
+            public uint disable_auto_convert;
+        }
 
         /// <summary>
+        /// A linked-list of the inputs/outputs of the filter chain.
+        /// 
+        /// This is mainly useful for avfilter_graph_parse() /
+        /// avfilter_graph_parse2(),
+        /// where it is used to communicate open (unlinked) inputs and outputs from
+        /// and
+        /// to the caller.
+        /// This struct specifies, per each not connected pad contained in the
+        /// graph, the
+        /// filter context and the pad index required for establishing a link.
         /// </summary>
-        [FieldOffset(12)]
-        public AVFilterInOut* next;
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVFilterInOut
+        {
+            /// <summary>
+            /// unique name for this input/output in the list
+            /// </summary>
+            public sbyte* name;
 
-    public unsafe partial class libavfilter
-    {
+            /// <summary>
+            /// filter context associated to this input/output
+            /// </summary>
+            public libavfilter.AVFilterContext* filter_ctx;
+
+            /// <summary>
+            /// index of the filt_ctx pad to use for linking
+            /// </summary>
+            public int pad_idx;
+
+            /// <summary>
+            /// next input/input in the list, NULL if this is the last
+            /// </summary>
+            public libavfilter.AVFilterInOut* next;
+        }
+
         /// <summary>
         /// Return the LIBAVFILTER_VERSION_INT constant.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_version")]
-        internal static extern uint avfilter_version();
+        public static extern uint avfilter_version();
 
         /// <summary>
         /// Return the libavfilter build-time configuration.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_configuration")]
-        internal static extern global::System.IntPtr avfilter_configuration();
+        public static extern sbyte* avfilter_configuration();
 
         /// <summary>
         /// Return the libavfilter license.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_license")]
-        internal static extern global::System.IntPtr avfilter_license();
+        public static extern sbyte* avfilter_license();
 
         /// <summary>
         /// Copy properties of src to dst, without copying the actual data
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_copy_buffer_ref_props")]
-        internal static extern void avfilter_copy_buffer_ref_props(AVFilterBufferRef* dst, AVFilterBufferRef* src);
+        public static extern void avfilter_copy_buffer_ref_props(libavfilter.AVFilterBufferRef* dst, libavfilter.AVFilterBufferRef* src);
 
         /// <summary>
         /// Add a new reference to a buffer.
@@ -1403,9 +1163,10 @@ namespace libavfilter
         /// old, excluding any permissions denied by pmask
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_ref_buffer")]
-        internal static extern AVFilterBufferRef* avfilter_ref_buffer(AVFilterBufferRef* @ref, int pmask);
+        public static extern libavfilter.AVFilterBufferRef* avfilter_ref_buffer(libavfilter.AVFilterBufferRef* _ref, int pmask);
 
         /// <summary>
         /// Remove a reference to a buffer. If this is the last reference to the
@@ -1417,9 +1178,10 @@ namespace libavfilter
         /// function
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_unref_buffer")]
-        internal static extern void avfilter_unref_buffer(AVFilterBufferRef* @ref);
+        public static extern void avfilter_unref_buffer(libavfilter.AVFilterBufferRef* _ref);
 
         /// <summary>
         /// Remove a reference to a buffer and set the pointer to NULL.
@@ -1429,17 +1191,32 @@ namespace libavfilter
         /// @param ref pointer to the buffer reference
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_unref_bufferp")]
-        internal static extern void avfilter_unref_bufferp(AVFilterBufferRef* @ref);
+        public static extern void avfilter_unref_bufferp(libavfilter.AVFilterBufferRef** _ref);
+
+        /// <summary>
+        /// Remove a reference to a buffer and set the pointer to NULL.
+        /// If this is the last reference to the buffer, the buffer itself
+        /// is also automatically freed.
+        /// 
+        /// @param ref pointer to the buffer reference
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_unref_bufferp")]
+        public static extern void avfilter_unref_bufferp(ref libavfilter.AVFilterBufferRef* _ref);
 
         /// <summary>
         /// Get the number of channels of a buffer reference.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_ref_get_channels")]
-        internal static extern int avfilter_ref_get_channels(AVFilterBufferRef* @ref);
+        public static extern int avfilter_ref_get_channels(libavfilter.AVFilterBufferRef* _ref);
 
         /// <summary>
         /// Get the number of elements in a NULL-terminated array of AVFilterPads
@@ -1447,9 +1224,10 @@ namespace libavfilter
         /// AVFilter.inputs/outputs).
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_pad_count")]
-        internal static extern int avfilter_pad_count(AVFilterPad* pads);
+        public static extern int avfilter_pad_count(libavfilter.AVFilterPad* pads);
 
         /// <summary>
         /// Get the name of an AVFilterPad.
@@ -1461,9 +1239,10 @@ namespace libavfilter
         /// @return name of the pad_idx'th pad in pads
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_pad_get_name")]
-        internal static extern global::System.IntPtr avfilter_pad_get_name(AVFilterPad* pads, int pad_idx);
+        public static extern sbyte* avfilter_pad_get_name(libavfilter.AVFilterPad* pads, int pad_idx);
 
         /// <summary>
         /// Get the type of an AVFilterPad.
@@ -1475,9 +1254,10 @@ namespace libavfilter
         /// @return type of the pad_idx'th pad in pads
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_pad_get_type")]
-        internal static extern AVMediaType avfilter_pad_get_type(AVFilterPad* pads, int pad_idx);
+        public static extern libavutil.AVMediaType avfilter_pad_get_type(libavfilter.AVFilterPad* pads, int pad_idx);
 
         /// <summary>
         /// Link two filters together.
@@ -1489,33 +1269,46 @@ namespace libavfilter
         /// @return       zero on success
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_link")]
-        internal static extern int avfilter_link(AVFilterContext* src, uint srcpad, AVFilterContext* dst, uint dstpad);
+        public static extern int avfilter_link(libavfilter.AVFilterContext* src, uint srcpad, libavfilter.AVFilterContext* dst, uint dstpad);
 
         /// <summary>
         /// Free the link in *link, and set its pointer to NULL.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_link_free")]
-        internal static extern void avfilter_link_free(AVFilterLink* link);
+        public static extern void avfilter_link_free(libavfilter.AVFilterLink** link);
+
+        /// <summary>
+        /// Free the link in *link, and set its pointer to NULL.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_link_free")]
+        public static extern void avfilter_link_free(ref libavfilter.AVFilterLink* link);
 
         /// <summary>
         /// Get the number of channels of a link.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_link_get_channels")]
-        internal static extern int avfilter_link_get_channels(AVFilterLink* link);
+        public static extern int avfilter_link_get_channels(libavfilter.AVFilterLink* link);
 
         /// <summary>
         /// Set the closed field of a link.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_link_set_closed")]
-        internal static extern void avfilter_link_set_closed(AVFilterLink* link, int closed);
+        public static extern void avfilter_link_set_closed(libavfilter.AVFilterLink* link, int closed);
 
         /// <summary>
         /// Negotiate the media format, dimensions, etc of all inputs to a filter.
@@ -1524,9 +1317,10 @@ namespace libavfilter
         /// @return       zero on successful negotiation
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_config_links")]
-        internal static extern int avfilter_config_links(AVFilterContext* filter);
+        public static extern int avfilter_config_links(libavfilter.AVFilterContext* filter);
 
         /// <summary>
         /// Create a buffer reference wrapped around an already allocated image
@@ -1543,9 +1337,10 @@ namespace libavfilter
         /// linesize arrays
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_video_buffer_ref_from_arrays")]
-        internal static extern AVFilterBufferRef* avfilter_get_video_buffer_ref_from_arrays(byte* data, int* linesize, int perms, int w, int h, AVPixelFormat format);
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_video_buffer_ref_from_arrays(byte** data, int* linesize, int perms, int w, int h, libavutil.AVPixelFormat format);
 
         /// <summary>
         /// Create an audio buffer reference wrapped around an already
@@ -1563,9 +1358,31 @@ namespace libavfilter
         /// @param channel_layout the channel layout of the buffer
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_audio_buffer_ref_from_arrays")]
-        internal static extern AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_arrays(byte* data, int linesize, int perms, int nb_samples, AVSampleFormat sample_fmt, ulong channel_layout);
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_arrays(byte** data, int linesize, int perms, int nb_samples, libavutil.AVSampleFormat sample_fmt, ulong channel_layout);
+
+        /// <summary>
+        /// Create an audio buffer reference wrapped around an already
+        /// allocated samples buffer.
+        /// 
+        /// See avfilter_get_audio_buffer_ref_from_arrays_channels() for a version
+        /// that can handle unknown channel layouts.
+        /// 
+        /// @param data           pointers to the samples plane buffers
+        /// @param linesize       linesize for the samples plane buffers
+        /// @param perms          the required access permissions
+        /// @param nb_samples     number of samples per channel
+        /// @param sample_fmt     the format of each sample in the buffer to
+        /// allocate
+        /// @param channel_layout the channel layout of the buffer
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_get_audio_buffer_ref_from_arrays")]
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_arrays(ref byte* data, int linesize, int perms, int nb_samples, libavutil.AVSampleFormat sample_fmt, ulong channel_layout);
 
         /// <summary>
         /// Create an audio buffer reference wrapped around an already
@@ -1582,32 +1399,58 @@ namespace libavfilter
         /// must be either 0 or consistent with channels
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_audio_buffer_ref_from_arrays_channels")]
-        internal static extern AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_arrays_channels(byte* data, int linesize, int perms, int nb_samples, AVSampleFormat sample_fmt, int channels, ulong channel_layout);
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_arrays_channels(byte** data, int linesize, int perms, int nb_samples, libavutil.AVSampleFormat sample_fmt, int channels, ulong channel_layout);
+
+        /// <summary>
+        /// Create an audio buffer reference wrapped around an already
+        /// allocated samples buffer.
+        /// 
+        /// @param data           pointers to the samples plane buffers
+        /// @param linesize       linesize for the samples plane buffers
+        /// @param perms          the required access permissions
+        /// @param nb_samples     number of samples per channel
+        /// @param sample_fmt     the format of each sample in the buffer to
+        /// allocate
+        /// @param channels       the number of channels of the buffer
+        /// @param channel_layout the channel layout of the buffer,
+        /// must be either 0 or consistent with channels
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_get_audio_buffer_ref_from_arrays_channels")]
+        public static extern libavfilter.AVFilterBufferRef* avfilter_get_audio_buffer_ref_from_arrays_channels(ref byte* data, int linesize, int perms, int nb_samples, libavutil.AVSampleFormat sample_fmt, int channels, ulong channel_layout);
 
         /// <summary>
         /// Make the filter instance process a command.
         /// It is recommended to use avfilter_graph_send_command().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_process_command")]
-        internal static extern int avfilter_process_command(AVFilterContext* filter, global::System.IntPtr cmd, global::System.IntPtr arg, sbyte* res, int res_len, int flags);
+        public static extern int avfilter_process_command(libavfilter.AVFilterContext* filter, string cmd, string arg, System.Text.StringBuilder res, int res_len, int flags);
 
         /// <summary>
+        /// Initialize the filter system. Register all builtin filters.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_register_all")]
-        internal static extern void avfilter_register_all();
+        public static extern void avfilter_register_all();
 
         /// <summary>
+        /// Uninitialize the filter system. Unregister all filters.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_uninit")]
-        internal static extern void avfilter_uninit();
+        public static extern void avfilter_uninit();
 
         /// <summary>
         /// Register a filter. This is only needed if you plan to use
@@ -1621,9 +1464,10 @@ namespace libavfilter
         /// otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_register")]
-        internal static extern int avfilter_register(AVFilter* filter);
+        public static extern int avfilter_register(libavfilter.AVFilter* filter);
 
         /// <summary>
         /// Get a filter definition matching the given name.
@@ -1633,9 +1477,10 @@ namespace libavfilter
         /// NULL if none found.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_by_name")]
-        internal static extern AVFilter* avfilter_get_by_name(global::System.IntPtr name);
+        public static extern libavfilter.AVFilter* avfilter_get_by_name(string name);
 
         /// <summary>
         /// Iterate over all registered filters.
@@ -1645,9 +1490,10 @@ namespace libavfilter
         /// filter.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_next")]
-        internal static extern AVFilter* avfilter_next(AVFilter* prev);
+        public static extern libavfilter.AVFilter* avfilter_next(libavfilter.AVFilter* prev);
 
         /// <summary>
         /// If filter is NULL, returns a pointer to the first registered filter
@@ -1658,9 +1504,24 @@ namespace libavfilter
         /// @deprecated use avfilter_next()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_filter_next")]
-        internal static extern AVFilter* av_filter_next(AVFilter* filter);
+        public static extern libavfilter.AVFilter** av_filter_next(libavfilter.AVFilter** filter);
+
+        /// <summary>
+        /// If filter is NULL, returns a pointer to the first registered filter
+        /// pointer,
+        /// if filter is non-NULL, returns the next pointer after filter.
+        /// If the returned pointer points to NULL, the last registered filter
+        /// was already reached.
+        /// @deprecated use avfilter_next()
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_filter_next")]
+        public static extern libavfilter.AVFilter** av_filter_next(ref libavfilter.AVFilter* filter);
 
         /// <summary>
         /// Create a filter instance.
@@ -1674,9 +1535,27 @@ namespace libavfilter
         /// @deprecated use avfilter_graph_alloc_filter() instead
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_open")]
-        internal static extern int avfilter_open(AVFilterContext* filter_ctx, AVFilter* filter, global::System.IntPtr inst_name);
+        public static extern int avfilter_open(libavfilter.AVFilterContext** filter_ctx, libavfilter.AVFilter* filter, string inst_name);
+
+        /// <summary>
+        /// Create a filter instance.
+        /// 
+        /// @param filter_ctx put here a pointer to the created filter context
+        /// on success, NULL on failure
+        /// @param filter    the filter to create an instance of
+        /// @param inst_name Name to give to the new instance. Can be NULL for
+        /// none.
+        /// @return >= 0 in case of success, a negative error code otherwise
+        /// @deprecated use avfilter_graph_alloc_filter() instead
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_open")]
+        public static extern int avfilter_open(ref libavfilter.AVFilterContext* filter_ctx, libavfilter.AVFilter* filter, string inst_name);
 
         /// <summary>
         /// Initialize a filter.
@@ -1691,9 +1570,10 @@ namespace libavfilter
         /// @return       zero on success
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_init_filter")]
-        internal static extern int avfilter_init_filter(AVFilterContext* filter, global::System.IntPtr args, global::System.IntPtr opaque);
+        public static extern int avfilter_init_filter(libavfilter.AVFilterContext* filter, string args, void* opaque);
 
         /// <summary>
         /// Initialize a filter with the supplied parameters.
@@ -1706,9 +1586,10 @@ namespace libavfilter
         /// @return 0 on success, a negative AVERROR on failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_init_str")]
-        internal static extern int avfilter_init_str(AVFilterContext* ctx, global::System.IntPtr args);
+        public static extern int avfilter_init_str(libavfilter.AVFilterContext* ctx, string args);
 
         /// <summary>
         /// Initialize a filter with the supplied dictionary of options.
@@ -1737,9 +1618,42 @@ namespace libavfilter
         /// continue as usual.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_init_dict")]
-        internal static extern int avfilter_init_dict(AVFilterContext* ctx, AVDictionary* options);
+        public static extern int avfilter_init_dict(libavfilter.AVFilterContext* ctx, libavutil.AVDictionary** options);
+
+        /// <summary>
+        /// Initialize a filter with the supplied dictionary of options.
+        /// 
+        /// @param ctx     uninitialized filter context to initialize
+        /// @param options An AVDictionary filled with options for this filter. On
+        /// return this parameter will be destroyed and replaced with
+        /// a dict containing options that were not found. This dictionary
+        /// must be freed by the caller.
+        /// May be NULL, then this function is equivalent to
+        /// avfilter_init_str() with the second parameter set to NULL.
+        /// @return 0 on success, a negative AVERROR on failure
+        /// 
+        /// @note This function and avfilter_init_str() do essentially the same
+        /// thing,
+        /// the difference is in manner in which the options are passed. It is up
+        /// to the
+        /// calling code to choose whichever is more preferable. The two functions
+        /// also
+        /// behave differently when some of the provided options are not declared
+        /// as
+        /// supported by the filter. In such a case, avfilter_init_str() will fail,
+        /// but
+        /// this function will leave those extra options in the options
+        /// AVDictionary and
+        /// continue as usual.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_init_dict")]
+        public static extern int avfilter_init_dict(libavfilter.AVFilterContext* ctx, ref libavutil.AVDictionary* options);
 
         /// <summary>
         /// Free a filter context. This will also remove the filter from its
@@ -1748,9 +1662,10 @@ namespace libavfilter
         /// @param filter the filter to free
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_free")]
-        internal static extern void avfilter_free(AVFilterContext* filter);
+        public static extern void avfilter_free(libavfilter.AVFilterContext* filter);
 
         /// <summary>
         /// Insert a filter in the middle of an existing link.
@@ -1762,9 +1677,10 @@ namespace libavfilter
         /// @return     zero on success
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_insert_filter")]
-        internal static extern int avfilter_insert_filter(AVFilterLink* link, AVFilterContext* filt, uint filt_srcpad_idx, uint filt_dstpad_idx);
+        public static extern int avfilter_insert_filter(libavfilter.AVFilterLink* link, libavfilter.AVFilterContext* filt, uint filt_srcpad_idx, uint filt_dstpad_idx);
 
         /// <summary>
         /// Copy the frame properties of src to dst, without copying the actual
@@ -1773,9 +1689,10 @@ namespace libavfilter
         /// @return 0 on success, a negative number on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_copy_frame_props")]
-        internal static extern int avfilter_copy_frame_props(AVFilterBufferRef* dst, AVFrame* src);
+        public static extern int avfilter_copy_frame_props(libavfilter.AVFilterBufferRef* dst, libavutil.AVFrame* src);
 
         /// <summary>
         /// Copy the frame properties and data pointers of src to dst, without
@@ -1785,9 +1702,10 @@ namespace libavfilter
         /// @return 0 on success, a negative number on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_copy_buf_props")]
-        internal static extern int avfilter_copy_buf_props(AVFrame* dst, AVFilterBufferRef* src);
+        public static extern int avfilter_copy_buf_props(libavutil.AVFrame* dst, libavfilter.AVFilterBufferRef* src);
 
         /// <summary>
         /// @return AVClass for AVFilterContext.
@@ -1795,17 +1713,19 @@ namespace libavfilter
         /// @see av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_get_class")]
-        internal static extern AVClass* avfilter_get_class();
+        public static extern libavutil.AVClass* avfilter_get_class();
 
         /// <summary>
         /// Allocate a filter graph.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_alloc")]
-        internal static extern AVFilterGraph* avfilter_graph_alloc();
+        public static extern libavfilter.AVFilterGraph* avfilter_graph_alloc();
 
         /// <summary>
         /// Create a new filter instance in a filter graph.
@@ -1823,9 +1743,10 @@ namespace libavfilter
         /// avfilter_graph_get_filter()) on success or NULL or failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_alloc_filter")]
-        internal static extern AVFilterContext* avfilter_graph_alloc_filter(AVFilterGraph* graph, AVFilter* filter, global::System.IntPtr name);
+        public static extern libavfilter.AVFilterContext* avfilter_graph_alloc_filter(libavfilter.AVFilterGraph* graph, libavfilter.AVFilter* filter, string name);
 
         /// <summary>
         /// Get a filter instance with name name from graph.
@@ -1834,9 +1755,10 @@ namespace libavfilter
         /// cannot be found.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_get_filter")]
-        internal static extern AVFilterContext* avfilter_graph_get_filter(AVFilterGraph* graph, sbyte* name);
+        public static extern libavfilter.AVFilterContext* avfilter_graph_get_filter(libavfilter.AVFilterGraph* graph, System.Text.StringBuilder name);
 
         /// <summary>
         /// Add an existing filter instance to a filter graph.
@@ -1848,9 +1770,10 @@ namespace libavfilter
         /// filter graph
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_add_filter")]
-        internal static extern int avfilter_graph_add_filter(AVFilterGraph* graphctx, AVFilterContext* filter);
+        public static extern int avfilter_graph_add_filter(libavfilter.AVFilterGraph* graphctx, libavfilter.AVFilterContext* filter);
 
         /// <summary>
         /// Create and add a filter instance into an existing graph.
@@ -1866,9 +1789,29 @@ namespace libavfilter
         /// negative value otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_create_filter")]
-        internal static extern int avfilter_graph_create_filter(AVFilterContext* filt_ctx, AVFilter* filt, global::System.IntPtr name, global::System.IntPtr args, global::System.IntPtr opaque, AVFilterGraph* graph_ctx);
+        public static extern int avfilter_graph_create_filter(libavfilter.AVFilterContext** filt_ctx, libavfilter.AVFilter* filt, string name, string args, void* opaque, libavfilter.AVFilterGraph* graph_ctx);
+
+        /// <summary>
+        /// Create and add a filter instance into an existing graph.
+        /// The filter instance is created from the filter filt and inited
+        /// with the parameters args and opaque.
+        /// 
+        /// In case of success put in *filt_ctx the pointer to the created
+        /// filter instance, otherwise set *filt_ctx to NULL.
+        /// 
+        /// @param name the instance name to give to the created filter instance
+        /// @param graph_ctx the filter graph
+        /// @return a negative AVERROR error code in case of failure, a non
+        /// negative value otherwise
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_graph_create_filter")]
+        public static extern int avfilter_graph_create_filter(ref libavfilter.AVFilterContext* filt_ctx, libavfilter.AVFilter* filt, string name, string args, void* opaque, libavfilter.AVFilterGraph* graph_ctx);
 
         /// <summary>
         /// Enable or disable automatic format conversion inside the graph.
@@ -1879,9 +1822,10 @@ namespace libavfilter
         /// @param flags  any of the AVFILTER_AUTO_CONVERT_* constants
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_set_auto_convert")]
-        internal static extern void avfilter_graph_set_auto_convert(AVFilterGraph* graph, uint flags);
+        public static extern void avfilter_graph_set_auto_convert(libavfilter.AVFilterGraph* graph, uint flags);
 
         /// <summary>
         /// Check validity and configure all the links and formats in the graph.
@@ -1891,18 +1835,30 @@ namespace libavfilter
         /// @return >= 0 in case of success, a negative AVERROR code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_config")]
-        internal static extern int avfilter_graph_config(AVFilterGraph* graphctx, global::System.IntPtr log_ctx);
+        public static extern int avfilter_graph_config(libavfilter.AVFilterGraph* graphctx, void* log_ctx);
 
         /// <summary>
         /// Free a graph, destroy its links, and set *graph to NULL.
         /// If *graph is NULL, do nothing.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_free")]
-        internal static extern void avfilter_graph_free(AVFilterGraph* graph);
+        public static extern void avfilter_graph_free(libavfilter.AVFilterGraph** graph);
+
+        /// <summary>
+        /// Free a graph, destroy its links, and set *graph to NULL.
+        /// If *graph is NULL, do nothing.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_graph_free")]
+        public static extern void avfilter_graph_free(ref libavfilter.AVFilterGraph* graph);
 
         /// <summary>
         /// Allocate a single AVFilterInOut entry.
@@ -1910,18 +1866,30 @@ namespace libavfilter
         /// @return allocated AVFilterInOut on success, NULL on failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_inout_alloc")]
-        internal static extern AVFilterInOut* avfilter_inout_alloc();
+        public static extern libavfilter.AVFilterInOut* avfilter_inout_alloc();
 
         /// <summary>
         /// Free the supplied list of AVFilterInOut and set *inout to NULL.
         /// If *inout is NULL, do nothing.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_inout_free")]
-        internal static extern void avfilter_inout_free(AVFilterInOut* inout);
+        public static extern void avfilter_inout_free(libavfilter.AVFilterInOut** inout);
+
+        /// <summary>
+        /// Free the supplied list of AVFilterInOut and set *inout to NULL.
+        /// If *inout is NULL, do nothing.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_inout_free")]
+        public static extern void avfilter_inout_free(ref libavfilter.AVFilterInOut* inout);
 
         /// <summary>
         /// Add a graph described by a string to a graph.
@@ -1940,9 +1908,32 @@ namespace libavfilter
         /// @deprecated Use avfilter_graph_parse_ptr() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_parse")]
-        internal static extern int avfilter_graph_parse(AVFilterGraph* graph, global::System.IntPtr filters, AVFilterInOut* inputs, AVFilterInOut* outputs, global::System.IntPtr log_ctx);
+        public static extern int avfilter_graph_parse(libavfilter.AVFilterGraph* graph, string filters, libavfilter.AVFilterInOut** inputs, libavfilter.AVFilterInOut** outputs, void* log_ctx);
+
+        /// <summary>
+        /// Add a graph described by a string to a graph.
+        /// 
+        /// @param graph   the filter graph where to link the parsed graph context
+        /// @param filters string to be parsed
+        /// @param inputs  pointer to a linked list to the inputs of the graph, may
+        /// be NULL.
+        /// If non-NULL, *inputs is updated to contain the list of open inputs
+        /// after the parsing, should be freed with avfilter_inout_free().
+        /// @param outputs pointer to a linked list to the outputs of the graph,
+        /// may be NULL.
+        /// If non-NULL, *outputs is updated to contain the list of open outputs
+        /// after the parsing, should be freed with avfilter_inout_free().
+        /// @return non negative on success, a negative AVERROR code on error
+        /// @deprecated Use avfilter_graph_parse_ptr() instead.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_graph_parse")]
+        public static extern int avfilter_graph_parse(libavfilter.AVFilterGraph* graph, string filters, ref libavfilter.AVFilterInOut* inputs, ref libavfilter.AVFilterInOut* outputs, void* log_ctx);
 
         /// <summary>
         /// Add a graph described by a string to a graph.
@@ -1960,9 +1951,31 @@ namespace libavfilter
         /// @return non negative on success, a negative AVERROR code on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_parse_ptr")]
-        internal static extern int avfilter_graph_parse_ptr(AVFilterGraph* graph, global::System.IntPtr filters, AVFilterInOut* inputs, AVFilterInOut* outputs, global::System.IntPtr log_ctx);
+        public static extern int avfilter_graph_parse_ptr(libavfilter.AVFilterGraph* graph, string filters, libavfilter.AVFilterInOut** inputs, libavfilter.AVFilterInOut** outputs, void* log_ctx);
+
+        /// <summary>
+        /// Add a graph described by a string to a graph.
+        /// 
+        /// @param graph   the filter graph where to link the parsed graph context
+        /// @param filters string to be parsed
+        /// @param inputs  pointer to a linked list to the inputs of the graph, may
+        /// be NULL.
+        /// If non-NULL, *inputs is updated to contain the list of open inputs
+        /// after the parsing, should be freed with avfilter_inout_free().
+        /// @param outputs pointer to a linked list to the outputs of the graph,
+        /// may be NULL.
+        /// If non-NULL, *outputs is updated to contain the list of open outputs
+        /// after the parsing, should be freed with avfilter_inout_free().
+        /// @return non negative on success, a negative AVERROR code on error
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_graph_parse_ptr")]
+        public static extern int avfilter_graph_parse_ptr(libavfilter.AVFilterGraph* graph, string filters, ref libavfilter.AVFilterInOut* inputs, ref libavfilter.AVFilterInOut* outputs, void* log_ctx);
 
         /// <summary>
         /// Add a graph described by a string to a graph.
@@ -1988,9 +2001,39 @@ namespace libavfilter
         /// filters.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_parse2")]
-        internal static extern int avfilter_graph_parse2(AVFilterGraph* graph, global::System.IntPtr filters, AVFilterInOut* inputs, AVFilterInOut* outputs);
+        public static extern int avfilter_graph_parse2(libavfilter.AVFilterGraph* graph, string filters, libavfilter.AVFilterInOut** inputs, libavfilter.AVFilterInOut** outputs);
+
+        /// <summary>
+        /// Add a graph described by a string to a graph.
+        /// 
+        /// @param[in]  graph   the filter graph where to link the parsed graph
+        /// context
+        /// @param[in]  filters string to be parsed
+        /// @param[out] inputs  a linked list of all free (unlinked) inputs of the
+        /// parsed graph will be returned here. It is to be freed
+        /// by the caller using avfilter_inout_free().
+        /// @param[out] outputs a linked list of all free (unlinked) outputs of the
+        /// parsed graph will be returned here. It is to be freed by the
+        /// caller using avfilter_inout_free().
+        /// @return zero on success, a negative AVERROR code on error
+        /// 
+        /// @note This function returns the inputs and outputs that are left
+        /// unlinked after parsing the graph and the caller then deals with
+        /// them.
+        /// @note This function makes no reference whatsoever to already
+        /// existing parts of the graph and the inputs parameter will on return
+        /// contain inputs of the newly parsed part of the graph.  Analogously
+        /// the outputs parameter will contain outputs of the newly created
+        /// filters.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="avfilter_graph_parse2")]
+        public static extern int avfilter_graph_parse2(libavfilter.AVFilterGraph* graph, string filters, ref libavfilter.AVFilterInOut* inputs, ref libavfilter.AVFilterInOut* outputs);
 
         /// <summary>
         /// Send a command to one or more filter instances.
@@ -2010,9 +2053,10 @@ namespace libavfilter
         /// AVERROR(ENOSYS) on unsupported commands
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_send_command")]
-        internal static extern int avfilter_graph_send_command(AVFilterGraph* graph, global::System.IntPtr target, global::System.IntPtr cmd, global::System.IntPtr arg, sbyte* res, int res_len, int flags);
+        public static extern int avfilter_graph_send_command(libavfilter.AVFilterGraph* graph, string target, string cmd, string arg, System.Text.StringBuilder res, int res_len, int flags);
 
         /// <summary>
         /// Queue a command for one or more filter instances.
@@ -2033,9 +2077,10 @@ namespace libavfilter
         /// supported.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_queue_command")]
-        internal static extern int avfilter_graph_queue_command(AVFilterGraph* graph, global::System.IntPtr target, global::System.IntPtr cmd, global::System.IntPtr arg, int flags, double ts);
+        public static extern int avfilter_graph_queue_command(libavfilter.AVFilterGraph* graph, string target, string cmd, string arg, int flags, double ts);
 
         /// <summary>
         /// Dump a graph into a human-readable string representation.
@@ -2046,9 +2091,10 @@ namespace libavfilter
         /// the string must be freed using av_free
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_dump")]
-        internal static extern sbyte* avfilter_graph_dump(AVFilterGraph* graph, global::System.IntPtr options);
+        public static extern sbyte* avfilter_graph_dump(libavfilter.AVFilterGraph* graph, string options);
 
         /// <summary>
         /// Request a frame on the oldest sink link.
@@ -2071,8 +2117,9 @@ namespace libavfilter
         /// or AVERROR_EOF if all links returned AVERROR_EOF
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avfilter_graph_request_oldest")]
-        internal static extern int avfilter_graph_request_oldest(AVFilterGraph* graph);
+        public static extern int avfilter_graph_request_oldest(libavfilter.AVFilterGraph* graph);
     }
 }

@@ -5,37 +5,39 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavfilter
+namespace FFmpeg
 {
-    [Flags]
-    public enum AV_BUFFERSRC_FLAG
+    public unsafe static partial class libavfilter
     {
-        /// <summary>Do not check for format changes.</summary>
-        AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT = 1,
-        /// <summary>Ignored</summary>
-        AV_BUFFERSRC_FLAG_NO_COPY = 2,
-        /// <summary>Immediately push the frame to the output.</summary>
-        AV_BUFFERSRC_FLAG_PUSH = 4,
-        /// <summary>Keep a reference to the frame. If the frame if reference-counted, create a new reference; otherwise copy the frame data.</summary>
-        AV_BUFFERSRC_FLAG_KEEP_REF = 8
-    }
+        [Flags]
+        public enum AV_BUFFERSRC_FLAG
+        {
+            /// <summary>Do not check for format changes.</summary>
+            AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT = 1,
+            /// <summary>Ignored</summary>
+            AV_BUFFERSRC_FLAG_NO_COPY = 2,
+            /// <summary>Immediately push the frame to the output.</summary>
+            AV_BUFFERSRC_FLAG_PUSH = 4,
+            /// <summary>Keep a reference to the frame. If the frame if reference-counted, create a new reference; otherwise copy the frame data.</summary>
+            AV_BUFFERSRC_FLAG_KEEP_REF = 8
+        }
 
-    public unsafe partial class libavfilter
-    {
         /// <summary>
         /// Add buffer data in picref to buffer_src.
         /// 
         /// @param buffer_src  pointer to a buffer source context
         /// @param picref      a buffer reference, or NULL to mark EOF
-        /// @param flags       a combination of AV_BUFFERSRC_FLAG_*
+        /// @param flags       a combination of AV_BUFFERSRC_FLAG_
         /// @return            >= 0 in case of success, a negative AVERROR code
         /// in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersrc_add_ref")]
-        internal static extern int av_buffersrc_add_ref(AVFilterContext* buffer_src, AVFilterBufferRef* picref, int flags);
+        public static extern int av_buffersrc_add_ref(libavfilter.AVFilterContext* buffer_src, libavfilter.AVFilterBufferRef* picref, int flags);
 
         /// <summary>
         /// Get the number of failed requests.
@@ -45,9 +47,10 @@ namespace libavfilter
         /// The number is reset when a frame is added.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersrc_get_nb_failed_requests")]
-        internal static extern uint av_buffersrc_get_nb_failed_requests(AVFilterContext* buffer_src);
+        public static extern uint av_buffersrc_get_nb_failed_requests(libavfilter.AVFilterContext* buffer_src);
 
         /// <summary>
         /// Add a buffer to the filtergraph s.
@@ -61,9 +64,10 @@ namespace libavfilter
         /// @deprecated use av_buffersrc_write_frame() or av_buffersrc_add_frame()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersrc_buffer")]
-        internal static extern int av_buffersrc_buffer(AVFilterContext* s, AVFilterBufferRef* buf);
+        public static extern int av_buffersrc_buffer(libavfilter.AVFilterContext* s, libavfilter.AVFilterBufferRef* buf);
 
         /// <summary>
         /// Add a frame to the buffer source.
@@ -80,9 +84,10 @@ namespace libavfilter
         /// AV_BUFFERSRC_FLAG_KEEP_REF flag.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersrc_write_frame")]
-        internal static extern int av_buffersrc_write_frame(AVFilterContext* s, AVFrame* frame);
+        public static extern int av_buffersrc_write_frame(libavfilter.AVFilterContext* s, libavutil.AVFrame* frame);
 
         /// <summary>
         /// Add a frame to the buffer source.
@@ -107,9 +112,10 @@ namespace libavfilter
         /// AV_BUFFERSRC_FLAG_KEEP_REF flag.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersrc_add_frame")]
-        internal static extern int av_buffersrc_add_frame(AVFilterContext* ctx, AVFrame* frame);
+        public static extern int av_buffersrc_add_frame(libavfilter.AVFilterContext* ctx, libavutil.AVFrame* frame);
 
         /// <summary>
         /// Add a frame to the buffer source.
@@ -123,13 +129,14 @@ namespace libavfilter
         /// 
         /// @param buffer_src  pointer to a buffer source context
         /// @param frame       a frame, or NULL to mark EOF
-        /// @param flags       a combination of AV_BUFFERSRC_FLAG_*
+        /// @param flags       a combination of AV_BUFFERSRC_FLAG_
         /// @return            >= 0 in case of success, a negative AVERROR code
         /// in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersrc_add_frame_flags")]
-        internal static extern int av_buffersrc_add_frame_flags(AVFilterContext* buffer_src, AVFrame* frame, int flags);
+        public static extern int av_buffersrc_add_frame_flags(libavfilter.AVFilterContext* buffer_src, libavutil.AVFrame* frame, int flags);
     }
 }

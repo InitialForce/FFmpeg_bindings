@@ -5,58 +5,57 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavcodec
+namespace FFmpeg
 {
-    public enum RDFTransformType
-    {
-        DFT_R2C = 0,
-        IDFT_C2R = 1,
-        IDFT_R2C = 2,
-        DFT_C2R = 3
-    }
-
-    public enum DCTTransformType
-    {
-        DCT_II = 0,
-        DCT_III = 1,
-        DCT_I = 2,
-        DST_I = 3
-    }
-
     /// <summary>
     /// @defgroup lavc_fft FFT functions
     /// @ingroup lavc_misc
     /// 
     /// @{
     /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct FFTComplex
+    public unsafe static partial class libavcodec
     {
-        [FieldOffset(0)]
-        public float re;
+        public enum RDFTransformType
+        {
+            DFT_R2C = 0,
+            IDFT_C2R = 1,
+            IDFT_R2C = 2,
+            DFT_C2R = 3
+        }
 
-        [FieldOffset(4)]
-        public float im;
-    }
+        public enum DCTTransformType
+        {
+            DCT_II = 0,
+            DCT_III = 1,
+            DCT_I = 2,
+            DST_I = 3
+        }
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct FFTContext
-    {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct FFTComplex
+        {
+            public float re;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct RDFTContext
-    {
-    }
+            public float im;
+        }
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct DCTContext
-    {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct FFTContext
+        {
+        }
 
-    public unsafe partial class libavcodec
-    {
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct RDFTContext
+        {
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct DCTContext
+        {
+        }
+
         /// <summary>
         /// Set up a complex FFT.
         /// @param nbits           log2 of the length of the input array
@@ -64,17 +63,19 @@ namespace libavcodec
         /// the inverse
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fft_init")]
-        internal static extern FFTContext* av_fft_init(int nbits, int inverse);
+        public static extern libavcodec.FFTContext* av_fft_init(int nbits, int inverse);
 
         /// <summary>
         /// Do the permutation needed BEFORE calling ff_fft_calc().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fft_permute")]
-        internal static extern void av_fft_permute(FFTContext* s, FFTComplex* z);
+        public static extern void av_fft_permute(libavcodec.FFTContext* s, libavcodec.FFTComplex* z);
 
         /// <summary>
         /// Do a complex FFT with the parameters defined in av_fft_init(). The
@@ -82,39 +83,46 @@ namespace libavcodec
         /// done.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fft_calc")]
-        internal static extern void av_fft_calc(FFTContext* s, FFTComplex* z);
+        public static extern void av_fft_calc(libavcodec.FFTContext* s, libavcodec.FFTComplex* z);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_fft_end")]
-        internal static extern void av_fft_end(FFTContext* s);
+        public static extern void av_fft_end(libavcodec.FFTContext* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_mdct_init")]
-        internal static extern FFTContext* av_mdct_init(int nbits, int inverse, double scale);
+        public static extern libavcodec.FFTContext* av_mdct_init(int nbits, int inverse, double scale);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_imdct_calc")]
-        internal static extern void av_imdct_calc(FFTContext* s, float* output, float* input);
+        public static extern void av_imdct_calc(libavcodec.FFTContext* s, float* output, float* input);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_imdct_half")]
-        internal static extern void av_imdct_half(FFTContext* s, float* output, float* input);
+        public static extern void av_imdct_half(libavcodec.FFTContext* s, float* output, float* input);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_mdct_calc")]
-        internal static extern void av_mdct_calc(FFTContext* s, float* output, float* input);
+        public static extern void av_mdct_calc(libavcodec.FFTContext* s, float* output, float* input);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_mdct_end")]
-        internal static extern void av_mdct_end(FFTContext* s);
+        public static extern void av_mdct_end(libavcodec.FFTContext* s);
 
         /// <summary>
         /// Set up a real FFT.
@@ -122,19 +130,22 @@ namespace libavcodec
         /// @param trans           the type of transform
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_rdft_init")]
-        internal static extern RDFTContext* av_rdft_init(int nbits, RDFTransformType trans);
+        public static extern libavcodec.RDFTContext* av_rdft_init(int nbits, libavcodec.RDFTransformType trans);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_rdft_calc")]
-        internal static extern void av_rdft_calc(RDFTContext* s, float* data);
+        public static extern void av_rdft_calc(libavcodec.RDFTContext* s, float* data);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_rdft_end")]
-        internal static extern void av_rdft_end(RDFTContext* s);
+        public static extern void av_rdft_end(libavcodec.RDFTContext* s);
 
         /// <summary>
         /// Set up DCT.
@@ -145,18 +156,21 @@ namespace libavcodec
         /// @note the first element of the input of DST-I is ignored
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_dct_init")]
-        internal static extern DCTContext* av_dct_init(int nbits, DCTTransformType type);
+        public static extern libavcodec.DCTContext* av_dct_init(int nbits, libavcodec.DCTTransformType type);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_dct_calc")]
-        internal static extern void av_dct_calc(DCTContext* s, float* data);
+        public static extern void av_dct_calc(libavcodec.DCTContext* s, float* data);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avcodec-if-55.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_dct_end")]
-        internal static extern void av_dct_end(DCTContext* s);
+        public static extern void av_dct_end(libavcodec.DCTContext* s);
     }
 }

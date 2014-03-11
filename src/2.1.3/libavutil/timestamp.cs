@@ -6,10 +6,12 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
+        public const sbyte AV_TS_MAX_STRING_SIZE = 32;
+
         /// <summary>
         /// Fill the provided buffer with a string containing a timestamp
         /// representation.
@@ -20,9 +22,10 @@ namespace libavutil
         /// @return the buffer in input
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_ts_make_string")]
-        internal static extern sbyte* av_ts_make_string(sbyte* buf, long ts);
+        public static extern sbyte* av_ts_make_string(System.Text.StringBuilder buf, long ts);
 
         /// <summary>
         /// Fill the provided buffer with a string containing a timestamp time
@@ -35,8 +38,9 @@ namespace libavutil
         /// @return the buffer in input
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_ts_make_time_string")]
-        internal static extern sbyte* av_ts_make_time_string(sbyte* buf, long ts, AVRational* tb);
+        public static extern sbyte* av_ts_make_time_string(System.Text.StringBuilder buf, long ts, libavutil.AVRational* tb);
     }
 }

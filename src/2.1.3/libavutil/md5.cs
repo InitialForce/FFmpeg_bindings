@@ -6,22 +6,23 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVMD5
+    public unsafe static partial class libavutil
     {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVMD5
+        {
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Allocate an AVMD5 context.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_md5_alloc")]
-        internal static extern AVMD5* av_md5_alloc();
+        public static extern libavutil.AVMD5* av_md5_alloc();
 
         /// <summary>
         /// Initialize MD5 hashing.
@@ -29,9 +30,10 @@ namespace libavutil
         /// @param ctx pointer to the function context (of size av_md5_size)
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_md5_init")]
-        internal static extern void av_md5_init(AVMD5* ctx);
+        public static extern void av_md5_init(libavutil.AVMD5* ctx);
 
         /// <summary>
         /// Update hash value.
@@ -41,9 +43,10 @@ namespace libavutil
         /// @param len input data length
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_md5_update")]
-        internal static extern void av_md5_update(AVMD5* ctx, byte* src, int len);
+        public static extern void av_md5_update(libavutil.AVMD5* ctx, byte* src, int len);
 
         /// <summary>
         /// Finish hashing and output digest value.
@@ -52,9 +55,10 @@ namespace libavutil
         /// @param dst buffer where output digest value is stored
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_md5_final")]
-        internal static extern void av_md5_final(AVMD5* ctx, byte* dst);
+        public static extern void av_md5_final(libavutil.AVMD5* ctx, byte* dst);
 
         /// <summary>
         /// Hash an array of data.
@@ -64,8 +68,9 @@ namespace libavutil
         /// @param len The length of the data, in bytes
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_md5_sum")]
-        internal static extern void av_md5_sum(byte* dst, byte* src, int len);
+        public static extern void av_md5_sum(byte* dst, byte* src, int len);
     }
 }

@@ -6,134 +6,89 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVComponentDescriptor
+    public unsafe static partial class libavutil
     {
-        /// <summary>
-        /// < which of the 4 planes contains the component
-        /// </summary>
-        [FieldOffset(0)]
-        public ushort plane;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVComponentDescriptor
+        {
+            /// <summary>
+            /// which of the 4 planes contains the component
+            /// </summary>
+            public ushort plane;
+
+            /// <summary>
+            /// Number of elements between 2 horizontally consecutive pixels minus 1.
+            /// Elements are bits for bitstream formats, bytes otherwise.
+            /// </summary>
+            public ushort step_minus1;
+
+            /// <summary>
+            /// Number of elements before the component of the first pixel plus 1.
+            /// Elements are bits for bitstream formats, bytes otherwise.
+            /// </summary>
+            public ushort offset_plus1;
+
+            /// <summary>
+            /// number of least significant bits that must be shifted away to get the
+            /// value
+            /// </summary>
+            public ushort shift;
+
+            /// <summary>
+            /// number of bits in the component minus 1
+            /// </summary>
+            public ushort depth_minus1;
+        }
 
         /// <summary>
-        /// Number of elements between 2 horizontally consecutive pixels minus
-        /// 1.
-        /// Elements are bits for bitstream formats, bytes otherwise.
+        /// Descriptor that unambiguously describes how the bits of a pixel are
+        /// stored in the up to 4 data planes of an image. It also stores the
+        /// subsampling factors and number of components.
+        /// 
+        /// @note This is separate of the colorspace (RGB, YCbCr, YPbPr, JPEG-style
+        /// YUV
+        /// and all the YUV variants) AVPixFmtDescriptor just stores how values
+        /// are stored not what these values represent.
         /// </summary>
-        [FieldOffset(0)]
-        public ushort step_minus1;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVPixFmtDescriptor
+        {
+            public sbyte* name;
 
-        /// <summary>
-        /// Number of elements before the component of the first pixel plus 1.
-        /// Elements are bits for bitstream formats, bytes otherwise.
-        /// </summary>
-        [FieldOffset(0)]
-        public ushort offset_plus1;
+            /// <summary>
+            /// The number of components each pixel has, (1-4)
+            /// </summary>
+            public byte nb_components;
 
-        /// <summary>
-        /// < number of least significant bits that must be shifted away to get
-        /// the value
-        /// </summary>
-        [FieldOffset(1)]
-        public ushort shift;
+            /// <summary>
+            /// chroma_width = -((-luma_width )>>log2_chroma_w)
+            /// </summary>
+            public byte log2_chroma_w;
 
-        /// <summary>
-        /// < number of bits in the component minus 1
-        /// </summary>
-        [FieldOffset(1)]
-        public ushort depth_minus1;
-    }
+            /// <summary>
+            /// Amount to shift the luma height right to find the chroma height.
+            /// For YV12 this is 1 for example.
+            /// chroma_height= -((-luma_height) >> log2_chroma_h)
+            /// The note above is needed to ensure rounding up.
+            /// This value only refers to the chroma components.
+            /// </summary>
+            public byte log2_chroma_h;
 
-    /// <summary>
-    /// Descriptor that unambiguously describes how the bits of a pixel are
-    /// stored in the up to 4 data planes of an image. It also stores the
-    /// subsampling factors and number of components.
-    /// 
-    /// @note This is separate of the colorspace (RGB, YCbCr, YPbPr, JPEG-style
-    /// YUV
-    /// and all the YUV variants) AVPixFmtDescriptor just stores how values
-    /// are stored not what these values represent.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVPixFmtDescriptor
-    {
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
+            public byte flags;
 
-        /// <summary>
-        /// < The number of components each pixel has, (1-4)
-        /// </summary>
-        [FieldOffset(4)]
-        public byte nb_components;
+            /// <summary>
+            /// Parameters that describe how pixels are packed.
+            /// If the format has 2 or 4 components, then alpha is last.
+            /// If the format has 1 or 2 components, then luma is 0.
+            /// If the format has 3 or 4 components,
+            /// if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
+            /// otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
+            /// </summary>
+            public ArrayWrapper_AVComponentDescriptor4 comp;
+        }
 
-        /// <summary>
-        /// < chroma_width = -((-luma_width )>>log2_chroma_w)
-        /// </summary>
-        [FieldOffset(5)]
-        public byte log2_chroma_w;
-
-        /// <summary>
-        /// Amount to shift the luma height right to find the chroma height.
-        /// For YV12 this is 1 for example.
-        /// chroma_height= -((-luma_height) >> log2_chroma_h)
-        /// The note above is needed to ensure rounding up.
-        /// This value only refers to the chroma components.
-        /// </summary>
-        [FieldOffset(6)]
-        public byte log2_chroma_h;
-
-        [FieldOffset(7)]
-        public byte flags;
-
-        /// <summary>
-        /// Parameters that describe how pixels are packed.
-        /// If the format has 2 or 4 components, then alpha is last.
-        /// If the format has 1 or 2 components, then luma is 0.
-        /// If the format has 3 or 4 components,
-        /// if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
-        /// otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
-        /// </summary>
-        [FieldOffset(8)]
-        public AVComponentDescriptor* comp_0;
-
-        /// <summary>
-        /// Parameters that describe how pixels are packed.
-        /// If the format has 2 or 4 components, then alpha is last.
-        /// If the format has 1 or 2 components, then luma is 0.
-        /// If the format has 3 or 4 components,
-        /// if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
-        /// otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
-        /// </summary>
-        [FieldOffset(12)]
-        public AVComponentDescriptor* comp_1;
-
-        /// <summary>
-        /// Parameters that describe how pixels are packed.
-        /// If the format has 2 or 4 components, then alpha is last.
-        /// If the format has 1 or 2 components, then luma is 0.
-        /// If the format has 3 or 4 components,
-        /// if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
-        /// otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
-        /// </summary>
-        [FieldOffset(16)]
-        public AVComponentDescriptor* comp_2;
-
-        /// <summary>
-        /// Parameters that describe how pixels are packed.
-        /// If the format has 2 or 4 components, then alpha is last.
-        /// If the format has 1 or 2 components, then luma is 0.
-        /// If the format has 3 or 4 components,
-        /// if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
-        /// otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
-        /// </summary>
-        [FieldOffset(20)]
-        public AVComponentDescriptor* comp_3;
-    }
-
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Read a line from an image, and write the values of the
         /// pixel format component c to dst.
@@ -152,9 +107,10 @@ namespace libavutil
         /// data[0]. The behavior is undefined if the format is not paletted.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_read_image_line")]
-        internal static extern void av_read_image_line(ushort* dst, byte* data, int* linesize, AVPixFmtDescriptor* desc, int x, int y, int c, int w, int read_pal_component);
+        public static extern void av_read_image_line(ushort* dst, byte** data, int* linesize, libavutil.AVPixFmtDescriptor* desc, int x, int y, int c, int w, int read_pal_component);
 
         /// <summary>
         /// Write the values from src to the pixel format component c of an
@@ -171,9 +127,10 @@ namespace libavutil
         /// values to write to the image line
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_write_image_line")]
-        internal static extern void av_write_image_line(ushort* src, byte* data, int* linesize, AVPixFmtDescriptor* desc, int x, int y, int c, int w);
+        public static extern void av_write_image_line(ushort* src, byte** data, int* linesize, libavutil.AVPixFmtDescriptor* desc, int x, int y, int c, int w);
 
         /// <summary>
         /// Return the pixel format corresponding to name.
@@ -187,9 +144,10 @@ namespace libavutil
         /// Finally if no pixel format has been found, returns AV_PIX_FMT_NONE.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_pix_fmt")]
-        internal static extern AVPixelFormat av_get_pix_fmt(global::System.IntPtr name);
+        public static extern libavutil.AVPixelFormat av_get_pix_fmt(string name);
 
         /// <summary>
         /// Return the short name for a pixel format, NULL in case pix_fmt is
@@ -198,9 +156,10 @@ namespace libavutil
         /// @see av_get_pix_fmt(), av_get_pix_fmt_string()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_pix_fmt_name")]
-        internal static extern global::System.IntPtr av_get_pix_fmt_name(AVPixelFormat pix_fmt);
+        public static extern sbyte* av_get_pix_fmt_name(libavutil.AVPixelFormat pix_fmt);
 
         /// <summary>
         /// Print in buf the string corresponding to the pixel format with
@@ -213,9 +172,10 @@ namespace libavutil
         /// corresponding header.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_pix_fmt_string")]
-        internal static extern sbyte* av_get_pix_fmt_string(sbyte* buf, int buf_size, AVPixelFormat pix_fmt);
+        public static extern sbyte* av_get_pix_fmt_string(System.Text.StringBuilder buf, int buf_size, libavutil.AVPixelFormat pix_fmt);
 
         /// <summary>
         /// Return the number of bits per pixel used by the pixel format
@@ -227,27 +187,30 @@ namespace libavutil
         /// not counted.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_bits_per_pixel")]
-        internal static extern int av_get_bits_per_pixel(AVPixFmtDescriptor* pixdesc);
+        public static extern int av_get_bits_per_pixel(libavutil.AVPixFmtDescriptor* pixdesc);
 
         /// <summary>
         /// Return the number of bits per pixel for the pixel format
         /// described by pixdesc, including any padding or unused bits.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_padded_bits_per_pixel")]
-        internal static extern int av_get_padded_bits_per_pixel(AVPixFmtDescriptor* pixdesc);
+        public static extern int av_get_padded_bits_per_pixel(libavutil.AVPixFmtDescriptor* pixdesc);
 
         /// <summary>
         /// @return a pixel format descriptor for provided pixel format or NULL if
         /// this pixel format is unknown.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_pix_fmt_desc_get")]
-        internal static extern AVPixFmtDescriptor* av_pix_fmt_desc_get(AVPixelFormat pix_fmt);
+        public static extern libavutil.AVPixFmtDescriptor* av_pix_fmt_desc_get(libavutil.AVPixelFormat pix_fmt);
 
         /// <summary>
         /// Iterate over all pixel format descriptors known to libavutil.
@@ -257,9 +220,10 @@ namespace libavutil
         /// @return next descriptor or NULL after the last descriptor
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_pix_fmt_desc_next")]
-        internal static extern AVPixFmtDescriptor* av_pix_fmt_desc_next(AVPixFmtDescriptor* prev);
+        public static extern libavutil.AVPixFmtDescriptor* av_pix_fmt_desc_next(libavutil.AVPixFmtDescriptor* prev);
 
         /// <summary>
         /// @return an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if
@@ -267,9 +231,10 @@ namespace libavutil
         /// is not a valid pointer to a pixel format descriptor.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_pix_fmt_desc_get_id")]
-        internal static extern AVPixelFormat av_pix_fmt_desc_get_id(AVPixFmtDescriptor* desc);
+        public static extern libavutil.AVPixelFormat av_pix_fmt_desc_get_id(libavutil.AVPixFmtDescriptor* desc);
 
         /// <summary>
         /// Utility function to access log2_chroma_w log2_chroma_h from
@@ -288,9 +253,10 @@ namespace libavutil
         /// format
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_pix_fmt_get_chroma_sub_sample")]
-        internal static extern int av_pix_fmt_get_chroma_sub_sample(AVPixelFormat pix_fmt, int* h_shift, int* v_shift);
+        public static extern int av_pix_fmt_get_chroma_sub_sample(libavutil.AVPixelFormat pix_fmt, int* h_shift, int* v_shift);
 
         /// <summary>
         /// @return number of planes in pix_fmt, a negative AVERROR if pix_fmt is
@@ -298,14 +264,16 @@ namespace libavutil
         /// valid pixel format.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_pix_fmt_count_planes")]
-        internal static extern int av_pix_fmt_count_planes(AVPixelFormat pix_fmt);
+        public static extern int av_pix_fmt_count_planes(libavutil.AVPixelFormat pix_fmt);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="ff_check_pixfmt_descriptors")]
-        internal static extern void ff_check_pixfmt_descriptors();
+        public static extern void ff_check_pixfmt_descriptors();
 
         /// <summary>
         /// Utility function to swap the endianness of a pixel format.
@@ -316,8 +284,9 @@ namespace libavutil
         /// otherwise AV_PIX_FMT_NONE
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_pix_fmt_swap_endianness")]
-        internal static extern AVPixelFormat av_pix_fmt_swap_endianness(AVPixelFormat pix_fmt);
+        public static extern libavutil.AVPixelFormat av_pix_fmt_swap_endianness(libavutil.AVPixelFormat pix_fmt);
     }
 }

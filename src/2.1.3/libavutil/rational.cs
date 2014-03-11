@@ -6,29 +6,27 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    /// <summary>
-    /// rational number numerator/denominator
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVRational
+    public unsafe static partial class libavutil
     {
         /// <summary>
-        /// < numerator
+        /// rational number numerator/denominator
         /// </summary>
-        [FieldOffset(0)]
-        public int num;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVRational
+        {
+            /// <summary>
+            /// numerator
+            /// </summary>
+            public int num;
 
-        /// <summary>
-        /// < denominator
-        /// </summary>
-        [FieldOffset(4)]
-        public int den;
-    }
+            /// <summary>
+            /// denominator
+            /// </summary>
+            public int den;
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Compare two rationals.
         /// @param a first rational
@@ -37,9 +35,10 @@ namespace libavutil
         /// values is of the form 0/0
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_cmp_q")]
-        internal static extern int av_cmp_q(AVRational* a, AVRational* b);
+        public static extern int av_cmp_q(libavutil.AVRational a, libavutil.AVRational b);
 
         /// <summary>
         /// Convert rational to double.
@@ -47,9 +46,10 @@ namespace libavutil
         /// @return (double) a
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_q2d")]
-        internal static extern double av_q2d(AVRational* a);
+        public static extern double av_q2d(libavutil.AVRational a);
 
         /// <summary>
         /// Reduce a fraction.
@@ -62,9 +62,10 @@ namespace libavutil
         /// @return 1 if exact, 0 otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_reduce")]
-        internal static extern int av_reduce(int* dst_num, int* dst_den, long num, long den, long max);
+        public static extern int av_reduce(int* dst_num, int* dst_den, long num, long den, long max);
 
         /// <summary>
         /// Multiply two rationals.
@@ -73,9 +74,10 @@ namespace libavutil
         /// @return b*c
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_mul_q")]
-        internal static extern AVRational* av_mul_q(AVRational* b, AVRational* c);
+        public static extern libavutil.AVRational av_mul_q(libavutil.AVRational b, libavutil.AVRational c);
 
         /// <summary>
         /// Divide one rational by another.
@@ -84,9 +86,10 @@ namespace libavutil
         /// @return b/c
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_div_q")]
-        internal static extern AVRational* av_div_q(AVRational* b, AVRational* c);
+        public static extern libavutil.AVRational av_div_q(libavutil.AVRational b, libavutil.AVRational c);
 
         /// <summary>
         /// Add two rationals.
@@ -95,9 +98,10 @@ namespace libavutil
         /// @return b+c
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_add_q")]
-        internal static extern AVRational* av_add_q(AVRational* b, AVRational* c);
+        public static extern libavutil.AVRational av_add_q(libavutil.AVRational b, libavutil.AVRational c);
 
         /// <summary>
         /// Subtract one rational from another.
@@ -106,9 +110,10 @@ namespace libavutil
         /// @return b-c
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_sub_q")]
-        internal static extern AVRational* av_sub_q(AVRational* b, AVRational* c);
+        public static extern libavutil.AVRational av_sub_q(libavutil.AVRational b, libavutil.AVRational c);
 
         /// <summary>
         /// Invert a rational.
@@ -116,9 +121,10 @@ namespace libavutil
         /// @return 1 / q
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_inv_q")]
-        internal static extern AVRational* av_inv_q(AVRational* q);
+        public static extern libavutil.AVRational av_inv_q(libavutil.AVRational q);
 
         /// <summary>
         /// Convert a double precision floating point number to a rational.
@@ -129,18 +135,20 @@ namespace libavutil
         /// @return (AVRational) d
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_d2q")]
-        internal static extern AVRational* av_d2q(double d, int max);
+        public static extern libavutil.AVRational av_d2q(double d, int max);
 
         /// <summary>
         /// @return 1 if q1 is nearer to q than q2, -1 if q2 is nearer
         /// than q1, 0 if they have the same distance.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_nearer_q")]
-        internal static extern int av_nearer_q(AVRational* q, AVRational* q1, AVRational* q2);
+        public static extern int av_nearer_q(libavutil.AVRational q, libavutil.AVRational q1, libavutil.AVRational q2);
 
         /// <summary>
         /// Find the nearest value in q_list to q.
@@ -148,8 +156,9 @@ namespace libavutil
         /// @return the index of the nearest value found in the array
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-52.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_nearest_q_idx")]
-        internal static extern int av_find_nearest_q_idx(AVRational* q, AVRational* q_list);
+        public static extern int av_find_nearest_q_idx(libavutil.AVRational q, libavutil.AVRational* q_list);
     }
 }

@@ -6,305 +6,327 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    /// <summary>
-    /// @defgroup avoptions AVOptions
-    /// @ingroup lavu_data
-    /// @{
-    /// AVOptions provide a generic system to declare options on arbitrary
-    /// structs
-    /// ("objects"). An option can have a help text, a type and a range of
-    /// possible
-    /// values. Options may then be enumerated, read and written to.
-    /// 
-    /// @section avoptions_implement Implementing AVOptions
-    /// This section describes how to add AVOptions capabilities to a struct.
-    /// 
-    /// All AVOptions-related information is stored in an AVClass. Therefore
-    /// the first member of the struct should be a pointer to an AVClass
-    /// describing it.
-    /// The option field of the AVClass must be set to a NULL-terminated static
-    /// array
-    /// of AVOptions. Each AVOption must have a non-empty name, a type, a
-    /// default
-    /// value and for number-type AVOptions also a range of allowed values. It
-    /// must
-    /// also declare an offset in bytes from the start of the struct, where the
-    /// field
-    /// associated with this AVOption is located. Other fields in the AVOption
-    /// struct
-    /// should also be set when applicable, but are not required.
-    /// 
-    /// The following example illustrates an AVOptions-enabled struct:
-    /// @code
-    /// typedef struct test_struct {
-    /// AVClass *class;
-    /// int      int_opt;
-    /// char    *str_opt;
-    /// uint8_t *bin_opt;
-    /// int      bin_len;
-    /// } test_struct;
-    /// 
-    /// static const AVOption options[] = {
-    /// { "test_int", "This is a test option of int type.",
-    /// offsetof(test_struct, int_opt),
-    /// AV_OPT_TYPE_INT, { .i64 = -1 }, INT_MIN, INT_MAX },
-    /// { "test_str", "This is a test option of string type.",
-    /// offsetof(test_struct, str_opt),
-    /// AV_OPT_TYPE_STRING },
-    /// { "test_bin", "This is a test option of binary type.",
-    /// offsetof(test_struct, bin_opt),
-    /// AV_OPT_TYPE_BINARY },
-    /// { NULL },
-    /// };
-    /// 
-    /// static const AVClass test_class = {
-    /// .class_name = "test class",
-    /// .item_name  = av_default_item_name,
-    /// .option     = options,
-    /// .version    = LIBAVUTIL_VERSION_INT,
-    /// };
-    /// @endcode
-    /// 
-    /// Next, when allocating your struct, you must ensure that the AVClass
-    /// pointer
-    /// is set to the correct value. Then, av_opt_set_defaults() can be called
-    /// to
-    /// initialize defaults. After that the struct is ready to be used with the
-    /// AVOptions API.
-    /// 
-    /// When cleaning up, you may use the av_opt_free() function to
-    /// automatically
-    /// free all the allocated string and binary options.
-    /// 
-    /// Continuing with the above example:
-    /// 
-    /// @code
-    /// test_struct *alloc_test_struct(void)
-    /// {
-    /// test_struct *ret = av_malloc(sizeof(*ret));
-    /// ret->class = &test_class;
-    /// av_opt_set_defaults(ret);
-    /// return ret;
-    /// }
-    /// void free_test_struct(test_struct **foo)
-    /// {
-    /// av_opt_free(*foo);
-    /// av_freep(foo);
-    /// }
-    /// @endcode
-    /// 
-    /// @subsection avoptions_implement_nesting Nesting
-    /// It may happen that an AVOptions-enabled struct contains another
-    /// AVOptions-enabled struct as a member (e.g. AVCodecContext in
-    /// libavcodec exports generic options, while its priv_data field exports
-    /// codec-specific options). In such a case, it is possible to set up the
-    /// parent struct to export a child's options. To do that, simply
-    /// implement AVClass.child_next() and AVClass.child_class_next() in the
-    /// parent struct's AVClass.
-    /// Assuming that the test_struct from above now also contains a
-    /// child_struct field:
-    /// 
-    /// @code
-    /// typedef struct child_struct {
-    /// AVClass *class;
-    /// int flags_opt;
-    /// } child_struct;
-    /// static const AVOption child_opts[] = {
-    /// { "test_flags", "This is a test option of flags type.",
-    /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
-    /// INT_MIN, INT_MAX },
-    /// { NULL },
-    /// };
-    /// static const AVClass child_class = {
-    /// .class_name = "child class",
-    /// .item_name  = av_default_item_name,
-    /// .option     = child_opts,
-    /// .version    = LIBAVUTIL_VERSION_INT,
-    /// };
-    /// 
-    /// void *child_next(void *obj, void *prev)
-    /// {
-    /// test_struct *t = obj;
-    /// if (!prev && t->child_struct)
-    /// return t->child_struct;
-    /// return NULL
-    /// }
-    /// const AVClass child_class_next(const AVClass *prev)
-    /// {
-    /// return prev ? NULL : &child_class;
-    /// }
-    /// @endcode
-    /// Putting child_next() and child_class_next() as defined above into
-    /// test_class will now make child_struct's options accessible through
-    /// test_struct (again, proper setup as described above needs to be done on
-    /// child_struct right after it is created).
-    /// 
-    /// From the above example it might not be clear why both child_next()
-    /// and child_class_next() are needed. The distinction is that child_next()
-    /// iterates over actually existing objects, while child_class_next()
-    /// iterates over all possible child classes. E.g. if an AVCodecContext
-    /// was initialized to use a codec which has private options, then its
-    /// child_next() will return AVCodecContext.priv_data and finish
-    /// iterating. OTOH child_class_next() on AVCodecContext.av_class will
-    /// iterate over all available codecs with private options.
-    /// 
-    /// @subsection avoptions_implement_named_constants Named constants
-    /// It is possible to create named constants for options. Simply set the
-    /// unit
-    /// field of the option the constants should apply to to a string and
-    /// create the constants themselves as options of type AV_OPT_TYPE_CONST
-    /// with their unit field set to the same string.
-    /// Their default_val field should contain the value of the named
-    /// constant.
-    /// For example, to add some named constants for the test_flags option
-    /// above, put the following into the child_opts array:
-    /// @code
-    /// { "test_flags", "This is a test option of flags type.",
-    /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
-    /// INT_MIN, INT_MAX, "test_unit" },
-    /// { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64
-    /// = 16 }, 0, 0, "test_unit" },
-    /// @endcode
-    /// 
-    /// @section avoptions_use Using AVOptions
-    /// This section deals with accessing options in an AVOptions-enabled
-    /// struct.
-    /// Such structs in FFmpeg are e.g. AVCodecContext in libavcodec or
-    /// AVFormatContext in libavformat.
-    /// 
-    /// @subsection avoptions_use_examine Examining AVOptions
-    /// The basic functions for examining options are av_opt_next(), which
-    /// iterates
-    /// over all options defined for one object, and av_opt_find(), which
-    /// searches
-    /// for an option with the given name.
-    /// 
-    /// The situation is more complicated with nesting. An AVOptions-enabled
-    /// struct
-    /// may have AVOptions-enabled children. Passing the AV_OPT_SEARCH_CHILDREN
-    /// flag
-    /// to av_opt_find() will make the function search children recursively.
-    /// 
-    /// For enumerating there are basically two cases. The first is when you
-    /// want to
-    /// get all options that may potentially exist on the struct and its
-    /// children
-    /// (e.g.  when constructing documentation). In that case you should call
-    /// av_opt_child_class_next() recursively on the parent struct's AVClass.
-    /// The
-    /// second case is when you have an already initialized struct with all its
-    /// children and you want to get all options that can be actually written
-    /// or read
-    /// from it. In that case you should call av_opt_child_next() recursively
-    /// (and
-    /// av_opt_next() on each result).
-    /// 
-    /// @subsection avoptions_use_get_set Reading and writing AVOptions
-    /// When setting options, you often have a string read directly from the
-    /// user. In such a case, simply passing it to av_opt_set() is enough. For
-    /// non-string type options, av_opt_set() will parse the string according
-    /// to the
-    /// option type.
-    /// 
-    /// Similarly av_opt_get() will read any option type and convert it to a
-    /// string
-    /// which will be returned. Do not forget that the string is allocated, so
-    /// you
-    /// have to free it with av_free().
-    /// 
-    /// In some cases it may be more convenient to put all options into an
-    /// AVDictionary and call av_opt_set_dict() on it. A specific case of this
-    /// are the format/codec open functions in lavf/lavc which take a
-    /// dictionary
-    /// filled with option as a parameter. This allows to set some options
-    /// that cannot be set otherwise, since e.g. the input file format is not
-    /// known
-    /// before the file is actually opened.
-    /// </summary>
-    public enum AVOptionType
+    public unsafe static partial class libavutil
     {
-        AV_OPT_TYPE_FLAGS = 0,
-        AV_OPT_TYPE_INT = 1,
-        AV_OPT_TYPE_INT64 = 2,
-        AV_OPT_TYPE_DOUBLE = 3,
-        AV_OPT_TYPE_FLOAT = 4,
-        AV_OPT_TYPE_STRING = 5,
-        AV_OPT_TYPE_RATIONAL = 6,
-        /// <summary>offset must point to a pointer immediately followed by an int for the length</summary>
-        AV_OPT_TYPE_BINARY = 7,
-        AV_OPT_TYPE_CONST = 128,
-        /// <summary>offset must point to two consecutive integers</summary>
-        AV_OPT_TYPE_IMAGE_SIZE = 1397316165,
-        AV_OPT_TYPE_PIXEL_FMT = 1346784596,
-        FF_OPT_TYPE_FLAGS = 0,
-        FF_OPT_TYPE_INT = 1,
-        FF_OPT_TYPE_INT64 = 2,
-        FF_OPT_TYPE_DOUBLE = 3,
-        FF_OPT_TYPE_FLOAT = 4,
-        FF_OPT_TYPE_STRING = 5,
-        FF_OPT_TYPE_RATIONAL = 6,
-        /// <summary>offset must point to a pointer immediately followed by an int for the length</summary>
-        FF_OPT_TYPE_BINARY = 7,
-        FF_OPT_TYPE_CONST = 128
-    }
+        public const sbyte AV_OPT_FLAG_ENCODING_PARAM = 1;
 
-    /// <summary>
-    /// AVOption
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVOption
-    {
-        [FieldOffset(0)]
-        public global::System.IntPtr name;
+        public const sbyte AV_OPT_FLAG_DECODING_PARAM = 2;
+
+        public const sbyte AV_OPT_FLAG_METADATA = 4;
+
+        public const sbyte AV_OPT_FLAG_AUDIO_PARAM = 8;
+
+        public const sbyte AV_OPT_FLAG_VIDEO_PARAM = 16;
+
+        public const sbyte AV_OPT_FLAG_SUBTITLE_PARAM = 32;
+
+        public const sbyte AV_OPT_SEARCH_CHILDREN = 1;
+
+        public const sbyte AV_OPT_SEARCH_FAKE_OBJ = 2;
 
         /// <summary>
-        /// short English help text
-        /// @todo What about other languages?
+        /// @defgroup avoptions AVOptions
+        /// @ingroup lavu_data
+        /// @{
+        /// AVOptions provide a generic system to declare options on arbitrary
+        /// structs
+        /// ("objects"). An option can have a help text, a type and a range of
+        /// possible
+        /// values. Options may then be enumerated, read and written to.
+        /// 
+        /// @section avoptions_implement Implementing AVOptions
+        /// This section describes how to add AVOptions capabilities to a struct.
+        /// 
+        /// All AVOptions-related information is stored in an AVClass. Therefore
+        /// the first member of the struct should be a pointer to an AVClass
+        /// describing it.
+        /// The option field of the AVClass must be set to a NULL-terminated static
+        /// array
+        /// of AVOptions. Each AVOption must have a non-empty name, a type, a
+        /// default
+        /// value and for number-type AVOptions also a range of allowed values. It
+        /// must
+        /// also declare an offset in bytes from the start of the struct, where the
+        /// field
+        /// associated with this AVOption is located. Other fields in the AVOption
+        /// struct
+        /// should also be set when applicable, but are not required.
+        /// 
+        /// The following example illustrates an AVOptions-enabled struct:
+        /// @code
+        /// typedef struct test_struct {
+        /// AVClass *class;
+        /// int      int_opt;
+        /// char    *str_opt;
+        /// uint8_t *bin_opt;
+        /// int      bin_len;
+        /// } test_struct;
+        /// 
+        /// static const AVOption options[] = {
+        /// { "test_int", "This is a test option of int type.",
+        /// offsetof(test_struct, int_opt),
+        /// AV_OPT_TYPE_INT, { .i64 = -1 }, INT_MIN, INT_MAX },
+        /// { "test_str", "This is a test option of string type.",
+        /// offsetof(test_struct, str_opt),
+        /// AV_OPT_TYPE_STRING },
+        /// { "test_bin", "This is a test option of binary type.",
+        /// offsetof(test_struct, bin_opt),
+        /// AV_OPT_TYPE_BINARY },
+        /// { NULL },
+        /// };
+        /// 
+        /// static const AVClass test_class = {
+        /// .class_name = "test class",
+        /// .item_name  = av_default_item_name,
+        /// .option     = options,
+        /// .version    = LIBAVUTIL_VERSION_INT,
+        /// };
+        /// @endcode
+        /// 
+        /// Next, when allocating your struct, you must ensure that the AVClass
+        /// pointer
+        /// is set to the correct value. Then, av_opt_set_defaults() can be called
+        /// to
+        /// initialize defaults. After that the struct is ready to be used with the
+        /// AVOptions API.
+        /// 
+        /// When cleaning up, you may use the av_opt_free() function to
+        /// automatically
+        /// free all the allocated string and binary options.
+        /// 
+        /// Continuing with the above example:
+        /// 
+        /// @code
+        /// test_struct *alloc_test_struct(void)
+        /// {
+        /// test_struct *ret = av_malloc(sizeof(*ret));
+        /// ret->class = &test_class;
+        /// av_opt_set_defaults(ret);
+        /// return ret;
+        /// }
+        /// void free_test_struct(test_struct **foo)
+        /// {
+        /// av_opt_free(*foo);
+        /// av_freep(foo);
+        /// }
+        /// @endcode
+        /// 
+        /// @subsection avoptions_implement_nesting Nesting
+        /// It may happen that an AVOptions-enabled struct contains another
+        /// AVOptions-enabled struct as a member (e.g. AVCodecContext in
+        /// libavcodec exports generic options, while its priv_data field exports
+        /// codec-specific options). In such a case, it is possible to set up the
+        /// parent struct to export a child's options. To do that, simply
+        /// implement AVClass.child_next() and AVClass.child_class_next() in the
+        /// parent struct's AVClass.
+        /// Assuming that the test_struct from above now also contains a
+        /// child_struct field:
+        /// 
+        /// @code
+        /// typedef struct child_struct {
+        /// AVClass *class;
+        /// int flags_opt;
+        /// } child_struct;
+        /// static const AVOption child_opts[] = {
+        /// { "test_flags", "This is a test option of flags type.",
+        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
+        /// INT_MIN, INT_MAX },
+        /// { NULL },
+        /// };
+        /// static const AVClass child_class = {
+        /// .class_name = "child class",
+        /// .item_name  = av_default_item_name,
+        /// .option     = child_opts,
+        /// .version    = LIBAVUTIL_VERSION_INT,
+        /// };
+        /// 
+        /// void *child_next(void *obj, void *prev)
+        /// {
+        /// test_struct *t = obj;
+        /// if (!prev && t->child_struct)
+        /// return t->child_struct;
+        /// return NULL
+        /// }
+        /// const AVClass child_class_next(const AVClass *prev)
+        /// {
+        /// return prev ? NULL : &child_class;
+        /// }
+        /// @endcode
+        /// Putting child_next() and child_class_next() as defined above into
+        /// test_class will now make child_struct's options accessible through
+        /// test_struct (again, proper setup as described above needs to be done on
+        /// child_struct right after it is created).
+        /// 
+        /// From the above example it might not be clear why both child_next()
+        /// and child_class_next() are needed. The distinction is that child_next()
+        /// iterates over actually existing objects, while child_class_next()
+        /// iterates over all possible child classes. E.g. if an AVCodecContext
+        /// was initialized to use a codec which has private options, then its
+        /// child_next() will return AVCodecContext.priv_data and finish
+        /// iterating. OTOH child_class_next() on AVCodecContext.av_class will
+        /// iterate over all available codecs with private options.
+        /// 
+        /// @subsection avoptions_implement_named_constants Named constants
+        /// It is possible to create named constants for options. Simply set the
+        /// unit
+        /// field of the option the constants should apply to to a string and
+        /// create the constants themselves as options of type AV_OPT_TYPE_CONST
+        /// with their unit field set to the same string.
+        /// Their default_val field should contain the value of the named
+        /// constant.
+        /// For example, to add some named constants for the test_flags option
+        /// above, put the following into the child_opts array:
+        /// @code
+        /// { "test_flags", "This is a test option of flags type.",
+        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
+        /// INT_MIN, INT_MAX, "test_unit" },
+        /// { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64
+        /// = 16 }, 0, 0, "test_unit" },
+        /// @endcode
+        /// 
+        /// @section avoptions_use Using AVOptions
+        /// This section deals with accessing options in an AVOptions-enabled
+        /// struct.
+        /// Such structs in FFmpeg are e.g. AVCodecContext in libavcodec or
+        /// AVFormatContext in libavformat.
+        /// 
+        /// @subsection avoptions_use_examine Examining AVOptions
+        /// The basic functions for examining options are av_opt_next(), which
+        /// iterates
+        /// over all options defined for one object, and av_opt_find(), which
+        /// searches
+        /// for an option with the given name.
+        /// 
+        /// The situation is more complicated with nesting. An AVOptions-enabled
+        /// struct
+        /// may have AVOptions-enabled children. Passing the AV_OPT_SEARCH_CHILDREN
+        /// flag
+        /// to av_opt_find() will make the function search children recursively.
+        /// 
+        /// For enumerating there are basically two cases. The first is when you
+        /// want to
+        /// get all options that may potentially exist on the struct and its
+        /// children
+        /// (e.g.  when constructing documentation). In that case you should call
+        /// av_opt_child_class_next() recursively on the parent struct's AVClass.
+        /// The
+        /// second case is when you have an already initialized struct with all its
+        /// children and you want to get all options that can be actually written
+        /// or read
+        /// from it. In that case you should call av_opt_child_next() recursively
+        /// (and
+        /// av_opt_next() on each result).
+        /// 
+        /// @subsection avoptions_use_get_set Reading and writing AVOptions
+        /// When setting options, you often have a string read directly from the
+        /// user. In such a case, simply passing it to av_opt_set() is enough. For
+        /// non-string type options, av_opt_set() will parse the string according
+        /// to the
+        /// option type.
+        /// 
+        /// Similarly av_opt_get() will read any option type and convert it to a
+        /// string
+        /// which will be returned. Do not forget that the string is allocated, so
+        /// you
+        /// have to free it with av_free().
+        /// 
+        /// In some cases it may be more convenient to put all options into an
+        /// AVDictionary and call av_opt_set_dict() on it. A specific case of this
+        /// are the format/codec open functions in lavf/lavc which take a
+        /// dictionary
+        /// filled with option as a parameter. This allows to set some options
+        /// that cannot be set otherwise, since e.g. the input file format is not
+        /// known
+        /// before the file is actually opened.
         /// </summary>
-        [FieldOffset(4)]
-        public global::System.IntPtr help;
+        public enum AVOptionType
+        {
+            AV_OPT_TYPE_FLAGS = 0,
+            AV_OPT_TYPE_INT = 1,
+            AV_OPT_TYPE_INT64 = 2,
+            AV_OPT_TYPE_DOUBLE = 3,
+            AV_OPT_TYPE_FLOAT = 4,
+            AV_OPT_TYPE_STRING = 5,
+            AV_OPT_TYPE_RATIONAL = 6,
+            /// <summary>offset must point to a pointer immediately followed by an int for the length</summary>
+            AV_OPT_TYPE_BINARY = 7,
+            AV_OPT_TYPE_CONST = 128,
+            /// <summary>offset must point to two consecutive integers</summary>
+            AV_OPT_TYPE_IMAGE_SIZE = 1397316165,
+            AV_OPT_TYPE_PIXEL_FMT = 1346784596,
+            FF_OPT_TYPE_FLAGS = 0,
+            FF_OPT_TYPE_INT = 1,
+            FF_OPT_TYPE_INT64 = 2,
+            FF_OPT_TYPE_DOUBLE = 3,
+            FF_OPT_TYPE_FLOAT = 4,
+            FF_OPT_TYPE_STRING = 5,
+            FF_OPT_TYPE_RATIONAL = 6,
+            /// <summary>offset must point to a pointer immediately followed by an int for the length</summary>
+            FF_OPT_TYPE_BINARY = 7,
+            FF_OPT_TYPE_CONST = 128
+        }
 
         /// <summary>
-        /// The offset relative to the context structure where the option
-        /// value is stored. It should be 0 for named constants.
+        /// AVOption
         /// </summary>
-        [FieldOffset(8)]
-        public int offset;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVOption
+        {
+            public sbyte* name;
 
-        [FieldOffset(12)]
-        public AVOptionType type;
+            /// <summary>
+            /// short English help text
+            /// @todo What about other languages?
+            /// </summary>
+            public sbyte* help;
 
-        [FieldOffset(16)]
-        public AVOption.* default_val;
+            /// <summary>
+            /// The offset relative to the context structure where the option
+            /// value is stored. It should be 0 for named constants.
+            /// </summary>
+            public int offset;
 
-        /// <summary>
-        /// < minimum valid value for the option
-        /// </summary>
-        [FieldOffset(24)]
-        public double min;
+            public libavutil.AVOptionType type;
 
-        /// <summary>
-        /// < maximum valid value for the option
-        /// </summary>
-        [FieldOffset(32)]
-        public double max;
+            public libavutil.AVOption.AVOption_anon default_val;
 
-        [FieldOffset(40)]
-        public int flags;
+            /// <summary>
+            /// minimum valid value for the option
+            /// </summary>
+            public double min;
 
-        /// <summary>
-        /// The logical unit to which the option belongs. Non-constant
-        /// options and corresponding named constants share the same
-        /// unit. May be NULL.
-        /// </summary>
-        [FieldOffset(44)]
-        public global::System.IntPtr unit;
-    }
+            /// <summary>
+            /// maximum valid value for the option
+            /// </summary>
+            public double max;
 
-    public unsafe partial class libavutil
-    {
+            public int flags;
+
+            /// <summary>
+            /// The logical unit to which the option belongs. Non-constant
+            /// options and corresponding named constants share the same
+            /// unit. May be NULL.
+            /// </summary>
+            public sbyte* unit;
+
+            /// <summary>
+            /// the default value for scalar options
+            /// </summary>
+            [StructLayout(LayoutKind.Sequential)]
+            public unsafe partial struct AVOption_anon
+            {
+                public long i64;
+
+                public double dbl;
+
+                public sbyte* str;
+
+                public libavutil.AVRational q;
+            }
+        }
+
         /// <summary>
         /// Look for an option in obj. Look only for the options which
         /// have the flags set as specified in mask and flags (that is,
@@ -320,9 +342,10 @@ namespace libavutil
         /// @deprecated use av_opt_find.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_find_opt")]
-        internal static extern AVOption* av_find_opt(global::System.IntPtr obj, global::System.IntPtr name, global::System.IntPtr unit, int mask, int flags);
+        public static extern libavutil.AVOption* av_find_opt(void* obj, string name, string unit, int mask, int flags);
 
         /// <summary>
         /// Set the field of obj with the given name to value.
@@ -351,49 +374,114 @@ namespace libavutil
         /// @deprecated use av_opt_set()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_string3")]
-        internal static extern int av_set_string3(global::System.IntPtr obj, global::System.IntPtr name, global::System.IntPtr val, int alloc, AVOption* o_out);
+        public static extern int av_set_string3(void* obj, string name, string val, int alloc, libavutil.AVOption** o_out);
+
+        /// <summary>
+        /// Set the field of obj with the given name to value.
+        /// 
+        /// @param[in] obj A struct whose first element is a pointer to an
+        /// AVClass.
+        /// @param[in] name the name of the field to set
+        /// @param[in] val The value to set. If the field is not of a string
+        /// type, then the given string is parsed.
+        /// SI postfixes and some named scalars are supported.
+        /// If the field is of a numeric type, it has to be a numeric or named
+        /// scalar. Behavior with more than one scalar and +- infix operators
+        /// is undefined.
+        /// If the field is of a flags type, it has to be a sequence of numeric
+        /// scalars or named flags separated by '+' or '-'. Prefixing a flag
+        /// with '+' causes it to be set without affecting the other flags;
+        /// similarly, '-' unsets a flag.
+        /// @param[out] o_out if non-NULL put here a pointer to the AVOption
+        /// found
+        /// @param alloc this parameter is currently ignored
+        /// @return 0 if the value has been set, or an AVERROR code in case of
+        /// error:
+        /// AVERROR_OPTION_NOT_FOUND if no matching option exists
+        /// AVERROR(ERANGE) if the value is out of range
+        /// AVERROR(EINVAL) if the value is not valid
+        /// @deprecated use av_opt_set()
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_set_string3")]
+        public static extern int av_set_string3(void* obj, string name, string val, int alloc, ref libavutil.AVOption* o_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_double")]
-        internal static extern AVOption* av_set_double(global::System.IntPtr obj, global::System.IntPtr name, double n);
+        public static extern libavutil.AVOption* av_set_double(void* obj, string name, double n);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_q")]
-        internal static extern AVOption* av_set_q(global::System.IntPtr obj, global::System.IntPtr name, AVRational* n);
+        public static extern libavutil.AVOption* av_set_q(void* obj, string name, libavutil.AVRational n);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_int")]
-        internal static extern AVOption* av_set_int(global::System.IntPtr obj, global::System.IntPtr name, long n);
+        public static extern libavutil.AVOption* av_set_int(void* obj, string name, long n);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_double")]
-        internal static extern double av_get_double(global::System.IntPtr obj, global::System.IntPtr name, AVOption* o_out);
+        public static extern double av_get_double(void* obj, string name, libavutil.AVOption** o_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_get_double")]
+        public static extern double av_get_double(void* obj, string name, ref libavutil.AVOption* o_out);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_q")]
-        internal static extern AVRational* av_get_q(global::System.IntPtr obj, global::System.IntPtr name, AVOption* o_out);
+        public static extern libavutil.AVRational av_get_q(void* obj, string name, libavutil.AVOption** o_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_get_q")]
+        public static extern libavutil.AVRational av_get_q(void* obj, string name, ref libavutil.AVOption* o_out);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_int")]
-        internal static extern long av_get_int(global::System.IntPtr obj, global::System.IntPtr name, AVOption* o_out);
+        public static extern long av_get_int(void* obj, string name, libavutil.AVOption** o_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_get_int")]
+        public static extern long av_get_int(void* obj, string name, ref libavutil.AVOption* o_out);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_string")]
-        internal static extern global::System.IntPtr av_get_string(global::System.IntPtr obj, global::System.IntPtr name, AVOption* o_out, sbyte* buf, int buf_len);
+        public static extern sbyte* av_get_string(void* obj, string name, libavutil.AVOption** o_out, System.Text.StringBuilder buf, int buf_len);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_get_string")]
+        public static extern sbyte* av_get_string(void* obj, string name, ref libavutil.AVOption* o_out, System.Text.StringBuilder buf, int buf_len);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_next_option")]
-        internal static extern AVOption* av_next_option(global::System.IntPtr obj, AVOption* last);
+        public static extern libavutil.AVOption* av_next_option(void* obj, libavutil.AVOption* last);
 
         /// <summary>
         /// Show the obj options.
@@ -405,9 +493,10 @@ namespace libavutil
         /// @param av_log_obj log context to use for showing the options
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_show2")]
-        internal static extern int av_opt_show2(global::System.IntPtr obj, global::System.IntPtr av_log_obj, int req_flags, int rej_flags);
+        public static extern int av_opt_show2(void* obj, void* av_log_obj, int req_flags, int rej_flags);
 
         /// <summary>
         /// Set the values of all AVOption fields to their default values.
@@ -416,14 +505,16 @@ namespace libavutil
         /// to AVClass)
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set_defaults")]
-        internal static extern void av_opt_set_defaults(global::System.IntPtr s);
+        public static extern void av_opt_set_defaults(void* s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set_defaults2")]
-        internal static extern void av_opt_set_defaults2(global::System.IntPtr s, int mask, int flags);
+        public static extern void av_opt_set_defaults2(void* s, int mask, int flags);
 
         /// <summary>
         /// Parse the key/value pairs list in opts. For each key/value pair
@@ -443,17 +534,19 @@ namespace libavutil
         /// cannot be set
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_options_string")]
-        internal static extern int av_set_options_string(global::System.IntPtr ctx, global::System.IntPtr opts, global::System.IntPtr key_val_sep, global::System.IntPtr pairs_sep);
+        public static extern int av_set_options_string(void* ctx, string opts, string key_val_sep, string pairs_sep);
 
         /// <summary>
         /// Free all string and binary options in obj.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_free")]
-        internal static extern void av_opt_free(global::System.IntPtr obj);
+        public static extern void av_opt_free(void* obj);
 
         /// <summary>
         /// Check whether a particular flag is set in a flags field.
@@ -464,14 +557,22 @@ namespace libavutil
         /// isn't of the right type, or the flags field doesn't exist.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_flag_is_set")]
-        internal static extern int av_opt_flag_is_set(global::System.IntPtr obj, global::System.IntPtr field_name, global::System.IntPtr flag_name);
+        public static extern int av_opt_flag_is_set(void* obj, string field_name, string flag_name);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set_dict")]
-        internal static extern int av_opt_set_dict(global::System.IntPtr obj, AVDictionary* options);
+        public static extern int av_opt_set_dict(void* obj, libavutil.AVDictionary** options);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_opt_set_dict")]
+        public static extern int av_opt_set_dict(void* obj, ref libavutil.AVDictionary* options);
 
         /// <summary>
         /// @defgroup opt_eval_funcs Evaluating option strings
@@ -488,34 +589,40 @@ namespace libavutil
         /// @return 0 on success, a negative number on failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_eval_flags")]
-        internal static extern int av_opt_eval_flags(global::System.IntPtr obj, AVOption* o, global::System.IntPtr val, int* flags_out);
+        public static extern int av_opt_eval_flags(void* obj, libavutil.AVOption* o, string val, int* flags_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_eval_int")]
-        internal static extern int av_opt_eval_int(global::System.IntPtr obj, AVOption* o, global::System.IntPtr val, int* int_out);
+        public static extern int av_opt_eval_int(void* obj, libavutil.AVOption* o, string val, int* int_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_eval_int64")]
-        internal static extern int av_opt_eval_int64(global::System.IntPtr obj, AVOption* o, global::System.IntPtr val, long* int64_out);
+        public static extern int av_opt_eval_int64(void* obj, libavutil.AVOption* o, string val, long* int64_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_eval_float")]
-        internal static extern int av_opt_eval_float(global::System.IntPtr obj, AVOption* o, global::System.IntPtr val, float* float_out);
+        public static extern int av_opt_eval_float(void* obj, libavutil.AVOption* o, string val, float* float_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_eval_double")]
-        internal static extern int av_opt_eval_double(global::System.IntPtr obj, AVOption* o, global::System.IntPtr val, double* double_out);
+        public static extern int av_opt_eval_double(void* obj, libavutil.AVOption* o, string val, double* double_out);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_eval_q")]
-        internal static extern int av_opt_eval_q(global::System.IntPtr obj, AVOption* o, global::System.IntPtr val, AVRational* q_out);
+        public static extern int av_opt_eval_q(void* obj, libavutil.AVOption* o, string val, libavutil.AVRational* q_out);
 
         /// <summary>
         /// Look for an option in an object. Consider only options which
@@ -543,9 +650,10 @@ namespace libavutil
         /// flag.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_find")]
-        internal static extern AVOption* av_opt_find(global::System.IntPtr obj, global::System.IntPtr name, global::System.IntPtr unit, int opt_flags, int search_flags);
+        public static extern libavutil.AVOption* av_opt_find(void* obj, string name, string unit, int opt_flags, int search_flags);
 
         /// <summary>
         /// Look for an option in an object. Consider only options which
@@ -572,9 +680,40 @@ namespace libavutil
         /// was found.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_find2")]
-        internal static extern AVOption* av_opt_find2(global::System.IntPtr obj, global::System.IntPtr name, global::System.IntPtr unit, int opt_flags, int search_flags, global::System.IntPtr target_obj);
+        public static extern libavutil.AVOption* av_opt_find2(void* obj, string name, string unit, int opt_flags, int search_flags, void** target_obj);
+
+        /// <summary>
+        /// Look for an option in an object. Consider only options which
+        /// have all the specified flags set.
+        /// 
+        /// @param[in] obj A pointer to a struct whose first element is a
+        /// pointer to an AVClass.
+        /// Alternatively a double pointer to an AVClass, if
+        /// AV_OPT_SEARCH_FAKE_OBJ search flag is set.
+        /// @param[in] name The name of the option to look for.
+        /// @param[in] unit When searching for named constants, name of the unit
+        /// it belongs to.
+        /// @param opt_flags Find only options with all the specified flags set
+        /// (AV_OPT_FLAG).
+        /// @param search_flags A combination of AV_OPT_SEARCH_*.
+        /// @param[out] target_obj if non-NULL, an object to which the option
+        /// belongs will be
+        /// written here. It may be different from obj if AV_OPT_SEARCH_CHILDREN is
+        /// present
+        /// in search_flags. This parameter is ignored if search_flags contain
+        /// AV_OPT_SEARCH_FAKE_OBJ.
+        /// 
+        /// @return A pointer to the option found, or NULL if no option
+        /// was found.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_opt_find2")]
+        public static extern libavutil.AVOption* av_opt_find2(void* obj, string name, string unit, int opt_flags, int search_flags, ref void* target_obj);
 
         /// <summary>
         /// Iterate over all AVOptions belonging to obj.
@@ -586,9 +725,10 @@ namespace libavutil
         /// @return next AVOption or NULL
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_next")]
-        internal static extern AVOption* av_opt_next(global::System.IntPtr obj, AVOption* prev);
+        public static extern libavutil.AVOption* av_opt_next(void* obj, libavutil.AVOption* prev);
 
         /// <summary>
         /// Iterate over AVOptions-enabled children of obj.
@@ -597,9 +737,10 @@ namespace libavutil
         /// @return next AVOptions-enabled child or NULL
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_child_next")]
-        internal static extern global::System.IntPtr av_opt_child_next(global::System.IntPtr obj, global::System.IntPtr prev);
+        public static extern void* av_opt_child_next(void* obj, void* prev);
 
         /// <summary>
         /// Iterate over potential AVOptions-enabled children of parent.
@@ -608,9 +749,10 @@ namespace libavutil
         /// @return AVClass corresponding to next potential child or NULL
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_child_class_next")]
-        internal static extern AVClass* av_opt_child_class_next(AVClass* parent, AVClass* prev);
+        public static extern libavutil.AVClass* av_opt_child_class_next(libavutil.AVClass* parent, libavutil.AVClass* prev);
 
         /// <summary>
         /// @defgroup opt_set_funcs Option setting functions
@@ -641,29 +783,34 @@ namespace libavutil
         /// AVERROR(EINVAL) if the value is not valid
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set")]
-        internal static extern int av_opt_set(global::System.IntPtr obj, global::System.IntPtr name, global::System.IntPtr val, int search_flags);
+        public static extern int av_opt_set(void* obj, string name, string val, int search_flags);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set_int")]
-        internal static extern int av_opt_set_int(global::System.IntPtr obj, global::System.IntPtr name, long val, int search_flags);
+        public static extern int av_opt_set_int(void* obj, string name, long val, int search_flags);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set_double")]
-        internal static extern int av_opt_set_double(global::System.IntPtr obj, global::System.IntPtr name, double val, int search_flags);
+        public static extern int av_opt_set_double(void* obj, string name, double val, int search_flags);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set_q")]
-        internal static extern int av_opt_set_q(global::System.IntPtr obj, global::System.IntPtr name, AVRational* val, int search_flags);
+        public static extern int av_opt_set_q(void* obj, string name, libavutil.AVRational val, int search_flags);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_set_bin")]
-        internal static extern int av_opt_set_bin(global::System.IntPtr obj, global::System.IntPtr name, byte* val, int size, int search_flags);
+        public static extern int av_opt_set_bin(void* obj, string name, byte* val, int size, int search_flags);
 
         /// <summary>
         /// @defgroup opt_get_funcs Option getting functions
@@ -684,24 +831,52 @@ namespace libavutil
         /// the caller
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_get")]
-        internal static extern int av_opt_get(global::System.IntPtr obj, global::System.IntPtr name, int search_flags, byte* out_val);
+        public static extern int av_opt_get(void* obj, string name, int search_flags, byte** out_val);
+
+        /// <summary>
+        /// @defgroup opt_get_funcs Option getting functions
+        /// @{
+        /// Those functions get a value of the option with the given name from an
+        /// object.
+        /// 
+        /// @param[in] obj a struct whose first element is a pointer to an AVClass.
+        /// @param[in] name name of the option to get.
+        /// @param[in] search_flags flags passed to av_opt_find2. I.e. if
+        /// AV_OPT_SEARCH_CHILDREN
+        /// is passed here, then the option may be found in a child of obj.
+        /// @param[out] out_val value of the option will be written here
+        /// @return 0 on success, a negative error code otherwise
+        /// 
+        /// 
+        /// @note the returned string will av_malloc()ed and must be av_free()ed by
+        /// the caller
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_opt_get")]
+        public static extern int av_opt_get(void* obj, string name, int search_flags, ref byte* out_val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_get_int")]
-        internal static extern int av_opt_get_int(global::System.IntPtr obj, global::System.IntPtr name, int search_flags, long* out_val);
+        public static extern int av_opt_get_int(void* obj, string name, int search_flags, long* out_val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_get_double")]
-        internal static extern int av_opt_get_double(global::System.IntPtr obj, global::System.IntPtr name, int search_flags, double* out_val);
+        public static extern int av_opt_get_double(void* obj, string name, int search_flags, double* out_val);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_get_q")]
-        internal static extern int av_opt_get_q(global::System.IntPtr obj, global::System.IntPtr name, int search_flags, AVRational* out_val);
+        public static extern int av_opt_get_q(void* obj, string name, int search_flags, libavutil.AVRational* out_val);
 
         /// <summary>
         /// @}
@@ -717,8 +892,9 @@ namespace libavutil
         /// or written to.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_opt_ptr")]
-        internal static extern global::System.IntPtr av_opt_ptr(AVClass* avclass, global::System.IntPtr obj, global::System.IntPtr name);
+        public static extern void* av_opt_ptr(libavutil.AVClass* avclass, void* obj, string name);
     }
 }

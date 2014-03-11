@@ -6,9 +6,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
         /// <summary>
         /// Compute the max pixel step for each plane of an image with a
@@ -27,9 +27,10 @@ namespace libavutil
         /// for each plane which has the max pixel step. May be NULL.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_fill_max_pixsteps")]
-        internal static extern void av_image_fill_max_pixsteps(int* max_pixsteps, int* max_pixstep_comps, AVPixFmtDescriptor* pixdesc);
+        public static extern void av_image_fill_max_pixsteps(int* max_pixsteps, int* max_pixstep_comps, libavutil.AVPixFmtDescriptor* pixdesc);
 
         /// <summary>
         /// Compute the size of an image line with format pix_fmt and width
@@ -38,9 +39,10 @@ namespace libavutil
         /// @return the computed size in bytes
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_get_linesize")]
-        internal static extern int av_image_get_linesize(PixelFormat pix_fmt, int width, int plane);
+        public static extern int av_image_get_linesize(libavutil.PixelFormat pix_fmt, int width, int plane);
 
         /// <summary>
         /// Fill plane linesizes for an image with pixel format pix_fmt and
@@ -50,9 +52,10 @@ namespace libavutil
         /// @return >= 0 in case of success, a negative error code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_fill_linesizes")]
-        internal static extern int av_image_fill_linesizes(int* linesizes, PixelFormat pix_fmt, int width);
+        public static extern int av_image_fill_linesizes(int* linesizes, libavutil.PixelFormat pix_fmt, int width);
 
         /// <summary>
         /// Fill plane data pointers for an image with pixel format pix_fmt and
@@ -67,9 +70,10 @@ namespace libavutil
         /// error code in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_fill_pointers")]
-        internal static extern int av_image_fill_pointers(byte* data, PixelFormat pix_fmt, int height, byte* ptr, int* linesizes);
+        public static extern int av_image_fill_pointers(byte** data, libavutil.PixelFormat pix_fmt, int height, byte* ptr, int* linesizes);
 
         /// <summary>
         /// Allocate an image with size w and h and pixel format pix_fmt, and
@@ -82,9 +86,10 @@ namespace libavutil
         /// error code in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_alloc")]
-        internal static extern int av_image_alloc(byte* pointers, int* linesizes, int w, int h, PixelFormat pix_fmt, int align);
+        public static extern int av_image_alloc(byte** pointers, int* linesizes, int w, int h, libavutil.PixelFormat pix_fmt, int align);
 
         /// <summary>
         /// Copy image plane from src to dst.
@@ -96,9 +101,10 @@ namespace libavutil
         /// @param src_linesize linesize for the image plane in src
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_copy_plane")]
-        internal static extern void av_image_copy_plane(byte* dst, int dst_linesize, byte* src, int src_linesize, int bytewidth, int height);
+        public static extern void av_image_copy_plane(byte* dst, int dst_linesize, byte* src, int src_linesize, int bytewidth, int height);
 
         /// <summary>
         /// Copy image in src_data to dst_data.
@@ -107,9 +113,10 @@ namespace libavutil
         /// @param src_linesizes linesizes for the image in src_data
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_copy")]
-        internal static extern void av_image_copy(byte* dst_data, int* dst_linesizes, byte* src_data, int* src_linesizes, PixelFormat pix_fmt, int width, int height);
+        public static extern void av_image_copy(byte** dst_data, int* dst_linesizes, byte** src_data, int* src_linesizes, libavutil.PixelFormat pix_fmt, int width, int height);
 
         /// <summary>
         /// Setup the data pointers and linesizes based on the specified image
@@ -140,9 +147,10 @@ namespace libavutil
         /// in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_fill_arrays")]
-        internal static extern int av_image_fill_arrays(byte* dst_data, int* dst_linesize, byte* src, PixelFormat pix_fmt, int width, int height, int align);
+        public static extern int av_image_fill_arrays(byte** dst_data, int* dst_linesize, byte* src, libavutil.PixelFormat pix_fmt, int width, int height, int align);
 
         /// <summary>
         /// Return the size in bytes of the amount of data required to store an
@@ -151,9 +159,10 @@ namespace libavutil
         /// @param[in] align the assumed linesize alignment
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_get_buffer_size")]
-        internal static extern int av_image_get_buffer_size(PixelFormat pix_fmt, int width, int height, int align);
+        public static extern int av_image_get_buffer_size(libavutil.PixelFormat pix_fmt, int width, int height, int align);
 
         /// <summary>
         /// Copy image data from an image into a buffer.
@@ -173,9 +182,10 @@ namespace libavutil
         /// (error code) on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_copy_to_buffer")]
-        internal static extern int av_image_copy_to_buffer(byte* dst, int dst_size, byte* src_data, int* src_linesize, PixelFormat pix_fmt, int width, int height, int align);
+        public static extern int av_image_copy_to_buffer(byte* dst, int dst_size, byte** src_data, int* src_linesize, libavutil.PixelFormat pix_fmt, int width, int height, int align);
 
         /// <summary>
         /// Check if the given dimension of an image is valid, meaning that all
@@ -189,13 +199,15 @@ namespace libavutil
         /// @return >= 0 if valid, a negative error code otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_image_check_size")]
-        internal static extern int av_image_check_size(uint w, uint h, int log_offset, global::System.IntPtr log_ctx);
+        public static extern int av_image_check_size(uint w, uint h, int log_offset, void* log_ctx);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="ff_set_systematic_pal2")]
-        internal static extern int ff_set_systematic_pal2(uint* pal, PixelFormat pix_fmt);
+        public static extern int ff_set_systematic_pal2(uint* pal, libavutil.PixelFormat pix_fmt);
     }
 }

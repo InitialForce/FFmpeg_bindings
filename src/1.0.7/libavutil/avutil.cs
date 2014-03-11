@@ -6,89 +6,99 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    /// <summary>
-    /// @addtogroup lavu_media Media Type
-    /// @brief Media Type
-    /// </summary>
-    public enum AVMediaType
+    public unsafe static partial class libavutil
     {
-        /// <summary>Usually treated as AVMEDIA_TYPE_DATA</summary>
-        AVMEDIA_TYPE_UNKNOWN = -1,
-        AVMEDIA_TYPE_VIDEO = 0,
-        AVMEDIA_TYPE_AUDIO = 1,
-        /// <summary>Opaque data information usually continuous</summary>
-        AVMEDIA_TYPE_DATA = 2,
-        AVMEDIA_TYPE_SUBTITLE = 3,
-        /// <summary>Opaque data information usually sparse</summary>
-        AVMEDIA_TYPE_ATTACHMENT = 4,
-        AVMEDIA_TYPE_NB = 5
-    }
+        public const sbyte FF_LAMBDA_SHIFT = 7;
 
-    /// <summary>
-    /// @}
-    /// @}
-    /// @defgroup lavu_picture Image related
-    /// 
-    /// AVPicture types, pixel formats and basic image planes manipulation.
-    /// 
-    /// @{
-    /// </summary>
-    public enum AVPictureType
-    {
-        /// <summary>Undefined</summary>
-        AV_PICTURE_TYPE_NONE = 0,
-        /// <summary>Intra</summary>
-        AV_PICTURE_TYPE_I = 1,
-        /// <summary>Predicted</summary>
-        AV_PICTURE_TYPE_P = 2,
-        /// <summary>Bi-dir predicted</summary>
-        AV_PICTURE_TYPE_B = 3,
-        /// <summary>S(GMC)-VOP MPEG4</summary>
-        AV_PICTURE_TYPE_S = 4,
-        /// <summary>Switching Intra</summary>
-        AV_PICTURE_TYPE_SI = 5,
-        /// <summary>Switching Predicted</summary>
-        AV_PICTURE_TYPE_SP = 6,
-        /// <summary>BI type</summary>
-        AV_PICTURE_TYPE_BI = 7
-    }
+        public const sbyte FF_QP2LAMBDA = 118;
 
-    public unsafe partial class libavutil
-    {
+        public const int AV_TIME_BASE = 1000000;
+
+        /// <summary>
+        /// @addtogroup lavu_media Media Type
+        /// @brief Media Type
+        /// </summary>
+        public enum AVMediaType
+        {
+            /// <summary>Usually treated as AVMEDIA_TYPE_DATA</summary>
+            AVMEDIA_TYPE_UNKNOWN = -1,
+            AVMEDIA_TYPE_VIDEO = 0,
+            AVMEDIA_TYPE_AUDIO = 1,
+            /// <summary>Opaque data information usually continuous</summary>
+            AVMEDIA_TYPE_DATA = 2,
+            AVMEDIA_TYPE_SUBTITLE = 3,
+            /// <summary>Opaque data information usually sparse</summary>
+            AVMEDIA_TYPE_ATTACHMENT = 4,
+            AVMEDIA_TYPE_NB = 5
+        }
+
+        /// <summary>
+        /// @}
+        /// @}
+        /// @defgroup lavu_picture Image related
+        /// 
+        /// AVPicture types, pixel formats and basic image planes manipulation.
+        /// 
+        /// @{
+        /// </summary>
+        public enum AVPictureType
+        {
+            /// <summary>Undefined</summary>
+            AV_PICTURE_TYPE_NONE = 0,
+            /// <summary>Intra</summary>
+            AV_PICTURE_TYPE_I = 1,
+            /// <summary>Predicted</summary>
+            AV_PICTURE_TYPE_P = 2,
+            /// <summary>Bi-dir predicted</summary>
+            AV_PICTURE_TYPE_B = 3,
+            /// <summary>S(GMC)-VOP MPEG4</summary>
+            AV_PICTURE_TYPE_S = 4,
+            /// <summary>Switching Intra</summary>
+            AV_PICTURE_TYPE_SI = 5,
+            /// <summary>Switching Predicted</summary>
+            AV_PICTURE_TYPE_SP = 6,
+            /// <summary>BI type</summary>
+            AV_PICTURE_TYPE_BI = 7
+        }
+
         /// <summary>
         /// Return the LIBAVUTIL_VERSION_INT constant.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avutil_version")]
-        internal static extern uint avutil_version();
+        public static extern uint avutil_version();
 
         /// <summary>
         /// Return the libavutil build-time configuration.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avutil_configuration")]
-        internal static extern global::System.IntPtr avutil_configuration();
+        public static extern sbyte* avutil_configuration();
 
         /// <summary>
         /// Return the libavutil license.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avutil_license")]
-        internal static extern global::System.IntPtr avutil_license();
+        public static extern sbyte* avutil_license();
 
         /// <summary>
         /// Return a string describing the media_type enum, NULL if media_type
         /// is unknown.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_media_type_string")]
-        internal static extern global::System.IntPtr av_get_media_type_string(AVMediaType media_type);
+        public static extern sbyte* av_get_media_type_string(libavutil.AVMediaType media_type);
 
         /// <summary>
         /// Return a single letter to describe the given picture type
@@ -98,16 +108,18 @@ namespace libavutil
         /// representing the picture type, '?' if pict_type is unknown
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_picture_type_char")]
-        internal static extern sbyte av_get_picture_type_char(AVPictureType pict_type);
+        public static extern sbyte av_get_picture_type_char(libavutil.AVPictureType pict_type);
 
         /// <summary>
         /// Return x default pointer in case p is NULL.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_x_if_null")]
-        internal static extern global::System.IntPtr av_x_if_null(global::System.IntPtr p, global::System.IntPtr x);
+        public static extern void* av_x_if_null(void* p, void* x);
     }
 }

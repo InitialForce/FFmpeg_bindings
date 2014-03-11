@@ -6,123 +6,126 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public enum AVClassCategory
+    public unsafe static partial class libavutil
     {
-        AV_CLASS_CATEGORY_NA = 0,
-        AV_CLASS_CATEGORY_INPUT = 1,
-        AV_CLASS_CATEGORY_OUTPUT = 2,
-        AV_CLASS_CATEGORY_MUXER = 3,
-        AV_CLASS_CATEGORY_DEMUXER = 4,
-        AV_CLASS_CATEGORY_ENCODER = 5,
-        AV_CLASS_CATEGORY_DECODER = 6,
-        AV_CLASS_CATEGORY_FILTER = 7,
-        AV_CLASS_CATEGORY_BITSTREAM_FILTER = 8,
-        AV_CLASS_CATEGORY_SWSCALER = 9,
-        AV_CLASS_CATEGORY_SWRESAMPLER = 10,
-        /// <summary>not part of ABI/API</summary>
-        AV_CLASS_CATEGORY_NB = 11
-    }
+        public const sbyte AV_LOG_QUIET = -8;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVOption
-    {
-    }
+        public const sbyte AV_LOG_PANIC = 0;
 
-    /// <summary>
-    /// Describe the class of an AVClass context structure. That is an
-    /// arbitrary struct of which the first field is a pointer to an
-    /// AVClass struct (e.g. AVCodecContext, AVFormatContext etc.).
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVClass
-    {
-        /// <summary>
-        /// The name of the class; usually it is the same name as the
-        /// context structure type to which the AVClass is associated.
-        /// </summary>
-        [FieldOffset(0)]
-        public global::System.IntPtr class_name;
+        public const sbyte AV_LOG_FATAL = 8;
 
-        /// <summary>
-        /// A pointer to a function which returns the name of a context
-        /// instance ctx associated with the class.
-        /// </summary>
-        [FieldOffset(4)]
-        public global::System.IntPtr item_name;
+        public const sbyte AV_LOG_ERROR = 16;
+
+        public const sbyte AV_LOG_WARNING = 24;
+
+        public const sbyte AV_LOG_INFO = 32;
+
+        public const sbyte AV_LOG_VERBOSE = 40;
+
+        public const sbyte AV_LOG_DEBUG = 48;
+
+        public const sbyte AV_LOG_SKIP_REPEATED = 1;
+
+        public enum AVClassCategory
+        {
+            AV_CLASS_CATEGORY_NA = 0,
+            AV_CLASS_CATEGORY_INPUT = 1,
+            AV_CLASS_CATEGORY_OUTPUT = 2,
+            AV_CLASS_CATEGORY_MUXER = 3,
+            AV_CLASS_CATEGORY_DEMUXER = 4,
+            AV_CLASS_CATEGORY_ENCODER = 5,
+            AV_CLASS_CATEGORY_DECODER = 6,
+            AV_CLASS_CATEGORY_FILTER = 7,
+            AV_CLASS_CATEGORY_BITSTREAM_FILTER = 8,
+            AV_CLASS_CATEGORY_SWSCALER = 9,
+            AV_CLASS_CATEGORY_SWRESAMPLER = 10,
+            /// <summary>not part of ABI/API</summary>
+            AV_CLASS_CATEGORY_NB = 11
+        }
 
         /// <summary>
-        /// a pointer to the first option specified in the class if any or NULL
-        /// 
-        /// @see av_set_default_options()
+        /// Describe the class of an AVClass context structure. That is an
+        /// arbitrary struct of which the first field is a pointer to an
+        /// AVClass struct (e.g. AVCodecContext, AVFormatContext etc.).
         /// </summary>
-        [FieldOffset(8)]
-        public AVOption* option;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVClass
+        {
+            /// <summary>
+            /// The name of the class; usually it is the same name as the
+            /// context structure type to which the AVClass is associated.
+            /// </summary>
+            public sbyte* class_name;
 
-        /// <summary>
-        /// LIBAVUTIL_VERSION with which this structure was created.
-        /// This is used to allow fields to be added without requiring major
-        /// version bumps everywhere.
-        /// </summary>
-        [FieldOffset(12)]
-        public int version;
+            /// <summary>
+            /// A pointer to a function which returns the name of a context
+            /// instance ctx associated with the class.
+            /// </summary>
+            public global::System.IntPtr item_name;
 
-        /// <summary>
-        /// Offset in the structure where log_level_offset is stored.
-        /// 0 means there is no such variable
-        /// </summary>
-        [FieldOffset(16)]
-        public int log_level_offset_offset;
+            /// <summary>
+            /// a pointer to the first option specified in the class if any or NULL
+            /// 
+            /// @see av_set_default_options()
+            /// </summary>
+            public libavutil.AVOption* option;
 
-        /// <summary>
-        /// Offset in the structure where a pointer to the parent context for
-        /// loging is stored.
-        /// for example a decoder that uses eval.c could pass its
-        /// AVCodecContext to eval as such
-        /// parent context. And a av_log() implementation could then display
-        /// the parent context
-        /// can be NULL of course
-        /// </summary>
-        [FieldOffset(20)]
-        public int parent_log_context_offset;
+            /// <summary>
+            /// LIBAVUTIL_VERSION with which this structure was created.
+            /// This is used to allow fields to be added without requiring major
+            /// version bumps everywhere.
+            /// </summary>
+            public int version;
 
-        /// <summary>
-        /// Return next AVOptions-enabled child or NULL
-        /// </summary>
-        [FieldOffset(24)]
-        public global::System.IntPtr child_next;
+            /// <summary>
+            /// Offset in the structure where log_level_offset is stored.
+            /// 0 means there is no such variable
+            /// </summary>
+            public int log_level_offset_offset;
 
-        /// <summary>
-        /// Return an AVClass corresponding to next potential
-        /// AVOptions-enabled child.
-        /// 
-        /// The difference between child_next and this is that
-        /// child_next iterates over _already existing_ objects, while
-        /// child_class_next iterates over _all possible_ children.
-        /// </summary>
-        [FieldOffset(28)]
-        public global::System.IntPtr child_class_next;
+            /// <summary>
+            /// Offset in the structure where a pointer to the parent context for
+            /// loging is stored.
+            /// for example a decoder that uses eval.c could pass its AVCodecContext to
+            /// eval as such
+            /// parent context. And a av_log() implementation could then display the
+            /// parent context
+            /// can be NULL of course
+            /// </summary>
+            public int parent_log_context_offset;
 
-        /// <summary>
-        /// Category used for visualization (like color)
-        /// This is only set if the category is equal for all objects using
-        /// this class.
-        /// available since version (51 << 16 | 56 << 8 | 100)
-        /// </summary>
-        [FieldOffset(32)]
-        public AVClassCategory category;
+            /// <summary>
+            /// Return next AVOptions-enabled child or NULL
+            /// </summary>
+            public global::System.IntPtr child_next;
 
-        /// <summary>
-        /// Callback to return the category.
-        /// available since version (51 << 16 | 59 << 8 | 100)
-        /// </summary>
-        [FieldOffset(36)]
-        public global::System.IntPtr get_category;
-    }
+            /// <summary>
+            /// Return an AVClass corresponding to next potential
+            /// AVOptions-enabled child.
+            /// 
+            /// The difference between child_next and this is that
+            /// child_next iterates over _already existing_ objects, while
+            /// child_class_next iterates over _all possible_ children.
+            /// </summary>
+            public global::System.IntPtr child_class_next;
 
-    public unsafe partial class libavutil
-    {
+            /// <summary>
+            /// Category used for visualization (like color)
+            /// This is only set if the category is equal for all objects using this
+            /// class.
+            /// available since version (51 << 16 | 56 << 8 | 100)
+            /// </summary>
+            public libavutil.AVClassCategory category;
+
+            /// <summary>
+            /// Callback to return the category.
+            /// available since version (51 << 16 | 59 << 8 | 100)
+            /// </summary>
+            public global::System.IntPtr get_category;
+        }
+
         /// <summary>
         /// Send the specified message to the log if the level is less than or
         /// equal
@@ -143,38 +146,45 @@ namespace libavutil
         /// @see av_vlog
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_log")]
-        internal static extern void av_log(global::System.IntPtr avcl, int level, global::System.IntPtr fmt);
+        public static extern void av_log(void* avcl, int level, string fmt);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_log_get_level")]
-        internal static extern int av_log_get_level();
+        public static extern int av_log_get_level();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_log_set_level")]
-        internal static extern void av_log_set_level(int _0);
+        public static extern void av_log_set_level(int _0);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_log_set_formatted_callback")]
-        internal static extern void av_log_set_formatted_callback(global::System.IntPtr _0);
+        public static extern void av_log_set_formatted_callback(global::System.IntPtr _0);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_default_item_name")]
-        internal static extern global::System.IntPtr av_default_item_name(global::System.IntPtr ctx);
+        public static extern sbyte* av_default_item_name(void* ctx);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_default_get_category")]
-        internal static extern AVClassCategory av_default_get_category(global::System.IntPtr ptr);
+        public static extern libavutil.AVClassCategory av_default_get_category(void* ptr);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_log_set_flags")]
-        internal static extern void av_log_set_flags(int arg);
+        public static extern void av_log_set_flags(int arg);
     }
 }

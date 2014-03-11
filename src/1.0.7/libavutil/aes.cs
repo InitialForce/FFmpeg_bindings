@@ -6,24 +6,25 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVAES
+    public unsafe static partial class libavutil
     {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVAES
+        {
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Initialize an AVAES context.
         /// @param key_bits 128, 192 or 256
         /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_aes_init")]
-        internal static extern int av_aes_init(AVAES* a, byte* key, int key_bits, int decrypt);
+        public static extern int av_aes_init(libavutil.AVAES* a, byte* key, int key_bits, int decrypt);
 
         /// <summary>
         /// Encrypt or decrypt a buffer using a previously initialized context.
@@ -35,8 +36,9 @@ namespace libavutil
         /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_aes_crypt")]
-        internal static extern void av_aes_crypt(AVAES* a, byte* dst, byte* src, int count, byte* iv, int decrypt);
+        public static extern void av_aes_crypt(libavutil.AVAES* a, byte* dst, byte* src, int count, byte* iv, int decrypt);
     }
 }

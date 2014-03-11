@@ -1,5 +1,0 @@
-EXPORTS
-    avdevice_version @1
-    avdevice_configuration @2
-    avdevice_license @3
-    avdevice_register_all @4

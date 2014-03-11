@@ -6,15 +6,15 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVSHA
+    public unsafe static partial class libavutil
     {
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVSHA
+        {
+        }
 
-    public unsafe partial class libavutil
-    {
         /// <summary>
         /// Initialize SHA-1 or SHA-2 hashing.
         /// 
@@ -24,9 +24,10 @@ namespace libavutil
         /// @return        zero if initialization succeeded, -1 otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_sha_init")]
-        internal static extern int av_sha_init(AVSHA* context, int bits);
+        public static extern int av_sha_init(libavutil.AVSHA* context, int bits);
 
         /// <summary>
         /// Update hash value.
@@ -36,9 +37,10 @@ namespace libavutil
         /// @param len     input data length
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_sha_update")]
-        internal static extern void av_sha_update(AVSHA* context, byte* data, uint len);
+        public static extern void av_sha_update(libavutil.AVSHA* context, byte* data, uint len);
 
         /// <summary>
         /// Finish hashing and output digest value.
@@ -47,8 +49,9 @@ namespace libavutil
         /// @param digest  buffer where output digest value is stored
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_sha_final")]
-        internal static extern void av_sha_final(AVSHA* context, byte* digest);
+        public static extern void av_sha_final(libavutil.AVSHA* context, byte* digest);
     }
 }

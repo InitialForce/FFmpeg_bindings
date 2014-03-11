@@ -6,71 +6,92 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    /// <summary>
-    /// @addtogroup lavu_math
-    /// @{
-    /// </summary>
-    public enum AVRounding
+    public unsafe static partial class libavutil
     {
-        /// <summary>Round toward zero.</summary>
-        AV_ROUND_ZERO = 0,
-        /// <summary>Round away from zero.</summary>
-        AV_ROUND_INF = 1,
-        /// <summary>Round toward -infinity.</summary>
-        AV_ROUND_DOWN = 2,
-        /// <summary>Round toward +infinity.</summary>
-        AV_ROUND_UP = 3,
-        /// <summary>Round to nearest and halfway cases away from zero.</summary>
-        AV_ROUND_NEAR_INF = 5
-    }
+        public const double M_E = 2.71828182845905D;
 
-    public unsafe partial class libavutil
-    {
+        public const double M_LN2 = 0.693147180559945D;
+
+        public const double M_LN10 = 2.30258509299405D;
+
+        public const double M_LOG2_10 = 3.32192809488736D;
+
+        public const double M_PHI = 1.61803398874989D;
+
+        public const double M_PI = 3.14159265358979D;
+
+        public const double M_SQRT1_2 = 0.707106781186548D;
+
+        public const double M_SQRT2 = 1.4142135623731D;
+
+        /// <summary>
+        /// @addtogroup lavu_math
+        /// @{
+        /// </summary>
+        public enum AVRounding
+        {
+            /// <summary>Round toward zero.</summary>
+            AV_ROUND_ZERO = 0,
+            /// <summary>Round away from zero.</summary>
+            AV_ROUND_INF = 1,
+            /// <summary>Round toward -infinity.</summary>
+            AV_ROUND_DOWN = 2,
+            /// <summary>Round toward +infinity.</summary>
+            AV_ROUND_UP = 3,
+            /// <summary>Round to nearest and halfway cases away from zero.</summary>
+            AV_ROUND_NEAR_INF = 5
+        }
+
         /// <summary>
         /// Return the greatest common divisor of a and b.
         /// If both a and b are 0 or either or both are <0 then behavior is
         /// undefined.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_gcd")]
-        internal static extern long av_gcd(long a, long b);
+        public static extern long av_gcd(long a, long b);
 
         /// <summary>
         /// Rescale a 64-bit integer with rounding to nearest.
         /// A simple a*b/c isn't possible as it can overflow.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_rescale")]
-        internal static extern long av_rescale(long a, long b, long c);
+        public static extern long av_rescale(long a, long b, long c);
 
         /// <summary>
         /// Rescale a 64-bit integer with specified rounding.
         /// A simple a*b/c isn't possible as it can overflow.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_rescale_rnd")]
-        internal static extern long av_rescale_rnd(long a, long b, long c, AVRounding _0);
+        public static extern long av_rescale_rnd(long a, long b, long c, libavutil.AVRounding _0);
 
         /// <summary>
         /// Rescale a 64-bit integer by 2 rational numbers.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_rescale_q")]
-        internal static extern long av_rescale_q(long a, AVRational* bq, AVRational* cq);
+        public static extern long av_rescale_q(long a, libavutil.AVRational bq, libavutil.AVRational cq);
 
         /// <summary>
         /// Rescale a 64-bit integer by 2 rational numbers with specified rounding.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_rescale_q_rnd")]
-        internal static extern long av_rescale_q_rnd(long a, AVRational* bq, AVRational* cq, AVRounding _0);
+        public static extern long av_rescale_q_rnd(long a, libavutil.AVRational bq, libavutil.AVRational cq, libavutil.AVRounding _0);
 
         /// <summary>
         /// Compare 2 timestamps each in its own timebases.
@@ -80,9 +101,10 @@ namespace libavutil
         /// represent the same position
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_compare_ts")]
-        internal static extern int av_compare_ts(long ts_a, AVRational* tb_a, long ts_b, AVRational* tb_b);
+        public static extern int av_compare_ts(long ts_a, libavutil.AVRational tb_a, long ts_b, libavutil.AVRational tb_b);
 
         /// <summary>
         /// Compare 2 integers modulo mod.
@@ -95,8 +117,9 @@ namespace libavutil
         /// 0                if a equals          b
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_compare_mod")]
-        internal static extern long av_compare_mod(ulong a, ulong b, ulong mod);
+        public static extern long av_compare_mod(ulong a, ulong b, ulong mod);
     }
 }

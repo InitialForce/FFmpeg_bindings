@@ -5,153 +5,142 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavcodec
+namespace FFmpeg
 {
-    /// <summary>
-    /// This structure is used to share data between the FFmpeg library and
-    /// the client video application.
-    /// This shall be zero-allocated and available as
-    /// AVCodecContext.hwaccel_context. All user members can be set once
-    /// during initialization or through each AVCodecContext.get_buffer()
-    /// function call. In any case, they must be valid prior to calling
-    /// decoding functions.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct vaapi_context
+    public unsafe static partial class libavcodec
     {
         /// <summary>
-        /// Window system dependent data
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by user
+        /// This structure is used to share data between the FFmpeg library and
+        /// the client video application.
+        /// This shall be zero-allocated and available as
+        /// AVCodecContext.hwaccel_context. All user members can be set once
+        /// during initialization or through each AVCodecContext.get_buffer()
+        /// function call. In any case, they must be valid prior to calling
+        /// decoding functions.
         /// </summary>
-        [FieldOffset(0)]
-        public global::System.IntPtr display;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct vaapi_context
+        {
+            /// <summary>
+            /// Window system dependent data
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by user
+            /// </summary>
+            public void* display;
 
-        /// <summary>
-        /// Configuration ID
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by user
-        /// </summary>
-        [FieldOffset(4)]
-        public uint config_id;
+            /// <summary>
+            /// Configuration ID
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by user
+            /// </summary>
+            public uint config_id;
 
-        /// <summary>
-        /// Context ID (video decode pipeline)
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by user
-        /// </summary>
-        [FieldOffset(8)]
-        public uint context_id;
+            /// <summary>
+            /// Context ID (video decode pipeline)
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by user
+            /// </summary>
+            public uint context_id;
 
-        /// <summary>
-        /// VAPictureParameterBuffer ID
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(12)]
-        public uint pic_param_buf_id;
+            /// <summary>
+            /// VAPictureParameterBuffer ID
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint pic_param_buf_id;
 
-        /// <summary>
-        /// VAIQMatrixBuffer ID
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(16)]
-        public uint iq_matrix_buf_id;
+            /// <summary>
+            /// VAIQMatrixBuffer ID
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint iq_matrix_buf_id;
 
-        /// <summary>
-        /// VABitPlaneBuffer ID (for VC-1 decoding)
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(20)]
-        public uint bitplane_buf_id;
+            /// <summary>
+            /// VABitPlaneBuffer ID (for VC-1 decoding)
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint bitplane_buf_id;
 
-        /// <summary>
-        /// Slice parameter/data buffer IDs
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(24)]
-        public uint* slice_buf_ids;
+            /// <summary>
+            /// Slice parameter/data buffer IDs
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint* slice_buf_ids;
 
-        /// <summary>
-        /// Number of effective slice buffer IDs to send to the HW
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(28)]
-        public uint n_slice_buf_ids;
+            /// <summary>
+            /// Number of effective slice buffer IDs to send to the HW
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint n_slice_buf_ids;
 
-        /// <summary>
-        /// Size of pre-allocated slice_buf_ids
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(32)]
-        public uint slice_buf_ids_alloc;
+            /// <summary>
+            /// Size of pre-allocated slice_buf_ids
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint slice_buf_ids_alloc;
 
-        /// <summary>
-        /// Pointer to VASliceParameterBuffers
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(36)]
-        public global::System.IntPtr slice_params;
+            /// <summary>
+            /// Pointer to VASliceParameterBuffers
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public void* slice_params;
 
-        /// <summary>
-        /// Size of a VASliceParameterBuffer element
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(40)]
-        public uint slice_param_size;
+            /// <summary>
+            /// Size of a VASliceParameterBuffer element
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint slice_param_size;
 
-        /// <summary>
-        /// Size of pre-allocated slice_params
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(44)]
-        public uint slice_params_alloc;
+            /// <summary>
+            /// Size of pre-allocated slice_params
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint slice_params_alloc;
 
-        /// <summary>
-        /// Number of slices currently filled in
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(48)]
-        public uint slice_count;
+            /// <summary>
+            /// Number of slices currently filled in
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint slice_count;
 
-        /// <summary>
-        /// Pointer to slice data buffer base
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(52)]
-        public byte* slice_data;
+            /// <summary>
+            /// Pointer to slice data buffer base
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public byte* slice_data;
 
-        /// <summary>
-        /// Current size of slice data
-        /// 
-        /// - encoding: unused
-        /// - decoding: Set by libavcodec
-        /// </summary>
-        [FieldOffset(56)]
-        public uint slice_data_size;
+            /// <summary>
+            /// Current size of slice data
+            /// 
+            /// - encoding: unused
+            /// - decoding: Set by libavcodec
+            /// </summary>
+            public uint slice_data_size;
+        }
     }
 }

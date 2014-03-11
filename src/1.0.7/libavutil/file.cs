@@ -6,9 +6,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
         /// <summary>
         /// Read the file with name filename, and put its content in a newly
@@ -23,9 +23,28 @@ namespace libavutil
         /// corresponding to an AVERROR error code in case of failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_file_map")]
-        internal static extern int av_file_map(global::System.IntPtr filename, byte* bufptr, uint* size, int log_offset, global::System.IntPtr log_ctx);
+        public static extern int av_file_map(string filename, byte** bufptr, global::System.UIntPtr* size, int log_offset, void* log_ctx);
+
+        /// <summary>
+        /// Read the file with name filename, and put its content in a newly
+        /// allocated buffer or map it with mmap() when available.
+        /// In case of success set *bufptr to the read or mmapped buffer, and
+        /// size to the size in bytes of the buffer in *bufptr.
+        /// The returned buffer must be released with av_file_unmap().
+        /// 
+        /// @param log_offset loglevel offset used for logging
+        /// @param log_ctx context used for logging
+        /// @return a non negative number in case of success, a negative value
+        /// corresponding to an AVERROR error code in case of failure
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_file_map")]
+        public static extern int av_file_map(string filename, ref byte* bufptr, global::System.UIntPtr* size, int log_offset, void* log_ctx);
 
         /// <summary>
         /// Unmap or free the buffer bufptr created by av_file_map().
@@ -34,9 +53,10 @@ namespace libavutil
         /// by av_file_map()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_file_unmap")]
-        internal static extern void av_file_unmap(byte* bufptr, uint size);
+        public static extern void av_file_unmap(byte* bufptr, global::System.UIntPtr size);
 
         /// <summary>
         /// Wrapper to work around the lack of mkstemp() on mingw.
@@ -47,8 +67,23 @@ namespace libavutil
         /// and opened file name in **filename.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_tempfile")]
-        internal static extern int av_tempfile(global::System.IntPtr prefix, sbyte* filename, int log_offset, global::System.IntPtr log_ctx);
+        public static extern int av_tempfile(string prefix, sbyte** filename, int log_offset, void* log_ctx);
+
+        /// <summary>
+        /// Wrapper to work around the lack of mkstemp() on mingw.
+        /// Also, tries to create file in /tmp first, if possible.
+        /// prefix can be a character constant; *filename will be allocated
+        /// internally.
+        /// @return file descriptor of opened file (or -1 on error)
+        /// and opened file name in **filename.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_tempfile")]
+        public static extern int av_tempfile(string prefix, ref System.Text.StringBuilder filename, int log_offset, void* log_ctx);
     }
 }

@@ -6,9 +6,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
         /// <summary>
         /// Allocate a block of size bytes with alignment suitable for all
@@ -19,9 +19,10 @@ namespace libavutil
         /// @see av_mallocz()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_malloc")]
-        internal static extern global::System.IntPtr av_malloc(uint size);
+        public static extern void* av_malloc(global::System.UIntPtr size);
 
         /// <summary>
         /// Helper function to allocate a block of size * nmemb bytes with
@@ -33,9 +34,10 @@ namespace libavutil
         /// @see av_malloc()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_malloc_array")]
-        internal static extern global::System.IntPtr av_malloc_array(uint nmemb, uint size);
+        public static extern void* av_malloc_array(global::System.UIntPtr nmemb, global::System.UIntPtr size);
 
         /// <summary>
         /// Allocate or reallocate a block of memory.
@@ -50,9 +52,10 @@ namespace libavutil
         /// @see av_fast_realloc()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_realloc")]
-        internal static extern global::System.IntPtr av_realloc(global::System.IntPtr ptr, uint size);
+        public static extern void* av_realloc(void* ptr, global::System.UIntPtr size);
 
         /// <summary>
         /// Allocate or reallocate a block of memory.
@@ -64,9 +67,10 @@ namespace libavutil
         /// leak with the classic "buf = realloc(buf); if (!buf) return -1;".
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_realloc_f")]
-        internal static extern global::System.IntPtr av_realloc_f(global::System.IntPtr ptr, uint nelem, uint elsize);
+        public static extern void* av_realloc_f(void* ptr, global::System.UIntPtr nelem, global::System.UIntPtr elsize);
 
         /// <summary>
         /// Free a memory block which has been allocated with av_malloc(z)() or
@@ -77,9 +81,10 @@ namespace libavutil
         /// @see av_freep()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_free")]
-        internal static extern void av_free(global::System.IntPtr ptr);
+        public static extern void av_free(void* ptr);
 
         /// <summary>
         /// Allocate a block of size bytes with alignment suitable for all
@@ -90,9 +95,10 @@ namespace libavutil
         /// @see av_malloc()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_mallocz")]
-        internal static extern global::System.IntPtr av_mallocz(uint size);
+        public static extern void* av_mallocz(global::System.UIntPtr size);
 
         /// <summary>
         /// Allocate a block of nmemb * size bytes with alignment suitable for all
@@ -105,9 +111,10 @@ namespace libavutil
         /// @return Pointer to the allocated block, NULL if it cannot be allocated.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_calloc")]
-        internal static extern global::System.IntPtr av_calloc(uint nmemb, uint size);
+        public static extern void* av_calloc(global::System.UIntPtr nmemb, global::System.UIntPtr size);
 
         /// <summary>
         /// Helper function to allocate a block of size * nmemb bytes with
@@ -120,9 +127,10 @@ namespace libavutil
         /// @see av_malloc_array()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_mallocz_array")]
-        internal static extern global::System.IntPtr av_mallocz_array(uint nmemb, uint size);
+        public static extern void* av_mallocz_array(global::System.UIntPtr nmemb, global::System.UIntPtr size);
 
         /// <summary>
         /// Duplicate the string s.
@@ -131,9 +139,10 @@ namespace libavutil
         /// copy of s or NULL if the string cannot be allocated.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_strdup")]
-        internal static extern sbyte* av_strdup(global::System.IntPtr s);
+        public static extern sbyte* av_strdup(string s);
 
         /// <summary>
         /// Free a memory block which has been allocated with av_malloc(z)() or
@@ -143,9 +152,10 @@ namespace libavutil
         /// @see av_free()
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_freep")]
-        internal static extern void av_freep(global::System.IntPtr ptr);
+        public static extern void av_freep(void* ptr);
 
         /// <summary>
         /// Add an element to a dynamic array.
@@ -155,25 +165,28 @@ namespace libavutil
         /// @param elem    Element to be added.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_dynarray_add")]
-        internal static extern void av_dynarray_add(global::System.IntPtr tab_ptr, int* nb_ptr, global::System.IntPtr elem);
+        public static extern void av_dynarray_add(void* tab_ptr, int* nb_ptr, void* elem);
 
         /// <summary>
         /// Multiply two size_t values checking for overflow.
         /// @return  0 if success, AVERROR(EINVAL) if overflow.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_size_mult")]
-        internal static extern int av_size_mult(uint a, uint b, uint* r);
+        public static extern int av_size_mult(global::System.UIntPtr a, global::System.UIntPtr b, global::System.UIntPtr* r);
 
         /// <summary>
         /// Set the maximum size that may me allocated in one block.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_max_alloc")]
-        internal static extern void av_max_alloc(uint max);
+        public static extern void av_max_alloc(global::System.UIntPtr max);
     }
 }

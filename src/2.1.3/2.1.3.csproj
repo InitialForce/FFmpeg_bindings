@@ -45,16 +45,24 @@
     <Compile Include="libavcodec\avfft.cs" />
     <Compile Include="libavcodec\vaapi.cs" />
     <Compile Include="libavdevice\avdevice.cs" />
+    <Compile Include="libavdevice\version.cs" />
     <Compile Include="libavfilter\asrc_abuffer.cs" />
     <Compile Include="libavfilter\avcodec.cs" />
     <Compile Include="libavfilter\avfilter.cs" />
+    <Compile Include="libavfilter\avfiltergraph.cs" />
     <Compile Include="libavfilter\buffersink.cs" />
     <Compile Include="libavfilter\buffersrc.cs" />
+    <Compile Include="libavfilter\version.cs" />
     <Compile Include="libavformat\avformat.cs" />
     <Compile Include="libavformat\avio.cs" />
+    <Compile Include="libavformat\version.cs" />
     <Compile Include="libavutil\adler32.cs" />
     <Compile Include="libavutil\aes.cs" />
+    <Compile Include="libavutil\attributes.cs" />
+    <Compile Include="libavutil\audioconvert.cs" />
     <Compile Include="libavutil\audio_fifo.cs" />
+    <Compile Include="libavutil\avassert.cs" />
+    <Compile Include="libavutil\avconfig.cs" />
     <Compile Include="libavutil\avstring.cs" />
     <Compile Include="libavutil\avutil.cs" />
     <Compile Include="libavutil\base64.cs" />
@@ -72,6 +80,7 @@
     <Compile Include="libavutil\fifo.cs" />
     <Compile Include="libavutil\file.cs" />
     <Compile Include="libavutil\frame.cs" />
+    <Compile Include="libavutil\generated.cs" />
     <Compile Include="libavutil\hmac.cs" />
     <Compile Include="libavutil\imgutils.cs" />
     <Compile Include="libavutil\intfloat.cs" />
@@ -97,26 +106,14 @@
     <Compile Include="libavutil\time.cs" />
     <Compile Include="libavutil\timecode.cs" />
     <Compile Include="libavutil\timestamp.cs" />
+    <Compile Include="libavutil\version.cs" />
     <Compile Include="libavutil\xtea.cs" />
     <Compile Include="libswresample\swresample.cs" />
+    <Compile Include="libswresample\version.cs" />
     <Compile Include="libswscale\swscale.cs" />
+    <Compile Include="libswscale\version.cs" />
+    <Compile Include="Misc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="libavcodec\libavcodec-inlines.cpp" />
-    <Content Include="libavcodec\libavcodec-inlines.def" />
-    <Content Include="libavdevice\libavdevice-inlines.cpp" />
-    <Content Include="libavdevice\libavdevice-inlines.def" />
-    <Content Include="libavfilter\libavfilter-inlines.cpp" />
-    <Content Include="libavfilter\libavfilter-inlines.def" />
-    <Content Include="libavformat\libavformat-inlines.cpp" />
-    <Content Include="libavformat\libavformat-inlines.def" />
-    <Content Include="libavutil\libavutil-inlines.cpp" />
-    <Content Include="libavutil\libavutil-inlines.def" />
-    <Content Include="libswresample\libswresample-inlines.cpp" />
-    <Content Include="libswresample\libswresample-inlines.def" />
-    <Content Include="libswscale\libswscale-inlines.cpp" />
-    <Content Include="libswscale\libswscale-inlines.def" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

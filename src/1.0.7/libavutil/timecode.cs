@@ -6,49 +6,47 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    [Flags]
-    public enum AVTimecodeFlag
+    public unsafe static partial class libavutil
     {
-        /// <summary>timecode is drop frame</summary>
-        AV_TIMECODE_FLAG_DROPFRAME = 1,
-        /// <summary>timecode wraps after 24 hours</summary>
-        AV_TIMECODE_FLAG_24HOURSMAX = 2,
-        /// <summary>negative time values are allowed</summary>
-        AV_TIMECODE_FLAG_ALLOWNEGATIVE = 4
-    }
+        public const sbyte AV_TIMECODE_STR_SIZE = 16;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVTimecode
-    {
-        /// <summary>
-        /// < timecode frame start (first base frame number)
-        /// </summary>
-        [FieldOffset(0)]
-        public int start;
+        [Flags]
+        public enum AVTimecodeFlag
+        {
+            /// <summary>timecode is drop frame</summary>
+            AV_TIMECODE_FLAG_DROPFRAME = 1,
+            /// <summary>timecode wraps after 24 hours</summary>
+            AV_TIMECODE_FLAG_24HOURSMAX = 2,
+            /// <summary>negative time values are allowed</summary>
+            AV_TIMECODE_FLAG_ALLOWNEGATIVE = 4
+        }
 
-        /// <summary>
-        /// < flags such as drop frame, +24 hours support, ...
-        /// </summary>
-        [FieldOffset(4)]
-        public uint flags;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVTimecode
+        {
+            /// <summary>
+            /// timecode frame start (first base frame number)
+            /// </summary>
+            public int start;
 
-        /// <summary>
-        /// < frame rate in rational form
-        /// </summary>
-        [FieldOffset(8)]
-        public AVRational* rate;
+            /// <summary>
+            /// flags such as drop frame, +24 hours support, ...
+            /// </summary>
+            public uint flags;
 
-        /// <summary>
-        /// < frame per second; must be consistent with the rate field
-        /// </summary>
-        [FieldOffset(16)]
-        public uint fps;
-    }
+            /// <summary>
+            /// frame rate in rational form
+            /// </summary>
+            public libavutil.AVRational rate;
 
-    public unsafe partial class libavutil
-    {
+            /// <summary>
+            /// frame per second; must be consistent with the rate field
+            /// </summary>
+            public uint fps;
+        }
+
         /// <summary>
         /// Adjust frame number for NTSC drop frame time code.
         /// 
@@ -58,9 +56,10 @@ namespace libavutil
         /// @deprecated     use av_timecode_adjust_ntsc_framenum2 instead
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_adjust_ntsc_framenum")]
-        internal static extern int av_timecode_adjust_ntsc_framenum(int framenum);
+        public static extern int av_timecode_adjust_ntsc_framenum(int framenum);
 
         /// <summary>
         /// Adjust frame number for NTSC drop frame time code.
@@ -71,9 +70,10 @@ namespace libavutil
         /// @warning        adjustment is only valid in NTSC 29.97 and 59.94
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_adjust_ntsc_framenum2")]
-        internal static extern int av_timecode_adjust_ntsc_framenum2(int framenum, int fps);
+        public static extern int av_timecode_adjust_ntsc_framenum2(int framenum, int fps);
 
         /// <summary>
         /// Convert frame number to SMPTE 12M binary representation.
@@ -91,9 +91,10 @@ namespace libavutil
         /// correction (PC) bits are set to zero.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_get_smpte_from_framenum")]
-        internal static extern uint av_timecode_get_smpte_from_framenum(AVTimecode* tc, int framenum);
+        public static extern uint av_timecode_get_smpte_from_framenum(libavutil.AVTimecode* tc, int framenum);
 
         /// <summary>
         /// Load timecode string in buf.
@@ -110,9 +111,10 @@ namespace libavutil
         /// @note The frame number is relative to tc->start.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_make_string")]
-        internal static extern sbyte* av_timecode_make_string(AVTimecode* tc, sbyte* buf, int framenum);
+        public static extern sbyte* av_timecode_make_string(libavutil.AVTimecode* tc, System.Text.StringBuilder buf, int framenum);
 
         /// <summary>
         /// Get the timecode string from the SMPTE timecode format.
@@ -126,9 +128,10 @@ namespace libavutil
         /// @return           the buf parameter
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_make_smpte_tc_string")]
-        internal static extern sbyte* av_timecode_make_smpte_tc_string(sbyte* buf, uint tcsmpte, int prevent_df);
+        public static extern sbyte* av_timecode_make_smpte_tc_string(System.Text.StringBuilder buf, uint tcsmpte, int prevent_df);
 
         /// <summary>
         /// Get the timecode string from the 25-bit timecode format (MPEG GOP
@@ -140,9 +143,10 @@ namespace libavutil
         /// @return        the buf parameter
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_make_mpeg_tc_string")]
-        internal static extern sbyte* av_timecode_make_mpeg_tc_string(sbyte* buf, uint tc25bit);
+        public static extern sbyte* av_timecode_make_mpeg_tc_string(System.Text.StringBuilder buf, uint tc25bit);
 
         /// <summary>
         /// Init a timecode struct with the passed parameters.
@@ -159,9 +163,10 @@ namespace libavutil
         /// @return            0 on success, AVERROR otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_init")]
-        internal static extern int av_timecode_init(AVTimecode* tc, AVRational* rate, int flags, int frame_start, global::System.IntPtr log_ctx);
+        public static extern int av_timecode_init(libavutil.AVTimecode* tc, libavutil.AVRational rate, int flags, int frame_start, void* log_ctx);
 
         /// <summary>
         /// Parse timecode representation (hh:mm:ss[:;.]ff).
@@ -175,9 +180,10 @@ namespace libavutil
         /// @return        0 on success, AVERROR otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_init_from_string")]
-        internal static extern int av_timecode_init_from_string(AVTimecode* tc, AVRational* rate, global::System.IntPtr str, global::System.IntPtr log_ctx);
+        public static extern int av_timecode_init_from_string(libavutil.AVTimecode* tc, libavutil.AVRational rate, string str, void* log_ctx);
 
         /// <summary>
         /// Check if the timecode feature is available for the given frame rate
@@ -185,8 +191,9 @@ namespace libavutil
         /// @return 0 if supported, <0 otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_timecode_check_frame_rate")]
-        internal static extern int av_timecode_check_frame_rate(AVRational* rate);
+        public static extern int av_timecode_check_frame_rate(libavutil.AVRational rate);
     }
 }

@@ -5,52 +5,55 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libavfilter
+namespace FFmpeg
 {
-    /// <summary>
-    /// Struct to use for initializing a buffersink context.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVBufferSinkParams
+    public unsafe static partial class libavfilter
     {
-        /// <summary>
-        /// < list of allowed pixel formats, terminated by PIX_FMT_NONE
-        /// </summary>
-        [FieldOffset(0)]
-        public PixelFormat pixel_fmts;
-    }
+        public const sbyte AV_BUFFERSINK_FLAG_PEEK = 1;
 
-    /// <summary>
-    /// Struct to use for initializing an abuffersink context.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVABufferSinkParams
-    {
-        /// <summary>
-        /// < list of allowed sample formats, terminated by AV_SAMPLE_FMT_NONE
-        /// </summary>
-        [FieldOffset(0)]
-        public AVSampleFormat sample_fmts;
+        public const sbyte AV_BUFFERSINK_FLAG_NO_REQUEST = 2;
 
         /// <summary>
-        /// < list of allowed channel layouts, terminated by -1
+        /// Struct to use for initializing a buffersink context.
         /// </summary>
-        [FieldOffset(4)]
-        public long* channel_layouts;
-    }
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVBufferSinkParams
+        {
+            /// <summary>
+            /// list of allowed pixel formats, terminated by PIX_FMT_NONE
+            /// </summary>
+            public libavutil.PixelFormat* pixel_fmts;
+        }
 
-    public unsafe partial class libavfilter
-    {
+        /// <summary>
+        /// Struct to use for initializing an abuffersink context.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct AVABufferSinkParams
+        {
+            /// <summary>
+            /// list of allowed sample formats, terminated by AV_SAMPLE_FMT_NONE
+            /// </summary>
+            public libavutil.AVSampleFormat* sample_fmts;
+
+            /// <summary>
+            /// list of allowed channel layouts, terminated by -1
+            /// </summary>
+            public long* channel_layouts;
+        }
+
         /// <summary>
         /// Create an AVBufferSinkParams structure.
         /// 
         /// Must be freed with av_free().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersink_params_alloc")]
-        internal static extern AVBufferSinkParams* av_buffersink_params_alloc();
+        public static extern libavfilter.AVBufferSinkParams* av_buffersink_params_alloc();
 
         /// <summary>
         /// Create an AVABufferSinkParams structure.
@@ -58,9 +61,10 @@ namespace libavfilter
         /// Must be freed with av_free().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_abuffersink_params_alloc")]
-        internal static extern AVABufferSinkParams* av_abuffersink_params_alloc();
+        public static extern libavfilter.AVABufferSinkParams* av_abuffersink_params_alloc();
 
         /// <summary>
         /// Set the frame size for an audio buffer sink.
@@ -70,9 +74,10 @@ namespace libavfilter
         /// not enough. The last buffer at EOF will be padded with 0.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersink_set_frame_size")]
-        internal static extern void av_buffersink_set_frame_size(AVFilterContext* ctx, uint frame_size);
+        public static extern void av_buffersink_set_frame_size(libavfilter.AVFilterContext* ctx, uint frame_size);
 
         /// <summary>
         /// Get an audio/video buffer data from buffer_sink and put it in bufref.
@@ -85,25 +90,44 @@ namespace libavfilter
         /// failure
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersink_get_buffer_ref")]
-        internal static extern int av_buffersink_get_buffer_ref(AVFilterContext* buffer_sink, AVFilterBufferRef* bufref, int flags);
+        public static extern int av_buffersink_get_buffer_ref(libavfilter.AVFilterContext* buffer_sink, libavfilter.AVFilterBufferRef** bufref, int flags);
+
+        /// <summary>
+        /// Get an audio/video buffer data from buffer_sink and put it in bufref.
+        /// 
+        /// This function works with both audio and video buffer sinks.
+        /// 
+        /// @param buffer_sink pointer to a buffersink or abuffersink context
+        /// @param flags a combination of AV_BUFFERSINK_FLAG_* flags
+        /// @return >= 0 in case of success, a negative AVERROR code in case of
+        /// failure
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_buffersink_get_buffer_ref")]
+        public static extern int av_buffersink_get_buffer_ref(libavfilter.AVFilterContext* buffer_sink, ref libavfilter.AVFilterBufferRef* bufref, int flags);
 
         /// <summary>
         /// Get the number of immediately available frames.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersink_poll_frame")]
-        internal static extern int av_buffersink_poll_frame(AVFilterContext* ctx);
+        public static extern int av_buffersink_poll_frame(libavfilter.AVFilterContext* ctx);
 
         /// <summary>
         /// Get the frame rate of the input.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersink_get_frame_rate")]
-        internal static extern AVRational* av_buffersink_get_frame_rate(AVFilterContext* ctx);
+        public static extern libavutil.AVRational av_buffersink_get_frame_rate(libavfilter.AVFilterContext* ctx);
 
         /// <summary>
         /// Get a buffer with filtered data from sink and put it in buf.
@@ -120,9 +144,30 @@ namespace libavfilter
         /// failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersink_read")]
-        internal static extern int av_buffersink_read(AVFilterContext* ctx, AVFilterBufferRef* buf);
+        public static extern int av_buffersink_read(libavfilter.AVFilterContext* ctx, libavfilter.AVFilterBufferRef** buf);
+
+        /// <summary>
+        /// Get a buffer with filtered data from sink and put it in buf.
+        /// 
+        /// @param ctx pointer to a context of a buffersink or abuffersink
+        /// AVFilter.
+        /// @param buf pointer to the buffer will be written here if buf is
+        /// non-NULL. buf
+        /// must be freed by the caller using avfilter_unref_buffer().
+        /// Buf may also be NULL to query whether a buffer is ready to be
+        /// output.
+        /// 
+        /// @return >= 0 in case of success, a negative AVERROR code in case of
+        /// failure.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_buffersink_read")]
+        public static extern int av_buffersink_read(libavfilter.AVFilterContext* ctx, ref libavfilter.AVFilterBufferRef* buf);
 
         /// <summary>
         /// Same as av_buffersink_read, but with the ability to specify the number
@@ -145,8 +190,35 @@ namespace libavfilter
         /// the other with a single sink, not both.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avfilter-if-3.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_buffersink_read_samples")]
-        internal static extern int av_buffersink_read_samples(AVFilterContext* ctx, AVFilterBufferRef* buf, int nb_samples);
+        public static extern int av_buffersink_read_samples(libavfilter.AVFilterContext* ctx, libavfilter.AVFilterBufferRef** buf, int nb_samples);
+
+        /// <summary>
+        /// Same as av_buffersink_read, but with the ability to specify the number
+        /// of
+        /// samples read. This function is less efficient than
+        /// av_buffersink_read(),
+        /// because it copies the data around.
+        /// 
+        /// @param ctx pointer to a context of the abuffersink AVFilter.
+        /// @param buf pointer to the buffer will be written here if buf is
+        /// non-NULL. buf
+        /// must be freed by the caller using avfilter_unref_buffer(). buf
+        /// will contain exactly nb_samples audio samples, except at the end
+        /// of stream, when it can contain less than nb_samples.
+        /// Buf may also be NULL to query whether a buffer is ready to be
+        /// output.
+        /// 
+        /// @warning do not mix this function with av_buffersink_read(). Use only
+        /// one or
+        /// the other with a single sink, not both.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_buffersink_read_samples")]
+        public static extern int av_buffersink_read_samples(libavfilter.AVFilterContext* ctx, ref libavfilter.AVFilterBufferRef* buf, int nb_samples);
     }
 }

@@ -5,38 +5,50 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libswresample
+namespace FFmpeg
 {
-    public enum SwrDitherType
+    public unsafe static partial class libswresample
     {
-        SWR_DITHER_NONE = 0,
-        SWR_DITHER_RECTANGULAR = 1,
-        SWR_DITHER_TRIANGULAR = 2,
-        SWR_DITHER_TRIANGULAR_HIGHPASS = 3,
-        /// <summary>not part of API/ABI</summary>
-        SWR_DITHER_NB = 4
-    }
+        public const sbyte LIBSWRESAMPLE_VERSION_MAJOR = 0;
 
-    /// <summary>
-    /// </summary>
-    public enum SwrFilterType
-    {
-        /// <summary>Cubic</summary>
-        SWR_FILTER_TYPE_CUBIC = 0,
-        /// <summary>Blackman Nuttall Windowed Sinc</summary>
-        SWR_FILTER_TYPE_BLACKMAN_NUTTALL = 1,
-        /// <summary>Kaiser Windowed Sinc</summary>
-        SWR_FILTER_TYPE_KAISER = 2
-    }
+        public const sbyte LIBSWRESAMPLE_VERSION_MINOR = 15;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct SwrContext
-    {
-    }
+        public const sbyte LIBSWRESAMPLE_VERSION_MICRO = 100;
 
-    public unsafe partial class libswresample
-    {
+        public const sbyte SWR_CH_MAX = 32;
+
+        public const sbyte SWR_FLAG_RESAMPLE = 1;
+
+        public enum SwrDitherType
+        {
+            SWR_DITHER_NONE = 0,
+            SWR_DITHER_RECTANGULAR = 1,
+            SWR_DITHER_TRIANGULAR = 2,
+            SWR_DITHER_TRIANGULAR_HIGHPASS = 3,
+            /// <summary>not part of API/ABI</summary>
+            SWR_DITHER_NB = 4
+        }
+
+        /// <summary>
+        /// Resampling Filter Types
+        /// </summary>
+        public enum SwrFilterType
+        {
+            /// <summary>Cubic</summary>
+            SWR_FILTER_TYPE_CUBIC = 0,
+            /// <summary>Blackman Nuttall Windowed Sinc</summary>
+            SWR_FILTER_TYPE_BLACKMAN_NUTTALL = 1,
+            /// <summary>Kaiser Windowed Sinc</summary>
+            SWR_FILTER_TYPE_KAISER = 2
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct SwrContext
+        {
+        }
+
         /// <summary>
         /// Get the AVClass for swrContext. It can be used in combination with
         /// AV_OPT_SEARCH_FAKE_OBJ for examining options.
@@ -44,9 +56,10 @@ namespace libswresample
         /// @see av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_get_class")]
-        internal static extern AVClass* swr_get_class();
+        public static extern libavutil.AVClass* swr_get_class();
 
         /// <summary>
         /// Allocate SwrContext.
@@ -59,9 +72,10 @@ namespace libswresample
         /// @return NULL on error, allocated context otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_alloc")]
-        internal static extern SwrContext* swr_alloc();
+        public static extern libswresample.SwrContext* swr_alloc();
 
         /// <summary>
         /// Initialize context after user parameters have been set.
@@ -69,9 +83,10 @@ namespace libswresample
         /// @return AVERROR error code in case of failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_init")]
-        internal static extern int swr_init(SwrContext* s);
+        public static extern int swr_init(libswresample.SwrContext* s);
 
         /// <summary>
         /// Allocate SwrContext if needed and set/reset common parameters.
@@ -96,17 +111,28 @@ namespace libswresample
         /// @return NULL on error, allocated context otherwise
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_alloc_set_opts")]
-        internal static extern SwrContext* swr_alloc_set_opts(SwrContext* s, long out_ch_layout, AVSampleFormat out_sample_fmt, int out_sample_rate, long in_ch_layout, AVSampleFormat in_sample_fmt, int in_sample_rate, int log_offset, global::System.IntPtr log_ctx);
+        public static extern libswresample.SwrContext* swr_alloc_set_opts(libswresample.SwrContext* s, long out_ch_layout, libavutil.AVSampleFormat out_sample_fmt, int out_sample_rate, long in_ch_layout, libavutil.AVSampleFormat in_sample_fmt, int in_sample_rate, int log_offset, void* log_ctx);
 
         /// <summary>
         /// Free the given SwrContext and set the pointer to NULL.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_free")]
-        internal static extern void swr_free(SwrContext* s);
+        public static extern void swr_free(libswresample.SwrContext** s);
+
+        /// <summary>
+        /// Free the given SwrContext and set the pointer to NULL.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="swr_free")]
+        public static extern void swr_free(ref libswresample.SwrContext* s);
 
         /// <summary>
         /// Convert audio.
@@ -132,9 +158,39 @@ namespace libswresample
         /// @return number of samples output per channel, negative value on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_convert")]
-        internal static extern int swr_convert(SwrContext* s, byte* @out, int out_count, byte* @in, int in_count);
+        public static extern int swr_convert(libswresample.SwrContext* s, byte** _out, int out_count, byte** _in, int in_count);
+
+        /// <summary>
+        /// Convert audio.
+        /// 
+        /// in and in_count can be set to 0 to flush the last few samples out at
+        /// the
+        /// end.
+        /// 
+        /// If more input is provided than output space then the input will be
+        /// buffered.
+        /// You can avoid this buffering by providing more output space than input.
+        /// Convertion will run directly without copying whenever possible.
+        /// 
+        /// @param s         allocated Swr context, with parameters set
+        /// @param out       output buffers, only the first one need be set in case
+        /// of packed audio
+        /// @param out_count amount of space available for output in samples per
+        /// channel
+        /// @param in        input buffers, only the first one need to be set in
+        /// case of packed audio
+        /// @param in_count  number of input samples available in one channel
+        /// 
+        /// @return number of samples output per channel, negative value on error
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="swr_convert")]
+        public static extern int swr_convert(libswresample.SwrContext* s, ref byte* _out, int out_count, ref byte* _in, int in_count);
 
         /// <summary>
         /// Convert the next timestamp from input to output
@@ -152,17 +208,19 @@ namespace libswresample
         /// @returns the output timestamp for the next output sample
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_next_pts")]
-        internal static extern long swr_next_pts(SwrContext* s, long pts);
+        public static extern long swr_next_pts(libswresample.SwrContext* s, long pts);
 
         /// <summary>
         /// Activate resampling compensation.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_set_compensation")]
-        internal static extern int swr_set_compensation(SwrContext* s, int sample_delta, int compensation_distance);
+        public static extern int swr_set_compensation(libswresample.SwrContext* s, int sample_delta, int compensation_distance);
 
         /// <summary>
         /// Set a customized input channel mapping.
@@ -173,9 +231,10 @@ namespace libswresample
         /// @return AVERROR error code in case of failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_set_channel_mapping")]
-        internal static extern int swr_set_channel_mapping(SwrContext* s, int* channel_map);
+        public static extern int swr_set_channel_mapping(libswresample.SwrContext* s, int* channel_map);
 
         /// <summary>
         /// Set a customized remix matrix.
@@ -187,25 +246,28 @@ namespace libswresample
         /// @return  AVERROR error code in case of failure.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_set_matrix")]
-        internal static extern int swr_set_matrix(SwrContext* s, double* matrix, int stride);
+        public static extern int swr_set_matrix(libswresample.SwrContext* s, double* matrix, int stride);
 
         /// <summary>
         /// Drops the specified number of output samples.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_drop_output")]
-        internal static extern int swr_drop_output(SwrContext* s, int count);
+        public static extern int swr_drop_output(libswresample.SwrContext* s, int count);
 
         /// <summary>
         /// Injects the specified number of silence samples.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_inject_silence")]
-        internal static extern int swr_inject_silence(SwrContext* s, int count);
+        public static extern int swr_inject_silence(libswresample.SwrContext* s, int count);
 
         /// <summary>
         /// Gets the delay the next input sample will experience relative to the
@@ -229,32 +291,36 @@ namespace libswresample
         /// @returns     the delay in 1/base units.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swr_get_delay")]
-        internal static extern long swr_get_delay(SwrContext* s, long @base);
+        public static extern long swr_get_delay(libswresample.SwrContext* s, long _base);
 
         /// <summary>
         /// Return the LIBSWRESAMPLE_VERSION_INT constant.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swresample_version")]
-        internal static extern uint swresample_version();
+        public static extern uint swresample_version();
 
         /// <summary>
         /// Return the swr build-time configuration.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swresample_configuration")]
-        internal static extern global::System.IntPtr swresample_configuration();
+        public static extern sbyte* swresample_configuration();
 
         /// <summary>
         /// Return the swr license.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swresample-if-0.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swresample_license")]
-        internal static extern global::System.IntPtr swresample_license();
+        public static extern sbyte* swresample_license();
     }
 }

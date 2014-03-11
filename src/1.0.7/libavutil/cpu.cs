@@ -6,26 +6,68 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public unsafe partial class libavutil
+    public unsafe static partial class libavutil
     {
+        public const uint AV_CPU_FLAG_FORCE = 80000000;
+
+        public const sbyte AV_CPU_FLAG_MMX = 1;
+
+        public const sbyte AV_CPU_FLAG_MMXEXT = 2;
+
+        public const sbyte AV_CPU_FLAG_MMX2 = 2;
+
+        public const sbyte AV_CPU_FLAG_3DNOW = 4;
+
+        public const sbyte AV_CPU_FLAG_SSE = 8;
+
+        public const sbyte AV_CPU_FLAG_SSE2 = 10;
+
+        public const int AV_CPU_FLAG_SSE2SLOW = 40000000;
+
+        public const sbyte AV_CPU_FLAG_3DNOWEXT = 20;
+
+        public const sbyte AV_CPU_FLAG_SSE3 = 40;
+
+        public const int AV_CPU_FLAG_SSE3SLOW = 20000000;
+
+        public const byte AV_CPU_FLAG_SSSE3 = 80;
+
+        public const int AV_CPU_FLAG_ATOM = 10000000;
+
+        public const short AV_CPU_FLAG_SSE4 = 100;
+
+        public const short AV_CPU_FLAG_SSE42 = 200;
+
+        public const short AV_CPU_FLAG_AVX = 4000;
+
+        public const short AV_CPU_FLAG_XOP = 400;
+
+        public const short AV_CPU_FLAG_FMA4 = 800;
+
+        public const int AV_CPU_FLAG_CMOV = 1001000;
+
+        public const sbyte AV_CPU_FLAG_ALTIVEC = 1;
+
         /// <summary>
         /// Return the flags which specify extensions supported by the CPU.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_cpu_flags")]
-        internal static extern int av_get_cpu_flags();
+        public static extern int av_get_cpu_flags();
 
         /// <summary>
         /// Disables cpu detection and forces the specified flags.
         /// -1 is a special case that disables forcing of specific flags.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_force_cpu_flags")]
-        internal static extern void av_force_cpu_flags(int flags);
+        public static extern void av_force_cpu_flags(int flags);
 
         /// <summary>
         /// Set a mask on flags returned by av_get_cpu_flags().
@@ -36,9 +78,10 @@ namespace libavutil
         /// @warning this function is not thread safe.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_cpu_flags_mask")]
-        internal static extern void av_set_cpu_flags_mask(int mask);
+        public static extern void av_set_cpu_flags_mask(int mask);
 
         /// <summary>
         /// Parse CPU flags from a string.
@@ -51,9 +94,10 @@ namespace libavutil
         /// @return a combination of AV_CPU_* flags, negative on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parse_cpu_flags")]
-        internal static extern int av_parse_cpu_flags(global::System.IntPtr s);
+        public static extern int av_parse_cpu_flags(string s);
 
         /// <summary>
         /// Parse CPU caps from a string and update the given AV_CPU_* flags based
@@ -62,23 +106,27 @@ namespace libavutil
         /// @return negative on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_parse_cpu_caps")]
-        internal static extern int av_parse_cpu_caps(uint* flags, global::System.IntPtr s);
+        public static extern int av_parse_cpu_caps(uint* flags, string s);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="ff_get_cpu_flags_arm")]
-        internal static extern int ff_get_cpu_flags_arm();
+        public static extern int ff_get_cpu_flags_arm();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="ff_get_cpu_flags_ppc")]
-        internal static extern int ff_get_cpu_flags_ppc();
+        public static extern int ff_get_cpu_flags_ppc();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="ff_get_cpu_flags_x86")]
-        internal static extern int ff_get_cpu_flags_x86();
+        public static extern int ff_get_cpu_flags_x86();
     }
 }

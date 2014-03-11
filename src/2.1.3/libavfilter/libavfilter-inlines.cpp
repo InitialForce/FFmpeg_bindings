@@ -1,5 +1,0 @@
-#include "asrc_abuffer.h"
-#include "avcodec.h"
-#include "avfilter.h"
-#include "buffersink.h"
-#include "buffersrc.h"

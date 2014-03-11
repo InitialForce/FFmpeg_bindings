@@ -5,71 +5,139 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using FFmpeg;
 
-namespace libswscale
+namespace FFmpeg
 {
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct SwsVector
+    public unsafe static partial class libswscale
     {
-        /// <summary>
-        /// < pointer to the list of coefficients
-        /// </summary>
-        [FieldOffset(0)]
-        public double* coeff;
+        public const sbyte SWS_FAST_BILINEAR = 1;
 
-        /// <summary>
-        /// < number of coefficients in the vector
-        /// </summary>
-        [FieldOffset(4)]
-        public int length;
-    }
+        public const sbyte SWS_BILINEAR = 2;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct SwsFilter
-    {
-        [FieldOffset(0)]
-        public SwsVector* lumH;
+        public const sbyte SWS_BICUBIC = 4;
 
-        [FieldOffset(4)]
-        public SwsVector* lumV;
+        public const sbyte SWS_X = 8;
 
-        [FieldOffset(8)]
-        public SwsVector* chrH;
+        public const sbyte SWS_POINT = 10;
 
-        [FieldOffset(12)]
-        public SwsVector* chrV;
-    }
+        public const sbyte SWS_AREA = 20;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct SwsContext
-    {
-    }
+        public const sbyte SWS_BICUBLIN = 40;
 
-    public unsafe partial class libswscale
-    {
+        public const byte SWS_GAUSS = 80;
+
+        public const short SWS_SINC = 100;
+
+        public const short SWS_LANCZOS = 200;
+
+        public const short SWS_SPLINE = 400;
+
+        public const int SWS_SRC_V_CHR_DROP_MASK = 30000;
+
+        public const sbyte SWS_SRC_V_CHR_DROP_SHIFT = 16;
+
+        public const int SWS_PARAM_DEFAULT = 123456;
+
+        public const short SWS_PRINT_INFO = 1000;
+
+        public const short SWS_FULL_CHR_H_INT = 2000;
+
+        public const short SWS_FULL_CHR_H_INP = 4000;
+
+        public const ushort SWS_DIRECT_BGR = 8000;
+
+        public const int SWS_ACCURATE_RND = 40000;
+
+        public const int SWS_BITEXACT = 80000;
+
+        public const uint SWS_CPU_CAPS_MMX = 80000000;
+
+        public const int SWS_CPU_CAPS_MMXEXT = 20000000;
+
+        public const int SWS_CPU_CAPS_MMX2 = 20000000;
+
+        public const int SWS_CPU_CAPS_3DNOW = 40000000;
+
+        public const int SWS_CPU_CAPS_ALTIVEC = 10000000;
+
+        public const int SWS_CPU_CAPS_BFIN = 1000000;
+
+        public const int SWS_CPU_CAPS_SSE2 = 2000000;
+
+        public const double SWS_MAX_REDUCE_CUTOFF = 0.002D;
+
+        public const sbyte SWS_CS_ITU709 = 1;
+
+        public const sbyte SWS_CS_FCC = 4;
+
+        public const sbyte SWS_CS_ITU601 = 5;
+
+        public const sbyte SWS_CS_ITU624 = 5;
+
+        public const sbyte SWS_CS_SMPTE170M = 5;
+
+        public const sbyte SWS_CS_SMPTE240M = 7;
+
+        public const sbyte SWS_CS_DEFAULT = 5;
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct SwsVector
+        {
+            /// <summary>
+            /// pointer to the list of coefficients
+            /// </summary>
+            public double* coeff;
+
+            /// <summary>
+            /// number of coefficients in the vector
+            /// </summary>
+            public int length;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct SwsFilter
+        {
+            public libswscale.SwsVector* lumH;
+
+            public libswscale.SwsVector* lumV;
+
+            public libswscale.SwsVector* chrH;
+
+            public libswscale.SwsVector* chrV;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe partial struct SwsContext
+        {
+        }
+
         /// <summary>
         /// Return the LIBSWSCALE_VERSION_INT constant.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swscale_version")]
-        internal static extern uint swscale_version();
+        public static extern uint swscale_version();
 
         /// <summary>
         /// Return the libswscale build-time configuration.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swscale_configuration")]
-        internal static extern global::System.IntPtr swscale_configuration();
+        public static extern sbyte* swscale_configuration();
 
         /// <summary>
         /// Return the libswscale license.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="swscale_license")]
-        internal static extern global::System.IntPtr swscale_license();
+        public static extern sbyte* swscale_license();
 
         /// <summary>
         /// Return a pointer to yuv<->rgb coefficients for the given colorspace
@@ -79,27 +147,30 @@ namespace libswscale
         /// SWS_CS_DEFAULT is used.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getCoefficients")]
-        internal static extern int* sws_getCoefficients(int colorspace);
+        public static extern int* sws_getCoefficients(int colorspace);
 
         /// <summary>
         /// Return a positive value if pix_fmt is a supported input format, 0
         /// otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_isSupportedInput")]
-        internal static extern int sws_isSupportedInput(PixelFormat pix_fmt);
+        public static extern int sws_isSupportedInput(libavutil.PixelFormat pix_fmt);
 
         /// <summary>
         /// Return a positive value if pix_fmt is a supported output format, 0
         /// otherwise.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_isSupportedOutput")]
-        internal static extern int sws_isSupportedOutput(PixelFormat pix_fmt);
+        public static extern int sws_isSupportedOutput(libavutil.PixelFormat pix_fmt);
 
         /// <summary>
         /// Allocate an empty SwsContext. This must be filled and passed to
@@ -107,9 +178,10 @@ namespace libswscale
         /// sws_setColorspaceDetails().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_alloc_context")]
-        internal static extern SwsContext* sws_alloc_context();
+        public static extern libswscale.SwsContext* sws_alloc_context();
 
         /// <summary>
         /// Initialize the swscaler context sws_context.
@@ -118,18 +190,20 @@ namespace libswscale
         /// error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_init_context")]
-        internal static extern int sws_init_context(SwsContext* sws_context, SwsFilter* srcFilter, SwsFilter* dstFilter);
+        public static extern int sws_init_context(libswscale.SwsContext* sws_context, libswscale.SwsFilter* srcFilter, libswscale.SwsFilter* dstFilter);
 
         /// <summary>
         /// Free the swscaler context swsContext.
         /// If swsContext is NULL, then does nothing.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_freeContext")]
-        internal static extern void sws_freeContext(SwsContext* swsContext);
+        public static extern void sws_freeContext(libswscale.SwsContext* swsContext);
 
         /// <summary>
         /// Allocate and return an SwsContext. You need it to perform
@@ -148,9 +222,10 @@ namespace libswscale
         /// @deprecated Use sws_getCachedContext() instead.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getContext")]
-        internal static extern SwsContext* sws_getContext(int srcW, int srcH, PixelFormat srcFormat, int dstW, int dstH, PixelFormat dstFormat, int flags, SwsFilter* srcFilter, SwsFilter* dstFilter, double* param);
+        public static extern libswscale.SwsContext* sws_getContext(int srcW, int srcH, libavutil.PixelFormat srcFormat, int dstW, int dstH, libavutil.PixelFormat dstFormat, int flags, libswscale.SwsFilter* srcFilter, libswscale.SwsFilter* dstFilter, double* param);
 
         /// <summary>
         /// Scale the image slice in srcSlice and put the resulting scaled
@@ -179,9 +254,10 @@ namespace libswscale
         /// @return          the height of the output slice
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_scale")]
-        internal static extern int sws_scale(SwsContext* c, byte* srcSlice, int* srcStride, int srcSliceY, int srcSliceH, byte* dst, int* dstStride);
+        public static extern int sws_scale(libswscale.SwsContext* c, byte** srcSlice, int* srcStride, int srcSliceY, int srcSliceH, byte** dst, int* dstStride);
 
         /// <summary>
         /// @param dstRange flag indicating the while-black range of the output
@@ -198,121 +274,147 @@ namespace libswscale
         /// @return -1 if not supported
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_setColorspaceDetails")]
-        internal static extern int sws_setColorspaceDetails(SwsContext* c, int* inv_table, int srcRange, int* table, int dstRange, int brightness, int contrast, int saturation);
+        public static extern int sws_setColorspaceDetails(libswscale.SwsContext* c, int* inv_table, int srcRange, int* table, int dstRange, int brightness, int contrast, int saturation);
 
         /// <summary>
         /// @return -1 if not supported
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getColorspaceDetails")]
-        internal static extern int sws_getColorspaceDetails(SwsContext* c, int* inv_table, int* srcRange, int* table, int* dstRange, int* brightness, int* contrast, int* saturation);
+        public static extern int sws_getColorspaceDetails(libswscale.SwsContext* c, int** inv_table, int* srcRange, int** table, int* dstRange, int* brightness, int* contrast, int* saturation);
+
+        /// <summary>
+        /// @return -1 if not supported
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="sws_getColorspaceDetails")]
+        public static extern int sws_getColorspaceDetails(libswscale.SwsContext* c, ref int* inv_table, int* srcRange, ref int* table, int* dstRange, int* brightness, int* contrast, int* saturation);
 
         /// <summary>
         /// Allocate and return an uninitialized vector with length coefficients.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_allocVec")]
-        internal static extern SwsVector* sws_allocVec(int length);
+        public static extern libswscale.SwsVector* sws_allocVec(int length);
 
         /// <summary>
         /// Return a normalized Gaussian curve used to filter stuff
         /// quality = 3 is high quality, lower is lower quality.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getGaussianVec")]
-        internal static extern SwsVector* sws_getGaussianVec(double variance, double quality);
+        public static extern libswscale.SwsVector* sws_getGaussianVec(double variance, double quality);
 
         /// <summary>
         /// Allocate and return a vector with length coefficients, all
         /// with the same value c.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getConstVec")]
-        internal static extern SwsVector* sws_getConstVec(double c, int length);
+        public static extern libswscale.SwsVector* sws_getConstVec(double c, int length);
 
         /// <summary>
         /// Allocate and return a vector with just one coefficient, with
         /// value 1.0.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getIdentityVec")]
-        internal static extern SwsVector* sws_getIdentityVec();
+        public static extern libswscale.SwsVector* sws_getIdentityVec();
 
         /// <summary>
         /// Scale all the coefficients of a by the scalar value.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_scaleVec")]
-        internal static extern void sws_scaleVec(SwsVector* a, double scalar);
+        public static extern void sws_scaleVec(libswscale.SwsVector* a, double scalar);
 
         /// <summary>
         /// Scale all the coefficients of a so that their sum equals height.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_normalizeVec")]
-        internal static extern void sws_normalizeVec(SwsVector* a, double height);
+        public static extern void sws_normalizeVec(libswscale.SwsVector* a, double height);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_convVec")]
-        internal static extern void sws_convVec(SwsVector* a, SwsVector* b);
+        public static extern void sws_convVec(libswscale.SwsVector* a, libswscale.SwsVector* b);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_addVec")]
-        internal static extern void sws_addVec(SwsVector* a, SwsVector* b);
+        public static extern void sws_addVec(libswscale.SwsVector* a, libswscale.SwsVector* b);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_subVec")]
-        internal static extern void sws_subVec(SwsVector* a, SwsVector* b);
+        public static extern void sws_subVec(libswscale.SwsVector* a, libswscale.SwsVector* b);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_shiftVec")]
-        internal static extern void sws_shiftVec(SwsVector* a, int shift);
+        public static extern void sws_shiftVec(libswscale.SwsVector* a, int shift);
 
         /// <summary>
         /// Allocate and return a clone of the vector a, that is a vector
         /// with the same coefficients as a.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_cloneVec")]
-        internal static extern SwsVector* sws_cloneVec(SwsVector* a);
+        public static extern libswscale.SwsVector* sws_cloneVec(libswscale.SwsVector* a);
 
         /// <summary>
         /// Print with av_log() a textual representation of the vector a
         /// if log_level <= av_log_level.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_printVec2")]
-        internal static extern void sws_printVec2(SwsVector* a, AVClass* log_ctx, int log_level);
+        public static extern void sws_printVec2(libswscale.SwsVector* a, libavutil.AVClass* log_ctx, int log_level);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_freeVec")]
-        internal static extern void sws_freeVec(SwsVector* a);
+        public static extern void sws_freeVec(libswscale.SwsVector* a);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getDefaultFilter")]
-        internal static extern SwsFilter* sws_getDefaultFilter(float lumaGBlur, float chromaGBlur, float lumaSharpen, float chromaSharpen, float chromaHShift, float chromaVShift, int verbose);
+        public static extern libswscale.SwsFilter* sws_getDefaultFilter(float lumaGBlur, float chromaGBlur, float lumaSharpen, float chromaSharpen, float chromaHShift, float chromaVShift, int verbose);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_freeFilter")]
-        internal static extern void sws_freeFilter(SwsFilter* filter);
+        public static extern void sws_freeFilter(libswscale.SwsFilter* filter);
 
         /// <summary>
         /// Check if context can be reused, otherwise reallocate a new one.
@@ -327,9 +429,10 @@ namespace libswscale
         /// are assumed to remain the same.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_getCachedContext")]
-        internal static extern SwsContext* sws_getCachedContext(SwsContext* context, int srcW, int srcH, PixelFormat srcFormat, int dstW, int dstH, PixelFormat dstFormat, int flags, SwsFilter* srcFilter, SwsFilter* dstFilter, double* param);
+        public static extern libswscale.SwsContext* sws_getCachedContext(libswscale.SwsContext* context, int srcW, int srcH, libavutil.PixelFormat srcFormat, int dstW, int dstH, libavutil.PixelFormat dstFormat, int flags, libswscale.SwsFilter* srcFilter, libswscale.SwsFilter* dstFilter, double* param);
 
         /// <summary>
         /// Convert an 8-bit paletted frame into a frame with a color depth of 32
@@ -344,9 +447,10 @@ namespace libswscale
         /// arrangement (RGB or BGR) of src
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_convertPalette8ToPacked32")]
-        internal static extern void sws_convertPalette8ToPacked32(byte* src, byte* dst, int num_pixels, byte* palette);
+        public static extern void sws_convertPalette8ToPacked32(byte* src, byte* dst, int num_pixels, byte* palette);
 
         /// <summary>
         /// Convert an 8-bit paletted frame into a frame with a color depth of 24
@@ -362,9 +466,10 @@ namespace libswscale
         /// arrangement (RGB or BGR) of src
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_convertPalette8ToPacked24")]
-        internal static extern void sws_convertPalette8ToPacked24(byte* src, byte* dst, int num_pixels, byte* palette);
+        public static extern void sws_convertPalette8ToPacked24(byte* src, byte* dst, int num_pixels, byte* palette);
 
         /// <summary>
         /// Get the AVClass for swsContext. It can be used in combination with
@@ -373,8 +478,9 @@ namespace libswscale
         /// @see av_opt_find().
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("swscale-if-2.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="sws_get_class")]
-        internal static extern AVClass* sws_get_class();
+        public static extern libavutil.AVClass* sws_get_class();
     }
 }

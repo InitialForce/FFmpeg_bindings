@@ -6,41 +6,45 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavdevice
+namespace FFmpeg
 {
-    public unsafe partial class libavdevice
+    public unsafe static partial class libavdevice
     {
         /// <summary>
         /// Return the LIBAVDEVICE_VERSION_INT constant.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avdevice-if-54.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVDEVICE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avdevice_version")]
-        internal static extern uint avdevice_version();
+        public static extern uint avdevice_version();
 
         /// <summary>
         /// Return the libavdevice build-time configuration.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avdevice-if-54.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVDEVICE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avdevice_configuration")]
-        internal static extern global::System.IntPtr avdevice_configuration();
+        public static extern sbyte* avdevice_configuration();
 
         /// <summary>
         /// Return the libavdevice license.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avdevice-if-54.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVDEVICE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avdevice_license")]
-        internal static extern global::System.IntPtr avdevice_license();
+        public static extern sbyte* avdevice_license();
 
         /// <summary>
         /// Initialize libavdevice and register all the input and output devices.
         /// @warning This function is not thread safe.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avdevice-if-54.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVDEVICE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avdevice_register_all")]
-        internal static extern void avdevice_register_all();
+        public static extern void avdevice_register_all();
     }
 }

@@ -6,23 +6,58 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public enum AVMatrixEncoding
+    public unsafe static partial class libavutil
     {
-        AV_MATRIX_ENCODING_NONE = 0,
-        AV_MATRIX_ENCODING_DOLBY = 1,
-        AV_MATRIX_ENCODING_DPLII = 2,
-        AV_MATRIX_ENCODING_NB = 3
-    }
+        public const sbyte AV_CH_FRONT_LEFT = 1;
 
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe partial struct AVBPrint
-    {
-    }
+        public const sbyte AV_CH_FRONT_RIGHT = 2;
 
-    public unsafe partial class libavutil
-    {
+        public const sbyte AV_CH_FRONT_CENTER = 4;
+
+        public const sbyte AV_CH_LOW_FREQUENCY = 8;
+
+        public const sbyte AV_CH_BACK_LEFT = 10;
+
+        public const sbyte AV_CH_BACK_RIGHT = 20;
+
+        public const sbyte AV_CH_FRONT_LEFT_OF_CENTER = 40;
+
+        public const byte AV_CH_FRONT_RIGHT_OF_CENTER = 80;
+
+        public const short AV_CH_BACK_CENTER = 100;
+
+        public const short AV_CH_SIDE_LEFT = 200;
+
+        public const short AV_CH_SIDE_RIGHT = 400;
+
+        public const short AV_CH_TOP_CENTER = 800;
+
+        public const short AV_CH_TOP_FRONT_LEFT = 1000;
+
+        public const short AV_CH_TOP_FRONT_CENTER = 2000;
+
+        public const short AV_CH_TOP_FRONT_RIGHT = 4000;
+
+        public const ushort AV_CH_TOP_BACK_LEFT = 8000;
+
+        public const int AV_CH_TOP_BACK_CENTER = 10000;
+
+        public const int AV_CH_TOP_BACK_RIGHT = 20000;
+
+        public const int AV_CH_STEREO_LEFT = 20000000;
+
+        public const int AV_CH_STEREO_RIGHT = 40000000;
+
+        public enum AVMatrixEncoding
+        {
+            AV_MATRIX_ENCODING_NONE = 0,
+            AV_MATRIX_ENCODING_DOLBY = 1,
+            AV_MATRIX_ENCODING_DPLII = 2,
+            AV_MATRIX_ENCODING_NB = 3
+        }
+
         /// <summary>
         /// Return a channel layout id that matches name, or 0 if no match is
         /// found.
@@ -43,9 +78,10 @@ namespace libavutil
         /// Example: "stereo+FC" = "2+FC" = "2c+1c" = "0x7"
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_channel_layout")]
-        internal static extern ulong av_get_channel_layout(global::System.IntPtr name);
+        public static extern ulong av_get_channel_layout(string name);
 
         /// <summary>
         /// Return a description of a channel layout.
@@ -55,33 +91,37 @@ namespace libavutil
         /// @param buf_size size in bytes of the buffer
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_channel_layout_string")]
-        internal static extern void av_get_channel_layout_string(sbyte* buf, int buf_size, int nb_channels, ulong channel_layout);
+        public static extern void av_get_channel_layout_string(System.Text.StringBuilder buf, int buf_size, int nb_channels, ulong channel_layout);
 
         /// <summary>
         /// Append a description of a channel layout to a bprint buffer.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_bprint_channel_layout")]
-        internal static extern void av_bprint_channel_layout(AVBPrint* bp, int nb_channels, ulong channel_layout);
+        public static extern void av_bprint_channel_layout(libavutil.AVBPrint* bp, int nb_channels, ulong channel_layout);
 
         /// <summary>
         /// Return the number of channels in the channel layout.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_channel_layout_nb_channels")]
-        internal static extern int av_get_channel_layout_nb_channels(ulong channel_layout);
+        public static extern int av_get_channel_layout_nb_channels(ulong channel_layout);
 
         /// <summary>
         /// Return default channel layout for a given number of channels.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_default_channel_layout")]
-        internal static extern long av_get_default_channel_layout(int nb_channels);
+        public static extern long av_get_default_channel_layout(int nb_channels);
 
         /// <summary>
         /// Get the index of a channel in channel_layout.
@@ -95,17 +135,19 @@ namespace libavutil
         /// on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_channel_layout_channel_index")]
-        internal static extern int av_get_channel_layout_channel_index(ulong channel_layout, ulong channel);
+        public static extern int av_get_channel_layout_channel_index(ulong channel_layout, ulong channel);
 
         /// <summary>
         /// Get the channel with the given index in channel_layout.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_channel_layout_extract_channel")]
-        internal static extern ulong av_channel_layout_extract_channel(ulong channel_layout, int index);
+        public static extern ulong av_channel_layout_extract_channel(ulong channel_layout, int index);
 
         /// <summary>
         /// Get the name of a given channel.
@@ -113,9 +155,10 @@ namespace libavutil
         /// @return channel name on success, NULL on error.
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_channel_name")]
-        internal static extern global::System.IntPtr av_get_channel_name(ulong channel);
+        public static extern sbyte* av_get_channel_name(ulong channel);
 
         /// <summary>
         /// Get the description of a given channel.
@@ -124,9 +167,10 @@ namespace libavutil
         /// @return  channel description on success, NULL on error
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_channel_description")]
-        internal static extern global::System.IntPtr av_get_channel_description(ulong channel);
+        public static extern sbyte* av_get_channel_description(ulong channel);
 
         /// <summary>
         /// Get the value and name of a standard channel layout.
@@ -135,11 +179,27 @@ namespace libavutil
         /// @param[out] layout  channel layout mask
         /// @param[out] name    name of the layout
         /// @return  0  if the layout exists,
-        /// <0 if index is beyond the limits
+        /// 0 if index is beyond the limits
         /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_standard_channel_layout")]
-        internal static extern int av_get_standard_channel_layout(uint index, ulong* layout, global::System.IntPtr name);
+        public static extern int av_get_standard_channel_layout(uint index, ulong* layout, sbyte** name);
+
+        /// <summary>
+        /// Get the value and name of a standard channel layout.
+        /// 
+        /// @param[in]  index   index in an internal list, starting at 0
+        /// @param[out] layout  channel layout mask
+        /// @param[out] name    name of the layout
+        /// @return  0  if the layout exists,
+        /// 0 if index is beyond the limits
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
+            EntryPoint="av_get_standard_channel_layout")]
+        public static extern int av_get_standard_channel_layout(uint index, ulong* layout, ref string name);
     }
 }

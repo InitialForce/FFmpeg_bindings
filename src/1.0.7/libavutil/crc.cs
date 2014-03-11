@@ -6,33 +6,36 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace libavutil
+namespace FFmpeg
 {
-    public enum AVCRCId
+    public unsafe static partial class libavutil
     {
-        AV_CRC_8_ATM = 0,
-        AV_CRC_16_ANSI = 1,
-        AV_CRC_16_CCITT = 2,
-        AV_CRC_32_IEEE = 3,
-        AV_CRC_32_IEEE_LE = 4,
-        AV_CRC_MAX = 5
-    }
+        public enum AVCRCId
+        {
+            AV_CRC_8_ATM = 0,
+            AV_CRC_16_ANSI = 1,
+            AV_CRC_16_CCITT = 2,
+            AV_CRC_32_IEEE = 3,
+            AV_CRC_32_IEEE_LE = 4,
+            AV_CRC_MAX = 5
+        }
 
-    public unsafe partial class libavutil
-    {
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_crc_init")]
-        internal static extern int av_crc_init(uint* ctx, int le, int bits, uint poly, int ctx_size);
+        public static extern int av_crc_init(uint* ctx, int le, int bits, uint poly, int ctx_size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_crc_get_table")]
-        internal static extern uint* av_crc_get_table(AVCRCId crc_id);
+        public static extern uint* av_crc_get_table(libavutil.AVCRCId crc_id);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport("avutil-if-51.dll", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+        [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_crc")]
-        internal static extern uint av_crc(uint* ctx, uint start_crc, byte* buffer, uint length);
+        public static extern uint av_crc(uint* ctx, uint start_crc, byte* buffer, global::System.UIntPtr length);
     }
 }

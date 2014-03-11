@@ -71,16 +71,16 @@ namespace FFmpegBindings
             });
         }
 
-        private static void GenerateComplexLibraries(IList<IComplexLibrary> complexLibraries)
+        private static void GenerateComplexLibraries(IList<FFmpegSubLibrary> complexLibraries)
         {
             var log = new TextDiagnosticPrinter();
 
             // sort topoligically (by dependencies)
-            IEnumerable<IComplexLibrary> sorted = complexLibraries.TSort(l => l.DependentLibraries);
+            IEnumerable<FFmpegSubLibrary> sorted = complexLibraries.TSort(l => l.DependentLibraries);
             var drivers = new List<S>();
 
             log.EmitMessage("Parsing libraries...");
-            foreach (IComplexLibrary lib in sorted)
+            foreach (FFmpegSubLibrary lib in sorted)
             {
                 List<Driver> dependents = drivers.Select(s => s.Driver).ToList();
                 drivers.Add(new S
@@ -95,7 +95,7 @@ namespace FFmpegBindings
             var generated = new List<TranslationUnit>();
             foreach (S s in drivers)
             {
-                IComplexLibrary library = s.Library;
+                FFmpegSubLibrary library = s.Library;
                 Driver driver = s.Driver;
 
                 library.Postprocess(driver, driver.ASTContext, s.Dependents.Select(d => d.ASTContext));
@@ -123,7 +123,7 @@ namespace FFmpegBindings
             }
         }
 
-        private static Driver GenerateLibrary(TextDiagnosticPrinter log, IComplexLibrary library,
+        private static Driver GenerateLibrary(TextDiagnosticPrinter log, FFmpegSubLibrary library,
             IList<Driver> dependentLibraries)
         {
             var options = new DriverOptions
@@ -182,7 +182,7 @@ namespace FFmpegBindings
         {
             public Driver Driver { get; set; }
             public List<Driver> Dependents { get; set; }
-            public IComplexLibrary Library { get; set; }
+            public FFmpegSubLibrary Library { get; set; }
         }
     }
 }

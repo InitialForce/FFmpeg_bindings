@@ -12,22 +12,15 @@ using Type = CppSharp.AST.Type;
 
 namespace FFmpegBindings
 {
-    public interface IComplexLibrary : ILibrary
-    {
-        IEnumerable<IComplexLibrary> DependentLibraries { get; }
-        string OutputNamespace { get; }
-        string LibraryNameSpace { get; }
-    }
-
     [DebuggerDisplay("{LibraryName}")]
-    internal class FFmpegSubLibrary : IComplexLibrary
+    public class FFmpegSubLibrary : ILibrary
     {
         private readonly IEnumerable<string> _filesToIgnore;
         private readonly DirectoryInfo _includeDir;
         private readonly TranslationUnit _generatedTypesFile;
         private readonly DirectoryInfo _outputDir;
 
-        public FFmpegSubLibrary(DirectoryInfo includeDir, TranslationUnit generatedTypesFile, string libraryName, string dllName, DirectoryInfo outputDir, IEnumerable<string> filesToIgnore = null, IEnumerable<IComplexLibrary> dependentLibraries = null)
+        public FFmpegSubLibrary(DirectoryInfo includeDir, TranslationUnit generatedTypesFile, string libraryName, string dllName, DirectoryInfo outputDir, IEnumerable<string> filesToIgnore = null, IEnumerable<FFmpegSubLibrary> dependentLibraries = null)
         {
             _includeDir = includeDir;
             _generatedTypesFile = generatedTypesFile;
@@ -39,7 +32,7 @@ namespace FFmpegBindings
             DllName = dllName;
 
             _outputDir = outputDir;
-            DependentLibraries = dependentLibraries ?? Enumerable.Empty<IComplexLibrary>();
+            DependentLibraries = dependentLibraries ?? Enumerable.Empty<FFmpegSubLibrary>();
             _filesToIgnore = filesToIgnore ?? Enumerable.Empty<string>();
             OutputNamespace = "FFmpeg";
         }
@@ -47,7 +40,7 @@ namespace FFmpegBindings
         public string LibraryName { get; private set; }
         public string DllName { get; private set; }
         public string LibraryNameSpace { get; private set; }
-        public IEnumerable<IComplexLibrary> DependentLibraries { get; private set; }
+        public IEnumerable<FFmpegSubLibrary> DependentLibraries { get; private set; }
         public string OutputNamespace { get; private set; }
 
         public virtual void Preprocess(Driver driver, ASTContext ctx, IEnumerable<ASTContext> dependentContexts)
@@ -331,7 +324,7 @@ namespace FFmpegBindings
             return false;
         }
 
-        public static void MoveAllIntoWrapperClass(this IComplexLibrary library, IEnumerable<TranslationUnit> ourTranslationUnits)
+        public static void MoveAllIntoWrapperClass(this FFmpegSubLibrary library, IEnumerable<TranslationUnit> ourTranslationUnits)
         {
             foreach (TranslationUnit tu in ourTranslationUnits)
             {

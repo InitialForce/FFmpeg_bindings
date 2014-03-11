@@ -119,6 +119,16 @@ namespace FFmpegBindings
             return ourTranslationUnits;
         }
 
+        public void Preprocess(Driver driver, ASTContext ctx)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Postprocess(Driver driver, ASTContext lib)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual void Setup(Driver driver)
         {
             driver.Options.GeneratedTypesFile = _generatedTypesFile;

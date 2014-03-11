@@ -6,11 +6,11 @@ namespace CppSharp
 {
     internal class FFMS2Library : ILibrary
     {
-        public void Preprocess(Driver driver, ASTContext ctx, IEnumerable<ASTContext> dependentContexts = null)
+        public void Preprocess(Driver driver, ASTContext ctx)
         {
         }
 
-        public void Postprocess(Driver driver, ASTContext lib, IEnumerable<ASTContext> dependentContexts = null)
+        public void Postprocess(Driver driver, ASTContext lib)
         {
         }
 

@@ -53,21 +53,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CppSharp">
-      <HintPath>..\..\deps\CppSharp\CppSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="CppSharp.AST">
-      <HintPath>..\..\deps\CppSharp\CppSharp.AST.dll</HintPath>
-    </Reference>
-    <Reference Include="CppSharp.Generator">
-      <HintPath>..\..\deps\CppSharp\CppSharp.Generator.dll</HintPath>
-    </Reference>
-    <Reference Include="CppSharp.Parser">
-      <HintPath>..\..\deps\CppSharp\CppSharp.Parser.dll</HintPath>
-    </Reference>
-    <Reference Include="CppSharp.Runtime">
-      <HintPath>..\..\deps\CppSharp\CppSharp.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -77,9 +62,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASTContextExtensions.cs" />
     <Compile Include="FFmpegSubLibrary.cs" />
+    <Compile Include="FFMS2Library.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TopologicalSort.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\external\CppSharp\build\vs2013\projects\CppSharp.Parser.vcxproj">
+      <Project>{c105fd61-2d91-6a26-36a2-ed1aa2acc626}</Project>
+      <Name>CppSharp.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\CppSharp\src\AST\CppSharp.AST.csproj">
+      <Project>{bc4c5c41-a8af-ebe5-5135-249c3d77b768}</Project>
+      <Name>CppSharp.AST</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\CppSharp\src\Core\CppSharp.csproj">
+      <Project>{c600c309-b2cd-1d15-dbe6-0bbdc71253a3}</Project>
+      <Name>CppSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\CppSharp\src\Generator\CppSharp.Generator.csproj">
+      <Project>{1BD1FEC4-07B5-BF1A-7015-BA6D5C18AA9C}</Project>
+      <Name>CppSharp.Generator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\CppSharp\src\Runtime\CppSharp.Runtime.csproj">
+      <Project>{189ff169-0498-10bc-2dca-f5401922f0c7}</Project>
+      <Name>CppSharp.Runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

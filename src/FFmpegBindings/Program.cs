@@ -5,6 +5,7 @@ using CppSharp;
 using CppSharp.AST;
 using CppSharp.Generators;
 using CppSharp.Passes;
+using FFmpegBindings.Utilities;
 
 namespace FFmpegBindings
 {
@@ -12,7 +13,7 @@ namespace FFmpegBindings
     {
         public static void Main(string[] args)
         {
-            //            GenerateLibrary(new WinApi());
+            //            GenerateLibrary(new WinAPI());
             //            Environment.Exit(0);
 
             GenerateFFmpeg();
@@ -40,21 +41,21 @@ namespace FFmpegBindings
                     "vda.h",
                     "vdpau.h",
                     "xvmc.h"
-                }, new[] { avutilLib });
+                }, new[] {avutilLib});
 
             var avformatLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avformat", "avformat-if-55.dll",
                 outputDir, null,
-                new[] { avutilLib, avcodecLib });
+                new[] {avutilLib, avcodecLib});
 
             var swresampleLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "swresample", "swresample-if-0.dll",
                 outputDir,
-                null, new[] { avutilLib });
+                null, new[] {avutilLib});
 
             var swscaleLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "swscale", "swscale-if-2.dll",
-                outputDir, null, new[] { avutilLib });
+                outputDir, null, new[] {avutilLib});
 
             var avfilterLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avfilter", "avfilter-if-3.dll",
-                outputDir, null, new[] { avutilLib, swresampleLib, swscaleLib, avcodecLib, avformatLib });
+                outputDir, null, new[] {avutilLib, swresampleLib, swscaleLib, avcodecLib, avformatLib});
 
             var avdeviceLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avdevice", "avdevice-if-55.dll",
                 outputDir);

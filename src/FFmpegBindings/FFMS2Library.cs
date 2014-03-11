@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using CppSharp;
 using CppSharp.AST;
 
-namespace CppSharp
+namespace FFmpegBindings
 {
     internal class FFMS2Library : ILibrary
     {

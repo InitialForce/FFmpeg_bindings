@@ -62,12 +62,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASTContextExtensions.cs" />
+    <Compile Include="Utilities\ASTContextExtensions.cs" />
     <Compile Include="FFmpegSubLibrary.cs" />
     <Compile Include="FFMS2Library.cs" />
+    <Compile Include="Passes\GenerateOverloadsForFunctionArrayParametersPass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TopologicalSort.cs" />
+    <Compile Include="Utilities\TopologicalSort.cs" />
+    <Compile Include="WinAPI.cs" />
+    <Compile Include="Passes\UnwrapUnsupportedArraysPass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\external\CppSharp\build\vs2013\projects\CppSharp.Parser.vcxproj">

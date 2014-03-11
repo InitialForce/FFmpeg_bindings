@@ -1,0 +1,3 @@
+[submodule "external/CppSharp"]
+	path = external/CppSharp
+	url = https://github.com/InitialForce/CppSharp.git

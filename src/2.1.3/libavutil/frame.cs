@@ -122,7 +122,7 @@ namespace FFmpeg
             /// up to 16 bytes beyond the planes, if these filters are to be used,
             /// then 16 extra bytes must be allocated.
             /// </summary>
-            public ArrayWrapper_BytePtr8 data;
+            public libavutil.ArrayWrapper_BytePtr8 data;
 
             /// <summary>
             /// For video, size in bytes of each picture line.
@@ -190,7 +190,7 @@ namespace FFmpeg
             /// </summary>
             public libavutil.AVPictureType pict_type;
 
-            public ArrayWrapper_BytePtr8 @base;
+            public libavutil.ArrayWrapper_BytePtr8 @base;
 
             /// <summary>
             /// Sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
@@ -261,7 +261,7 @@ namespace FFmpeg
             /// motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
             /// @endcode
             /// </summary>
-            public ArrayWrapper_ShortPtrPtr2 motion_val;
+            public libavutil.ArrayWrapper_ShortPtrPtr2 motion_val;
 
             /// <summary>
             /// macroblock type table
@@ -278,7 +278,7 @@ namespace FFmpeg
             /// motion reference frame index
             /// the order in which these are stored can depend on the codec.
             /// </summary>
-            public ArrayWrapper_SbytePtr2 ref_index;
+            public libavutil.ArrayWrapper_SbytePtr2 ref_index;
 
             /// <summary>
             /// for some private data of the user
@@ -368,7 +368,7 @@ namespace FFmpeg
             /// this array. Then the extra AVBufferRef pointers are stored in the
             /// extended_buf array.
             /// </summary>
-            public ArrayWrapper_AVBufferRef8 buf;
+            public libavutil.ArrayWrapper_AVBufferRef8 buf;
 
             /// <summary>
             /// For planar audio which requires more than AV_NUM_DATA_POINTERS

@@ -17,7 +17,7 @@ namespace FFmpeg
         {
             public fixed uint p[18];
 
-            public ArrayWrapper_Uint__4 s;
+            public libavutil.ArrayWrapper_Uint__4 s;
         }
 
         /// <summary>

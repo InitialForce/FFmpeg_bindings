@@ -86,7 +86,7 @@ namespace FFmpeg
             /// if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
             /// otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
             /// </summary>
-            public ArrayWrapper_AVComponentDescriptor4 comp;
+            public libavutil.ArrayWrapper_AVComponentDescriptor4 comp;
         }
 
         /// <summary>

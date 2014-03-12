@@ -29,7 +29,7 @@ namespace FFmpegBindings
             var utilityClass = new TranslationUnit
             {
                 Name = "generated",
-                FilePath = Path.Combine(ffmpegInstallDir.FullName, "generated.h")
+                FilePath = Path.Combine(ffmpegInstallDir.FullName, "generated.h"),
             };
 
             var avutilLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avutil", "avutil-if-52.dll", outputDir);
@@ -148,6 +148,8 @@ namespace FFmpegBindings
                     driver.ASTContext.TranslationUnits.Add(tu);
                 }
             }
+            if(library.LibraryName == "avutil")
+                driver.ASTContext.TranslationUnits.Add(library.GeneratedTypesFile);
 
             log.EmitMessage("Parsing libraries...");
 

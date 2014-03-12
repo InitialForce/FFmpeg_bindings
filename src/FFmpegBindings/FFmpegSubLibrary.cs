@@ -15,7 +15,6 @@ namespace FFmpegBindings
     public class FFmpegSubLibrary : ILibrary
     {
         private readonly IEnumerable<string> _filesToIgnore;
-        private readonly TranslationUnit _generatedTypesFile;
         private readonly DirectoryInfo _includeDir;
         private readonly DirectoryInfo _outputDir;
 
@@ -24,7 +23,7 @@ namespace FFmpegBindings
             IEnumerable<FFmpegSubLibrary> dependentLibraries = null)
         {
             _includeDir = includeDir;
-            _generatedTypesFile = generatedTypesFile;
+            GeneratedTypesFile = generatedTypesFile;
             if (!_includeDir.Exists)
                 throw new DirectoryNotFoundException(_includeDir.FullName);
 
@@ -37,6 +36,8 @@ namespace FFmpegBindings
             _filesToIgnore = filesToIgnore ?? Enumerable.Empty<string>();
             OutputNamespace = "FFmpeg";
         }
+
+        public TranslationUnit GeneratedTypesFile { get; private set; }
 
         public string LibraryName { get; private set; }
         public string DllName { get; private set; }
@@ -84,7 +85,7 @@ namespace FFmpegBindings
         public virtual void SetupPasses(Driver driver)
         {
             //                TranslationUnitPasses.AddPass(new UnwrapUnsupportedArraysPass());
-            driver.TranslationUnitPasses.AddPass(new GenerateWrapperForUnsupportedArrayFieldsPass(_generatedTypesFile));
+            driver.TranslationUnitPasses.AddPass(new GenerateWrapperForUnsupportedArrayFieldsPass(GeneratedTypesFile));
             driver.TranslationUnitPasses.AddPass(new RewriteDoublePointerFunctionParametersToRef());
         }
 

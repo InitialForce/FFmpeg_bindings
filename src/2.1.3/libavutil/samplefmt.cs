@@ -149,6 +149,7 @@ namespace FFmpeg
             EntryPoint="av_get_sample_fmt_string")]
         public static extern sbyte* av_get_sample_fmt_string(System.Text.StringBuilder buf, int buf_size, libavutil.AVSampleFormat sample_fmt);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

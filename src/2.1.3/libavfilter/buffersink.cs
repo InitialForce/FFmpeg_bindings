@@ -69,6 +69,7 @@ namespace FFmpeg
         /// @return >= 0 in case of success, a negative AVERROR code in case of
         /// failure
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -85,6 +86,7 @@ namespace FFmpeg
         /// @return >= 0 in case of success, a negative AVERROR code in case of
         /// failure
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -94,6 +96,7 @@ namespace FFmpeg
         /// <summary>
         /// Get the number of immediately available frames.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -114,6 +117,7 @@ namespace FFmpeg
         /// @return >= 0 in case of success, a negative AVERROR code in case of
         /// failure.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -134,6 +138,7 @@ namespace FFmpeg
         /// @return >= 0 in case of success, a negative AVERROR code in case of
         /// failure.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -160,6 +165,7 @@ namespace FFmpeg
         /// one or
         /// the other with a single sink, not both.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -186,6 +192,7 @@ namespace FFmpeg
         /// one or
         /// the other with a single sink, not both.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

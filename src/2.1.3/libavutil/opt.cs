@@ -402,6 +402,7 @@ namespace FFmpeg
         /// 
         /// @deprecated use av_opt_find.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -434,6 +435,7 @@ namespace FFmpeg
         /// AVERROR(EINVAL) if the value is not valid
         /// @deprecated use av_opt_set()
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -466,24 +468,28 @@ namespace FFmpeg
         /// AVERROR(EINVAL) if the value is not valid
         /// @deprecated use av_opt_set()
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_string3")]
         public static extern int av_set_string3(void* obj, string name, string val, int alloc, ref libavutil.AVOption* o_out);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_double")]
         public static extern libavutil.AVOption* av_set_double(void* obj, string name, double n);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_set_q")]
         public static extern libavutil.AVOption* av_set_q(void* obj, string name, libavutil.AVRational n);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -526,18 +532,21 @@ namespace FFmpeg
             EntryPoint="av_get_int")]
         public static extern long av_get_int(void* obj, string name, ref libavutil.AVOption* o_out);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_string")]
         public static extern sbyte* av_get_string(void* obj, string name, libavutil.AVOption** o_out, System.Text.StringBuilder buf, int buf_len);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_get_string")]
         public static extern sbyte* av_get_string(void* obj, string name, ref libavutil.AVOption* o_out, System.Text.StringBuilder buf, int buf_len);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -571,6 +580,7 @@ namespace FFmpeg
             EntryPoint="av_opt_set_defaults")]
         public static extern void av_opt_set_defaults(void* s);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

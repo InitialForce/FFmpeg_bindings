@@ -1613,6 +1613,7 @@ namespace FFmpeg
         /// The side data is always allocated with av_malloc() and is freed in
         /// av_free_packet().
         /// </summary>
+        [System.ObsoleteAttribute()]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVPacket
         {
@@ -1662,8 +1663,10 @@ namespace FFmpeg
             /// </summary>
             public int duration;
 
+            [System.ObsoleteAttribute()]
             public global::System.IntPtr destruct;
 
+            [System.ObsoleteAttribute()]
             public void* priv;
 
             /// <summary>
@@ -1723,6 +1726,7 @@ namespace FFmpeg
         /// applications.
         /// sizeof(AVCodecContext) must not be used outside libav*.
         /// </summary>
+        [System.ObsoleteAttribute("Deprecated in favor of request_channel_layout.")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVCodecContext
         {
@@ -2530,6 +2534,7 @@ namespace FFmpeg
             /// - decoding: Set by user.
             /// @deprecated Deprecated in favor of request_channel_layout.
             /// </summary>
+            [System.ObsoleteAttribute()]
             public int request_channels;
 
             /// <summary>
@@ -2628,6 +2633,7 @@ namespace FFmpeg
             /// 
             /// @deprecated use get_buffer2()
             /// </summary>
+            [System.ObsoleteAttribute()]
             public global::System.IntPtr get_buffer;
 
             /// <summary>
@@ -2642,6 +2648,7 @@ namespace FFmpeg
             /// 
             /// @deprecated custom freeing callbacks should be set from get_buffer2()
             /// </summary>
+            [System.ObsoleteAttribute()]
             public global::System.IntPtr release_buffer;
 
             /// <summary>
@@ -2657,6 +2664,7 @@ namespace FFmpeg
             /// - encoding: unused
             /// - decoding: Set by libavcodec, user can override.
             /// </summary>
+            [System.ObsoleteAttribute()]
             public global::System.IntPtr reget_buffer;
 
             /// <summary>
@@ -4358,6 +4366,7 @@ namespace FFmpeg
         /// Default packet destructor.
         /// @deprecated use the AVBuffer API instead
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4637,18 +4646,21 @@ namespace FFmpeg
             EntryPoint="avcodec_find_decoder_by_name")]
         public static extern libavcodec.AVCodec* avcodec_find_decoder_by_name(string name);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_get_buffer")]
         public static extern int avcodec_default_get_buffer(libavcodec.AVCodecContext* s, libavutil.AVFrame* pic);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="avcodec_default_release_buffer")]
         public static extern void avcodec_default_release_buffer(libavcodec.AVCodecContext* s, libavutil.AVFrame* pic);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4813,6 +4825,7 @@ namespace FFmpeg
         /// used or zero if no frame data was decompressed (used) from the input
         /// AVPacket.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5150,6 +5163,7 @@ namespace FFmpeg
         /// number
         /// of bytes used to encode the data read from the input buffer.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5218,6 +5232,7 @@ namespace FFmpeg
         /// number
         /// of bytes used from the output buffer.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5292,12 +5307,14 @@ namespace FFmpeg
         /// output sampling rate
         /// @return allocated ReSampleContext, NULL if error occurred
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_audio_resample_init")]
         public static extern libavcodec.ReSampleContext* av_audio_resample_init(int output_channels, int input_channels, int output_rate, int input_rate, libavutil.AVSampleFormat sample_fmt_out, libavutil.AVSampleFormat sample_fmt_in, int filter_length, int log2_phase_count, int linear, double cutoff);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5310,6 +5327,7 @@ namespace FFmpeg
         /// @param s a non-NULL pointer to a resample context previously
         /// created with av_audio_resample_init()
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5330,6 +5348,7 @@ namespace FFmpeg
         /// @param cutoff cutoff frequency, 1.0 corresponds to half the output
         /// sampling rate
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5347,6 +5366,7 @@ namespace FFmpeg
         /// that way several channels can be resampled with the same context.
         /// @return the number of samples written in dst or -1 if an error occurred
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5371,12 +5391,14 @@ namespace FFmpeg
         /// especially if the compensation_distance is large and the in_rate used
         /// during init is small
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_resample_compensate")]
         public static extern void av_resample_compensate(libavcodec.AVResampleContext* c, int sample_delta, int compensation_distance);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5494,6 +5516,7 @@ namespace FFmpeg
         /// 
         /// @deprecated - use yadif (in libavfilter) instead
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5671,6 +5694,7 @@ namespace FFmpeg
             EntryPoint="avcodec_find_best_pix_fmt_of_2")]
         public static extern libavutil.AVPixelFormat avcodec_find_best_pix_fmt_of_2(libavutil.AVPixelFormat dst_pix_fmt1, libavutil.AVPixelFormat dst_pix_fmt2, libavutil.AVPixelFormat src_pix_fmt, int has_alpha, int* loss_ptr);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6061,6 +6085,7 @@ namespace FFmpeg
         /// mailing list.
         /// @deprecated Use avpriv_report_missing_feature() instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6079,6 +6104,7 @@ namespace FFmpeg
         /// message
         /// @deprecated Use avpriv_request_sample() instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

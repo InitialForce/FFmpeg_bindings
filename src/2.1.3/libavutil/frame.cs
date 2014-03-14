@@ -110,6 +110,7 @@ namespace FFmpeg
         /// av_opt_ptr() can be reordered. This allows 2 forks to add fields
         /// without breaking compatibility with each other.
         /// </summary>
+        [System.ObsoleteAttribute("in favor of pkt_pts")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFrame
         {
@@ -190,6 +191,7 @@ namespace FFmpeg
             /// </summary>
             public libavutil.AVPictureType pict_type;
 
+            [System.ObsoleteAttribute()]
             public libavutil.ArrayWrapper_BytePtr8 @base;
 
             /// <summary>
@@ -231,24 +233,29 @@ namespace FFmpeg
             /// </summary>
             public int quality;
 
+            [System.ObsoleteAttribute()]
             public int reference;
 
             /// <summary>
             /// QP table
             /// </summary>
+            [System.ObsoleteAttribute()]
             public sbyte* qscale_table;
 
             /// <summary>
             /// QP store stride
             /// </summary>
+            [System.ObsoleteAttribute()]
             public int qstride;
 
+            [System.ObsoleteAttribute()]
             public int qscale_type;
 
             /// <summary>
             /// mbskip_table[mb]>=1 if MB didn't change
             /// stride= mb_width = (width+15)>>4
             /// </summary>
+            [System.ObsoleteAttribute()]
             public byte* mbskip_table;
 
             /// <summary>
@@ -261,23 +268,27 @@ namespace FFmpeg
             /// motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
             /// @endcode
             /// </summary>
+            [System.ObsoleteAttribute()]
             public libavutil.ArrayWrapper_ShortPtrPtr2 motion_val;
 
             /// <summary>
             /// macroblock type table
             /// mb_type_base + mb_width + 2
             /// </summary>
+            [System.ObsoleteAttribute()]
             public uint* mb_type;
 
             /// <summary>
             /// DCT coefficients
             /// </summary>
+            [System.ObsoleteAttribute()]
             public short* dct_coeff;
 
             /// <summary>
             /// motion reference frame index
             /// the order in which these are stored can depend on the codec.
             /// </summary>
+            [System.ObsoleteAttribute()]
             public libavutil.ArrayWrapper_SbytePtr2 ref_index;
 
             /// <summary>
@@ -290,6 +301,7 @@ namespace FFmpeg
             /// </summary>
             public fixed ulong error[8];
 
+            [System.ObsoleteAttribute()]
             public int type;
 
             /// <summary>
@@ -313,6 +325,7 @@ namespace FFmpeg
             /// </summary>
             public int palette_has_changed;
 
+            [System.ObsoleteAttribute()]
             public int buffer_hints;
 
             /// <summary>
@@ -333,10 +346,12 @@ namespace FFmpeg
             /// </summary>
             public long reordered_opaque;
 
+            [System.ObsoleteAttribute()]
             public void* hwaccel_picture_private;
 
             public libavutil.AVCodecContext* owner;
 
+            [System.ObsoleteAttribute()]
             public void* thread_opaque;
 
             /// <summary>
@@ -344,6 +359,7 @@ namespace FFmpeg
             /// represents:
             /// (4->16x16, 3->8x8, 2-> 4x4, 1-> 2x2)
             /// </summary>
+            [System.ObsoleteAttribute()]
             public byte motion_subsample_log2;
 
             /// <summary>

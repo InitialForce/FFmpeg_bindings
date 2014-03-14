@@ -82,6 +82,7 @@ namespace FFmpeg
         /// 
         /// @warning this function is not thread safe.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -98,6 +99,7 @@ namespace FFmpeg
         /// Please use av_parse_cpu_caps() when possible.
         /// @return a combination of AV_CPU_* flags, negative on error.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

@@ -343,6 +343,7 @@ namespace FFmpeg
         /// to access the name and type fields; there should be no need to access
         /// any other fields from outside of libavfilter.
         /// </summary>
+        [System.ObsoleteAttribute("unused")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFilterPad
         {
@@ -369,6 +370,7 @@ namespace FFmpeg
             /// link must have at least these permissions; this fact is checked by
             /// asserts. It can be used to optimize buffer allocation.
             /// </summary>
+            [System.ObsoleteAttribute()]
             public int min_perms;
 
             /// <summary>
@@ -383,6 +385,7 @@ namespace FFmpeg
             /// Permissions which are automatically removed on outgoing buffers. It
             /// can be used to optimize buffer allocation.
             /// </summary>
+            [System.ObsoleteAttribute()]
             public int rej_perms;
 
             public global::System.IntPtr start_frame;
@@ -649,6 +652,7 @@ namespace FFmpeg
         /// <summary>
         /// An instance of a filter
         /// </summary>
+        [System.ObsoleteAttribute("eprecated unsigned input_count; ///< @deprecated use nb_inputs")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFilterContext
         {
@@ -677,6 +681,7 @@ namespace FFmpeg
             /// </summary>
             public libavfilter.AVFilterLink** inputs;
 
+            [System.ObsoleteAttribute()]
             public uint input_count;
 
             /// <summary>
@@ -694,6 +699,7 @@ namespace FFmpeg
             /// </summary>
             public libavfilter.AVFilterLink** outputs;
 
+            [System.ObsoleteAttribute()]
             public uint output_count;
 
             /// <summary>
@@ -991,11 +997,13 @@ namespace FFmpeg
         {
         }
 
+        [System.ObsoleteAttribute()]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFilterGraph
         {
             public libavutil.AVClass* av_class;
 
+            [System.ObsoleteAttribute()]
             public uint filter_count_unused;
 
             public libavfilter.AVFilterContext** filters;
@@ -1146,6 +1154,7 @@ namespace FFmpeg
         /// <summary>
         /// Copy properties of src to dst, without copying the actual data
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1162,6 +1171,7 @@ namespace FFmpeg
         /// the
         /// old, excluding any permissions denied by pmask
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1177,6 +1187,7 @@ namespace FFmpeg
         /// @note it is recommended to use avfilter_unref_bufferp() instead of this
         /// function
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1190,6 +1201,7 @@ namespace FFmpeg
         /// 
         /// @param ref pointer to the buffer reference
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1203,6 +1215,7 @@ namespace FFmpeg
         /// 
         /// @param ref pointer to the buffer reference
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1212,6 +1225,7 @@ namespace FFmpeg
         /// <summary>
         /// Get the number of channels of a buffer reference.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1336,6 +1350,7 @@ namespace FFmpeg
         /// @param format the pixel format of the image specified by the data and
         /// linesize arrays
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1357,6 +1372,7 @@ namespace FFmpeg
         /// allocate
         /// @param channel_layout the channel layout of the buffer
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1378,6 +1394,7 @@ namespace FFmpeg
         /// allocate
         /// @param channel_layout the channel layout of the buffer
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1398,6 +1415,7 @@ namespace FFmpeg
         /// @param channel_layout the channel layout of the buffer,
         /// must be either 0 or consistent with channels
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1418,6 +1436,7 @@ namespace FFmpeg
         /// @param channel_layout the channel layout of the buffer,
         /// must be either 0 or consistent with channels
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1446,6 +1465,7 @@ namespace FFmpeg
         /// <summary>
         /// Uninitialize the filter system. Unregister all filters.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1503,6 +1523,7 @@ namespace FFmpeg
         /// was already reached.
         /// @deprecated use avfilter_next()
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1517,6 +1538,7 @@ namespace FFmpeg
         /// was already reached.
         /// @deprecated use avfilter_next()
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1534,6 +1556,7 @@ namespace FFmpeg
         /// @return >= 0 in case of success, a negative error code otherwise
         /// @deprecated use avfilter_graph_alloc_filter() instead
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1551,6 +1574,7 @@ namespace FFmpeg
         /// @return >= 0 in case of success, a negative error code otherwise
         /// @deprecated use avfilter_graph_alloc_filter() instead
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1569,6 +1593,7 @@ namespace FFmpeg
         /// of this parameter varies by filter.
         /// @return       zero on success
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1688,6 +1713,7 @@ namespace FFmpeg
         /// 
         /// @return 0 on success, a negative number on error.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1701,6 +1727,7 @@ namespace FFmpeg
         /// 
         /// @return 0 on success, a negative number on error.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1769,6 +1796,7 @@ namespace FFmpeg
         /// @deprecated use avfilter_graph_alloc_filter() to allocate a filter in a
         /// filter graph
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1907,6 +1935,7 @@ namespace FFmpeg
         /// @return non negative on success, a negative AVERROR code on error
         /// @deprecated Use avfilter_graph_parse_ptr() instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1929,6 +1958,7 @@ namespace FFmpeg
         /// @return non negative on success, a negative AVERROR code on error
         /// @deprecated Use avfilter_graph_parse_ptr() instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

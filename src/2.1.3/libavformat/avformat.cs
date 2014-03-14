@@ -1496,6 +1496,7 @@ namespace FFmpeg
             EntryPoint="av_new_program")]
         public static extern libavformat.AVProgram* av_new_program(libavformat.AVFormatContext* s, int id);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1727,6 +1728,7 @@ namespace FFmpeg
             EntryPoint="avformat_open_input")]
         public static extern int avformat_open_input(ref libavformat.AVFormatContext* ps, string filename, libavformat.AVInputFormat* fmt, ref libavutil.AVDictionary* options);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1748,6 +1750,7 @@ namespace FFmpeg
         /// 
         /// @deprecated use avformat_find_stream_info.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1906,6 +1909,7 @@ namespace FFmpeg
         /// @param pkt is filled
         /// @return 0 if OK, AVERROR_xxx on error
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2025,6 +2029,7 @@ namespace FFmpeg
             EntryPoint="av_read_pause")]
         public static extern int av_read_pause(libavformat.AVFormatContext* s);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2061,12 +2066,14 @@ namespace FFmpeg
         /// @param s media file handle
         /// @param id file-format-dependent stream ID
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
             EntryPoint="av_new_stream")]
         public static extern libavformat.AVStream* av_new_stream(libavformat.AVFormatContext* s, int id);
 
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

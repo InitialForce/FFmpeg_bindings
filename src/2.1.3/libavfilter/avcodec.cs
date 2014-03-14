@@ -18,6 +18,7 @@ namespace FFmpeg
         /// @param perms permissions to assign to the new buffer reference
         /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -31,6 +32,7 @@ namespace FFmpeg
         /// @param perms permissions to assign to the new buffer reference
         /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -44,6 +46,7 @@ namespace FFmpeg
         /// @param perms permissions to assign to the new buffer reference
         /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -59,6 +62,7 @@ namespace FFmpeg
         /// failure
         /// @deprecated Use avfilter_copy_buf_props() instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -74,6 +78,7 @@ namespace FFmpeg
         /// failure
         /// @deprecated Use avfilter_copy_buf_props() instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -89,6 +94,7 @@ namespace FFmpeg
         /// failure
         /// @deprecated Use avfilter_copy_buf_props() instead.
         /// </summary>
+        [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

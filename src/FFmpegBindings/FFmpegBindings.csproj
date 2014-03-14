@@ -62,6 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BodiTrakLibrary.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Passes\FFmpegMacrosPass.cs" />
     <Compile Include="Utilities\ASTContextExtensions.cs" />
     <Compile Include="FFmpegSubLibrary.cs" />

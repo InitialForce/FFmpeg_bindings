@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Passes\FFmpegMacrosPass.cs" />
     <Compile Include="Utilities\ASTContextExtensions.cs" />
     <Compile Include="FFmpegSubLibrary.cs" />
     <Compile Include="FFMS2Library.cs" />

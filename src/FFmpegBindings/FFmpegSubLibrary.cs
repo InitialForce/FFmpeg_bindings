@@ -7,6 +7,7 @@ using System.Linq;
 using CppSharp;
 using CppSharp.AST;
 using CppSharp.Passes;
+using FFmpegBindings.Passes;
 using FFmpegBindings.Utilities;
 
 namespace FFmpegBindings
@@ -87,6 +88,7 @@ namespace FFmpegBindings
             //                TranslationUnitPasses.AddPass(new UnwrapUnsupportedArraysPass());
             driver.TranslationUnitPasses.AddPass(new GenerateWrapperForUnsupportedArrayFieldsPass(GeneratedTypesFile));
             driver.TranslationUnitPasses.AddPass(new RewriteDoublePointerFunctionParametersToRef());
+            driver.TranslationUnitPasses.AddPass(new FFmpegMacrosPass());
         }
 
         public virtual void Preprocess(Driver driver, ASTContext ctx, IEnumerable<ASTContext> dependentContexts)

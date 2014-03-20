@@ -110,7 +110,6 @@ namespace FFmpeg
         /// av_opt_ptr() can be reordered. This allows 2 forks to add fields
         /// without breaking compatibility with each other.
         /// </summary>
-        [System.ObsoleteAttribute("in favor of pkt_pts")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFrame
         {
@@ -136,10 +135,11 @@ namespace FFmpeg
             /// preference, this is 16 or 32 for modern desktop CPUs.
             /// Some code requires such alignment other code can be slower without
             /// correct alignment, for yet other it makes no difference.
-            /// 
-            /// @note The linesize may be larger than the size of usable data -- there
-            /// may be extra padding present for performance reasons.
             /// </summary>
+            /// <remark>
+            /// The linesize may be larger than the size of usable data -- there
+            /// may be extra padding present for performance reasons.
+            /// </remark>
             public fixed int linesize[8];
 
             /// <summary>
@@ -260,14 +260,14 @@ namespace FFmpeg
 
             /// <summary>
             /// motion vector table
-            /// @code
+            /// </summary>
+            /// <code>
             /// example:
             /// int mv_sample_log2= 4 - motion_subsample_log2;
             /// int mb_width= (width+15)>>4;
             /// int mv_stride= (mb_width << mv_sample_log2) + 1;
             /// motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
-            /// @endcode
-            /// </summary>
+            /// </code>
             [System.ObsoleteAttribute()]
             public libavutil.ArrayWrapper_ShortPtrPtr2 motion_val;
 
@@ -658,8 +658,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the name of a colorspace.
-        /// @return a static string identifying the colorspace; can be NULL.
         /// </summary>
+        /// <returns>
+        /// a static string identifying the colorspace; can be NULL.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -670,15 +672,16 @@ namespace FFmpeg
         /// Allocate an AVFrame and set its fields to default values.  The
         /// resulting
         /// struct must be freed using av_frame_free().
-        /// 
-        /// @return An AVFrame filled with default values or NULL on failure.
-        /// 
-        /// @note this only allocates the AVFrame itself, not the data buffers.
-        /// Those
+        /// </summary>
+        /// <returns>
+        /// An AVFrame filled with default values or NULL on failure.
+        /// </returns>
+        /// <remark>
+        /// this only allocates the AVFrame itself, not the data buffers. Those
         /// must be allocated through other means, e.g. with av_frame_get_buffer()
         /// or
         /// manually.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -689,9 +692,10 @@ namespace FFmpeg
         /// Free the frame and any dynamically allocated objects in it,
         /// e.g. extended_data. If the frame is reference counted, it will be
         /// unreferenced first.
-        /// 
-        /// @param frame frame to be freed. The pointer will be set to NULL.
         /// </summary>
+        /// <param name="frame">
+        /// frame to be freed. The pointer will be set to NULL.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -702,9 +706,10 @@ namespace FFmpeg
         /// Free the frame and any dynamically allocated objects in it,
         /// e.g. extended_data. If the frame is reference counted, it will be
         /// unreferenced first.
-        /// 
-        /// @param frame frame to be freed. The pointer will be set to NULL.
         /// </summary>
+        /// <param name="frame">
+        /// frame to be freed. The pointer will be set to NULL.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -721,9 +726,10 @@ namespace FFmpeg
         /// If src is not reference counted, new buffers are allocated and the data
         /// is
         /// copied.
-        /// 
-        /// @return 0 on success, a negative AVERROR on error
         /// </summary>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -734,9 +740,10 @@ namespace FFmpeg
         /// Create a new frame that references the same data as src.
         /// 
         /// This is a shortcut for av_frame_alloc()+av_frame_ref().
-        /// 
-        /// @return newly created AVFrame on success, NULL on error.
         /// </summary>
+        /// <returns>
+        /// newly created AVFrame on success, NULL on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -774,12 +781,16 @@ namespace FFmpeg
         /// necessary, allocate and fill AVFrame.extended_data and
         /// AVFrame.extended_buf.
         /// For planar formats, one buffer will be allocated for each plane.
-        /// 
-        /// @param frame frame in which to store the new buffers.
-        /// @param align required buffer size alignment
-        /// 
-        /// @return 0 on success, a negative AVERROR on error.
         /// </summary>
+        /// <param name="frame">
+        /// frame in which to store the new buffers.
+        /// </param>
+        /// <param name="align">
+        /// required buffer size alignment
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -788,9 +799,9 @@ namespace FFmpeg
 
         /// <summary>
         /// Check if the frame data is writable.
-        /// 
-        /// @return A positive value if the frame data is writable (which is true
-        /// if and
+        /// </summary>
+        /// <returns>
+        /// A positive value if the frame data is writable (which is true if and
         /// only if each of the underlying buffers has only one reference, namely
         /// the one
         /// stored in this frame). Return 0 otherwise.
@@ -801,7 +812,7 @@ namespace FFmpeg
         /// directly).
         /// 
         /// @see av_frame_make_writable(), av_buffer_is_writable()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -814,12 +825,13 @@ namespace FFmpeg
         /// Do nothing if the frame is writable, allocate new buffers and copy the
         /// data
         /// if it is not.
-        /// 
-        /// @return 0 on success, a negative AVERROR on error.
+        /// </summary>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error.
         /// 
         /// @see av_frame_is_writable(), av_buffer_is_writable(),
         /// av_buffer_make_writable()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -844,14 +856,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the buffer reference a given data plane is stored in.
-        /// 
-        /// @param plane index of the data plane of interest in
-        /// frame->extended_data.
-        /// 
-        /// @return the buffer reference that contains the plane or NULL if the
-        /// input
-        /// frame is not valid.
         /// </summary>
+        /// <param name="plane">
+        /// index of the data plane of interest in frame->extended_data.
+        /// </param>
+        /// <returns>
+        /// the buffer reference that contains the plane or NULL if the input
+        /// frame is not valid.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -860,13 +872,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a new side data to a frame.
-        /// 
-        /// @param frame a frame to which the side data should be added
-        /// @param type type of the added side data
-        /// @param size size of the side data
-        /// 
-        /// @return newly added side data on success, NULL on error
         /// </summary>
+        /// <param name="frame">
+        /// a frame to which the side data should be added
+        /// </param>
+        /// <param name="type">
+        /// type of the added side data
+        /// </param>
+        /// <param name="size">
+        /// size of the side data
+        /// </param>
+        /// <returns>
+        /// newly added side data on success, NULL on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -874,10 +892,12 @@ namespace FFmpeg
         public static extern libavutil.AVFrameSideData* av_frame_new_side_data(libavutil.AVFrame* frame, libavutil.AVFrameSideDataType type, int size);
 
         /// <summary>
-        /// @return a pointer to the side data of a given type on success, NULL if
-        /// there
-        /// is no side data with such type in this frame.
+        /// 
         /// </summary>
+        /// <returns>
+        /// a pointer to the side data of a given type on success, NULL if there
+        /// is no side data with such type in this frame.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

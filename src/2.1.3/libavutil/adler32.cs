@@ -16,12 +16,19 @@ namespace FFmpeg
         /// Passing the return value to a subsequent av_adler32_update() call
         /// allows the checksum of multiple buffers to be calculated as though
         /// they were concatenated.
-        /// 
-        /// @param adler initial checksum value
-        /// @param buf   pointer to input buffer
-        /// @param len   size of input buffer
-        /// @return      updated checksum
         /// </summary>
+        /// <param name="adler">
+        /// initial checksum value
+        /// </param>
+        /// <param name="buf">
+        /// pointer to input buffer
+        /// </param>
+        /// <param name="len">
+        /// size of input buffer
+        /// </param>
+        /// <returns>
+        /// updated checksum
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

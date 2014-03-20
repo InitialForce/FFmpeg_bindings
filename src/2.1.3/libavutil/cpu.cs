@@ -97,8 +97,10 @@ namespace FFmpeg
         /// 
         /// This function exists only for compatibility with libav.
         /// Please use av_parse_cpu_caps() when possible.
-        /// @return a combination of AV_CPU_* flags, negative on error.
         /// </summary>
+        /// <returns>
+        /// a combination of AV_CPU_* flags, negative on error.
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -109,9 +111,10 @@ namespace FFmpeg
         /// <summary>
         /// Parse CPU caps from a string and update the given AV_CPU_* flags based
         /// on that.
-        /// 
-        /// @return negative on error.
         /// </summary>
+        /// <returns>
+        /// negative on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -119,8 +122,11 @@ namespace FFmpeg
         public static extern int av_parse_cpu_caps(uint* flags, string s);
 
         /// <summary>
-        /// @return the number of logical CPU cores present.
+        /// 
         /// </summary>
+        /// <returns>
+        /// the number of logical CPU cores present.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

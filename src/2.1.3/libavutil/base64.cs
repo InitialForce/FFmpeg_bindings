@@ -12,14 +12,21 @@ namespace FFmpeg
     {
         /// <summary>
         /// Decode a base64-encoded string.
-        /// 
-        /// @param out      buffer for decoded data
-        /// @param in       null-terminated input string
-        /// @param out_size size in bytes of the out buffer, must be at
-        /// least 3/4 of the length of in
-        /// @return         number of bytes written, or a negative value in case of
-        /// invalid input
         /// </summary>
+        /// <param name="out">
+        /// buffer for decoded data
+        /// </param>
+        /// <param name="in">
+        /// null-terminated input string
+        /// </param>
+        /// <param name="out_size">
+        /// size in bytes of the out buffer, must be at
+        /// least 3/4 of the length of in
+        /// </param>
+        /// <returns>
+        /// number of bytes written, or a negative value in case of
+        /// invalid input
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -28,14 +35,23 @@ namespace FFmpeg
 
         /// <summary>
         /// Encode data to base64 and null-terminate.
-        /// 
-        /// @param out      buffer for encoded data
-        /// @param out_size size in bytes of the out buffer (including the
-        /// null terminator), must be at least AV_BASE64_SIZE(in_size)
-        /// @param in       input buffer containing the data to encode
-        /// @param in_size  size in bytes of the in buffer
-        /// @return         out or NULL in case of error
         /// </summary>
+        /// <param name="out">
+        /// buffer for encoded data
+        /// </param>
+        /// <param name="out_size">
+        /// size in bytes of the out buffer (including the
+        /// null terminator), must be at least AV_BASE64_SIZE(in_size)
+        /// </param>
+        /// <param name="in">
+        /// input buffer containing the data to encode
+        /// </param>
+        /// <param name="in_size">
+        /// size in bytes of the in buffer
+        /// </param>
+        /// <returns>
+        /// out or NULL in case of error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

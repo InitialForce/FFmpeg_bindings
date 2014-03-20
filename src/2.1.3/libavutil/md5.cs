@@ -26,9 +26,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize MD5 hashing.
-        /// 
-        /// @param ctx pointer to the function context (of size av_md5_size)
         /// </summary>
+        /// <param name="ctx">
+        /// pointer to the function context (of size av_md5_size)
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -37,11 +38,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Update hash value.
-        /// 
-        /// @param ctx hash function context
-        /// @param src input data to update hash with
-        /// @param len input data length
         /// </summary>
+        /// <param name="ctx">
+        /// hash function context
+        /// </param>
+        /// <param name="src">
+        /// input data to update hash with
+        /// </param>
+        /// <param name="len">
+        /// input data length
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -50,10 +56,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Finish hashing and output digest value.
-        /// 
-        /// @param ctx hash function context
-        /// @param dst buffer where output digest value is stored
         /// </summary>
+        /// <param name="ctx">
+        /// hash function context
+        /// </param>
+        /// <param name="dst">
+        /// buffer where output digest value is stored
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -62,11 +71,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Hash an array of data.
-        /// 
-        /// @param dst The output buffer to write the digest into
-        /// @param src The data to hash
-        /// @param len The length of the data, in bytes
         /// </summary>
+        /// <param name="dst">
+        /// The output buffer to write the digest into
+        /// </param>
+        /// <param name="src">
+        /// The data to hash
+        /// </param>
+        /// <param name="len">
+        /// The length of the data, in bytes
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

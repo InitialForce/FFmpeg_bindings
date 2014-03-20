@@ -18,16 +18,27 @@ namespace FFmpeg
         /// want to exclude those values.
         /// 
         /// The undefined value can be expressed using the "0:0" string.
-        /// 
-        /// @param[in,out] q pointer to the AVRational which will contain the ratio
-        /// @param[in] str the string to parse: it has to be a string in the format
-        /// num:den, a float number or an expression
-        /// @param[in] max the maximum allowed numerator and denominator
-        /// @param[in] log_offset log level offset which is applied to the log
-        /// level of log_ctx
-        /// @param[in] log_ctx parent logging context
-        /// @return >= 0 on success, a negative error code otherwise
         /// </summary>
+        /// <param name="[in,out]">
+        /// q pointer to the AVRational which will contain the ratio
+        /// </param>
+        /// <param name="[in]">
+        /// str the string to parse: it has to be a string in the format
+        /// num:den, a float number or an expression
+        /// </param>
+        /// <param name="[in]">
+        /// max the maximum allowed numerator and denominator
+        /// </param>
+        /// <param name="[in]">
+        /// log_offset log level offset which is applied to the log
+        /// level of log_ctx
+        /// </param>
+        /// <param name="[in]">
+        /// log_ctx parent logging context
+        /// </param>
+        /// <returns>
+        /// >= 0 on success, a negative error code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -36,17 +47,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse str and put in width_ptr and height_ptr the detected values.
-        /// 
-        /// @param[in,out] width_ptr pointer to the variable which will contain the
-        /// detected
-        /// width value
-        /// @param[in,out] height_ptr pointer to the variable which will contain
-        /// the detected
-        /// height value
-        /// @param[in] str the string to parse: it has to be a string in the format
-        /// width x height or a valid video size abbreviation.
-        /// @return >= 0 on success, a negative error code otherwise
         /// </summary>
+        /// <param name="[in,out]">
+        /// width_ptr pointer to the variable which will contain the detected
+        /// width value
+        /// </param>
+        /// <param name="[in,out]">
+        /// height_ptr pointer to the variable which will contain the detected
+        /// height value
+        /// </param>
+        /// <param name="[in]">
+        /// str the string to parse: it has to be a string in the format
+        /// width x height or a valid video size abbreviation.
+        /// </param>
+        /// <returns>
+        /// >= 0 on success, a negative error code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -55,14 +71,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse str and store the detected values in *rate.
-        /// 
-        /// @param[in,out] rate pointer to the AVRational which will contain the
-        /// detected
-        /// frame rate
-        /// @param[in] str the string to parse: it has to be a string in the format
-        /// rate_num / rate_den, a float number or a valid video rate abbreviation
-        /// @return >= 0 on success, a negative error code otherwise
         /// </summary>
+        /// <param name="[in,out]">
+        /// rate pointer to the AVRational which will contain the detected
+        /// frame rate
+        /// </param>
+        /// <param name="[in]">
+        /// str the string to parse: it has to be a string in the format
+        /// rate_num / rate_den, a float number or a valid video rate abbreviation
+        /// </param>
+        /// <returns>
+        /// >= 0 on success, a negative error code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -71,8 +91,9 @@ namespace FFmpeg
 
         /// <summary>
         /// Put the RGBA values that correspond to color_string in rgba_color.
-        /// 
-        /// @param color_string a string specifying a color. It can be the name of
+        /// </summary>
+        /// <param name="color_string">
+        /// a string specifying a color. It can be the name of
         /// a color (case insensitive match) or a [0x|#]RRGGBB[AA] sequence,
         /// possibly followed by "@" and a string representing the alpha
         /// component.
@@ -82,12 +103,16 @@ namespace FFmpeg
         /// 0xff/1.0 completely opaque).
         /// If the alpha component is not specified then 0xff is assumed.
         /// The string "random" will result in a random color.
-        /// @param slen length of the initial part of color_string containing the
+        /// </param>
+        /// <param name="slen">
+        /// length of the initial part of color_string containing the
         /// color. It can be set to -1 if color_string is a null terminated string
         /// containing nothing else than the color.
-        /// @return >= 0 in case of success, a negative value in case of
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value in case of
         /// failure (for example if color_string cannot be parsed).
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -100,12 +125,17 @@ namespace FFmpeg
         /// 
         /// This function is meant to enumerate the color names recognized by
         /// av_parse_color().
-        /// 
-        /// @param color_idx index of the requested color, starting from 0
-        /// @param rgbp      if not NULL, will point to a 3-elements array with the
-        /// color value in RGB
-        /// @return the color name string or NULL if color_idx is not in the array
         /// </summary>
+        /// <param name="color_idx">
+        /// index of the requested color, starting from 0
+        /// </param>
+        /// <param name="rgbp">
+        /// if not NULL, will point to a 3-elements array with the color value in
+        /// RGB
+        /// </param>
+        /// <returns>
+        /// the color name string or NULL if color_idx is not in the array
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -118,12 +148,17 @@ namespace FFmpeg
         /// 
         /// This function is meant to enumerate the color names recognized by
         /// av_parse_color().
-        /// 
-        /// @param color_idx index of the requested color, starting from 0
-        /// @param rgbp      if not NULL, will point to a 3-elements array with the
-        /// color value in RGB
-        /// @return the color name string or NULL if color_idx is not in the array
         /// </summary>
+        /// <param name="color_idx">
+        /// index of the requested color, starting from 0
+        /// </param>
+        /// <param name="rgbp">
+        /// if not NULL, will point to a 3-elements array with the color value in
+        /// RGB
+        /// </param>
+        /// <returns>
+        /// the color name string or NULL if color_idx is not in the array
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -134,35 +169,44 @@ namespace FFmpeg
         /// Parse timestr and return in *time a corresponding number of
         /// microseconds.
         /// 
-        /// @param timeval puts here the number of microseconds corresponding
-        /// to the string in timestr. If the string represents a duration, it
-        /// is the number of microseconds contained in the time interval.  If
-        /// the string is a date, is the number of microseconds since 1st of
-        /// January, 1970 up to the time of the parsed date.  If timestr cannot
-        /// be successfully parsed, set *time to INT64_MIN.
         /// 
-        /// @param timestr a string representing a date or a duration.
-        /// - If a date the syntax is:
-        /// @code
-        /// [{YYYY-MM-DD|YYYYMMDD}[T|t|
-        /// ]]{{HH:MM:SS[.m...]]]}|{HHMMSS[.m...]]]}}[Z]
-        /// now
-        /// @endcode
+        /// 
         /// If the value is "now" it takes the current time.
         /// Time is local time unless Z is appended, in which case it is
         /// interpreted as UTC.
         /// If the year-month-day part is not specified it takes the current
         /// year-month-day.
         /// - If a duration the syntax is:
-        /// @code
+        /// </summary>
+        /// <param name="timeval">
+        /// puts here the number of microseconds corresponding
+        /// to the string in timestr. If the string represents a duration, it
+        /// is the number of microseconds contained in the time interval.  If
+        /// the string is a date, is the number of microseconds since 1st of
+        /// January, 1970 up to the time of the parsed date.  If timestr cannot
+        /// be successfully parsed, set *time to INT64_MIN.
+        /// </param>
+        /// <param name="timestr">
+        /// a string representing a date or a duration.
+        /// - If a date the syntax is:
+        /// </param>
+        /// <code>
+        /// [{YYYY-MM-DD|YYYYMMDD}[T|t|
+        /// ]]{{HH:MM:SS[.m...]]]}|{HHMMSS[.m...]]]}}[Z]
+        /// now
+        /// </code>
+        /// <code>
         /// [-][HH:]MM:SS[.m...]
         /// [-]S+[.m...]
-        /// @endcode
-        /// @param duration flag which tells how to interpret timestr, if not
+        /// </code>
+        /// <param name="duration">
+        /// flag which tells how to interpret timestr, if not
         /// zero timestr is interpreted as a duration, otherwise as a date
-        /// @return >= 0 in case of success, a negative value corresponding to an
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
         /// AVERROR code otherwise
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

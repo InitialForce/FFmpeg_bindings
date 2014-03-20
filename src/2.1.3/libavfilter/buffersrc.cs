@@ -26,13 +26,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Add buffer data in picref to buffer_src.
-        /// 
-        /// @param buffer_src  pointer to a buffer source context
-        /// @param picref      a buffer reference, or NULL to mark EOF
-        /// @param flags       a combination of AV_BUFFERSRC_FLAG_
-        /// @return            >= 0 in case of success, a negative AVERROR code
-        /// in case of failure
         /// </summary>
+        /// <param name="buffer_src">
+        /// pointer to a buffer source context
+        /// </param>
+        /// <param name="picref">
+        /// a buffer reference, or NULL to mark EOF
+        /// </param>
+        /// <param name="flags">
+        /// a combination of AV_BUFFERSRC_FLAG_
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code
+        /// in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -54,15 +61,15 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a buffer to the filtergraph s.
-        /// 
-        /// @param buf buffer containing frame data to be passed down the
-        /// filtergraph.
+        /// </summary>
+        /// <param name="buf">
+        /// buffer containing frame data to be passed down the filtergraph.
         /// This function will take ownership of buf, the user must not free it.
         /// A NULL buf signals EOF -- i.e. no more frames will be sent to this
         /// filter.
         /// 
         /// @deprecated use av_buffersrc_write_frame() or av_buffersrc_add_frame()
-        /// </summary>
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -72,18 +79,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a frame to the buffer source.
-        /// 
-        /// @param s an instance of the buffersrc filter.
-        /// @param frame frame to be added. If the frame is reference counted, this
+        /// </summary>
+        /// <param name="s">
+        /// an instance of the buffersrc filter.
+        /// </param>
+        /// <param name="frame">
+        /// frame to be added. If the frame is reference counted, this
         /// function will make a new reference to it. Otherwise the frame data will
         /// be
         /// copied.
-        /// 
-        /// @return 0 on success, a negative AVERROR on error
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error
         /// 
         /// This function is equivalent to av_buffersrc_add_frame_flags() with the
         /// AV_BUFFERSRC_FLAG_KEEP_REF flag.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -92,18 +103,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a frame to the buffer source.
-        /// 
-        /// @param s an instance of the buffersrc filter.
-        /// @param frame frame to be added. If the frame is reference counted, this
+        /// </summary>
+        /// <param name="s">
+        /// an instance of the buffersrc filter.
+        /// </param>
+        /// <param name="frame">
+        /// frame to be added. If the frame is reference counted, this
         /// function will take ownership of the reference(s) and reset the frame.
         /// Otherwise the frame data will be copied. If this function returns an
         /// error,
         /// the input frame is not touched.
-        /// 
-        /// @return 0 on success, a negative AVERROR on error.
-        /// 
-        /// @note the difference between this function and
-        /// av_buffersrc_write_frame() is
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error.
+        /// </returns>
+        /// <remark>
+        /// the difference between this function and av_buffersrc_write_frame() is
         /// that av_buffersrc_write_frame() creates a new reference to the input
         /// frame,
         /// while this function takes ownership of the reference passed to it.
@@ -111,7 +126,7 @@ namespace FFmpeg
         /// This function is equivalent to av_buffersrc_add_frame_flags() without
         /// the
         /// AV_BUFFERSRC_FLAG_KEEP_REF flag.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -127,13 +142,20 @@ namespace FFmpeg
         /// using the flags.
         /// 
         /// If this function returns an error, the input frame is not touched.
-        /// 
-        /// @param buffer_src  pointer to a buffer source context
-        /// @param frame       a frame, or NULL to mark EOF
-        /// @param flags       a combination of AV_BUFFERSRC_FLAG_
-        /// @return            >= 0 in case of success, a negative AVERROR code
-        /// in case of failure
         /// </summary>
+        /// <param name="buffer_src">
+        /// pointer to a buffer source context
+        /// </param>
+        /// <param name="frame">
+        /// a frame, or NULL to mark EOF
+        /// </param>
+        /// <param name="flags">
+        /// a combination of AV_BUFFERSRC_FLAG_
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code
+        /// in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

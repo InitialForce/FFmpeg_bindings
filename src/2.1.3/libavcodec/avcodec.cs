@@ -1613,7 +1613,6 @@ namespace FFmpeg
         /// The side data is always allocated with av_malloc() and is freed in
         /// av_free_packet().
         /// </summary>
-        [System.ObsoleteAttribute()]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVPacket
         {
@@ -1726,7 +1725,6 @@ namespace FFmpeg
         /// applications.
         /// sizeof(AVCodecContext) must not be used outside libav*.
         /// </summary>
-        [System.ObsoleteAttribute("Deprecated in favor of request_channel_layout.")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVCodecContext
         {
@@ -1997,24 +1995,35 @@ namespace FFmpeg
             /// or mark state.
             /// - encoding: unused
             /// - decoding: Set by user.
-            /// @param height the height of the slice
-            /// @param y the y position of the slice
-            /// @param type 1->top field, 2->bottom field, 3->frame
-            /// @param offset offset into the AVFrame.data from which the slice should
-            /// be read
             /// </summary>
+            /// <param name="height">
+            /// the height of the slice
+            /// </param>
+            /// <param name="y">
+            /// the y position of the slice
+            /// </param>
+            /// <param name="type">
+            /// 1->top field, 2->bottom field, 3->frame
+            /// </param>
+            /// <param name="offset">
+            /// offset into the AVFrame.data from which the slice should be read
+            /// </param>
             public global::System.IntPtr draw_horiz_band;
 
             /// <summary>
             /// callback to negotiate the pixelFormat
-            /// @param fmt is the list of formats which are supported by the codec,
+            /// </summary>
+            /// <param name="fmt">
+            /// is the list of formats which are supported by the codec,
             /// it is terminated by -1 as 0 is a valid format, the formats are ordered
             /// by quality.
             /// The first is always the native one.
-            /// @return the chosen format
+            /// </param>
+            /// <returns>
+            /// the chosen format
             /// - encoding: unused
             /// - decoding: Set by user, if not set the native format will be chosen.
-            /// </summary>
+            /// </returns>
             public global::System.IntPtr get_format;
 
             /// <summary>
@@ -2509,10 +2518,11 @@ namespace FFmpeg
             /// 
             /// - decoding: total number of frames returned from the decoder so far.
             /// - encoding: total number of frames passed to the encoder so far.
-            /// 
-            /// @note the counter is not incremented if encoding/decoding resulted in
-            /// an error.
             /// </summary>
+            /// <remark>
+            /// the counter is not incremented if encoding/decoding resulted in
+            /// an error.
+            /// </remark>
             public int frame_number;
 
             /// <summary>
@@ -3189,10 +3199,12 @@ namespace FFmpeg
             /// It will return only after finishing all tasks.
             /// The user may replace this with some multithreaded implementation,
             /// the default implementation will execute the parts serially.
-            /// @param count the number of things to execute
+            /// </summary>
+            /// <param name="count">
+            /// the number of things to execute
             /// - encoding: Set by libavcodec, user can override.
             /// - decoding: Set by libavcodec, user can override.
-            /// </summary>
+            /// </param>
             public global::System.IntPtr execute;
 
             /// <summary>
@@ -3202,23 +3214,34 @@ namespace FFmpeg
             /// the default implementation will execute the parts serially.
             /// Also see avcodec_thread_init and e.g. the --enable-pthread configure
             /// option.
-            /// @param c context passed also to func
-            /// @param count the number of things to execute
-            /// @param arg2 argument passed unchanged to func
-            /// @param ret return values of executed functions, must have space for
-            /// "count" values. May be NULL.
-            /// @param func function that will be called count times, with jobnr from 0
-            /// to count-1.
+            /// </summary>
+            /// <param name="c">
+            /// context passed also to func
+            /// </param>
+            /// <param name="count">
+            /// the number of things to execute
+            /// </param>
+            /// <param name="arg2">
+            /// argument passed unchanged to func
+            /// </param>
+            /// <param name="ret">
+            /// return values of executed functions, must have space for "count"
+            /// values. May be NULL.
+            /// </param>
+            /// <param name="func">
+            /// function that will be called count times, with jobnr from 0 to count-1.
             /// threadnr will be in the range 0 to c->thread_count-1 < MAX_THREADS and
             /// so that no
             /// two instances of func executing at the same time will have the same
             /// threadnr.
-            /// @return always 0 currently, but code should handle a future improvement
-            /// where when any call to func
+            /// </param>
+            /// <returns>
+            /// always 0 currently, but code should handle a future improvement where
+            /// when any call to func
             /// returns < 0 no further calls to func may be done and < 0 is returned.
             /// - encoding: Set by libavcodec, user can override.
             /// - decoding: Set by libavcodec, user can override.
-            /// </summary>
+            /// </returns>
             public global::System.IntPtr execute2;
 
             /// <summary>
@@ -3491,7 +3514,6 @@ namespace FFmpeg
             /// may not be used outside of libavcodec and can be changed and
             /// removed at will.
             /// New public fields should be added right above.
-            /// 
             /// </summary>
             public int priv_data_size;
 
@@ -3537,16 +3559,23 @@ namespace FFmpeg
 
             /// <summary>
             /// Encode data to an AVPacket.
-            /// 
-            /// @param      avctx          codec context
-            /// @param      avpkt          output AVPacket (may contain a user-provided
-            /// buffer)
-            /// @param[in]  frame          AVFrame containing the raw data to be
-            /// encoded
-            /// @param[out] got_packet_ptr encoder sets to 0 or 1 to indicate that a
-            /// non-empty packet was returned in avpkt.
-            /// @return 0 on success, negative error code on failure
             /// </summary>
+            /// <param name="avctx">
+            /// codec context
+            /// </param>
+            /// <param name="avpkt">
+            /// output AVPacket (may contain a user-provided buffer)
+            /// </param>
+            /// <param name="[in]">
+            /// frame          AVFrame containing the raw data to be encoded
+            /// </param>
+            /// <param name="[out]">
+            /// got_packet_ptr encoder sets to 0 or 1 to indicate that a
+            /// non-empty packet was returned in avpkt.
+            /// </param>
+            /// <returns>
+            /// 0 on success, negative error code on failure
+            /// </returns>
             public global::System.IntPtr encode2;
 
             public global::System.IntPtr decode;
@@ -3610,12 +3639,19 @@ namespace FFmpeg
             /// 
             /// Note that buf can be NULL along with buf_size set to 0.
             /// Otherwise, this means the whole frame is available at this point.
-            /// 
-            /// @param avctx the codec context
-            /// @param buf the frame data buffer base
-            /// @param buf_size the size of the frame in bytes
-            /// @return zero if successful, a negative value otherwise
             /// </summary>
+            /// <param name="avctx">
+            /// the codec context
+            /// </param>
+            /// <param name="buf">
+            /// the frame data buffer base
+            /// </param>
+            /// <param name="buf_size">
+            /// the size of the frame in bytes
+            /// </param>
+            /// <returns>
+            /// zero if successful, a negative value otherwise
+            /// </returns>
             public global::System.IntPtr start_frame;
 
             /// <summary>
@@ -3623,12 +3659,19 @@ namespace FFmpeg
             /// 
             /// Meaningful slice information (codec specific) is guaranteed to
             /// be parsed at this point. This function is mandatory.
-            /// 
-            /// @param avctx the codec context
-            /// @param buf the slice data buffer base
-            /// @param buf_size the size of the slice in bytes
-            /// @return zero if successful, a negative value otherwise
             /// </summary>
+            /// <param name="avctx">
+            /// the codec context
+            /// </param>
+            /// <param name="buf">
+            /// the slice data buffer base
+            /// </param>
+            /// <param name="buf_size">
+            /// the size of the slice in bytes
+            /// </param>
+            /// <returns>
+            /// zero if successful, a negative value otherwise
+            /// </returns>
             public global::System.IntPtr decode_slice;
 
             /// <summary>
@@ -3636,10 +3679,13 @@ namespace FFmpeg
             /// 
             /// The whole picture is parsed at this point and can now be sent
             /// to the hardware accelerator. This function is mandatory.
-            /// 
-            /// @param avctx the codec context
-            /// @return zero if successful, a negative value otherwise
             /// </summary>
+            /// <param name="avctx">
+            /// the codec context
+            /// </param>
+            /// <returns>
+            /// zero if successful, a negative value otherwise
+            /// </returns>
             public global::System.IntPtr end_frame;
 
             /// <summary>
@@ -4093,18 +4139,19 @@ namespace FFmpeg
         /// resulting struct can be deallocated by calling avcodec_close() on it
         /// followed
         /// by av_free().
-        /// 
-        /// @param codec if non-NULL, allocate private data and initialize defaults
+        /// </summary>
+        /// <param name="codec">
+        /// if non-NULL, allocate private data and initialize defaults
         /// for the given codec. It is illegal to then call avcodec_open2()
         /// with a different codec.
         /// If NULL, then the codec-specific defaults won't be initialized,
         /// which may result in suboptimal default settings (this is
         /// important mainly for encoders, e.g. libx264).
-        /// 
-        /// @return An AVCodecContext filled with default values or NULL on
-        /// failure.
+        /// </param>
+        /// <returns>
+        /// An AVCodecContext filled with default values or NULL on failure.
         /// @see avcodec_get_context_defaults
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4168,12 +4215,17 @@ namespace FFmpeg
         /// AVCodecContext. The resulting destination codec context will be
         /// unopened, i.e. you are required to call avcodec_open2() before you
         /// can use this AVCodecContext to decode/encode video/audio data.
-        /// 
-        /// @param dest target codec context, should be initialized with
-        /// avcodec_alloc_context3(NULL), but otherwise uninitialized
-        /// @param src source codec context
-        /// @return AVERROR() on error (e.g. memory allocation error), 0 on success
         /// </summary>
+        /// <param name="dest">
+        /// target codec context, should be initialized with
+        /// avcodec_alloc_context3(NULL), but otherwise uninitialized
+        /// </param>
+        /// <param name="src">
+        /// source codec context
+        /// </param>
+        /// <returns>
+        /// AVERROR() on error (e.g. memory allocation error), 0 on success
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4184,10 +4236,11 @@ namespace FFmpeg
         /// Allocate an AVFrame and set its fields to default values.  The
         /// resulting
         /// struct must be freed using avcodec_free_frame().
-        /// 
-        /// @return An AVFrame filled with default values or NULL on failure.
-        /// @see avcodec_get_frame_defaults
         /// </summary>
+        /// <returns>
+        /// An AVFrame filled with default values or NULL on failure.
+        /// @see avcodec_get_frame_defaults
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4196,10 +4249,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Set the fields of the given AVFrame to default values.
-        /// 
-        /// @param frame The AVFrame of which the fields should be set to default
-        /// values.
         /// </summary>
+        /// <param name="frame">
+        /// The AVFrame of which the fields should be set to default values.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4209,13 +4262,14 @@ namespace FFmpeg
         /// <summary>
         /// Free the frame and any dynamically allocated objects in it,
         /// e.g. extended_data.
-        /// 
-        /// @param frame frame to be freed. The pointer will be set to NULL.
+        /// </summary>
+        /// <param name="frame">
+        /// frame to be freed. The pointer will be set to NULL.
         /// 
         /// @warning this function does NOT free the data buffers themselves
         /// (it does not know how, since they might have been allocated with
         /// a custom get_buffer()).
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4225,13 +4279,14 @@ namespace FFmpeg
         /// <summary>
         /// Free the frame and any dynamically allocated objects in it,
         /// e.g. extended_data.
-        /// 
-        /// @param frame frame to be freed. The pointer will be set to NULL.
+        /// </summary>
+        /// <param name="frame">
+        /// frame to be freed. The pointer will be set to NULL.
         /// 
         /// @warning this function does NOT free the data buffers themselves
         /// (it does not know how, since they might have been allocated with
         /// a custom get_buffer()).
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4250,8 +4305,8 @@ namespace FFmpeg
         /// retrieving a codec.
         /// 
         /// @warning This function is not thread safe!
-        /// 
-        /// @code
+        /// </summary>
+        /// <code>
         /// avcodec_register_all();
         /// av_dict_set(&opts, "b", "2.5M", 0);
         /// codec = avcodec_find_decoder(AV_CODEC_ID_H264);
@@ -4262,24 +4317,27 @@ namespace FFmpeg
         /// 
         /// if (avcodec_open2(context, codec, opts) < 0)
         /// exit(1);
-        /// @endcode
-        /// 
-        /// @param avctx The context to initialize.
-        /// @param codec The codec to open this context for. If a non-NULL codec
-        /// has been
+        /// </code>
+        /// <param name="avctx">
+        /// The context to initialize.
+        /// </param>
+        /// <param name="codec">
+        /// The codec to open this context for. If a non-NULL codec has been
         /// previously passed to avcodec_alloc_context3() or
         /// avcodec_get_context_defaults3() for this context, then this
         /// parameter MUST be either NULL or equal to the previously passed
         /// codec.
-        /// @param options A dictionary filled with AVCodecContext and
-        /// codec-private options.
+        /// </param>
+        /// <param name="options">
+        /// A dictionary filled with AVCodecContext and codec-private options.
         /// On return this object will be filled with options that were not found.
-        /// 
-        /// @return zero on success, a negative value on error
+        /// </param>
+        /// <returns>
+        /// zero on success, a negative value on error
         /// @see avcodec_alloc_context3(), avcodec_find_decoder(),
         /// avcodec_find_encoder(),
         /// av_dict_set(), av_opt_find().
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4298,8 +4356,8 @@ namespace FFmpeg
         /// retrieving a codec.
         /// 
         /// @warning This function is not thread safe!
-        /// 
-        /// @code
+        /// </summary>
+        /// <code>
         /// avcodec_register_all();
         /// av_dict_set(&opts, "b", "2.5M", 0);
         /// codec = avcodec_find_decoder(AV_CODEC_ID_H264);
@@ -4310,24 +4368,27 @@ namespace FFmpeg
         /// 
         /// if (avcodec_open2(context, codec, opts) < 0)
         /// exit(1);
-        /// @endcode
-        /// 
-        /// @param avctx The context to initialize.
-        /// @param codec The codec to open this context for. If a non-NULL codec
-        /// has been
+        /// </code>
+        /// <param name="avctx">
+        /// The context to initialize.
+        /// </param>
+        /// <param name="codec">
+        /// The codec to open this context for. If a non-NULL codec has been
         /// previously passed to avcodec_alloc_context3() or
         /// avcodec_get_context_defaults3() for this context, then this
         /// parameter MUST be either NULL or equal to the previously passed
         /// codec.
-        /// @param options A dictionary filled with AVCodecContext and
-        /// codec-private options.
+        /// </param>
+        /// <param name="options">
+        /// A dictionary filled with AVCodecContext and codec-private options.
         /// On return this object will be filled with options that were not found.
-        /// 
-        /// @return zero on success, a negative value on error
+        /// </param>
+        /// <returns>
+        /// zero on success, a negative value on error
         /// @see avcodec_alloc_context3(), avcodec_find_decoder(),
         /// avcodec_find_encoder(),
         /// av_dict_set(), av_opt_find().
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4353,9 +4414,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Free all allocated data in the given subtitle struct.
-        /// 
-        /// @param sub AVSubtitle to free.
         /// </summary>
+        /// <param name="sub">
+        /// AVSubtitle to free.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4378,9 +4440,10 @@ namespace FFmpeg
         /// 
         /// Note, this does not touch the data and size members, which have to be
         /// initialized separately.
-        /// 
-        /// @param pkt packet
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4390,11 +4453,16 @@ namespace FFmpeg
         /// <summary>
         /// Allocate the payload of a packet and initialize its fields with
         /// default values.
-        /// 
-        /// @param pkt packet
-        /// @param size wanted payload size
-        /// @return 0 if OK, AVERROR_xxx otherwise
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="size">
+        /// wanted payload size
+        /// </param>
+        /// <returns>
+        /// 0 if OK, AVERROR_xxx otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4403,10 +4471,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Reduce packet size, correctly zeroing padding
-        /// 
-        /// @param pkt packet
-        /// @param size new size
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="size">
+        /// new size
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4415,11 +4486,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Increase packet size, correctly zeroing padding
-        /// 
-        /// @param pkt packet
-        /// @param grow_by number of bytes by which to increase the size of the
-        /// packet
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="grow_by">
+        /// number of bytes by which to increase the size of the packet
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4428,21 +4501,24 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize a reference-counted packet from av_malloc()ed data.
-        /// 
-        /// @param pkt packet to be initialized. This function will set the data,
-        /// size,
+        /// </summary>
+        /// <param name="pkt">
+        /// packet to be initialized. This function will set the data, size,
         /// buf and destruct fields, all others are left untouched.
-        /// @param data Data allocated by av_malloc() to be used as packet data. If
-        /// this
+        /// </param>
+        /// <param name="data">
+        /// Data allocated by av_malloc() to be used as packet data. If this
         /// function returns successfully, the data is owned by the underlying
         /// AVBuffer.
         /// The caller may not access the data through other means.
-        /// @param size size of data in bytes, without the padding. I.e. the full
-        /// buffer
+        /// </param>
+        /// <param name="size">
+        /// size of data in bytes, without the padding. I.e. the full buffer
         /// size is assumed to be size + FF_INPUT_BUFFER_PADDING_SIZE.
-        /// 
-        /// @return 0 on success, a negative AVERROR on error
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4457,9 +4533,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Copy packet, including contents
-        /// 
-        /// @return 0 on success, negative AVERROR on fail
         /// </summary>
+        /// <returns>
+        /// 0 on success, negative AVERROR on fail
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4468,9 +4545,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Copy packet side data
-        /// 
-        /// @return 0 on success, negative AVERROR on fail
         /// </summary>
+        /// <returns>
+        /// 0 on success, negative AVERROR on fail
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4479,9 +4557,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Free a packet.
-        /// 
-        /// @param pkt packet to free
         /// </summary>
+        /// <param name="pkt">
+        /// packet to free
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4490,12 +4569,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate new information of a packet.
-        /// 
-        /// @param pkt packet
-        /// @param type side information type
-        /// @param size side information size
-        /// @return pointer to fresh allocated data or NULL otherwise
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="type">
+        /// side information type
+        /// </param>
+        /// <param name="size">
+        /// side information size
+        /// </param>
+        /// <returns>
+        /// pointer to fresh allocated data or NULL otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4504,12 +4590,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Shrink the already allocated side data buffer
-        /// 
-        /// @param pkt packet
-        /// @param type side information type
-        /// @param size new side information size
-        /// @return 0 on success, < 0 on failure
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="type">
+        /// side information type
+        /// </param>
+        /// <param name="size">
+        /// new side information size
+        /// </param>
+        /// <returns>
+        /// 0 on success, < 0 on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4518,12 +4611,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Get side information from packet.
-        /// 
-        /// @param pkt packet
-        /// @param type desired side information type
-        /// @param size pointer for side information size to store (optional)
-        /// @return pointer to data if present or NULL otherwise
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="type">
+        /// desired side information type
+        /// </param>
+        /// <param name="size">
+        /// pointer for side information size to store (optional)
+        /// </param>
+        /// <returns>
+        /// pointer to data if present or NULL otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4545,9 +4645,10 @@ namespace FFmpeg
         /// <summary>
         /// Convenience function to free all the side data stored.
         /// All the other fields stay untouched.
-        /// 
-        /// @param pkt packet
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4564,12 +4665,16 @@ namespace FFmpeg
         /// All the other fields are copied from src.
         /// 
         /// @see av_packet_unref
-        /// 
-        /// @param dst Destination packet
-        /// @param src Source packet
-        /// 
-        /// @return 0 on success, a negative AVERROR on error.
         /// </summary>
+        /// <param name="dst">
+        /// Destination packet
+        /// </param>
+        /// <param name="src">
+        /// Source packet
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4581,9 +4686,10 @@ namespace FFmpeg
         /// 
         /// Unreference the buffer referenced by the packet and reset the
         /// remaining packet fields to their default values.
-        /// 
-        /// @param pkt The packet to be unreferenced.
         /// </summary>
+        /// <param name="pkt">
+        /// The packet to be unreferenced.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4594,10 +4700,13 @@ namespace FFmpeg
         /// Move every field in src to dst and reset src.
         /// 
         /// @see av_packet_unref
-        /// 
-        /// @param src Source packet, will be reset
-        /// @param dst Destination packet
         /// </summary>
+        /// <param name="src">
+        /// Source packet, will be reset
+        /// </param>
+        /// <param name="dst">
+        /// Destination packet
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4609,13 +4718,16 @@ namespace FFmpeg
         /// 
         /// Properties for the purpose of this function are all the fields
         /// beside those related to the packet data (buf, data, size)
-        /// 
-        /// @param dst Destination packet
-        /// @param src Source packet
-        /// 
-        /// @return 0 on success AVERROR on failure.
-        /// 
         /// </summary>
+        /// <param name="dst">
+        /// Destination packet
+        /// </param>
+        /// <param name="src">
+        /// Source packet
+        /// </param>
+        /// <returns>
+        /// 0 on success AVERROR on failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4624,10 +4736,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Find a registered decoder with a matching codec ID.
-        /// 
-        /// @param id AVCodecID of the requested decoder
-        /// @return A decoder if one was found, NULL otherwise.
         /// </summary>
+        /// <param name="id">
+        /// AVCodecID of the requested decoder
+        /// </param>
+        /// <returns>
+        /// A decoder if one was found, NULL otherwise.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4636,10 +4751,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Find a registered decoder with the specified name.
-        /// 
-        /// @param name name of the requested decoder
-        /// @return A decoder if one was found, NULL otherwise.
         /// </summary>
+        /// <param name="name">
+        /// name of the requested decoder
+        /// </param>
+        /// <returns>
+        /// A decoder if one was found, NULL otherwise.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4685,9 +4803,10 @@ namespace FFmpeg
         /// must
         /// provide around the edge of the image for codecs which do not have the
         /// CODEC_FLAG_EMU_EDGE flag.
-        /// 
-        /// @return Required padding in pixels.
         /// </summary>
+        /// <returns>
+        /// Required padding in pixels.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4734,10 +4853,13 @@ namespace FFmpeg
         /// system
         /// with luma (0,0) representing the origin and luma(1,1) representing
         /// 256,256
-        /// 
-        /// @param xpos  horizontal chroma sample position
-        /// @param ypos  vertical   chroma sample position
         /// </summary>
+        /// <param name="xpos">
+        /// horizontal chroma sample position
+        /// </param>
+        /// <param name="ypos">
+        /// vertical   chroma sample position
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4751,10 +4873,13 @@ namespace FFmpeg
         /// system
         /// with luma (0,0) representing the origin and luma(1,1) representing
         /// 256,256
-        /// 
-        /// @param xpos  horizontal chroma sample position
-        /// @param ypos  vertical   chroma sample position
         /// </summary>
+        /// <param name="xpos">
+        /// horizontal chroma sample position
+        /// </param>
+        /// <param name="ypos">
+        /// vertical   chroma sample position
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4794,9 +4919,9 @@ namespace FFmpeg
         /// avcodec_decode_audio3().  Doing so will override it with
         /// avcodec_default_get_buffer.  Use avcodec_decode_audio4() instead,
         /// which does allow the application to provide a custom get_buffer().
-        /// 
-        /// @note You might have to align the input buffer avpkt->data and output
-        /// buffer
+        /// </summary>
+        /// <remark>
+        /// You might have to align the input buffer avpkt->data and output buffer
         /// samples. The alignment requirements depend on the CPU: On some CPUs it
         /// isn't
         /// necessary at all, on others it won't work at all if not aligned and on
@@ -4806,25 +4931,34 @@ namespace FFmpeg
         /// In practice, avpkt->data should have 4 byte alignment at minimum and
         /// samples should be 16 byte aligned unless the CPU doesn't need it
         /// (AltiVec and SSE do).
-        /// 
-        /// @note Codecs which have the CODEC_CAP_DELAY capability set have a delay
+        /// </remark>
+        /// <remark>
+        /// Codecs which have the CODEC_CAP_DELAY capability set have a delay
         /// between input and output, these need to be fed with avpkt->data=NULL,
         /// avpkt->size=0 at the end to return the remaining frames.
-        /// 
-        /// @param avctx the codec context
-        /// @param[out] samples the output buffer, sample type in avctx->sample_fmt
+        /// </remark>
+        /// <param name="avctx">
+        /// the codec context
+        /// </param>
+        /// <param name="[out]">
+        /// samples the output buffer, sample type in avctx->sample_fmt
         /// If the sample format is planar, each channel plane will
         /// be the same size, with no padding between channels.
-        /// @param[in,out] frame_size_ptr the output buffer size in bytes
-        /// @param[in] avpkt The input AVPacket containing the input buffer.
+        /// </param>
+        /// <param name="[in,out]">
+        /// frame_size_ptr the output buffer size in bytes
+        /// </param>
+        /// <param name="[in]">
+        /// avpkt The input AVPacket containing the input buffer.
         /// You can create such packet with av_init_packet() and by then setting
         /// data and size, some decoders might in addition need other fields.
         /// All decoders are designed to use the least fields possible though.
-        /// @return On error a negative value is returned, otherwise the number of
-        /// bytes
+        /// </param>
+        /// <returns>
+        /// On error a negative value is returned, otherwise the number of bytes
         /// used or zero if no frame data was decompressed (used) from the input
         /// AVPacket.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -4862,9 +4996,12 @@ namespace FFmpeg
         /// FF_INPUT_BUFFER_PADDING_SIZE
         /// larger than the actual read bytes because some optimized bitstream
         /// readers read 32 or 64 bits at once and could read over the end.
-        /// 
-        /// @param      avctx the codec context
-        /// @param[out] frame The AVFrame in which to store decoded audio samples.
+        /// </summary>
+        /// <param name="avctx">
+        /// the codec context
+        /// </param>
+        /// <param name="[out]">
+        /// frame The AVFrame in which to store decoded audio samples.
         /// The decoder will allocate a buffer for the decoded frame by
         /// calling the AVCodecContext.get_buffer2() callback.
         /// When AVCodecContext.refcounted_frames is set to 1, the frame is
@@ -4876,19 +5013,24 @@ namespace FFmpeg
         /// reference belongs to the decoder and is valid only until the
         /// next call to this function or until closing or flushing the
         /// decoder. The caller may not write to it.
-        /// @param[out] got_frame_ptr Zero if no frame could be decoded, otherwise
-        /// it is
+        /// </param>
+        /// <param name="[out]">
+        /// got_frame_ptr Zero if no frame could be decoded, otherwise it is
         /// non-zero. Note that this field being set to zero
         /// does not mean that an error has occurred. For
         /// decoders with CODEC_CAP_DELAY set, no given decode
         /// call is guaranteed to produce a frame.
-        /// @param[in]  avpkt The input AVPacket containing the input buffer.
+        /// </param>
+        /// <param name="[in]">
+        /// avpkt The input AVPacket containing the input buffer.
         /// At least avpkt->data and avpkt->size should be set. Some
         /// decoders might also require additional fields to be set.
-        /// @return A negative error code is returned if an error occurred during
+        /// </param>
+        /// <returns>
+        /// A negative error code is returned if an error occurred during
         /// decoding, otherwise the number of bytes consumed from the input
         /// AVPacket is returned.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4910,14 +5052,17 @@ namespace FFmpeg
         /// @warning The end of the input buffer buf should be set to 0 to ensure
         /// that
         /// no overreading happens for damaged MPEG streams.
-        /// 
-        /// @note Codecs which have the CODEC_CAP_DELAY capability set have a delay
+        /// </summary>
+        /// <remark>
+        /// Codecs which have the CODEC_CAP_DELAY capability set have a delay
         /// between input and output, these need to be fed with avpkt->data=NULL,
         /// avpkt->size=0 at the end to return the remaining frames.
-        /// 
-        /// @param avctx the codec context
-        /// @param[out] picture The AVFrame in which the decoded video frame will
-        /// be stored.
+        /// </remark>
+        /// <param name="avctx">
+        /// the codec context
+        /// </param>
+        /// <param name="[out]">
+        /// picture The AVFrame in which the decoded video frame will be stored.
         /// Use av_frame_alloc() to get an AVFrame. The codec will
         /// allocate memory for the actual bitmap by calling the
         /// AVCodecContext.get_buffer2() callback.
@@ -4930,18 +5075,22 @@ namespace FFmpeg
         /// reference belongs to the decoder and is valid only until the
         /// next call to this function or until closing or flushing the
         /// decoder. The caller may not write to it.
-        /// 
-        /// @param[in] avpkt The input AVPacket containing the input buffer.
+        /// </param>
+        /// <param name="[in]">
+        /// avpkt The input AVPacket containing the input buffer.
         /// You can create such packet with av_init_packet() and by then setting
         /// data and size, some decoders might in addition need other fields like
         /// flags&AV_PKT_FLAG_KEY. All decoders are designed to use the least
         /// fields possible.
-        /// @param[in,out] got_picture_ptr Zero if no frame could be decompressed,
-        /// otherwise, it is nonzero.
-        /// @return On error a negative value is returned, otherwise the number of
-        /// bytes
+        /// </param>
+        /// <param name="[in,out]">
+        /// got_picture_ptr Zero if no frame could be decompressed, otherwise, it
+        /// is nonzero.
+        /// </param>
+        /// <returns>
+        /// On error a negative value is returned, otherwise the number of bytes
         /// used or zero if no frame could be decompressed.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -4973,15 +5122,22 @@ namespace FFmpeg
         /// returning subtitles. It is safe to flush even those decoders that are
         /// not
         /// marked with CODEC_CAP_DELAY, then no subtitles will be returned.
-        /// 
-        /// @param avctx the codec context
-        /// @param[out] sub The AVSubtitle in which the decoded subtitle will be
-        /// stored, must be
-        /// freed with avsubtitle_free if *got_sub_ptr is set.
-        /// @param[in,out] got_sub_ptr Zero if no subtitle could be decompressed,
-        /// otherwise, it is nonzero.
-        /// @param[in] avpkt The input AVPacket containing the input buffer.
         /// </summary>
+        /// <param name="avctx">
+        /// the codec context
+        /// </param>
+        /// <param name="[out]">
+        /// sub The AVSubtitle in which the decoded subtitle will be stored, must
+        /// be
+        /// freed with avsubtitle_free if *got_sub_ptr is set.
+        /// </param>
+        /// <param name="[in,out]">
+        /// got_sub_ptr Zero if no subtitle could be decompressed, otherwise, it is
+        /// nonzero.
+        /// </param>
+        /// <param name="[in]">
+        /// avpkt The input AVPacket containing the input buffer.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5008,23 +5164,41 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse a packet.
-        /// 
-        /// @param s             parser context.
-        /// @param avctx         codec context.
-        /// @param poutbuf       set to pointer to parsed buffer or NULL if not yet
-        /// finished.
-        /// @param poutbuf_size  set to size of parsed buffer or zero if not yet
-        /// finished.
-        /// @param buf           input buffer.
-        /// @param buf_size      input length, to signal EOF, this should be 0 (so
-        /// that the last frame can be output).
-        /// @param pts           input presentation timestamp.
-        /// @param dts           input decoding timestamp.
-        /// @param pos           input byte position in stream.
-        /// @return the number of bytes of the input bitstream used.
+        /// </summary>
+        /// <param name="s">
+        /// parser context.
+        /// </param>
+        /// <param name="avctx">
+        /// codec context.
+        /// </param>
+        /// <param name="poutbuf">
+        /// set to pointer to parsed buffer or NULL if not yet finished.
+        /// </param>
+        /// <param name="poutbuf_size">
+        /// set to size of parsed buffer or zero if not yet finished.
+        /// </param>
+        /// <param name="buf">
+        /// input buffer.
+        /// </param>
+        /// <param name="buf_size">
+        /// input length, to signal EOF, this should be 0 (so that the last frame
+        /// can be output).
+        /// </param>
+        /// <param name="pts">
+        /// input presentation timestamp.
+        /// </param>
+        /// <param name="dts">
+        /// input decoding timestamp.
+        /// </param>
+        /// <param name="pos">
+        /// input byte position in stream.
+        /// </param>
+        /// <returns>
+        /// the number of bytes of the input bitstream used.
         /// 
         /// Example:
-        /// @code
+        /// </returns>
+        /// <code>
         /// while(in_len){
         /// len = av_parser_parse2(myparser, AVCodecContext, &data, &size,
         /// in_data, in_len,
@@ -5035,8 +5209,7 @@ namespace FFmpeg
         /// if(size)
         /// decode_frame(data, size);
         /// }
-        /// @endcode
-        /// </summary>
+        /// </code>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5045,23 +5218,41 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse a packet.
-        /// 
-        /// @param s             parser context.
-        /// @param avctx         codec context.
-        /// @param poutbuf       set to pointer to parsed buffer or NULL if not yet
-        /// finished.
-        /// @param poutbuf_size  set to size of parsed buffer or zero if not yet
-        /// finished.
-        /// @param buf           input buffer.
-        /// @param buf_size      input length, to signal EOF, this should be 0 (so
-        /// that the last frame can be output).
-        /// @param pts           input presentation timestamp.
-        /// @param dts           input decoding timestamp.
-        /// @param pos           input byte position in stream.
-        /// @return the number of bytes of the input bitstream used.
+        /// </summary>
+        /// <param name="s">
+        /// parser context.
+        /// </param>
+        /// <param name="avctx">
+        /// codec context.
+        /// </param>
+        /// <param name="poutbuf">
+        /// set to pointer to parsed buffer or NULL if not yet finished.
+        /// </param>
+        /// <param name="poutbuf_size">
+        /// set to size of parsed buffer or zero if not yet finished.
+        /// </param>
+        /// <param name="buf">
+        /// input buffer.
+        /// </param>
+        /// <param name="buf_size">
+        /// input length, to signal EOF, this should be 0 (so that the last frame
+        /// can be output).
+        /// </param>
+        /// <param name="pts">
+        /// input presentation timestamp.
+        /// </param>
+        /// <param name="dts">
+        /// input decoding timestamp.
+        /// </param>
+        /// <param name="pos">
+        /// input byte position in stream.
+        /// </param>
+        /// <returns>
+        /// the number of bytes of the input bitstream used.
         /// 
         /// Example:
-        /// @code
+        /// </returns>
+        /// <code>
         /// while(in_len){
         /// len = av_parser_parse2(myparser, AVCodecContext, &data, &size,
         /// in_data, in_len,
@@ -5072,8 +5263,7 @@ namespace FFmpeg
         /// if(size)
         /// decode_frame(data, size);
         /// }
-        /// @endcode
-        /// </summary>
+        /// </code>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5081,10 +5271,13 @@ namespace FFmpeg
         public static extern int av_parser_parse2(libavcodec.AVCodecParserContext* s, libavcodec.AVCodecContext* avctx, ref byte* poutbuf, int* poutbuf_size, byte* buf, int buf_size, long pts, long dts, long pos);
 
         /// <summary>
-        /// @return 0 if the output buffer is a subset of the input, 1 if it is
-        /// allocated and must be freed
-        /// @deprecated use AVBitStreamFilter
+        /// 
         /// </summary>
+        /// <returns>
+        /// 0 if the output buffer is a subset of the input, 1 if it is allocated
+        /// and must be freed
+        /// @deprecated use AVBitStreamFilter
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5092,10 +5285,13 @@ namespace FFmpeg
         public static extern int av_parser_change(libavcodec.AVCodecParserContext* s, libavcodec.AVCodecContext* avctx, byte** poutbuf, int* poutbuf_size, byte* buf, int buf_size, int keyframe);
 
         /// <summary>
-        /// @return 0 if the output buffer is a subset of the input, 1 if it is
-        /// allocated and must be freed
-        /// @deprecated use AVBitStreamFilter
+        /// 
         /// </summary>
+        /// <returns>
+        /// 0 if the output buffer is a subset of the input, 1 if it is allocated
+        /// and must be freed
+        /// @deprecated use AVBitStreamFilter
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5110,10 +5306,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Find a registered encoder with a matching codec ID.
-        /// 
-        /// @param id AVCodecID of the requested encoder
-        /// @return An encoder if one was found, NULL otherwise.
         /// </summary>
+        /// <param name="id">
+        /// AVCodecID of the requested encoder
+        /// </param>
+        /// <returns>
+        /// An encoder if one was found, NULL otherwise.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5122,10 +5321,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Find a registered encoder with the specified name.
-        /// 
-        /// @param name name of the requested encoder
-        /// @return An encoder if one was found, NULL otherwise.
         /// </summary>
+        /// <param name="name">
+        /// name of the requested encoder
+        /// </param>
+        /// <returns>
+        /// An encoder if one was found, NULL otherwise.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5136,19 +5338,26 @@ namespace FFmpeg
         /// Encode an audio frame from samples into buf.
         /// 
         /// @deprecated Use avcodec_encode_audio2 instead.
-        /// 
-        /// @note The output buffer should be at least FF_MIN_BUFFER_SIZE bytes
-        /// large.
+        /// </summary>
+        /// <remark>
+        /// The output buffer should be at least FF_MIN_BUFFER_SIZE bytes large.
         /// However, for codecs with avctx->frame_size equal to 0 (e.g. PCM) the
         /// user
         /// will know how much space is needed because it depends on the value
         /// passed
         /// in buf_size as described below. In that case a lower value can be used.
-        /// 
-        /// @param avctx the codec context
-        /// @param[out] buf the output buffer
-        /// @param[in] buf_size the output buffer size
-        /// @param[in] samples the input buffer containing the samples
+        /// </remark>
+        /// <param name="avctx">
+        /// the codec context
+        /// </param>
+        /// <param name="[out]">
+        /// buf the output buffer
+        /// </param>
+        /// <param name="[in]">
+        /// buf_size the output buffer size
+        /// </param>
+        /// <param name="[in]">
+        /// samples the input buffer containing the samples
         /// The number of samples read from this buffer is frame_size*channels,
         /// both of which are defined in avctx.
         /// For codecs which have avctx->frame_size equal to 0 (e.g. PCM) the
@@ -5159,10 +5368,11 @@ namespace FFmpeg
         /// This also implies that av_get_bits_per_sample() must not return 0 for
         /// these
         /// codecs.
-        /// @return On error a negative value is returned, on success zero or the
-        /// number
+        /// </param>
+        /// <returns>
+        /// On error a negative value is returned, on success zero or the number
         /// of bytes used to encode the data read from the input buffer.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -5179,9 +5389,12 @@ namespace FFmpeg
         /// the most recent frame, as encoders can delay, split, and combine input
         /// frames
         /// internally as needed.
-        /// 
-        /// @param avctx     codec context
-        /// @param avpkt     output AVPacket.
+        /// </summary>
+        /// <param name="avctx">
+        /// codec context
+        /// </param>
+        /// <param name="avpkt">
+        /// output AVPacket.
         /// The user can supply an output buffer by setting
         /// avpkt->data and avpkt->size prior to calling the
         /// function, but if the size of the user-provided data is not
@@ -5195,7 +5408,9 @@ namespace FFmpeg
         /// If this function fails or produces no output, avpkt will be
         /// freed using av_free_packet() (i.e. avpkt->destruct will be
         /// called to free the user supplied buffer).
-        /// @param[in] frame AVFrame containing the raw audio data to be encoded.
+        /// </param>
+        /// <param name="[in]">
+        /// frame AVFrame containing the raw audio data to be encoded.
         /// May be NULL when flushing an encoder that has the
         /// CODEC_CAP_DELAY capability set.
         /// If CODEC_CAP_VARIABLE_FRAME_SIZE is set, then each frame
@@ -5203,14 +5418,18 @@ namespace FFmpeg
         /// If it is not set, frame->nb_samples must be equal to
         /// avctx->frame_size for all frames except the last.
         /// The final frame may be smaller than avctx->frame_size.
-        /// @param[out] got_packet_ptr This field is set to 1 by libavcodec if the
+        /// </param>
+        /// <param name="[out]">
+        /// got_packet_ptr This field is set to 1 by libavcodec if the
         /// output packet is non-empty, and to 0 if it is
         /// empty. If the function returns an error, the
         /// packet can be assumed to be invalid, and the
         /// value of got_packet_ptr is undefined and should
         /// not be used.
-        /// @return          0 on success, negative error code on failure
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, negative error code on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5223,15 +5442,23 @@ namespace FFmpeg
         /// Encode a video frame from pict into buf.
         /// The input picture should be
         /// stored using a specific format, namely avctx.pix_fmt.
-        /// 
-        /// @param avctx the codec context
-        /// @param[out] buf the output buffer for the bitstream of encoded frame
-        /// @param[in] buf_size the size of the output buffer in bytes
-        /// @param[in] pict the input picture to encode
-        /// @return On error a negative value is returned, on success zero or the
-        /// number
-        /// of bytes used from the output buffer.
         /// </summary>
+        /// <param name="avctx">
+        /// the codec context
+        /// </param>
+        /// <param name="[out]">
+        /// buf the output buffer for the bitstream of encoded frame
+        /// </param>
+        /// <param name="[in]">
+        /// buf_size the size of the output buffer in bytes
+        /// </param>
+        /// <param name="[in]">
+        /// pict the input picture to encode
+        /// </param>
+        /// <returns>
+        /// On error a negative value is returned, on success zero or the number
+        /// of bytes used from the output buffer.
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -5248,9 +5475,12 @@ namespace FFmpeg
         /// data for
         /// the most recent frame, as encoders can delay and reorder input frames
         /// internally as needed.
-        /// 
-        /// @param avctx     codec context
-        /// @param avpkt     output AVPacket.
+        /// </summary>
+        /// <param name="avctx">
+        /// codec context
+        /// </param>
+        /// <param name="avpkt">
+        /// output AVPacket.
         /// The user can supply an output buffer by setting
         /// avpkt->data and avpkt->size prior to calling the
         /// function, but if the size of the user-provided data is not
@@ -5264,17 +5494,23 @@ namespace FFmpeg
         /// If this function fails or produces no output, avpkt will be
         /// freed using av_free_packet() (i.e. avpkt->destruct will be
         /// called to free the user supplied buffer).
-        /// @param[in] frame AVFrame containing the raw video data to be encoded.
+        /// </param>
+        /// <param name="[in]">
+        /// frame AVFrame containing the raw video data to be encoded.
         /// May be NULL when flushing an encoder that has the
         /// CODEC_CAP_DELAY capability set.
-        /// @param[out] got_packet_ptr This field is set to 1 by libavcodec if the
+        /// </param>
+        /// <param name="[out]">
+        /// got_packet_ptr This field is set to 1 by libavcodec if the
         /// output packet is non-empty, and to 0 if it is
         /// empty. If the function returns an error, the
         /// packet can be assumed to be invalid, and the
         /// value of got_packet_ptr is undefined and should
         /// not be used.
-        /// @return          0 on success, negative error code on failure
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, negative error code on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5289,24 +5525,42 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize audio resampling context.
-        /// 
-        /// @param output_channels  number of output channels
-        /// @param input_channels   number of input channels
-        /// @param output_rate      output sample rate
-        /// @param input_rate       input sample rate
-        /// @param sample_fmt_out   requested output sample format
-        /// @param sample_fmt_in    input sample format
-        /// @param filter_length    length of each FIR filter in the filterbank
-        /// relative to the cutoff frequency
-        /// @param log2_phase_count log2 of the number of entries in the polyphase
-        /// filterbank
-        /// @param linear           if 1 then the used FIR filter will be linearly
-        /// interpolated
-        /// between the 2 closest, if 0 the closest will be used
-        /// @param cutoff           cutoff frequency, 1.0 corresponds to half the
-        /// output sampling rate
-        /// @return allocated ReSampleContext, NULL if error occurred
         /// </summary>
+        /// <param name="output_channels">
+        /// number of output channels
+        /// </param>
+        /// <param name="input_channels">
+        /// number of input channels
+        /// </param>
+        /// <param name="output_rate">
+        /// output sample rate
+        /// </param>
+        /// <param name="input_rate">
+        /// input sample rate
+        /// </param>
+        /// <param name="sample_fmt_out">
+        /// requested output sample format
+        /// </param>
+        /// <param name="sample_fmt_in">
+        /// input sample format
+        /// </param>
+        /// <param name="filter_length">
+        /// length of each FIR filter in the filterbank relative to the cutoff
+        /// frequency
+        /// </param>
+        /// <param name="log2_phase_count">
+        /// log2 of the number of entries in the polyphase filterbank
+        /// </param>
+        /// <param name="linear">
+        /// if 1 then the used FIR filter will be linearly interpolated
+        /// between the 2 closest, if 0 the closest will be used
+        /// </param>
+        /// <param name="cutoff">
+        /// cutoff frequency, 1.0 corresponds to half the output sampling rate
+        /// </param>
+        /// <returns>
+        /// allocated ReSampleContext, NULL if error occurred
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -5323,10 +5577,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Free resample context.
-        /// 
-        /// @param s a non-NULL pointer to a resample context previously
-        /// created with av_audio_resample_init()
         /// </summary>
+        /// <param name="s">
+        /// a non-NULL pointer to a resample context previously
+        /// created with av_audio_resample_init()
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -5338,16 +5593,20 @@ namespace FFmpeg
         /// Initialize an audio resampler.
         /// Note, if either rate is not an integer then simply scale both rates up
         /// so they are.
-        /// @param filter_length length of each FIR filter in the filterbank
-        /// relative to the cutoff freq
-        /// @param log2_phase_count log2 of the number of entries in the polyphase
-        /// filterbank
-        /// @param linear If 1 then the used FIR filter will be linearly
-        /// interpolated
-        /// between the 2 closest, if 0 the closest will be used
-        /// @param cutoff cutoff frequency, 1.0 corresponds to half the output
-        /// sampling rate
         /// </summary>
+        /// <param name="filter_length">
+        /// length of each FIR filter in the filterbank relative to the cutoff freq
+        /// </param>
+        /// <param name="log2_phase_count">
+        /// log2 of the number of entries in the polyphase filterbank
+        /// </param>
+        /// <param name="linear">
+        /// If 1 then the used FIR filter will be linearly interpolated
+        /// between the 2 closest, if 0 the closest will be used
+        /// </param>
+        /// <param name="cutoff">
+        /// cutoff frequency, 1.0 corresponds to half the output sampling rate
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -5357,15 +5616,26 @@ namespace FFmpeg
 
         /// <summary>
         /// Resample an array of samples using a previously configured context.
-        /// @param src an array of unconsumed samples
-        /// @param consumed the number of samples of src which have been consumed
-        /// are returned here
-        /// @param src_size the number of unconsumed samples available
-        /// @param dst_size the amount of space in samples available in dst
-        /// @param update_ctx If this is 0 then the context will not be modified,
-        /// that way several channels can be resampled with the same context.
-        /// @return the number of samples written in dst or -1 if an error occurred
         /// </summary>
+        /// <param name="src">
+        /// an array of unconsumed samples
+        /// </param>
+        /// <param name="consumed">
+        /// the number of samples of src which have been consumed are returned here
+        /// </param>
+        /// <param name="src_size">
+        /// the number of unconsumed samples available
+        /// </param>
+        /// <param name="dst_size">
+        /// the amount of space in samples available in dst
+        /// </param>
+        /// <param name="update_ctx">
+        /// If this is 0 then the context will not be modified, that way several
+        /// channels can be resampled with the same context.
+        /// </param>
+        /// <returns>
+        /// the number of samples written in dst or -1 if an error occurred
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -5378,10 +5648,13 @@ namespace FFmpeg
         /// changing
         /// the resampler parameters, so no audible clicks or similar distortions
         /// occur
-        /// @param compensation_distance distance in output samples over which the
-        /// compensation should be performed
-        /// @param sample_delta number of output samples which should be output
-        /// less
+        /// </summary>
+        /// <param name="compensation_distance">
+        /// distance in output samples over which the compensation should be
+        /// performed
+        /// </param>
+        /// <param name="sample_delta">
+        /// number of output samples which should be output less
         /// 
         /// example: av_resample_compensate(c, 10, 500)
         /// here instead of 510 samples only 500 samples would be output
@@ -5390,7 +5663,7 @@ namespace FFmpeg
         /// different,
         /// especially if the compensation_distance is large and the in_rate used
         /// during init is small
-        /// </summary>
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -5410,15 +5683,24 @@ namespace FFmpeg
         /// fields for it.
         /// 
         /// Call avpicture_free() to free it.
-        /// 
-        /// @param picture            the picture structure to be filled in
-        /// @param pix_fmt            the pixel format of the picture
-        /// @param width              the width of the picture
-        /// @param height             the height of the picture
-        /// @return zero if successful, a negative error code otherwise
+        /// </summary>
+        /// <param name="picture">
+        /// the picture structure to be filled in
+        /// </param>
+        /// <param name="pix_fmt">
+        /// the pixel format of the picture
+        /// </param>
+        /// <param name="width">
+        /// the width of the picture
+        /// </param>
+        /// <param name="height">
+        /// the height of the picture
+        /// </param>
+        /// <returns>
+        /// zero if successful, a negative error code otherwise
         /// 
         /// @see av_image_alloc(), avpicture_fill()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5430,9 +5712,10 @@ namespace FFmpeg
         /// The data buffer used by the AVPicture is freed, but the AVPicture
         /// structure
         /// itself is not.
-        /// 
-        /// @param picture the AVPicture to be freed
         /// </summary>
+        /// <param name="picture">
+        /// the AVPicture to be freed
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5451,17 +5734,28 @@ namespace FFmpeg
         /// 
         /// To allocate an image buffer and fill the picture data in one call,
         /// use avpicture_alloc().
-        /// 
-        /// @param picture       the picture to be filled in
-        /// @param ptr           buffer where the image data is stored, or NULL
-        /// @param pix_fmt       the pixel format of the image
-        /// @param width         the width of the image in pixels
-        /// @param height        the height of the image in pixels
-        /// @return the size in bytes required for src, a negative error code
+        /// </summary>
+        /// <param name="picture">
+        /// the picture to be filled in
+        /// </param>
+        /// <param name="ptr">
+        /// buffer where the image data is stored, or NULL
+        /// </param>
+        /// <param name="pix_fmt">
+        /// the pixel format of the image
+        /// </param>
+        /// <param name="width">
+        /// the width of the image in pixels
+        /// </param>
+        /// <param name="height">
+        /// the height of the image in pixels
+        /// </param>
+        /// <returns>
+        /// the size in bytes required for src, a negative error code
         /// in case of failure
         /// 
         /// @see av_image_fill_arrays()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5473,19 +5767,32 @@ namespace FFmpeg
         /// 
         /// avpicture_get_size() can be used to compute the required size for
         /// the buffer to fill.
-        /// 
-        /// @param src        source picture with filled data
-        /// @param pix_fmt    picture pixel format
-        /// @param width      picture width
-        /// @param height     picture height
-        /// @param dest       destination buffer
-        /// @param dest_size  destination buffer size in bytes
-        /// @return the number of bytes written to dest, or a negative value
+        /// </summary>
+        /// <param name="src">
+        /// source picture with filled data
+        /// </param>
+        /// <param name="pix_fmt">
+        /// picture pixel format
+        /// </param>
+        /// <param name="width">
+        /// picture width
+        /// </param>
+        /// <param name="height">
+        /// picture height
+        /// </param>
+        /// <param name="dest">
+        /// destination buffer
+        /// </param>
+        /// <param name="dest_size">
+        /// destination buffer size in bytes
+        /// </param>
+        /// <returns>
+        /// the number of bytes written to dest, or a negative value
         /// (error code) on error, for example if the destination buffer is not
         /// big enough
         /// 
         /// @see av_image_copy_to_buffer()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5496,15 +5803,22 @@ namespace FFmpeg
         /// Calculate the size in bytes that a picture of the given width and
         /// height
         /// would occupy if stored in the given picture format.
-        /// 
-        /// @param pix_fmt    picture pixel format
-        /// @param width      picture width
-        /// @param height     picture height
-        /// @return the computed picture buffer size or a negative error code
+        /// </summary>
+        /// <param name="pix_fmt">
+        /// picture pixel format
+        /// </param>
+        /// <param name="width">
+        /// picture width
+        /// </param>
+        /// <param name="height">
+        /// picture height
+        /// </param>
+        /// <returns>
+        /// the computed picture buffer size or a negative error code
         /// in case of error
         /// 
         /// @see av_image_get_buffer_size().
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5558,13 +5872,18 @@ namespace FFmpeg
         /// av_pix_fmt_get_chroma_sub_sample
         /// for one that returns a failure code and continues in case of invalid
         /// pix_fmts.
-        /// 
-        /// @param[in]  pix_fmt the pixel format
-        /// @param[out] h_shift store log2_chroma_w
-        /// @param[out] v_shift store log2_chroma_h
+        /// </summary>
+        /// <param name="[in]">
+        /// pix_fmt the pixel format
+        /// </param>
+        /// <param name="[out]">
+        /// h_shift store log2_chroma_w
+        /// </param>
+        /// <param name="[out]">
+        /// v_shift store log2_chroma_h
         /// 
         /// @see av_pix_fmt_get_chroma_sub_sample
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5600,15 +5919,20 @@ namespace FFmpeg
         /// avcodec_get_fix_fmt_loss() informs you about the various types of
         /// losses
         /// which will occur when converting from one pixel format to another.
-        /// 
-        /// @param[in] dst_pix_fmt destination pixel format
-        /// @param[in] src_pix_fmt source pixel format
-        /// @param[in] has_alpha Whether the source pixel format alpha channel is
-        /// used.
-        /// @return Combination of flags informing you what kind of losses will
-        /// occur
-        /// (maximum loss for an invalid dst_pix_fmt).
         /// </summary>
+        /// <param name="[in]">
+        /// dst_pix_fmt destination pixel format
+        /// </param>
+        /// <param name="[in]">
+        /// src_pix_fmt source pixel format
+        /// </param>
+        /// <param name="[in]">
+        /// has_alpha Whether the source pixel format alpha channel is used.
+        /// </param>
+        /// <returns>
+        /// Combination of flags informing you what kind of losses will occur
+        /// (maximum loss for an invalid dst_pix_fmt).
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5628,17 +5952,24 @@ namespace FFmpeg
         /// loss.
         /// The pixel formats from which it chooses one, are determined by the
         /// pix_fmt_list parameter.
-        /// 
-        /// 
-        /// @param[in] pix_fmt_list AV_PIX_FMT_NONE terminated array of pixel
-        /// formats to choose from
-        /// @param[in] src_pix_fmt source pixel format
-        /// @param[in] has_alpha Whether the source pixel format alpha channel is
-        /// used.
-        /// @param[out] loss_ptr Combination of flags informing you what kind of
-        /// losses will occur.
-        /// @return The best pixel format to convert to or -1 if none was found.
         /// </summary>
+        /// <param name="[in]">
+        /// pix_fmt_list AV_PIX_FMT_NONE terminated array of pixel formats to
+        /// choose from
+        /// </param>
+        /// <param name="[in]">
+        /// src_pix_fmt source pixel format
+        /// </param>
+        /// <param name="[in]">
+        /// has_alpha Whether the source pixel format alpha channel is used.
+        /// </param>
+        /// <param name="[out]">
+        /// loss_ptr Combination of flags informing you what kind of losses will
+        /// occur.
+        /// </param>
+        /// <returns>
+        /// The best pixel format to convert to or -1 if none was found.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5661,8 +5992,8 @@ namespace FFmpeg
         /// If one of the destination formats is AV_PIX_FMT_NONE the other pixel
         /// format (if valid) will be
         /// returned.
-        /// 
-        /// @code
+        /// </summary>
+        /// <code>
         /// src_pix_fmt = AV_PIX_FMT_YUV420P;
         /// dst_pix_fmt1= AV_PIX_FMT_RGB24;
         /// dst_pix_fmt2= AV_PIX_FMT_GRAY8;
@@ -5673,21 +6004,29 @@ namespace FFmpeg
         /// dst_pix_fmt2, src_pix_fmt, alpha, &loss);
         /// dst_pix_fmt = avcodec_find_best_pix_fmt_of_2(dst_pix_fmt, dst_pix_fmt3,
         /// src_pix_fmt, alpha, &loss);
-        /// @endcode
-        /// 
-        /// @param[in] dst_pix_fmt1 One of the two destination pixel formats to
-        /// choose from
-        /// @param[in] dst_pix_fmt2 The other of the two destination pixel formats
-        /// to choose from
-        /// @param[in] src_pix_fmt Source pixel format
-        /// @param[in] has_alpha Whether the source pixel format alpha channel is
-        /// used.
-        /// @param[in, out] loss_ptr Combination of loss flags. In: selects which
-        /// of the losses to ignore, i.e.
+        /// </code>
+        /// <param name="[in]">
+        /// dst_pix_fmt1 One of the two destination pixel formats to choose from
+        /// </param>
+        /// <param name="[in]">
+        /// dst_pix_fmt2 The other of the two destination pixel formats to choose
+        /// from
+        /// </param>
+        /// <param name="[in]">
+        /// src_pix_fmt Source pixel format
+        /// </param>
+        /// <param name="[in]">
+        /// has_alpha Whether the source pixel format alpha channel is used.
+        /// </param>
+        /// <param name="[in,">
+        /// out] loss_ptr Combination of loss flags. In: selects which of the
+        /// losses to ignore, i.e.
         /// NULL or value of zero means we care about all losses. Out: the loss
         /// that occurs when converting from src to selected dst pixel format.
-        /// @return The best pixel format to convert to or -1 if none was found.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// The best pixel format to convert to or -1 if none was found.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5718,11 +6057,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Put a string representing the codec tag codec_tag in buf.
-        /// 
-        /// @param buf_size size in bytes of buf
-        /// @return the length of the string that would have been generated if
-        /// enough space had been available, excluding the trailing null
         /// </summary>
+        /// <param name="buf_size">
+        /// size in bytes of buf
+        /// </param>
+        /// <returns>
+        /// the length of the string that would have been generated if
+        /// enough space had been available, excluding the trailing null
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5737,11 +6079,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Return a name for the specified profile, if available.
-        /// 
-        /// @param codec the codec that is searched for the given profile
-        /// @param profile the profile value for which a name is requested
-        /// @return A name for the profile if found, NULL otherwise.
         /// </summary>
+        /// <param name="codec">
+        /// the codec that is searched for the given profile
+        /// </param>
+        /// <param name="profile">
+        /// the profile value for which a name is requested
+        /// </param>
+        /// <returns>
+        /// A name for the profile if found, NULL otherwise.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5769,20 +6116,33 @@ namespace FFmpeg
         /// 
         /// AVFrame extended_data channel pointers are allocated if necessary for
         /// planar audio.
-        /// 
-        /// @param frame       the AVFrame
+        /// </summary>
+        /// <param name="frame">
+        /// the AVFrame
         /// frame->nb_samples must be set prior to calling the
         /// function. This function fills in frame->data,
         /// frame->extended_data, frame->linesize[0].
-        /// @param nb_channels channel count
-        /// @param sample_fmt  sample format
-        /// @param buf         buffer to use for frame data
-        /// @param buf_size    size of buffer
-        /// @param align       plane size sample alignment (0 = default)
-        /// @return            >=0 on success, negative error code on failure
+        /// </param>
+        /// <param name="nb_channels">
+        /// channel count
+        /// </param>
+        /// <param name="sample_fmt">
+        /// sample format
+        /// </param>
+        /// <param name="buf">
+        /// buffer to use for frame data
+        /// </param>
+        /// <param name="buf_size">
+        /// size of buffer
+        /// </param>
+        /// <param name="align">
+        /// plane size sample alignment (0 = default)
+        /// </param>
+        /// <returns>
+        /// >=0 on success, negative error code on failure
         /// @todo return the size in bytes required to store the samples in
         /// case of success, at the next libavutil bump
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5793,14 +6153,15 @@ namespace FFmpeg
         /// Reset the internal decoder state / flush internal buffers. Should be
         /// called
         /// e.g. when seeking or when switching to a different stream.
-        /// 
-        /// @note when refcounted frames are not used (i.e.
-        /// avctx->refcounted_frames is 0),
+        /// </summary>
+        /// <remark>
+        /// when refcounted frames are not used (i.e. avctx->refcounted_frames is
+        /// 0),
         /// this invalidates the frames previously returned from the decoder. When
         /// refcounted frames are used, the decoder just releases any references it
         /// might
         /// keep internally, but the caller's reference remains valid.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5809,11 +6170,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Return codec bits per sample.
-        /// 
-        /// @param[in] codec_id the codec
-        /// @return Number of bits per sample or zero if unknown for the given
-        /// codec.
         /// </summary>
+        /// <param name="[in]">
+        /// codec_id the codec
+        /// </param>
+        /// <returns>
+        /// Number of bits per sample or zero if unknown for the given codec.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5822,10 +6185,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Return the PCM codec associated with a sample format.
-        /// @param be  endianness, 0 for little, 1 for big,
-        /// -1 (or anything else) for native
-        /// @return  AV_CODEC_ID_PCM_* or AV_CODEC_ID_NONE
         /// </summary>
+        /// <param name="be">
+        /// endianness, 0 for little, 1 for big,
+        /// -1 (or anything else) for native
+        /// </param>
+        /// <returns>
+        /// AV_CODEC_ID_PCM_* or AV_CODEC_ID_NONE
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5836,11 +6203,13 @@ namespace FFmpeg
         /// Return codec bits per sample.
         /// Only return non-zero if the bits per sample is exactly correct, not an
         /// approximation.
-        /// 
-        /// @param[in] codec_id the codec
-        /// @return Number of bits per sample or zero if unknown for the given
-        /// codec.
         /// </summary>
+        /// <param name="[in]">
+        /// codec_id the codec
+        /// </param>
+        /// <returns>
+        /// Number of bits per sample or zero if unknown for the given codec.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5849,13 +6218,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Return audio frame duration.
-        /// 
-        /// @param avctx        codec context
-        /// @param frame_bytes  size of the frame, or 0 if unknown
-        /// @return             frame duration, in samples, if known. 0 if not able
-        /// to
-        /// determine.
         /// </summary>
+        /// <param name="avctx">
+        /// codec context
+        /// </param>
+        /// <param name="frame_bytes">
+        /// size of the frame, or 0 if unknown
+        /// </param>
+        /// <returns>
+        /// frame duration, in samples, if known. 0 if not able to
+        /// determine.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5882,11 +6255,14 @@ namespace FFmpeg
         /// filter name.
         /// 
         /// The returned context must be freed with av_bitstream_filter_close().
-        /// 
-        /// @param name    the name of the bitstream filter
-        /// @return a bitstream filter context if a matching filter was found
-        /// and successfully initialized, NULL otherwise
         /// </summary>
+        /// <param name="name">
+        /// the name of the bitstream filter
+        /// </param>
+        /// <returns>
+        /// a bitstream filter context if a matching filter was found
+        /// and successfully initialized, NULL otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5900,25 +6276,36 @@ namespace FFmpeg
         /// filtered buffer in the buffer pointed to by poutbuf.
         /// 
         /// The output buffer must be freed by the caller.
-        /// 
-        /// @param bsfc            bitstream filter context created by
-        /// av_bitstream_filter_init()
-        /// @param avctx           AVCodecContext accessed by the filter, may be
-        /// NULL.
+        /// </summary>
+        /// <param name="bsfc">
+        /// bitstream filter context created by av_bitstream_filter_init()
+        /// </param>
+        /// <param name="avctx">
+        /// AVCodecContext accessed by the filter, may be NULL.
         /// If specified, this must point to the encoder context of the
         /// output stream the packet is sent to.
-        /// @param args            arguments which specify the filter
-        /// configuration, may be NULL
-        /// @param poutbuf         pointer which is updated to point to the
-        /// filtered buffer
-        /// @param poutbuf_size    pointer which is updated to the filtered buffer
-        /// size in bytes
-        /// @param buf             buffer containing the data to filter
-        /// @param buf_size        size in bytes of buf
-        /// @param keyframe        set to non-zero if the buffer to filter
-        /// corresponds to a key-frame packet data
-        /// @return >= 0 in case of success, or a negative error code in case of
-        /// failure
+        /// </param>
+        /// <param name="args">
+        /// arguments which specify the filter configuration, may be NULL
+        /// </param>
+        /// <param name="poutbuf">
+        /// pointer which is updated to point to the filtered buffer
+        /// </param>
+        /// <param name="poutbuf_size">
+        /// pointer which is updated to the filtered buffer size in bytes
+        /// </param>
+        /// <param name="buf">
+        /// buffer containing the data to filter
+        /// </param>
+        /// <param name="buf_size">
+        /// size in bytes of buf
+        /// </param>
+        /// <param name="keyframe">
+        /// set to non-zero if the buffer to filter corresponds to a key-frame
+        /// packet data
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, or a negative error code in case of failure
         /// 
         /// If the return value is positive, an output buffer is allocated and
         /// is availble in *poutbuf, and is distinct from the input buffer.
@@ -5927,7 +6314,7 @@ namespace FFmpeg
         /// should be considered identical to the input buffer, or in case
         /// poutbuf was set it points to the input buffer (not necessarily to
         /// its starting address).
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5941,25 +6328,36 @@ namespace FFmpeg
         /// filtered buffer in the buffer pointed to by poutbuf.
         /// 
         /// The output buffer must be freed by the caller.
-        /// 
-        /// @param bsfc            bitstream filter context created by
-        /// av_bitstream_filter_init()
-        /// @param avctx           AVCodecContext accessed by the filter, may be
-        /// NULL.
+        /// </summary>
+        /// <param name="bsfc">
+        /// bitstream filter context created by av_bitstream_filter_init()
+        /// </param>
+        /// <param name="avctx">
+        /// AVCodecContext accessed by the filter, may be NULL.
         /// If specified, this must point to the encoder context of the
         /// output stream the packet is sent to.
-        /// @param args            arguments which specify the filter
-        /// configuration, may be NULL
-        /// @param poutbuf         pointer which is updated to point to the
-        /// filtered buffer
-        /// @param poutbuf_size    pointer which is updated to the filtered buffer
-        /// size in bytes
-        /// @param buf             buffer containing the data to filter
-        /// @param buf_size        size in bytes of buf
-        /// @param keyframe        set to non-zero if the buffer to filter
-        /// corresponds to a key-frame packet data
-        /// @return >= 0 in case of success, or a negative error code in case of
-        /// failure
+        /// </param>
+        /// <param name="args">
+        /// arguments which specify the filter configuration, may be NULL
+        /// </param>
+        /// <param name="poutbuf">
+        /// pointer which is updated to point to the filtered buffer
+        /// </param>
+        /// <param name="poutbuf_size">
+        /// pointer which is updated to the filtered buffer size in bytes
+        /// </param>
+        /// <param name="buf">
+        /// buffer containing the data to filter
+        /// </param>
+        /// <param name="buf_size">
+        /// size in bytes of buf
+        /// </param>
+        /// <param name="keyframe">
+        /// set to non-zero if the buffer to filter corresponds to a key-frame
+        /// packet data
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, or a negative error code in case of failure
         /// 
         /// If the return value is positive, an output buffer is allocated and
         /// is availble in *poutbuf, and is distinct from the input buffer.
@@ -5968,7 +6366,7 @@ namespace FFmpeg
         /// should be considered identical to the input buffer, or in case
         /// poutbuf was set it points to the input buffer (not necessarily to
         /// its starting address).
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5977,10 +6375,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Release bitstream filter context.
-        /// 
-        /// @param bsf the bitstream filter context created with
-        /// av_bitstream_filter_init(), can be NULL
         /// </summary>
+        /// <param name="bsf">
+        /// the bitstream filter context created with
+        /// av_bitstream_filter_init(), can be NULL
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6019,14 +6418,18 @@ namespace FFmpeg
         /// Contrary to av_fast_realloc the current buffer contents might not be
         /// preserved and on error the old buffer is freed, thus no special
         /// handling to avoid memleaks is necessary.
-        /// 
-        /// @param ptr pointer to pointer to already allocated buffer, overwritten
-        /// with pointer to new buffer
-        /// @param size size of the buffer *ptr points to
-        /// @param min_size minimum size of *ptr buffer after returning, *ptr will
-        /// be NULL and
-        /// size 0 if an error occurred.
         /// </summary>
+        /// <param name="ptr">
+        /// pointer to pointer to already allocated buffer, overwritten with
+        /// pointer to new buffer
+        /// </param>
+        /// <param name="size">
+        /// size of the buffer *ptr points to
+        /// </param>
+        /// <param name="min_size">
+        /// minimum size of *ptr buffer after returning, *ptr will be NULL and
+        /// size 0 if an error occurred.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6058,11 +6461,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Encode extradata length to a buffer. Used by xiph codecs.
-        /// 
-        /// @param s buffer to write to; must be at least (v/255+1) bytes long
-        /// @param v size of extradata in bytes
-        /// @return number of bytes written to the buffer.
         /// </summary>
+        /// <param name="s">
+        /// buffer to write to; must be at least (v/255+1) bytes long
+        /// </param>
+        /// <param name="v">
+        /// size of extradata in bytes
+        /// </param>
+        /// <returns>
+        /// number of bytes written to the buffer.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6074,17 +6482,21 @@ namespace FFmpeg
         /// intended to be used internally by FFmpeg (libavcodec, libavformat,
         /// etc.)
         /// only, and would normally not be used by applications.
-        /// @param[in] avc a pointer to an arbitrary struct of which the first
-        /// field is
+        /// </summary>
+        /// <param name="[in]">
+        /// avc a pointer to an arbitrary struct of which the first field is
         /// a pointer to an AVClass struct
-        /// @param[in] feature string containing the name of the missing feature
-        /// @param[in] want_sample indicates if samples are wanted which exhibit
-        /// this feature.
+        /// </param>
+        /// <param name="[in]">
+        /// feature string containing the name of the missing feature
+        /// </param>
+        /// <param name="[in]">
+        /// want_sample indicates if samples are wanted which exhibit this feature.
         /// If want_sample is non-zero, additional verbage will be added to the log
         /// message which tells the user how to report samples to the development
         /// mailing list.
         /// @deprecated Use avpriv_report_missing_feature() instead.
-        /// </summary>
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -6097,13 +6509,15 @@ namespace FFmpeg
         /// intended to be used internally by FFmpeg (libavcodec, libavformat,
         /// etc.)
         /// only, and would normally not be used by applications.
-        /// @param[in] avc a pointer to an arbitrary struct of which the first
-        /// field is
-        /// a pointer to an AVClass struct
-        /// @param[in] msg string containing an optional message, or NULL if no
-        /// message
-        /// @deprecated Use avpriv_request_sample() instead.
         /// </summary>
+        /// <param name="[in]">
+        /// avc a pointer to an arbitrary struct of which the first field is
+        /// a pointer to an AVClass struct
+        /// </param>
+        /// <param name="[in]">
+        /// msg string containing an optional message, or NULL if no message
+        /// @deprecated Use avpriv_request_sample() instead.
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -6137,14 +6551,15 @@ namespace FFmpeg
         /// specified by AVLockOp. mutex points to a (void *) where the
         /// lockmgr should store/get a pointer to a user allocated mutex. It's
         /// NULL upon AV_LOCK_CREATE and != NULL for all other ops.
-        /// 
-        /// @param cb User defined callback. Note: FFmpeg may invoke calls to this
+        /// </summary>
+        /// <param name="cb">
+        /// User defined callback. Note: FFmpeg may invoke calls to this
         /// callback during the call to av_lockmgr_register().
         /// Thus, the application must be prepared to handle that.
         /// If cb is set to NULL the lockmgr will be unregistered.
         /// Also note that during unregistration the previously registered
         /// lockmgr callback may also be invoked.
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6162,8 +6577,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the name of a codec.
-        /// @return  a static string identifying the codec; never NULL
         /// </summary>
+        /// <returns>
+        /// a static string identifying the codec; never NULL
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6171,10 +6588,12 @@ namespace FFmpeg
         public static extern sbyte* avcodec_get_name(libavcodec.AVCodecID id);
 
         /// <summary>
-        /// @return a positive value if s is open (i.e. avcodec_open2() was called
-        /// on it
-        /// with no corresponding avcodec_close()), 0 otherwise.
+        /// 
         /// </summary>
+        /// <returns>
+        /// a positive value if s is open (i.e. avcodec_open2() was called on it
+        /// with no corresponding avcodec_close()), 0 otherwise.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6182,8 +6601,11 @@ namespace FFmpeg
         public static extern int avcodec_is_open(libavcodec.AVCodecContext* s);
 
         /// <summary>
-        /// @return a non-zero number if codec is an encoder, zero otherwise
+        /// 
         /// </summary>
+        /// <returns>
+        /// a non-zero number if codec is an encoder, zero otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6191,8 +6613,11 @@ namespace FFmpeg
         public static extern int av_codec_is_encoder(libavcodec.AVCodec* codec);
 
         /// <summary>
-        /// @return a non-zero number if codec is a decoder, zero otherwise
+        /// 
         /// </summary>
+        /// <returns>
+        /// a non-zero number if codec is a decoder, zero otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6200,8 +6625,11 @@ namespace FFmpeg
         public static extern int av_codec_is_decoder(libavcodec.AVCodec* codec);
 
         /// <summary>
-        /// @return descriptor for given codec ID or NULL if no descriptor exists.
+        /// 
         /// </summary>
+        /// <returns>
+        /// descriptor for given codec ID or NULL if no descriptor exists.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6210,11 +6638,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate over all codec descriptors known to libavcodec.
-        /// 
-        /// @param prev previous descriptor. NULL to get the first descriptor.
-        /// 
-        /// @return next descriptor or NULL after the last descriptor
         /// </summary>
+        /// <param name="prev">
+        /// previous descriptor. NULL to get the first descriptor.
+        /// </param>
+        /// <returns>
+        /// next descriptor or NULL after the last descriptor
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6222,10 +6652,12 @@ namespace FFmpeg
         public static extern libavcodec.AVCodecDescriptor* avcodec_descriptor_next(libavcodec.AVCodecDescriptor* prev);
 
         /// <summary>
-        /// @return codec descriptor with the given name or NULL if no such
-        /// descriptor
-        /// exists.
+        /// 
         /// </summary>
+        /// <returns>
+        /// codec descriptor with the given name or NULL if no such descriptor
+        /// exists.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

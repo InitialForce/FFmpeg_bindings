@@ -11,30 +11,47 @@ namespace FFmpeg
 {
     /// <summary>
     /// A function executing multiple jobs, possibly in parallel.
-    /// 
-    /// @param ctx the filter context to which the jobs belong
-    /// @param func the function to be called multiple times
-    /// @param arg the argument to be passed to func
-    /// @param ret a nb_jobs-sized array to be filled with return values
-    /// from each
-    /// invocation of func
-    /// @param nb_jobs the number of jobs to execute
-    /// 
-    /// @return 0 on success, a negative AVERROR on error
     /// </summary>
+    /// <param name="ctx">
+    /// the filter context to which the jobs belong
+    /// </param>
+    /// <param name="func">
+    /// the function to be called multiple times
+    /// </param>
+    /// <param name="arg">
+    /// the argument to be passed to func
+    /// </param>
+    /// <param name="ret">
+    /// a nb_jobs-sized array to be filled with return values from each
+    /// invocation of func
+    /// </param>
+    /// <param name="nb_jobs">
+    /// the number of jobs to execute
+    /// </param>
+    /// <returns>
+    /// 0 on success, a negative AVERROR on error
+    /// </returns>
     /// <summary>
     /// A function pointer passed to the @ref AVFilterGraph.execute
     /// callback to be
     /// executed multiple times, possibly in parallel.
-    /// 
-    /// @param ctx the filter context the job belongs to
-    /// @param arg an opaque parameter passed through from @ref
-    /// AVFilterGraph.execute
-    /// @param jobnr the index of the job being executed
-    /// @param nb_jobs the total number of jobs
-    /// 
-    /// @return 0 on success, a negative AVERROR on error
     /// </summary>
+    /// <param name="ctx">
+    /// the filter context the job belongs to
+    /// </param>
+    /// <param name="arg">
+    /// an opaque parameter passed through from @ref
+    /// AVFilterGraph.execute
+    /// </param>
+    /// <param name="jobnr">
+    /// the index of the job being executed
+    /// </param>
+    /// <param name="nb_jobs">
+    /// the total number of jobs
+    /// </param>
+    /// <returns>
+    /// 0 on success, a negative AVERROR on error
+    /// </returns>
     public unsafe static partial class libavfilter
     {
         public const sbyte AV_PERM_READ = 1;
@@ -343,7 +360,6 @@ namespace FFmpeg
         /// to access the name and type fields; there should be no need to access
         /// any other fields from outside of libavfilter.
         /// </summary>
-        [System.ObsoleteAttribute("unused")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFilterPad
         {
@@ -417,11 +433,12 @@ namespace FFmpeg
             /// audio/video data and should do its processing.
             /// 
             /// Input pads only.
-            /// 
-            /// @return >= 0 on success, a negative AVERROR on error. This function
+            /// </summary>
+            /// <returns>
+            /// >= 0 on success, a negative AVERROR on error. This function
             /// must ensure that frame is properly unreferenced on error if it
             /// hasn't been passed on to another filter.
-            /// </summary>
+            /// </returns>
             public global::System.IntPtr filter_frame;
 
             /// <summary>
@@ -550,9 +567,10 @@ namespace FFmpeg
             /// @ref AVFilter.uninit "uninit" is guaranteed to be called even if
             /// initialization fails, so this callback does not have to clean up on
             /// failure.
-            /// 
-            /// @return 0 on success, a negative AVERROR on failure
             /// </summary>
+            /// <returns>
+            /// 0 on success, a negative AVERROR on failure
+            /// </returns>
             public global::System.IntPtr init;
 
             /// <summary>
@@ -601,10 +619,11 @@ namespace FFmpeg
             /// This callback may be NULL for filters with one input, in which case
             /// libavfilter assumes that it supports all input formats and preserves
             /// them on output.
-            /// 
-            /// @return zero on success, a negative value corresponding to an
-            /// AVERROR code otherwise
             /// </summary>
+            /// <returns>
+            /// zero on success, a negative value corresponding to an
+            /// AVERROR code otherwise
+            /// </returns>
             public global::System.IntPtr query_formats;
 
             /// <summary>
@@ -621,19 +640,27 @@ namespace FFmpeg
 
             /// <summary>
             /// Make the filter instance process a command.
-            /// 
-            /// @param cmd    the command to process, for handling simplicity all
-            /// commands must be alphanumeric only
-            /// @param arg    the argument for the command
-            /// @param res    a buffer with size res_size where the filter(s) can
-            /// return a response. This must not change when the command is not supported.
-            /// @param flags  if AVFILTER_CMD_FLAG_FAST is set and the command would be
+            /// </summary>
+            /// <param name="cmd">
+            /// the command to process, for handling simplicity all commands must be
+            /// alphanumeric only
+            /// </param>
+            /// <param name="arg">
+            /// the argument for the command
+            /// </param>
+            /// <param name="res">
+            /// a buffer with size res_size where the filter(s) can return a response.
+            /// This must not change when the command is not supported.
+            /// </param>
+            /// <param name="flags">
+            /// if AVFILTER_CMD_FLAG_FAST is set and the command would be
             /// time consuming then a filter should treat it like an unsupported
             /// command
-            /// 
-            /// @returns >=0 on success otherwise an error code.
+            /// </param>
+            /// <returns>
+            /// s >=0 on success otherwise an error code.
             /// AVERROR(ENOSYS) on unsupported commands
-            /// </summary>
+            /// </returns>
             public global::System.IntPtr process_command;
 
             /// <summary>
@@ -652,7 +679,6 @@ namespace FFmpeg
         /// <summary>
         /// An instance of a filter
         /// </summary>
-        [System.ObsoleteAttribute("eprecated unsigned input_count; ///< @deprecated use nb_inputs")]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFilterContext
         {
@@ -851,7 +877,6 @@ namespace FFmpeg
             /// filters respectively. These lists are used for negotiating the format
             /// to actually be used, which will be loaded into the format and
             /// channel_layout members, above, when chosen.
-            /// 
             /// </summary>
             public libavfilter.AVFilterFormats* in_formats;
 
@@ -997,7 +1022,6 @@ namespace FFmpeg
         {
         }
 
-        [System.ObsoleteAttribute()]
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVFilterGraph
         {
@@ -1163,14 +1187,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a new reference to a buffer.
-        /// 
-        /// @param ref   an existing reference to the buffer
-        /// @param pmask a bitmask containing the allowable permissions in the new
-        /// reference
-        /// @return      a new reference to the buffer with the same properties as
-        /// the
-        /// old, excluding any permissions denied by pmask
         /// </summary>
+        /// <param name="ref">
+        /// an existing reference to the buffer
+        /// </param>
+        /// <param name="pmask">
+        /// a bitmask containing the allowable permissions in the new
+        /// reference
+        /// </param>
+        /// <returns>
+        /// a new reference to the buffer with the same properties as the
+        /// old, excluding any permissions denied by pmask
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1181,12 +1209,14 @@ namespace FFmpeg
         /// <summary>
         /// Remove a reference to a buffer. If this is the last reference to the
         /// buffer, the buffer itself is also automatically freed.
-        /// 
-        /// @param ref reference to the buffer, may be NULL
-        /// 
-        /// @note it is recommended to use avfilter_unref_bufferp() instead of this
-        /// function
         /// </summary>
+        /// <param name="ref">
+        /// reference to the buffer, may be NULL
+        /// </param>
+        /// <remark>
+        /// it is recommended to use avfilter_unref_bufferp() instead of this
+        /// function
+        /// </remark>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1198,9 +1228,10 @@ namespace FFmpeg
         /// Remove a reference to a buffer and set the pointer to NULL.
         /// If this is the last reference to the buffer, the buffer itself
         /// is also automatically freed.
-        /// 
-        /// @param ref pointer to the buffer reference
         /// </summary>
+        /// <param name="ref">
+        /// pointer to the buffer reference
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1212,9 +1243,10 @@ namespace FFmpeg
         /// Remove a reference to a buffer and set the pointer to NULL.
         /// If this is the last reference to the buffer, the buffer itself
         /// is also automatically freed.
-        /// 
-        /// @param ref pointer to the buffer reference
         /// </summary>
+        /// <param name="ref">
+        /// pointer to the buffer reference
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1245,13 +1277,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the name of an AVFilterPad.
-        /// 
-        /// @param pads an array of AVFilterPads
-        /// @param pad_idx index of the pad in the array it; is the caller's
-        /// responsibility to ensure the index is valid
-        /// 
-        /// @return name of the pad_idx'th pad in pads
         /// </summary>
+        /// <param name="pads">
+        /// an array of AVFilterPads
+        /// </param>
+        /// <param name="pad_idx">
+        /// index of the pad in the array it; is the caller's
+        /// responsibility to ensure the index is valid
+        /// </param>
+        /// <returns>
+        /// name of the pad_idx'th pad in pads
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1260,13 +1296,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the type of an AVFilterPad.
-        /// 
-        /// @param pads an array of AVFilterPads
-        /// @param pad_idx index of the pad in the array; it is the caller's
-        /// responsibility to ensure the index is valid
-        /// 
-        /// @return type of the pad_idx'th pad in pads
         /// </summary>
+        /// <param name="pads">
+        /// an array of AVFilterPads
+        /// </param>
+        /// <param name="pad_idx">
+        /// index of the pad in the array; it is the caller's
+        /// responsibility to ensure the index is valid
+        /// </param>
+        /// <returns>
+        /// type of the pad_idx'th pad in pads
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1275,13 +1315,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Link two filters together.
-        /// 
-        /// @param src    the source filter
-        /// @param srcpad index of the output pad on the source filter
-        /// @param dst    the destination filter
-        /// @param dstpad index of the input pad on the destination filter
-        /// @return       zero on success
         /// </summary>
+        /// <param name="src">
+        /// the source filter
+        /// </param>
+        /// <param name="srcpad">
+        /// index of the output pad on the source filter
+        /// </param>
+        /// <param name="dst">
+        /// the destination filter
+        /// </param>
+        /// <param name="dstpad">
+        /// index of the input pad on the destination filter
+        /// </param>
+        /// <returns>
+        /// zero on success
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1326,10 +1375,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Negotiate the media format, dimensions, etc of all inputs to a filter.
-        /// 
-        /// @param filter the filter to negotiate the properties for its inputs
-        /// @return       zero on successful negotiation
         /// </summary>
+        /// <param name="filter">
+        /// the filter to negotiate the properties for its inputs
+        /// </param>
+        /// <returns>
+        /// zero on successful negotiation
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1339,17 +1391,25 @@ namespace FFmpeg
         /// <summary>
         /// Create a buffer reference wrapped around an already allocated image
         /// buffer.
-        /// 
-        /// @param data pointers to the planes of the image to reference
-        /// @param linesize linesizes for the planes of the image to reference
-        /// @param perms the required access permissions
-        /// @param w the width of the image specified by the data and linesize
-        /// arrays
-        /// @param h the height of the image specified by the data and linesize
-        /// arrays
-        /// @param format the pixel format of the image specified by the data and
-        /// linesize arrays
         /// </summary>
+        /// <param name="data">
+        /// pointers to the planes of the image to reference
+        /// </param>
+        /// <param name="linesize">
+        /// linesizes for the planes of the image to reference
+        /// </param>
+        /// <param name="perms">
+        /// the required access permissions
+        /// </param>
+        /// <param name="w">
+        /// the width of the image specified by the data and linesize arrays
+        /// </param>
+        /// <param name="h">
+        /// the height of the image specified by the data and linesize arrays
+        /// </param>
+        /// <param name="format">
+        /// the pixel format of the image specified by the data and linesize arrays
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1363,15 +1423,25 @@ namespace FFmpeg
         /// 
         /// See avfilter_get_audio_buffer_ref_from_arrays_channels() for a version
         /// that can handle unknown channel layouts.
-        /// 
-        /// @param data           pointers to the samples plane buffers
-        /// @param linesize       linesize for the samples plane buffers
-        /// @param perms          the required access permissions
-        /// @param nb_samples     number of samples per channel
-        /// @param sample_fmt     the format of each sample in the buffer to
-        /// allocate
-        /// @param channel_layout the channel layout of the buffer
         /// </summary>
+        /// <param name="data">
+        /// pointers to the samples plane buffers
+        /// </param>
+        /// <param name="linesize">
+        /// linesize for the samples plane buffers
+        /// </param>
+        /// <param name="perms">
+        /// the required access permissions
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples per channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the format of each sample in the buffer to allocate
+        /// </param>
+        /// <param name="channel_layout">
+        /// the channel layout of the buffer
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1385,15 +1455,25 @@ namespace FFmpeg
         /// 
         /// See avfilter_get_audio_buffer_ref_from_arrays_channels() for a version
         /// that can handle unknown channel layouts.
-        /// 
-        /// @param data           pointers to the samples plane buffers
-        /// @param linesize       linesize for the samples plane buffers
-        /// @param perms          the required access permissions
-        /// @param nb_samples     number of samples per channel
-        /// @param sample_fmt     the format of each sample in the buffer to
-        /// allocate
-        /// @param channel_layout the channel layout of the buffer
         /// </summary>
+        /// <param name="data">
+        /// pointers to the samples plane buffers
+        /// </param>
+        /// <param name="linesize">
+        /// linesize for the samples plane buffers
+        /// </param>
+        /// <param name="perms">
+        /// the required access permissions
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples per channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the format of each sample in the buffer to allocate
+        /// </param>
+        /// <param name="channel_layout">
+        /// the channel layout of the buffer
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1404,17 +1484,29 @@ namespace FFmpeg
         /// <summary>
         /// Create an audio buffer reference wrapped around an already
         /// allocated samples buffer.
-        /// 
-        /// @param data           pointers to the samples plane buffers
-        /// @param linesize       linesize for the samples plane buffers
-        /// @param perms          the required access permissions
-        /// @param nb_samples     number of samples per channel
-        /// @param sample_fmt     the format of each sample in the buffer to
-        /// allocate
-        /// @param channels       the number of channels of the buffer
-        /// @param channel_layout the channel layout of the buffer,
-        /// must be either 0 or consistent with channels
         /// </summary>
+        /// <param name="data">
+        /// pointers to the samples plane buffers
+        /// </param>
+        /// <param name="linesize">
+        /// linesize for the samples plane buffers
+        /// </param>
+        /// <param name="perms">
+        /// the required access permissions
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples per channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the format of each sample in the buffer to allocate
+        /// </param>
+        /// <param name="channels">
+        /// the number of channels of the buffer
+        /// </param>
+        /// <param name="channel_layout">
+        /// the channel layout of the buffer,
+        /// must be either 0 or consistent with channels
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1425,17 +1517,29 @@ namespace FFmpeg
         /// <summary>
         /// Create an audio buffer reference wrapped around an already
         /// allocated samples buffer.
-        /// 
-        /// @param data           pointers to the samples plane buffers
-        /// @param linesize       linesize for the samples plane buffers
-        /// @param perms          the required access permissions
-        /// @param nb_samples     number of samples per channel
-        /// @param sample_fmt     the format of each sample in the buffer to
-        /// allocate
-        /// @param channels       the number of channels of the buffer
-        /// @param channel_layout the channel layout of the buffer,
-        /// must be either 0 or consistent with channels
         /// </summary>
+        /// <param name="data">
+        /// pointers to the samples plane buffers
+        /// </param>
+        /// <param name="linesize">
+        /// linesize for the samples plane buffers
+        /// </param>
+        /// <param name="perms">
+        /// the required access permissions
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples per channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the format of each sample in the buffer to allocate
+        /// </param>
+        /// <param name="channels">
+        /// the number of channels of the buffer
+        /// </param>
+        /// <param name="channel_layout">
+        /// the channel layout of the buffer,
+        /// must be either 0 or consistent with channels
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1478,11 +1582,14 @@ namespace FFmpeg
         /// filter can still by instantiated with avfilter_graph_alloc_filter even
         /// if it
         /// is not registered.
-        /// 
-        /// @param filter the filter to register
-        /// @return 0 if the registration was successful, a negative value
-        /// otherwise
         /// </summary>
+        /// <param name="filter">
+        /// the filter to register
+        /// </param>
+        /// <returns>
+        /// 0 if the registration was successful, a negative value
+        /// otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1491,11 +1598,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Get a filter definition matching the given name.
-        /// 
-        /// @param name the filter name to find
-        /// @return     the filter definition, if any matching one is registered.
-        /// NULL if none found.
         /// </summary>
+        /// <param name="name">
+        /// the filter name to find
+        /// </param>
+        /// <returns>
+        /// the filter definition, if any matching one is registered.
+        /// NULL if none found.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1504,11 +1614,12 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate over all registered filters.
-        /// @return If prev is non-NULL, next registered filter after prev or NULL
-        /// if
+        /// </summary>
+        /// <returns>
+        /// If prev is non-NULL, next registered filter after prev or NULL if
         /// prev is the last filter. If prev is NULL, return the first registered
         /// filter.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1547,15 +1658,21 @@ namespace FFmpeg
 
         /// <summary>
         /// Create a filter instance.
-        /// 
-        /// @param filter_ctx put here a pointer to the created filter context
-        /// on success, NULL on failure
-        /// @param filter    the filter to create an instance of
-        /// @param inst_name Name to give to the new instance. Can be NULL for
-        /// none.
-        /// @return >= 0 in case of success, a negative error code otherwise
-        /// @deprecated use avfilter_graph_alloc_filter() instead
         /// </summary>
+        /// <param name="filter_ctx">
+        /// put here a pointer to the created filter context
+        /// on success, NULL on failure
+        /// </param>
+        /// <param name="filter">
+        /// the filter to create an instance of
+        /// </param>
+        /// <param name="inst_name">
+        /// Name to give to the new instance. Can be NULL for none.
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative error code otherwise
+        /// @deprecated use avfilter_graph_alloc_filter() instead
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1565,15 +1682,21 @@ namespace FFmpeg
 
         /// <summary>
         /// Create a filter instance.
-        /// 
-        /// @param filter_ctx put here a pointer to the created filter context
-        /// on success, NULL on failure
-        /// @param filter    the filter to create an instance of
-        /// @param inst_name Name to give to the new instance. Can be NULL for
-        /// none.
-        /// @return >= 0 in case of success, a negative error code otherwise
-        /// @deprecated use avfilter_graph_alloc_filter() instead
         /// </summary>
+        /// <param name="filter_ctx">
+        /// put here a pointer to the created filter context
+        /// on success, NULL on failure
+        /// </param>
+        /// <param name="filter">
+        /// the filter to create an instance of
+        /// </param>
+        /// <param name="inst_name">
+        /// Name to give to the new instance. Can be NULL for none.
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative error code otherwise
+        /// @deprecated use avfilter_graph_alloc_filter() instead
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1583,16 +1706,21 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize a filter.
-        /// 
-        /// @param filter the filter to initialize
-        /// @param args   A string of parameters to use when initializing the
-        /// filter.
-        /// The format and meaning of this string varies by filter.
-        /// @param opaque Any extra non-string data needed by the filter. The
-        /// meaning
-        /// of this parameter varies by filter.
-        /// @return       zero on success
         /// </summary>
+        /// <param name="filter">
+        /// the filter to initialize
+        /// </param>
+        /// <param name="args">
+        /// A string of parameters to use when initializing the filter.
+        /// The format and meaning of this string varies by filter.
+        /// </param>
+        /// <param name="opaque">
+        /// Any extra non-string data needed by the filter. The meaning
+        /// of this parameter varies by filter.
+        /// </param>
+        /// <returns>
+        /// zero on success
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1602,14 +1730,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize a filter with the supplied parameters.
-        /// 
-        /// @param ctx  uninitialized filter context to initialize
-        /// @param args Options to initialize the filter with. This must be a
+        /// </summary>
+        /// <param name="ctx">
+        /// uninitialized filter context to initialize
+        /// </param>
+        /// <param name="args">
+        /// Options to initialize the filter with. This must be a
         /// ':'-separated list of options in the 'key=value' form.
         /// May be NULL if the options have been set directly using the
         /// AVOptions API or there are no options that need to be set.
-        /// @return 0 on success, a negative AVERROR on failure
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1618,18 +1751,23 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize a filter with the supplied dictionary of options.
-        /// 
-        /// @param ctx     uninitialized filter context to initialize
-        /// @param options An AVDictionary filled with options for this filter. On
+        /// </summary>
+        /// <param name="ctx">
+        /// uninitialized filter context to initialize
+        /// </param>
+        /// <param name="options">
+        /// An AVDictionary filled with options for this filter. On
         /// return this parameter will be destroyed and replaced with
         /// a dict containing options that were not found. This dictionary
         /// must be freed by the caller.
         /// May be NULL, then this function is equivalent to
         /// avfilter_init_str() with the second parameter set to NULL.
-        /// @return 0 on success, a negative AVERROR on failure
-        /// 
-        /// @note This function and avfilter_init_str() do essentially the same
-        /// thing,
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure
+        /// </returns>
+        /// <remark>
+        /// This function and avfilter_init_str() do essentially the same thing,
         /// the difference is in manner in which the options are passed. It is up
         /// to the
         /// calling code to choose whichever is more preferable. The two functions
@@ -1641,7 +1779,7 @@ namespace FFmpeg
         /// this function will leave those extra options in the options
         /// AVDictionary and
         /// continue as usual.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1650,18 +1788,23 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize a filter with the supplied dictionary of options.
-        /// 
-        /// @param ctx     uninitialized filter context to initialize
-        /// @param options An AVDictionary filled with options for this filter. On
+        /// </summary>
+        /// <param name="ctx">
+        /// uninitialized filter context to initialize
+        /// </param>
+        /// <param name="options">
+        /// An AVDictionary filled with options for this filter. On
         /// return this parameter will be destroyed and replaced with
         /// a dict containing options that were not found. This dictionary
         /// must be freed by the caller.
         /// May be NULL, then this function is equivalent to
         /// avfilter_init_str() with the second parameter set to NULL.
-        /// @return 0 on success, a negative AVERROR on failure
-        /// 
-        /// @note This function and avfilter_init_str() do essentially the same
-        /// thing,
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure
+        /// </returns>
+        /// <remark>
+        /// This function and avfilter_init_str() do essentially the same thing,
         /// the difference is in manner in which the options are passed. It is up
         /// to the
         /// calling code to choose whichever is more preferable. The two functions
@@ -1673,7 +1816,7 @@ namespace FFmpeg
         /// this function will leave those extra options in the options
         /// AVDictionary and
         /// continue as usual.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1683,9 +1826,10 @@ namespace FFmpeg
         /// <summary>
         /// Free a filter context. This will also remove the filter from its
         /// filtergraph's list of filters.
-        /// 
-        /// @param filter the filter to free
         /// </summary>
+        /// <param name="filter">
+        /// the filter to free
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1694,13 +1838,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Insert a filter in the middle of an existing link.
-        /// 
-        /// @param link the link into which the filter should be inserted
-        /// @param filt the filter to be inserted
-        /// @param filt_srcpad_idx the input pad on the filter to connect
-        /// @param filt_dstpad_idx the output pad on the filter to connect
-        /// @return     zero on success
         /// </summary>
+        /// <param name="link">
+        /// the link into which the filter should be inserted
+        /// </param>
+        /// <param name="filt">
+        /// the filter to be inserted
+        /// </param>
+        /// <param name="filt_srcpad_idx">
+        /// the input pad on the filter to connect
+        /// </param>
+        /// <param name="filt_dstpad_idx">
+        /// the output pad on the filter to connect
+        /// </param>
+        /// <returns>
+        /// zero on success
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1710,9 +1863,10 @@ namespace FFmpeg
         /// <summary>
         /// Copy the frame properties of src to dst, without copying the actual
         /// image data.
-        /// 
-        /// @return 0 on success, a negative number on error.
         /// </summary>
+        /// <returns>
+        /// 0 on success, a negative number on error.
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1724,9 +1878,10 @@ namespace FFmpeg
         /// Copy the frame properties and data pointers of src to dst, without
         /// copying
         /// the actual data.
-        /// 
-        /// @return 0 on success, a negative number on error.
         /// </summary>
+        /// <returns>
+        /// 0 on success, a negative number on error.
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1735,10 +1890,13 @@ namespace FFmpeg
         public static extern int avfilter_copy_buf_props(libavutil.AVFrame* dst, libavfilter.AVFilterBufferRef* src);
 
         /// <summary>
-        /// @return AVClass for AVFilterContext.
+        /// 
+        /// </summary>
+        /// <returns>
+        /// AVClass for AVFilterContext.
         /// 
         /// @see av_opt_find().
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1756,19 +1914,24 @@ namespace FFmpeg
 
         /// <summary>
         /// Create a new filter instance in a filter graph.
-        /// 
-        /// @param graph graph in which the new filter will be used
-        /// @param filter the filter to create an instance of
-        /// @param name Name to give to the new instance (will be copied to
+        /// </summary>
+        /// <param name="graph">
+        /// graph in which the new filter will be used
+        /// </param>
+        /// <param name="filter">
+        /// the filter to create an instance of
+        /// </param>
+        /// <param name="name">
+        /// Name to give to the new instance (will be copied to
         /// AVFilterContext.name). This may be used by the caller to identify
         /// different filters, libavfilter itself assigns no semantics to
         /// this parameter. May be NULL.
-        /// 
-        /// @return the context of the newly created filter instance (note that it
-        /// is
+        /// </param>
+        /// <returns>
+        /// the context of the newly created filter instance (note that it is
         /// also retrievable directly through AVFilterGraph.filters or with
         /// avfilter_graph_get_filter()) on success or NULL or failure.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1777,10 +1940,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Get a filter instance with name name from graph.
-        /// 
-        /// @return the pointer to the found filter instance or NULL if it
-        /// cannot be found.
         /// </summary>
+        /// <returns>
+        /// the pointer to the found filter instance or NULL if it
+        /// cannot be found.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1789,13 +1953,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Add an existing filter instance to a filter graph.
-        /// 
-        /// @param graphctx  the filter graph
-        /// @param filter the filter to be added
+        /// </summary>
+        /// <param name="graphctx">
+        /// the filter graph
+        /// </param>
+        /// <param name="filter">
+        /// the filter to be added
         /// 
         /// @deprecated use avfilter_graph_alloc_filter() to allocate a filter in a
         /// filter graph
-        /// </summary>
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1810,12 +1977,17 @@ namespace FFmpeg
         /// 
         /// In case of success put in *filt_ctx the pointer to the created
         /// filter instance, otherwise set *filt_ctx to NULL.
-        /// 
-        /// @param name the instance name to give to the created filter instance
-        /// @param graph_ctx the filter graph
-        /// @return a negative AVERROR error code in case of failure, a non
-        /// negative value otherwise
         /// </summary>
+        /// <param name="name">
+        /// the instance name to give to the created filter instance
+        /// </param>
+        /// <param name="graph_ctx">
+        /// the filter graph
+        /// </param>
+        /// <returns>
+        /// a negative AVERROR error code in case of failure, a non
+        /// negative value otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1829,12 +2001,17 @@ namespace FFmpeg
         /// 
         /// In case of success put in *filt_ctx the pointer to the created
         /// filter instance, otherwise set *filt_ctx to NULL.
-        /// 
-        /// @param name the instance name to give to the created filter instance
-        /// @param graph_ctx the filter graph
-        /// @return a negative AVERROR error code in case of failure, a non
-        /// negative value otherwise
         /// </summary>
+        /// <param name="name">
+        /// the instance name to give to the created filter instance
+        /// </param>
+        /// <param name="graph_ctx">
+        /// the filter graph
+        /// </param>
+        /// <returns>
+        /// a negative AVERROR error code in case of failure, a non
+        /// negative value otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1846,9 +2023,10 @@ namespace FFmpeg
         /// 
         /// Note that format conversion can still happen inside explicitly inserted
         /// scale and aresample filters.
-        /// 
-        /// @param flags  any of the AVFILTER_AUTO_CONVERT_* constants
         /// </summary>
+        /// <param name="flags">
+        /// any of the AVFILTER_AUTO_CONVERT_* constants
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1857,11 +2035,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Check validity and configure all the links and formats in the graph.
-        /// 
-        /// @param graphctx the filter graph
-        /// @param log_ctx context used for logging
-        /// @return >= 0 in case of success, a negative AVERROR code otherwise
         /// </summary>
+        /// <param name="graphctx">
+        /// the filter graph
+        /// </param>
+        /// <param name="log_ctx">
+        /// context used for logging
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1891,8 +2074,10 @@ namespace FFmpeg
         /// <summary>
         /// Allocate a single AVFilterInOut entry.
         /// Must be freed with avfilter_inout_free().
-        /// @return allocated AVFilterInOut on success, NULL on failure.
         /// </summary>
+        /// <returns>
+        /// allocated AVFilterInOut on success, NULL on failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1921,20 +2106,27 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a graph described by a string to a graph.
-        /// 
-        /// @param graph   the filter graph where to link the parsed graph context
-        /// @param filters string to be parsed
-        /// @param inputs  pointer to a linked list to the inputs of the graph, may
-        /// be NULL.
+        /// </summary>
+        /// <param name="graph">
+        /// the filter graph where to link the parsed graph context
+        /// </param>
+        /// <param name="filters">
+        /// string to be parsed
+        /// </param>
+        /// <param name="inputs">
+        /// pointer to a linked list to the inputs of the graph, may be NULL.
         /// If non-NULL, *inputs is updated to contain the list of open inputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @param outputs pointer to a linked list to the outputs of the graph,
-        /// may be NULL.
+        /// </param>
+        /// <param name="outputs">
+        /// pointer to a linked list to the outputs of the graph, may be NULL.
         /// If non-NULL, *outputs is updated to contain the list of open outputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @return non negative on success, a negative AVERROR code on error
+        /// </param>
+        /// <returns>
+        /// non negative on success, a negative AVERROR code on error
         /// @deprecated Use avfilter_graph_parse_ptr() instead.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1944,20 +2136,27 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a graph described by a string to a graph.
-        /// 
-        /// @param graph   the filter graph where to link the parsed graph context
-        /// @param filters string to be parsed
-        /// @param inputs  pointer to a linked list to the inputs of the graph, may
-        /// be NULL.
+        /// </summary>
+        /// <param name="graph">
+        /// the filter graph where to link the parsed graph context
+        /// </param>
+        /// <param name="filters">
+        /// string to be parsed
+        /// </param>
+        /// <param name="inputs">
+        /// pointer to a linked list to the inputs of the graph, may be NULL.
         /// If non-NULL, *inputs is updated to contain the list of open inputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @param outputs pointer to a linked list to the outputs of the graph,
-        /// may be NULL.
+        /// </param>
+        /// <param name="outputs">
+        /// pointer to a linked list to the outputs of the graph, may be NULL.
         /// If non-NULL, *outputs is updated to contain the list of open outputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @return non negative on success, a negative AVERROR code on error
+        /// </param>
+        /// <returns>
+        /// non negative on success, a negative AVERROR code on error
         /// @deprecated Use avfilter_graph_parse_ptr() instead.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1967,19 +2166,26 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a graph described by a string to a graph.
-        /// 
-        /// @param graph   the filter graph where to link the parsed graph context
-        /// @param filters string to be parsed
-        /// @param inputs  pointer to a linked list to the inputs of the graph, may
-        /// be NULL.
+        /// </summary>
+        /// <param name="graph">
+        /// the filter graph where to link the parsed graph context
+        /// </param>
+        /// <param name="filters">
+        /// string to be parsed
+        /// </param>
+        /// <param name="inputs">
+        /// pointer to a linked list to the inputs of the graph, may be NULL.
         /// If non-NULL, *inputs is updated to contain the list of open inputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @param outputs pointer to a linked list to the outputs of the graph,
-        /// may be NULL.
+        /// </param>
+        /// <param name="outputs">
+        /// pointer to a linked list to the outputs of the graph, may be NULL.
         /// If non-NULL, *outputs is updated to contain the list of open outputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @return non negative on success, a negative AVERROR code on error
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// non negative on success, a negative AVERROR code on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1988,19 +2194,26 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a graph described by a string to a graph.
-        /// 
-        /// @param graph   the filter graph where to link the parsed graph context
-        /// @param filters string to be parsed
-        /// @param inputs  pointer to a linked list to the inputs of the graph, may
-        /// be NULL.
+        /// </summary>
+        /// <param name="graph">
+        /// the filter graph where to link the parsed graph context
+        /// </param>
+        /// <param name="filters">
+        /// string to be parsed
+        /// </param>
+        /// <param name="inputs">
+        /// pointer to a linked list to the inputs of the graph, may be NULL.
         /// If non-NULL, *inputs is updated to contain the list of open inputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @param outputs pointer to a linked list to the outputs of the graph,
-        /// may be NULL.
+        /// </param>
+        /// <param name="outputs">
+        /// pointer to a linked list to the outputs of the graph, may be NULL.
         /// If non-NULL, *outputs is updated to contain the list of open outputs
         /// after the parsing, should be freed with avfilter_inout_free().
-        /// @return non negative on success, a negative AVERROR code on error
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// non negative on success, a negative AVERROR code on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2009,27 +2222,38 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a graph described by a string to a graph.
-        /// 
-        /// @param[in]  graph   the filter graph where to link the parsed graph
-        /// context
-        /// @param[in]  filters string to be parsed
-        /// @param[out] inputs  a linked list of all free (unlinked) inputs of the
+        /// </summary>
+        /// <param name="[in]">
+        /// graph   the filter graph where to link the parsed graph context
+        /// </param>
+        /// <param name="[in]">
+        /// filters string to be parsed
+        /// </param>
+        /// <param name="[out]">
+        /// inputs  a linked list of all free (unlinked) inputs of the
         /// parsed graph will be returned here. It is to be freed
         /// by the caller using avfilter_inout_free().
-        /// @param[out] outputs a linked list of all free (unlinked) outputs of the
+        /// </param>
+        /// <param name="[out]">
+        /// outputs a linked list of all free (unlinked) outputs of the
         /// parsed graph will be returned here. It is to be freed by the
         /// caller using avfilter_inout_free().
-        /// @return zero on success, a negative AVERROR code on error
-        /// 
-        /// @note This function returns the inputs and outputs that are left
+        /// </param>
+        /// <returns>
+        /// zero on success, a negative AVERROR code on error
+        /// </returns>
+        /// <remark>
+        /// This function returns the inputs and outputs that are left
         /// unlinked after parsing the graph and the caller then deals with
         /// them.
-        /// @note This function makes no reference whatsoever to already
+        /// </remark>
+        /// <remark>
+        /// This function makes no reference whatsoever to already
         /// existing parts of the graph and the inputs parameter will on return
         /// contain inputs of the newly parsed part of the graph.  Analogously
         /// the outputs parameter will contain outputs of the newly created
         /// filters.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2038,27 +2262,38 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a graph described by a string to a graph.
-        /// 
-        /// @param[in]  graph   the filter graph where to link the parsed graph
-        /// context
-        /// @param[in]  filters string to be parsed
-        /// @param[out] inputs  a linked list of all free (unlinked) inputs of the
+        /// </summary>
+        /// <param name="[in]">
+        /// graph   the filter graph where to link the parsed graph context
+        /// </param>
+        /// <param name="[in]">
+        /// filters string to be parsed
+        /// </param>
+        /// <param name="[out]">
+        /// inputs  a linked list of all free (unlinked) inputs of the
         /// parsed graph will be returned here. It is to be freed
         /// by the caller using avfilter_inout_free().
-        /// @param[out] outputs a linked list of all free (unlinked) outputs of the
+        /// </param>
+        /// <param name="[out]">
+        /// outputs a linked list of all free (unlinked) outputs of the
         /// parsed graph will be returned here. It is to be freed by the
         /// caller using avfilter_inout_free().
-        /// @return zero on success, a negative AVERROR code on error
-        /// 
-        /// @note This function returns the inputs and outputs that are left
+        /// </param>
+        /// <returns>
+        /// zero on success, a negative AVERROR code on error
+        /// </returns>
+        /// <remark>
+        /// This function returns the inputs and outputs that are left
         /// unlinked after parsing the graph and the caller then deals with
         /// them.
-        /// @note This function makes no reference whatsoever to already
+        /// </remark>
+        /// <remark>
+        /// This function makes no reference whatsoever to already
         /// existing parts of the graph and the inputs parameter will on return
         /// contain inputs of the newly parsed part of the graph.  Analogously
         /// the outputs parameter will contain outputs of the newly created
         /// filters.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2067,21 +2302,30 @@ namespace FFmpeg
 
         /// <summary>
         /// Send a command to one or more filter instances.
-        /// 
-        /// @param graph  the filter graph
-        /// @param target the filter(s) to which the command should be sent
+        /// </summary>
+        /// <param name="graph">
+        /// the filter graph
+        /// </param>
+        /// <param name="target">
+        /// the filter(s) to which the command should be sent
         /// "all" sends to all filters
         /// otherwise it can be a filter or filter instance name
         /// which will send the command to all matching filters.
-        /// @param cmd    the command to send, for handling simplicity all commands
-        /// must be alphanumeric only
-        /// @param arg    the argument for the command
-        /// @param res    a buffer with size res_size where the filter(s) can
-        /// return a response.
-        /// 
-        /// @returns >=0 on success otherwise an error code.
+        /// </param>
+        /// <param name="cmd">
+        /// the command to send, for handling simplicity all commands must be
+        /// alphanumeric only
+        /// </param>
+        /// <param name="arg">
+        /// the argument for the command
+        /// </param>
+        /// <param name="res">
+        /// a buffer with size res_size where the filter(s) can return a response.
+        /// </param>
+        /// <returns>
+        /// s >=0 on success otherwise an error code.
         /// AVERROR(ENOSYS) on unsupported commands
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2090,22 +2334,31 @@ namespace FFmpeg
 
         /// <summary>
         /// Queue a command for one or more filter instances.
-        /// 
-        /// @param graph  the filter graph
-        /// @param target the filter(s) to which the command should be sent
+        /// </summary>
+        /// <param name="graph">
+        /// the filter graph
+        /// </param>
+        /// <param name="target">
+        /// the filter(s) to which the command should be sent
         /// "all" sends to all filters
         /// otherwise it can be a filter or filter instance name
         /// which will send the command to all matching filters.
-        /// @param cmd    the command to sent, for handling simplicity all commands
-        /// must be alphanummeric only
-        /// @param arg    the argument for the command
-        /// @param ts     time at which the command should be sent to the filter
-        /// 
-        /// @note As this executes commands after this function returns, no return
-        /// code
+        /// </param>
+        /// <param name="cmd">
+        /// the command to sent, for handling simplicity all commands must be
+        /// alphanummeric only
+        /// </param>
+        /// <param name="arg">
+        /// the argument for the command
+        /// </param>
+        /// <param name="ts">
+        /// time at which the command should be sent to the filter
+        /// </param>
+        /// <remark>
+        /// As this executes commands after this function returns, no return code
         /// from the filter is provided, also AVFILTER_CMD_FLAG_ONE is not
         /// supported.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2114,12 +2367,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Dump a graph into a human-readable string representation.
-        /// 
-        /// @param graph    the graph to dump
-        /// @param options  formatting options; currently ignored
-        /// @return  a string, or NULL in case of memory allocation failure;
-        /// the string must be freed using av_free
         /// </summary>
+        /// <param name="graph">
+        /// the graph to dump
+        /// </param>
+        /// <param name="options">
+        /// formatting options; currently ignored
+        /// </param>
+        /// <returns>
+        /// a string, or NULL in case of memory allocation failure;
+        /// the string must be freed using av_free
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2142,10 +2400,11 @@ namespace FFmpeg
         /// When there are multiple sink links, in case the requested link
         /// returns an EOF, this may cause a filter to flush pending frames
         /// which are sent to another sink link, although unrequested.
-        /// 
-        /// @return  the return value of ff_request_frame(),
-        /// or AVERROR_EOF if all links returned AVERROR_EOF
         /// </summary>
+        /// <returns>
+        /// the return value of ff_request_frame(),
+        /// or AVERROR_EOF if all links returned AVERROR_EOF
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

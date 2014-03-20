@@ -13,19 +13,36 @@ namespace FFmpeg
     {
         /// <summary>
         /// Queue an audio buffer to the audio buffer source.
-        /// 
-        /// @param abuffersrc audio source buffer context
-        /// @param data pointers to the samples planes
-        /// @param linesize linesizes of each audio buffer plane
-        /// @param nb_samples number of samples per channel
-        /// @param sample_fmt sample format of the audio data
-        /// @param ch_layout channel layout of the audio data
-        /// @param planar flag to indicate if audio data is planar or packed
-        /// @param pts presentation timestamp of the audio buffer
-        /// @param flags unused
+        /// </summary>
+        /// <param name="abuffersrc">
+        /// audio source buffer context
+        /// </param>
+        /// <param name="data">
+        /// pointers to the samples planes
+        /// </param>
+        /// <param name="linesize">
+        /// linesizes of each audio buffer plane
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples per channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// sample format of the audio data
+        /// </param>
+        /// <param name="ch_layout">
+        /// channel layout of the audio data
+        /// </param>
+        /// <param name="planar">
+        /// flag to indicate if audio data is planar or packed
+        /// </param>
+        /// <param name="pts">
+        /// presentation timestamp of the audio buffer
+        /// </param>
+        /// <param name="flags">
+        /// unused
         /// 
         /// @deprecated use av_buffersrc_add_ref() instead.
-        /// </summary>
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -38,18 +55,31 @@ namespace FFmpeg
         /// 
         /// This is similar to av_asrc_buffer_add_samples(), but the samples
         /// are stored in a buffer with known size.
-        /// 
-        /// @param abuffersrc audio source buffer context
-        /// @param buf pointer to the samples data, packed is assumed
-        /// @param size the size in bytes of the buffer, it must contain an
+        /// </summary>
+        /// <param name="abuffersrc">
+        /// audio source buffer context
+        /// </param>
+        /// <param name="buf">
+        /// pointer to the samples data, packed is assumed
+        /// </param>
+        /// <param name="size">
+        /// the size in bytes of the buffer, it must contain an
         /// integer number of samples
-        /// @param sample_fmt sample format of the audio data
-        /// @param ch_layout channel layout of the audio data
-        /// @param pts presentation timestamp of the audio buffer
-        /// @param flags unused
+        /// </param>
+        /// <param name="sample_fmt">
+        /// sample format of the audio data
+        /// </param>
+        /// <param name="ch_layout">
+        /// channel layout of the audio data
+        /// </param>
+        /// <param name="pts">
+        /// presentation timestamp of the audio buffer
+        /// </param>
+        /// <param name="flags">
+        /// unused
         /// 
         /// @deprecated use av_buffersrc_add_ref() instead.
-        /// </summary>
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -59,13 +89,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Queue an audio buffer to the audio buffer source.
-        /// 
-        /// @param abuffersrc audio source buffer context
-        /// @param samplesref buffer ref to queue
-        /// @param flags unused
+        /// </summary>
+        /// <param name="abuffersrc">
+        /// audio source buffer context
+        /// </param>
+        /// <param name="samplesref">
+        /// buffer ref to queue
+        /// </param>
+        /// <param name="flags">
+        /// unused
         /// 
         /// @deprecated use av_buffersrc_add_ref() instead.
-        /// </summary>
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,

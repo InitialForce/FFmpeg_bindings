@@ -85,8 +85,10 @@ namespace FFmpeg
         /// with swr_alloc_set_opts()) before calling swr_init().
         /// 
         /// @see swr_alloc_set_opts(), swr_init(), swr_free()
-        /// @return NULL on error, allocated context otherwise
         /// </summary>
+        /// <returns>
+        /// NULL on error, allocated context otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -95,9 +97,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize context after user parameters have been set.
-        /// 
-        /// @return AVERROR error code in case of failure.
         /// </summary>
+        /// <returns>
+        /// AVERROR error code in case of failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -112,20 +115,39 @@ namespace FFmpeg
         /// other hand, swr_alloc() can use swr_alloc_set_opts() to set the
         /// parameters
         /// on the allocated context.
-        /// 
-        /// @param s               Swr context, can be NULL
-        /// @param out_ch_layout   output channel layout (AV_CH_LAYOUT_*)
-        /// @param out_sample_fmt  output sample format (AV_SAMPLE_FMT_*).
-        /// @param out_sample_rate output sample rate (frequency in Hz)
-        /// @param in_ch_layout    input channel layout (AV_CH_LAYOUT_*)
-        /// @param in_sample_fmt   input sample format (AV_SAMPLE_FMT_*).
-        /// @param in_sample_rate  input sample rate (frequency in Hz)
-        /// @param log_offset      logging level offset
-        /// @param log_ctx         parent logging context, can be NULL
+        /// </summary>
+        /// <param name="s">
+        /// Swr context, can be NULL
+        /// </param>
+        /// <param name="out_ch_layout">
+        /// output channel layout (AV_CH_LAYOUT_*)
+        /// </param>
+        /// <param name="out_sample_fmt">
+        /// output sample format (AV_SAMPLE_FMT_*).
+        /// </param>
+        /// <param name="out_sample_rate">
+        /// output sample rate (frequency in Hz)
+        /// </param>
+        /// <param name="in_ch_layout">
+        /// input channel layout (AV_CH_LAYOUT_*)
+        /// </param>
+        /// <param name="in_sample_fmt">
+        /// input sample format (AV_SAMPLE_FMT_*).
+        /// </param>
+        /// <param name="in_sample_rate">
+        /// input sample rate (frequency in Hz)
+        /// </param>
+        /// <param name="log_offset">
+        /// logging level offset
+        /// </param>
+        /// <param name="log_ctx">
+        /// parent logging context, can be NULL
         /// 
         /// @see swr_init(), swr_free()
-        /// @return NULL on error, allocated context otherwise
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// NULL on error, allocated context otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -161,18 +183,26 @@ namespace FFmpeg
         /// buffered.
         /// You can avoid this buffering by providing more output space than input.
         /// Convertion will run directly without copying whenever possible.
-        /// 
-        /// @param s         allocated Swr context, with parameters set
-        /// @param out       output buffers, only the first one need be set in case
-        /// of packed audio
-        /// @param out_count amount of space available for output in samples per
-        /// channel
-        /// @param in        input buffers, only the first one need to be set in
-        /// case of packed audio
-        /// @param in_count  number of input samples available in one channel
-        /// 
-        /// @return number of samples output per channel, negative value on error
         /// </summary>
+        /// <param name="s">
+        /// allocated Swr context, with parameters set
+        /// </param>
+        /// <param name="out">
+        /// output buffers, only the first one need be set in case of packed audio
+        /// </param>
+        /// <param name="out_count">
+        /// amount of space available for output in samples per channel
+        /// </param>
+        /// <param name="in">
+        /// input buffers, only the first one need to be set in case of packed
+        /// audio
+        /// </param>
+        /// <param name="in_count">
+        /// number of input samples available in one channel
+        /// </param>
+        /// <returns>
+        /// number of samples output per channel, negative value on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -190,18 +220,26 @@ namespace FFmpeg
         /// buffered.
         /// You can avoid this buffering by providing more output space than input.
         /// Convertion will run directly without copying whenever possible.
-        /// 
-        /// @param s         allocated Swr context, with parameters set
-        /// @param out       output buffers, only the first one need be set in case
-        /// of packed audio
-        /// @param out_count amount of space available for output in samples per
-        /// channel
-        /// @param in        input buffers, only the first one need to be set in
-        /// case of packed audio
-        /// @param in_count  number of input samples available in one channel
-        /// 
-        /// @return number of samples output per channel, negative value on error
         /// </summary>
+        /// <param name="s">
+        /// allocated Swr context, with parameters set
+        /// </param>
+        /// <param name="out">
+        /// output buffers, only the first one need be set in case of packed audio
+        /// </param>
+        /// <param name="out_count">
+        /// amount of space available for output in samples per channel
+        /// </param>
+        /// <param name="in">
+        /// input buffers, only the first one need to be set in case of packed
+        /// audio
+        /// </param>
+        /// <param name="in_count">
+        /// number of input samples available in one channel
+        /// </param>
+        /// <returns>
+        /// number of samples output per channel, negative value on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -211,18 +249,22 @@ namespace FFmpeg
         /// <summary>
         /// Convert the next timestamp from input to output
         /// timestamps are in 1/(in_sample_rate * out_sample_rate) units.
-        /// 
-        /// @note There are 2 slightly differently behaving modes.
+        /// </summary>
+        /// <remark>
+        /// There are 2 slightly differently behaving modes.
         /// First is when automatic timestamp compensation is not used,
         /// (min_compensation >= FLT_MAX)
         /// in this case timestamps will be passed through with delays compensated
         /// Second is when automatic timestamp compensation is used,
         /// (min_compensation < FLT_MAX)
         /// in this case the output timestamps will match output sample numbers
-        /// 
-        /// @param pts   timestamp for the next input sample, INT64_MIN if unknown
-        /// @return the output timestamp for the next output sample
-        /// </summary>
+        /// </remark>
+        /// <param name="pts">
+        /// timestamp for the next input sample, INT64_MIN if unknown
+        /// </param>
+        /// <returns>
+        /// the output timestamp for the next output sample
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -240,12 +282,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Set a customized input channel mapping.
-        /// 
-        /// @param s           allocated Swr context, not yet initialized
-        /// @param channel_map customized input channel mapping (array of channel
-        /// indexes, -1 for a muted channel)
-        /// @return AVERROR error code in case of failure.
         /// </summary>
+        /// <param name="s">
+        /// allocated Swr context, not yet initialized
+        /// </param>
+        /// <param name="channel_map">
+        /// customized input channel mapping (array of channel
+        /// indexes, -1 for a muted channel)
+        /// </param>
+        /// <returns>
+        /// AVERROR error code in case of failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -254,13 +301,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Set a customized remix matrix.
-        /// 
-        /// @param s       allocated Swr context, not yet initialized
-        /// @param matrix  remix coefficients; matrix[i + stride * o] is
-        /// the weight of input channel i in output channel o
-        /// @param stride  offset between lines of the matrix
-        /// @return  AVERROR error code in case of failure.
         /// </summary>
+        /// <param name="s">
+        /// allocated Swr context, not yet initialized
+        /// </param>
+        /// <param name="matrix">
+        /// remix coefficients; matrix[i + stride * o] is
+        /// the weight of input channel i in output channel o
+        /// </param>
+        /// <param name="stride">
+        /// offset between lines of the matrix
+        /// </param>
+        /// <returns>
+        /// AVERROR error code in case of failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -298,9 +352,12 @@ namespace FFmpeg
         /// output sample rate may be a poor choice to represent the delay,
         /// similarly
         /// for upsampling and the input sample rate.
-        /// 
-        /// @param s     swr context
-        /// @param base  timebase in which the returned delay will be
+        /// </summary>
+        /// <param name="s">
+        /// swr context
+        /// </param>
+        /// <param name="base">
+        /// timebase in which the returned delay will be
         /// if its set to 1 the returned delay is in seconds
         /// if its set to 1000 the returned delay is in milli seconds
         /// if its set to the input sample rate then the returned delay is in input
@@ -309,8 +366,10 @@ namespace FFmpeg
         /// output samples
         /// an exact rounding free delay can be found by using LCM(in_sample_rate,
         /// out_sample_rate)
-        /// @returns     the delay in 1/base units.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// s     the delay in 1/base units.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWRESAMPLE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

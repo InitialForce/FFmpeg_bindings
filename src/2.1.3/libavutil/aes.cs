@@ -26,9 +26,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize an AVAES context.
-        /// @param key_bits 128, 192 or 256
-        /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
+        /// <param name="key_bits">
+        /// 128, 192 or 256
+        /// </param>
+        /// <param name="decrypt">
+        /// 0 for encryption, 1 for decryption
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -37,13 +41,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Encrypt or decrypt a buffer using a previously initialized context.
-        /// @param count number of 16 byte blocks
-        /// @param dst destination array, can be equal to src
-        /// @param src source array, can be equal to dst
-        /// @param iv initialization vector for CBC mode, if NULL then ECB will be
-        /// used
-        /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
+        /// <param name="count">
+        /// number of 16 byte blocks
+        /// </param>
+        /// <param name="dst">
+        /// destination array, can be equal to src
+        /// </param>
+        /// <param name="src">
+        /// source array, can be equal to dst
+        /// </param>
+        /// <param name="iv">
+        /// initialization vector for CBC mode, if NULL then ECB will be used
+        /// </param>
+        /// <param name="decrypt">
+        /// 0 for encryption, 1 for decryption
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

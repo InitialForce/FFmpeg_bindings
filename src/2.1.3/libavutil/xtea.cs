@@ -23,10 +23,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize an AVXTEA context.
-        /// 
-        /// @param ctx an AVXTEA context
-        /// @param key a key of 16 bytes used for encryption/decryption
         /// </summary>
+        /// <param name="ctx">
+        /// an AVXTEA context
+        /// </param>
+        /// <param name="key">
+        /// a key of 16 bytes used for encryption/decryption
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -35,15 +38,25 @@ namespace FFmpeg
 
         /// <summary>
         /// Encrypt or decrypt a buffer using a previously initialized context.
-        /// 
-        /// @param ctx an AVXTEA context
-        /// @param dst destination array, can be equal to src
-        /// @param src source array, can be equal to dst
-        /// @param count number of 8 byte blocks
-        /// @param iv initialization vector for CBC mode, if NULL then ECB will be
-        /// used
-        /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
+        /// <param name="ctx">
+        /// an AVXTEA context
+        /// </param>
+        /// <param name="dst">
+        /// destination array, can be equal to src
+        /// </param>
+        /// <param name="src">
+        /// source array, can be equal to dst
+        /// </param>
+        /// <param name="count">
+        /// number of 8 byte blocks
+        /// </param>
+        /// <param name="iv">
+        /// initialization vector for CBC mode, if NULL then ECB will be used
+        /// </param>
+        /// <param name="decrypt">
+        /// 0 for encryption, 1 for decryption
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

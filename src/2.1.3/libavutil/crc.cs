@@ -28,23 +28,32 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize a CRC table.
-        /// @param ctx must be an array of size sizeof(AVCRC)*257 or
-        /// sizeof(AVCRC)*1024
-        /// @param le If 1, the lowest bit represents the coefficient for the
-        /// highest
+        /// </summary>
+        /// <param name="ctx">
+        /// must be an array of size sizeof(AVCRC)*257 or sizeof(AVCRC)*1024
+        /// </param>
+        /// <param name="le">
+        /// If 1, the lowest bit represents the coefficient for the highest
         /// exponent of the corresponding polynomial (both for poly and
         /// actual CRC).
         /// If 0, you must swap the CRC parameter and the result of av_crc
         /// if you need the standard representation (can be simplified in
         /// most cases to e.g. bswap16):
         /// av_bswap32(crc << (32-bits))
-        /// @param bits number of bits for the CRC
-        /// @param poly generator polynomial without the x**bits coefficient, in
-        /// the
+        /// </param>
+        /// <param name="bits">
+        /// number of bits for the CRC
+        /// </param>
+        /// <param name="poly">
+        /// generator polynomial without the x**bits coefficient, in the
         /// representation as specified by le
-        /// @param ctx_size size of ctx in bytes
-        /// @return <0 on failure
-        /// </summary>
+        /// </param>
+        /// <param name="ctx_size">
+        /// size of ctx in bytes
+        /// </param>
+        /// <returns>
+        /// <0 on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -53,9 +62,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Get an initialized standard CRC table.
-        /// @param crc_id ID of a standard CRC
-        /// @return a pointer to the CRC table or NULL on failure
         /// </summary>
+        /// <param name="crc_id">
+        /// ID of a standard CRC
+        /// </param>
+        /// <returns>
+        /// a pointer to the CRC table or NULL on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -64,11 +77,15 @@ namespace FFmpeg
 
         /// <summary>
         /// Calculate the CRC of a block.
-        /// @param crc CRC of previous blocks if any or initial value for CRC
-        /// @return CRC updated with the data from the given block
+        /// </summary>
+        /// <param name="crc">
+        /// CRC of previous blocks if any or initial value for CRC
+        /// </param>
+        /// <returns>
+        /// CRC updated with the data from the given block
         /// 
         /// @see av_crc_init() "le" parameter
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

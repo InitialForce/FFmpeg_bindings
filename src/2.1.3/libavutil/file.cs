@@ -16,12 +16,17 @@ namespace FFmpeg
         /// In case of success set *bufptr to the read or mmapped buffer, and
         /// size to the size in bytes of the buffer in *bufptr.
         /// The returned buffer must be released with av_file_unmap().
-        /// 
-        /// @param log_offset loglevel offset used for logging
-        /// @param log_ctx context used for logging
-        /// @return a non negative number in case of success, a negative value
-        /// corresponding to an AVERROR error code in case of failure
         /// </summary>
+        /// <param name="log_offset">
+        /// loglevel offset used for logging
+        /// </param>
+        /// <param name="log_ctx">
+        /// context used for logging
+        /// </param>
+        /// <returns>
+        /// a non negative number in case of success, a negative value
+        /// corresponding to an AVERROR error code in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -34,12 +39,17 @@ namespace FFmpeg
         /// In case of success set *bufptr to the read or mmapped buffer, and
         /// size to the size in bytes of the buffer in *bufptr.
         /// The returned buffer must be released with av_file_unmap().
-        /// 
-        /// @param log_offset loglevel offset used for logging
-        /// @param log_ctx context used for logging
-        /// @return a non negative number in case of success, a negative value
-        /// corresponding to an AVERROR error code in case of failure
         /// </summary>
+        /// <param name="log_offset">
+        /// loglevel offset used for logging
+        /// </param>
+        /// <param name="log_ctx">
+        /// context used for logging
+        /// </param>
+        /// <returns>
+        /// a non negative number in case of success, a negative value
+        /// corresponding to an AVERROR error code in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -48,10 +58,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Unmap or free the buffer bufptr created by av_file_map().
-        /// 
-        /// @param size size in bytes of bufptr, must be the same as returned
-        /// by av_file_map()
         /// </summary>
+        /// <param name="size">
+        /// size in bytes of bufptr, must be the same as returned
+        /// by av_file_map()
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -63,12 +74,16 @@ namespace FFmpeg
         /// Also, tries to create file in /tmp first, if possible.
         /// prefix can be a character constant; *filename will be allocated
         /// internally.
-        /// @return file descriptor of opened file (or -1 on error)
+        /// </summary>
+        /// <returns>
+        /// file descriptor of opened file (or -1 on error)
         /// and opened file name in **filename.
-        /// @note On very old libcs it is necessary to set a secure umask before
+        /// </returns>
+        /// <remark>
+        /// On very old libcs it is necessary to set a secure umask before
         /// calling this, av_tempfile() can't call umask itself as it is used in
         /// libraries and could interfere with the calling application.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -80,12 +95,16 @@ namespace FFmpeg
         /// Also, tries to create file in /tmp first, if possible.
         /// prefix can be a character constant; *filename will be allocated
         /// internally.
-        /// @return file descriptor of opened file (or -1 on error)
+        /// </summary>
+        /// <returns>
+        /// file descriptor of opened file (or -1 on error)
         /// and opened file name in **filename.
-        /// @note On very old libcs it is necessary to set a secure umask before
+        /// </returns>
+        /// <remark>
+        /// On very old libcs it is necessary to set a secure umask before
         /// calling this, av_tempfile() can't call umask itself as it is used in
         /// libraries and could interfere with the calling application.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

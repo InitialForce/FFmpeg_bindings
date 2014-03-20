@@ -24,18 +24,26 @@ namespace FFmpeg
 
         /// <summary>
         /// @brief Decodes LZO 1x compressed data.
-        /// @param out output buffer
-        /// @param outlen size of output buffer, number of bytes left are returned
-        /// here
-        /// @param in input buffer
-        /// @param inlen size of input buffer, number of bytes left are returned
-        /// here
-        /// @return 0 on success, otherwise a combination of the error flags above
+        /// </summary>
+        /// <param name="out">
+        /// output buffer
+        /// </param>
+        /// <param name="outlen">
+        /// size of output buffer, number of bytes left are returned here
+        /// </param>
+        /// <param name="in">
+        /// input buffer
+        /// </param>
+        /// <param name="inlen">
+        /// size of input buffer, number of bytes left are returned here
+        /// </param>
+        /// <returns>
+        /// 0 on success, otherwise a combination of the error flags above
         /// 
         /// Make sure all buffers are appropriately padded, in must provide
         /// AV_LZO_INPUT_PADDING, out must provide AV_LZO_OUTPUT_PADDING additional
         /// bytes.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

@@ -58,10 +58,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Set up a complex FFT.
-        /// @param nbits           log2 of the length of the input array
-        /// @param inverse         if 0 perform the forward transform, if 1 perform
-        /// the inverse
         /// </summary>
+        /// <param name="nbits">
+        /// log2 of the length of the input array
+        /// </param>
+        /// <param name="inverse">
+        /// if 0 perform the forward transform, if 1 perform the inverse
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -126,9 +129,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Set up a real FFT.
-        /// @param nbits           log2 of the length of the input array
-        /// @param trans           the type of transform
         /// </summary>
+        /// <param name="nbits">
+        /// log2 of the length of the input array
+        /// </param>
+        /// <param name="trans">
+        /// the type of transform
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -149,12 +156,15 @@ namespace FFmpeg
 
         /// <summary>
         /// Set up DCT.
-        /// @param nbits           size of the input array:
+        /// </summary>
+        /// <param name="nbits">
+        /// size of the input array:
         /// (1 << nbits)     for DCT-II, DCT-III and DST-I
         /// (1 << nbits) + 1 for DCT-I
-        /// 
-        /// @note the first element of the input of DST-I is ignored
-        /// </summary>
+        /// </param>
+        /// <remark>
+        /// the first element of the input of DST-I is ignored
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

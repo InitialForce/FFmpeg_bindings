@@ -92,17 +92,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Init a print buffer.
-        /// 
-        /// @param buf        buffer to init
-        /// @param size_init  initial size (including the final 0)
-        /// @param size_max   maximum size;
+        /// </summary>
+        /// <param name="buf">
+        /// buffer to init
+        /// </param>
+        /// <param name="size_init">
+        /// initial size (including the final 0)
+        /// </param>
+        /// <param name="size_max">
+        /// maximum size;
         /// 0 means do not write anything, just count the length;
         /// 1 is replaced by the maximum value for automatic storage;
         /// any large value means that the internal buffer will be
         /// reallocated as needed up to that limit; -1 is converted to
         /// UINT_MAX, the largest limit possible.
         /// Check also AV_BPRINT_SIZE_* macros.
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -113,11 +118,16 @@ namespace FFmpeg
         /// Init a print buffer using a pre-existing buffer.
         /// 
         /// The buffer will not be reallocated.
-        /// 
-        /// @param buf     buffer structure to init
-        /// @param buffer  byte buffer to use for the string data
-        /// @param size    size of buffer
         /// </summary>
+        /// <param name="buf">
+        /// buffer structure to init
+        /// </param>
+        /// <param name="buffer">
+        /// byte buffer to use for the string data
+        /// </param>
+        /// <param name="size">
+        /// size of buffer
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -157,13 +167,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate bytes in the buffer for external use.
-        /// 
-        /// @param[in]  buf          buffer structure
-        /// @param[in]  size         required size
-        /// @param[out] mem          pointer to the memory area
-        /// @param[out] actual_size  size of the memory area after allocation;
-        /// can be larger or smaller than size
         /// </summary>
+        /// <param name="[in]">
+        /// buf          buffer structure
+        /// </param>
+        /// <param name="[in]">
+        /// size         required size
+        /// </param>
+        /// <param name="[out]">
+        /// mem          pointer to the memory area
+        /// </param>
+        /// <param name="[out]">
+        /// actual_size  size of the memory area after allocation;
+        /// can be larger or smaller than size
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -172,13 +189,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate bytes in the buffer for external use.
-        /// 
-        /// @param[in]  buf          buffer structure
-        /// @param[in]  size         required size
-        /// @param[out] mem          pointer to the memory area
-        /// @param[out] actual_size  size of the memory area after allocation;
-        /// can be larger or smaller than size
         /// </summary>
+        /// <param name="[in]">
+        /// buf          buffer structure
+        /// </param>
+        /// <param name="[in]">
+        /// size         required size
+        /// </param>
+        /// <param name="[out]">
+        /// mem          pointer to the memory area
+        /// </param>
+        /// <param name="[out]">
+        /// actual_size  size of the memory area after allocation;
+        /// can be larger or smaller than size
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -215,8 +239,10 @@ namespace FFmpeg
         /// @arg[out] ret_str  if not NULL, used to return a permanent copy of the
         /// buffer contents, or NULL if memory allocation fails;
         /// if NULL, the buffer is discarded and freed
-        /// @return  0 for success or error code (probably AVERROR(ENOMEM))
         /// </summary>
+        /// <returns>
+        /// 0 for success or error code (probably AVERROR(ENOMEM))
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -232,8 +258,10 @@ namespace FFmpeg
         /// @arg[out] ret_str  if not NULL, used to return a permanent copy of the
         /// buffer contents, or NULL if memory allocation fails;
         /// if NULL, the buffer is discarded and freed
-        /// @return  0 for success or error code (probably AVERROR(ENOMEM))
         /// </summary>
+        /// <returns>
+        /// 0 for success or error code (probably AVERROR(ENOMEM))
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -242,19 +270,26 @@ namespace FFmpeg
 
         /// <summary>
         /// Escape the content in src and append it to dstbuf.
-        /// 
-        /// @param dstbuf        already inited destination bprint buffer
-        /// @param src           string containing the text to escape
-        /// @param special_chars string containing the special characters which
+        /// </summary>
+        /// <param name="dstbuf">
+        /// already inited destination bprint buffer
+        /// </param>
+        /// <param name="src">
+        /// string containing the text to escape
+        /// </param>
+        /// <param name="special_chars">
+        /// string containing the special characters which
         /// need to be escaped, can be NULL
-        /// @param mode          escape mode to employ, see AV_ESCAPE_MODE_*
-        /// macros.
+        /// </param>
+        /// <param name="mode">
+        /// escape mode to employ, see AV_ESCAPE_MODE_* macros.
         /// Any unknown value for mode will be considered equivalent to
         /// AV_ESCAPE_MODE_BACKSLASH, but this behaviour can change without
         /// notice.
-        /// @param flags         flags which control how to escape, see
-        /// AV_ESCAPE_FLAG_* macros
-        /// </summary>
+        /// </param>
+        /// <param name="flags">
+        /// flags which control how to escape, see AV_ESCAPE_FLAG_* macros
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

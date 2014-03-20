@@ -139,15 +139,19 @@ namespace FFmpeg
         /// callback
         /// function.
         /// @see av_log_set_callback
-        /// 
-        /// @param avcl A pointer to an arbitrary struct of which the first field
-        /// is a
-        /// pointer to an AVClass struct.
-        /// @param level The importance level of the message expressed using a @ref
-        /// lavu_log_constants "Logging Constant".
-        /// @param fmt The format string (printf-compatible) that specifies how
-        /// subsequent arguments are converted to output.
         /// </summary>
+        /// <param name="avcl">
+        /// A pointer to an arbitrary struct of which the first field is a
+        /// pointer to an AVClass struct.
+        /// </param>
+        /// <param name="level">
+        /// The importance level of the message expressed using a @ref
+        /// lavu_log_constants "Logging Constant".
+        /// </param>
+        /// <param name="fmt">
+        /// The format string (printf-compatible) that specifies how
+        /// subsequent arguments are converted to output.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -158,9 +162,10 @@ namespace FFmpeg
         /// Get the current log level
         /// 
         /// @see lavu_log_constants
-        /// 
-        /// @return Current log level
         /// </summary>
+        /// <returns>
+        /// Current log level
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -171,9 +176,10 @@ namespace FFmpeg
         /// Set the log level
         /// 
         /// @see lavu_log_constants
-        /// 
-        /// @param level Logging level
         /// </summary>
+        /// <param name="level">
+        /// Logging level
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -184,16 +190,22 @@ namespace FFmpeg
         /// Default logging callback
         /// 
         /// It prints the message to stderr, optionally colorizing it.
-        /// 
-        /// @param avcl A pointer to an arbitrary struct of which the first field
-        /// is a
-        /// pointer to an AVClass struct.
-        /// @param level The importance level of the message expressed using a @ref
-        /// lavu_log_constants "Logging Constant".
-        /// @param fmt The format string (printf-compatible) that specifies how
-        /// subsequent arguments are converted to output.
-        /// @param ap The arguments referenced by the format string.
         /// </summary>
+        /// <param name="avcl">
+        /// A pointer to an arbitrary struct of which the first field is a
+        /// pointer to an AVClass struct.
+        /// </param>
+        /// <param name="level">
+        /// The importance level of the message expressed using a @ref
+        /// lavu_log_constants "Logging Constant".
+        /// </param>
+        /// <param name="fmt">
+        /// The format string (printf-compatible) that specifies how
+        /// subsequent arguments are converted to output.
+        /// </param>
+        /// <param name="ap">
+        /// The arguments referenced by the format string.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -202,11 +214,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Return the context name
-        /// 
-        /// @param  ctx The AVClass context
-        /// 
-        /// @return The AVClass class_name
         /// </summary>
+        /// <param name="ctx">
+        /// The AVClass context
+        /// </param>
+        /// <returns>
+        /// The AVClass class_name
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

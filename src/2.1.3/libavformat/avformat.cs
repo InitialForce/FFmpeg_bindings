@@ -185,7 +185,6 @@ namespace FFmpeg
         }
 
         /// <summary>
-        /// 
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVCodecTag
@@ -275,7 +274,6 @@ namespace FFmpeg
             /// may not be used outside of libavformat and can be changed and
             /// removed at will.
             /// New public fields should be added right above.
-            /// 
             /// </summary>
             public libavformat.AVOutputFormat* next;
 
@@ -304,12 +302,13 @@ namespace FFmpeg
 
             /// <summary>
             /// Test if the given codec can be stored in this container.
-            /// 
-            /// @return 1 if the codec is supported, 0 if it is not.
+            /// </summary>
+            /// <returns>
+            /// 1 if the codec is supported, 0 if it is not.
             /// A negative number if unknown.
             /// MKTAG('A', 'P', 'I', 'C') if the codec is only supported as
             /// AV_DISPOSITION_ATTACHED_PIC
-            /// </summary>
+            /// </returns>
             public global::System.IntPtr query_codec;
 
             public global::System.IntPtr get_output_timestamp;
@@ -362,7 +361,6 @@ namespace FFmpeg
             /// may not be used outside of libavformat and can be changed and
             /// removed at will.
             /// New public fields should be added right above.
-            /// 
             /// </summary>
             public libavformat.AVInputFormat* next;
 
@@ -395,10 +393,12 @@ namespace FFmpeg
             /// set. 'avformat_new_stream' can be called only if the flag
             /// AVFMTCTX_NOHEADER is used and only in the calling thread (not in a
             /// background thread).
-            /// @return 0 on success, < 0 on error.
+            /// </summary>
+            /// <returns>
+            /// 0 on success, < 0 on error.
             /// When returning an error, pkt must not have been allocated
             /// or must be freed before returning
-            /// </summary>
+            /// </returns>
             public global::System.IntPtr read_packet;
 
             /// <summary>
@@ -410,17 +410,25 @@ namespace FFmpeg
             /// <summary>
             /// Seek to a given timestamp relative to the frames in
             /// stream component stream_index.
-            /// @param stream_index Must not be -1.
-            /// @param flags Selects which direction should be preferred if no exact
-            /// match is available.
-            /// @return >= 0 on success (but not necessarily the new offset)
             /// </summary>
+            /// <param name="stream_index">
+            /// Must not be -1.
+            /// </param>
+            /// <param name="flags">
+            /// Selects which direction should be preferred if no exact
+            /// match is available.
+            /// </param>
+            /// <returns>
+            /// >= 0 on success (but not necessarily the new offset)
+            /// </returns>
             public global::System.IntPtr read_seek;
 
             /// <summary>
             /// Get the next timestamp in stream[stream_index].time_base units.
-            /// @return the timestamp or AV_NOPTS_VALUE if an error occurred
             /// </summary>
+            /// <returns>
+            /// the timestamp or AV_NOPTS_VALUE if an error occurred
+            /// </returns>
             public global::System.IntPtr read_timestamp;
 
             /// <summary>
@@ -534,9 +542,11 @@ namespace FFmpeg
             /// Only set this if you are absolutely 100% sure that the value you set
             /// it to really is the pts of the first frame.
             /// This may be undefined (AV_NOPTS_VALUE).
-            /// @note The ASF header does NOT contain a correct start_time the ASF
-            /// demuxer must NOT set this.
             /// </summary>
+            /// <remark>
+            /// The ASF header does NOT contain a correct start_time the ASF
+            /// demuxer must NOT set this.
+            /// </remark>
             public long start_time;
 
             /// <summary>
@@ -784,7 +794,6 @@ namespace FFmpeg
             /// may not be used outside of libavformat and can be changed and
             /// removed at will.
             /// New public fields should be added right above.
-            /// 
             /// </summary>
             public long start_time;
 
@@ -1236,11 +1245,16 @@ namespace FFmpeg
         /// <summary>
         /// Allocate and read the payload of a packet and initialize its
         /// fields with default values.
-        /// 
-        /// @param pkt packet
-        /// @param size desired payload size
-        /// @return >0 (read size) if OK, AVERROR_xxx otherwise
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="size">
+        /// desired payload size
+        /// </param>
+        /// <returns>
+        /// >0 (read size) if OK, AVERROR_xxx otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1254,12 +1268,17 @@ namespace FFmpeg
         /// which is inefficient. Thus this function should only be used
         /// when there is no reasonable way to know (an upper bound of)
         /// the final size.
-        /// 
-        /// @param pkt packet
-        /// @param size amount of data to read
-        /// @return >0 (read size) if OK, AVERROR_xxx otherwise, previous data
-        /// will not be lost even if an error occurs.
         /// </summary>
+        /// <param name="pkt">
+        /// packet
+        /// </param>
+        /// <param name="size">
+        /// amount of data to read
+        /// </param>
+        /// <returns>
+        /// >0 (read size) if OK, AVERROR_xxx otherwise, previous data
+        /// will not be lost even if an error occurs.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1322,10 +1341,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Returns the method used to set ctx->duration.
-        /// 
-        /// @return AVFMT_DURATION_FROM_PTS, AVFMT_DURATION_FROM_STREAM, or
-        /// AVFMT_DURATION_FROM_BITRATE.
         /// </summary>
+        /// <returns>
+        /// AVFMT_DURATION_FROM_PTS, AVFMT_DURATION_FROM_STREAM, or
+        /// AVFMT_DURATION_FROM_BITRATE.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1443,8 +1463,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Free an AVFormatContext and all its streams.
-        /// @param s context to free
         /// </summary>
+        /// <param name="s">
+        /// context to free
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1475,15 +1497,16 @@ namespace FFmpeg
         /// 
         /// User is required to call avcodec_close() and avformat_free_context() to
         /// clean up the allocation by avformat_new_stream().
-        /// 
-        /// @param c If non-NULL, the AVCodecContext corresponding to the new
-        /// stream
+        /// </summary>
+        /// <param name="c">
+        /// If non-NULL, the AVCodecContext corresponding to the new stream
         /// will be initialized to use this codec. This is needed for e.g.
         /// codec-specific
         /// defaults to be set, so codec should be provided if it is known.
-        /// 
-        /// @return newly created stream or NULL on error.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// newly created stream or NULL on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1507,18 +1530,27 @@ namespace FFmpeg
         /// Allocate an AVFormatContext for an output format.
         /// avformat_free_context() can be used to free the context and
         /// everything allocated by the framework within it.
-        /// 
-        /// @param *ctx is set to the created format context, or to NULL in
-        /// case of failure
-        /// @param oformat format to use for allocating the context, if NULL
-        /// format_name and filename are used instead
-        /// @param format_name the name of output format to use for allocating the
-        /// context, if NULL filename is used instead
-        /// @param filename the name of the filename to use for allocating the
-        /// context, may be NULL
-        /// @return >= 0 in case of success, a negative AVERROR code in case of
-        /// failure
         /// </summary>
+        /// <param name="ctx">
+        /// is set to the created format context, or to NULL in
+        /// case of failure
+        /// </param>
+        /// <param name="oformat">
+        /// format to use for allocating the context, if NULL
+        /// format_name and filename are used instead
+        /// </param>
+        /// <param name="format_name">
+        /// the name of output format to use for allocating the
+        /// context, if NULL filename is used instead
+        /// </param>
+        /// <param name="filename">
+        /// the name of the filename to use for allocating the
+        /// context, may be NULL
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code in case of
+        /// failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1529,18 +1561,27 @@ namespace FFmpeg
         /// Allocate an AVFormatContext for an output format.
         /// avformat_free_context() can be used to free the context and
         /// everything allocated by the framework within it.
-        /// 
-        /// @param *ctx is set to the created format context, or to NULL in
-        /// case of failure
-        /// @param oformat format to use for allocating the context, if NULL
-        /// format_name and filename are used instead
-        /// @param format_name the name of output format to use for allocating the
-        /// context, if NULL filename is used instead
-        /// @param filename the name of the filename to use for allocating the
-        /// context, may be NULL
-        /// @return >= 0 in case of success, a negative AVERROR code in case of
-        /// failure
         /// </summary>
+        /// <param name="ctx">
+        /// is set to the created format context, or to NULL in
+        /// case of failure
+        /// </param>
+        /// <param name="oformat">
+        /// format to use for allocating the context, if NULL
+        /// format_name and filename are used instead
+        /// </param>
+        /// <param name="format_name">
+        /// the name of output format to use for allocating the
+        /// context, if NULL filename is used instead
+        /// </param>
+        /// <param name="filename">
+        /// the name of the filename to use for allocating the
+        /// context, may be NULL
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code in case of
+        /// failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1558,10 +1599,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Guess the file format.
-        /// 
-        /// @param is_opened Whether the file is already opened; determines whether
-        /// demuxers with or without AVFMT_NOFILE are probed.
         /// </summary>
+        /// <param name="is_opened">
+        /// Whether the file is already opened; determines whether
+        /// demuxers with or without AVFMT_NOFILE are probed.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1570,15 +1612,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Guess the file format.
-        /// 
-        /// @param is_opened Whether the file is already opened; determines whether
+        /// </summary>
+        /// <param name="is_opened">
+        /// Whether the file is already opened; determines whether
         /// demuxers with or without AVFMT_NOFILE are probed.
-        /// @param score_max A probe score larger that this is required to accept a
+        /// </param>
+        /// <param name="score_max">
+        /// A probe score larger that this is required to accept a
         /// detection, the variable is set to the actual detection
         /// score afterwards.
         /// If the score is <= AVPROBE_SCORE_MAX / 4 it is recommended
         /// to retry with a larger probe buffer.
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1587,11 +1632,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Guess the file format.
-        /// 
-        /// @param is_opened Whether the file is already opened; determines whether
-        /// demuxers with or without AVFMT_NOFILE are probed.
-        /// @param score_ret The score of the best detection.
         /// </summary>
+        /// <param name="is_opened">
+        /// Whether the file is already opened; determines whether
+        /// demuxers with or without AVFMT_NOFILE are probed.
+        /// </param>
+        /// <param name="score_ret">
+        /// The score of the best detection.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1606,18 +1654,30 @@ namespace FFmpeg
         /// attempt is made. When the maximum probe size is reached, the input
         /// format
         /// with the highest score is returned.
-        /// 
-        /// @param pb the bytestream to probe
-        /// @param fmt the input format is put here
-        /// @param filename the filename of the stream
-        /// @param logctx the log context
-        /// @param offset the offset within the bytestream to probe from
-        /// @param max_probe_size the maximum probe buffer size (zero for default)
-        /// @return the score in case of success, a negative value corresponding to
-        /// an
+        /// </summary>
+        /// <param name="pb">
+        /// the bytestream to probe
+        /// </param>
+        /// <param name="fmt">
+        /// the input format is put here
+        /// </param>
+        /// <param name="filename">
+        /// the filename of the stream
+        /// </param>
+        /// <param name="logctx">
+        /// the log context
+        /// </param>
+        /// <param name="offset">
+        /// the offset within the bytestream to probe from
+        /// </param>
+        /// <param name="max_probe_size">
+        /// the maximum probe buffer size (zero for default)
+        /// </param>
+        /// <returns>
+        /// the score in case of success, a negative value corresponding to an
         /// the maximal score is AVPROBE_SCORE_MAX
         /// AVERROR code otherwise
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1632,18 +1692,30 @@ namespace FFmpeg
         /// attempt is made. When the maximum probe size is reached, the input
         /// format
         /// with the highest score is returned.
-        /// 
-        /// @param pb the bytestream to probe
-        /// @param fmt the input format is put here
-        /// @param filename the filename of the stream
-        /// @param logctx the log context
-        /// @param offset the offset within the bytestream to probe from
-        /// @param max_probe_size the maximum probe buffer size (zero for default)
-        /// @return the score in case of success, a negative value corresponding to
-        /// an
+        /// </summary>
+        /// <param name="pb">
+        /// the bytestream to probe
+        /// </param>
+        /// <param name="fmt">
+        /// the input format is put here
+        /// </param>
+        /// <param name="filename">
+        /// the filename of the stream
+        /// </param>
+        /// <param name="logctx">
+        /// the log context
+        /// </param>
+        /// <param name="offset">
+        /// the offset within the bytestream to probe from
+        /// </param>
+        /// <param name="max_probe_size">
+        /// the maximum probe buffer size (zero for default)
+        /// </param>
+        /// <returns>
+        /// the score in case of success, a negative value corresponding to an
         /// the maximal score is AVPROBE_SCORE_MAX
         /// AVERROR code otherwise
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1671,27 +1743,35 @@ namespace FFmpeg
         /// <summary>
         /// Open an input stream and read the header. The codecs are not opened.
         /// The stream must be closed with avformat_close_input().
-        /// 
-        /// @param ps Pointer to user-supplied AVFormatContext (allocated by
+        /// </summary>
+        /// <param name="ps">
+        /// Pointer to user-supplied AVFormatContext (allocated by
         /// avformat_alloc_context).
         /// May be a pointer to NULL, in which case an AVFormatContext is allocated
         /// by this
         /// function and written into ps.
         /// Note that a user-supplied AVFormatContext will be freed on failure.
-        /// @param filename Name of the stream to open.
-        /// @param fmt If non-NULL, this parameter forces a specific input format.
+        /// </param>
+        /// <param name="filename">
+        /// Name of the stream to open.
+        /// </param>
+        /// <param name="fmt">
+        /// If non-NULL, this parameter forces a specific input format.
         /// Otherwise the format is autodetected.
-        /// @param options  A dictionary filled with AVFormatContext and
-        /// demuxer-private options.
+        /// </param>
+        /// <param name="options">
+        /// A dictionary filled with AVFormatContext and demuxer-private options.
         /// On return this parameter will be destroyed and replaced with a dict
         /// containing
         /// options that were not found. May be NULL.
-        /// 
-        /// @return 0 on success, a negative AVERROR on failure.
-        /// 
-        /// @note If you want to use custom IO, preallocate the format context and
-        /// set its pb field.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure.
+        /// </returns>
+        /// <remark>
+        /// If you want to use custom IO, preallocate the format context and set
+        /// its pb field.
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1701,27 +1781,35 @@ namespace FFmpeg
         /// <summary>
         /// Open an input stream and read the header. The codecs are not opened.
         /// The stream must be closed with avformat_close_input().
-        /// 
-        /// @param ps Pointer to user-supplied AVFormatContext (allocated by
+        /// </summary>
+        /// <param name="ps">
+        /// Pointer to user-supplied AVFormatContext (allocated by
         /// avformat_alloc_context).
         /// May be a pointer to NULL, in which case an AVFormatContext is allocated
         /// by this
         /// function and written into ps.
         /// Note that a user-supplied AVFormatContext will be freed on failure.
-        /// @param filename Name of the stream to open.
-        /// @param fmt If non-NULL, this parameter forces a specific input format.
+        /// </param>
+        /// <param name="filename">
+        /// Name of the stream to open.
+        /// </param>
+        /// <param name="fmt">
+        /// If non-NULL, this parameter forces a specific input format.
         /// Otherwise the format is autodetected.
-        /// @param options  A dictionary filled with AVFormatContext and
-        /// demuxer-private options.
+        /// </param>
+        /// <param name="options">
+        /// A dictionary filled with AVFormatContext and demuxer-private options.
         /// On return this parameter will be destroyed and replaced with a dict
         /// containing
         /// options that were not found. May be NULL.
-        /// 
-        /// @return 0 on success, a negative AVERROR on failure.
-        /// 
-        /// @note If you want to use custom IO, preallocate the format context and
-        /// set its pb field.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure.
+        /// </returns>
+        /// <remark>
+        /// If you want to use custom IO, preallocate the format context and set
+        /// its pb field.
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1742,14 +1830,17 @@ namespace FFmpeg
         /// frame mode.
         /// The logical file position is not changed by this function;
         /// examined packets may be buffered for later processing.
-        /// 
-        /// @param ic media file handle
-        /// @return >=0 if OK, AVERROR_xxx on error
+        /// </summary>
+        /// <param name="ic">
+        /// media file handle
+        /// </param>
+        /// <returns>
+        /// >=0 if OK, AVERROR_xxx on error
         /// @todo Let the user decide somehow what information is needed so that
         /// we do not waste time getting stuff the user does not need.
         /// 
         /// @deprecated use avformat_find_stream_info.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1764,21 +1855,27 @@ namespace FFmpeg
         /// frame mode.
         /// The logical file position is not changed by this function;
         /// examined packets may be buffered for later processing.
-        /// 
-        /// @param ic media file handle
-        /// @param options  If non-NULL, an ic.nb_streams long array of pointers to
+        /// </summary>
+        /// <param name="ic">
+        /// media file handle
+        /// </param>
+        /// <param name="options">
+        /// If non-NULL, an ic.nb_streams long array of pointers to
         /// dictionaries, where i-th member contains options for
         /// codec corresponding to i-th stream.
         /// On return each dictionary will be filled with options that were not
         /// found.
-        /// @return >=0 if OK, AVERROR_xxx on error
-        /// 
-        /// @note this function isn't guaranteed to open all the codecs, so
+        /// </param>
+        /// <returns>
+        /// >=0 if OK, AVERROR_xxx on error
+        /// </returns>
+        /// <remark>
+        /// this function isn't guaranteed to open all the codecs, so
         /// options being non-empty at return is a perfectly normal behavior.
         /// 
         /// @todo Let the user decide somehow what information is needed so that
         /// we do not waste time getting stuff the user does not need.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1792,21 +1889,27 @@ namespace FFmpeg
         /// frame mode.
         /// The logical file position is not changed by this function;
         /// examined packets may be buffered for later processing.
-        /// 
-        /// @param ic media file handle
-        /// @param options  If non-NULL, an ic.nb_streams long array of pointers to
+        /// </summary>
+        /// <param name="ic">
+        /// media file handle
+        /// </param>
+        /// <param name="options">
+        /// If non-NULL, an ic.nb_streams long array of pointers to
         /// dictionaries, where i-th member contains options for
         /// codec corresponding to i-th stream.
         /// On return each dictionary will be filled with options that were not
         /// found.
-        /// @return >=0 if OK, AVERROR_xxx on error
-        /// 
-        /// @note this function isn't guaranteed to open all the codecs, so
+        /// </param>
+        /// <returns>
+        /// >=0 if OK, AVERROR_xxx on error
+        /// </returns>
+        /// <remark>
+        /// this function isn't guaranteed to open all the codecs, so
         /// options being non-empty at return is a perfectly normal behavior.
         /// 
         /// @todo Let the user decide somehow what information is needed so that
         /// we do not waste time getting stuff the user does not need.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1815,15 +1918,21 @@ namespace FFmpeg
 
         /// <summary>
         /// Find the programs which belong to a given stream.
-        /// 
-        /// @param ic    media file handle
-        /// @param last  the last found program, the search will start after this
-        /// program, or from the beginning if it is NULL
-        /// @param s     stream index
-        /// @return the next program which belongs to s, NULL if no program is
-        /// found or
-        /// the last program is not among the programs of ic.
         /// </summary>
+        /// <param name="ic">
+        /// media file handle
+        /// </param>
+        /// <param name="last">
+        /// the last found program, the search will start after this
+        /// program, or from the beginning if it is NULL
+        /// </param>
+        /// <param name="s">
+        /// stream index
+        /// </param>
+        /// <returns>
+        /// the next program which belongs to s, NULL if no program is found or
+        /// the last program is not among the programs of ic.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1839,24 +1948,38 @@ namespace FFmpeg
         /// default decoder for the stream's codec; streams for which no decoder
         /// can
         /// be found are ignored.
-        /// 
-        /// @param ic                media file handle
-        /// @param type              stream type: video, audio, subtitles, etc.
-        /// @param wanted_stream_nb  user-requested stream number,
+        /// </summary>
+        /// <param name="ic">
+        /// media file handle
+        /// </param>
+        /// <param name="type">
+        /// stream type: video, audio, subtitles, etc.
+        /// </param>
+        /// <param name="wanted_stream_nb">
+        /// user-requested stream number,
         /// or -1 for automatic selection
-        /// @param related_stream    try to find a stream related (eg. in the same
+        /// </param>
+        /// <param name="related_stream">
+        /// try to find a stream related (eg. in the same
         /// program) to this one, or -1 if none
-        /// @param decoder_ret       if non-NULL, returns the decoder for the
+        /// </param>
+        /// <param name="decoder_ret">
+        /// if non-NULL, returns the decoder for the
         /// selected stream
-        /// @param flags             flags; none are currently defined
-        /// @return  the non-negative stream number in case of success,
+        /// </param>
+        /// <param name="flags">
+        /// flags; none are currently defined
+        /// </param>
+        /// <returns>
+        /// the non-negative stream number in case of success,
         /// AVERROR_STREAM_NOT_FOUND if no stream with the requested type
         /// could be found,
         /// AVERROR_DECODER_NOT_FOUND if streams were found but no decoder
-        /// @note  If av_find_best_stream returns successfully and decoder_ret is
-        /// not
+        /// </returns>
+        /// <remark>
+        /// If av_find_best_stream returns successfully and decoder_ret is not
         /// NULL, then *decoder_ret is guaranteed to be set to a valid AVCodec.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1872,24 +1995,38 @@ namespace FFmpeg
         /// default decoder for the stream's codec; streams for which no decoder
         /// can
         /// be found are ignored.
-        /// 
-        /// @param ic                media file handle
-        /// @param type              stream type: video, audio, subtitles, etc.
-        /// @param wanted_stream_nb  user-requested stream number,
+        /// </summary>
+        /// <param name="ic">
+        /// media file handle
+        /// </param>
+        /// <param name="type">
+        /// stream type: video, audio, subtitles, etc.
+        /// </param>
+        /// <param name="wanted_stream_nb">
+        /// user-requested stream number,
         /// or -1 for automatic selection
-        /// @param related_stream    try to find a stream related (eg. in the same
+        /// </param>
+        /// <param name="related_stream">
+        /// try to find a stream related (eg. in the same
         /// program) to this one, or -1 if none
-        /// @param decoder_ret       if non-NULL, returns the decoder for the
+        /// </param>
+        /// <param name="decoder_ret">
+        /// if non-NULL, returns the decoder for the
         /// selected stream
-        /// @param flags             flags; none are currently defined
-        /// @return  the non-negative stream number in case of success,
+        /// </param>
+        /// <param name="flags">
+        /// flags; none are currently defined
+        /// </param>
+        /// <returns>
+        /// the non-negative stream number in case of success,
         /// AVERROR_STREAM_NOT_FOUND if no stream with the requested type
         /// could be found,
         /// AVERROR_DECODER_NOT_FOUND if streams were found but no decoder
-        /// @note  If av_find_best_stream returns successfully and decoder_ret is
-        /// not
+        /// </returns>
+        /// <remark>
+        /// If av_find_best_stream returns successfully and decoder_ret is not
         /// NULL, then *decoder_ret is guaranteed to be set to a valid AVCodec.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1904,11 +2041,16 @@ namespace FFmpeg
         /// 
         /// This function is obsolete and should never be used.
         /// Use av_read_frame() instead.
-        /// 
-        /// @param s media file handle
-        /// @param pkt is filled
-        /// @return 0 if OK, AVERROR_xxx on error
         /// </summary>
+        /// <param name="s">
+        /// media file handle
+        /// </param>
+        /// <param name="pkt">
+        /// is filled
+        /// </param>
+        /// <returns>
+        /// 0 if OK, AVERROR_xxx on error
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -1943,9 +2085,10 @@ namespace FFmpeg
         /// provide them). pkt->pts can be AV_NOPTS_VALUE if the video format
         /// has B-frames, so it is better to rely on pkt->dts if you do not
         /// decompress the payload.
-        /// 
-        /// @return 0 if OK, < 0 on error or end of file
         /// </summary>
+        /// <returns>
+        /// 0 if OK, < 0 on error or end of file
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1955,14 +2098,22 @@ namespace FFmpeg
         /// <summary>
         /// Seek to the keyframe at timestamp.
         /// 'timestamp' in 'stream_index'.
-        /// @param stream_index If stream_index is (-1), a default
+        /// </summary>
+        /// <param name="stream_index">
+        /// If stream_index is (-1), a default
         /// stream is selected, and timestamp is automatically converted
         /// from AV_TIME_BASE units to the stream specific time_base.
-        /// @param timestamp Timestamp in AVStream.time_base units
+        /// </param>
+        /// <param name="timestamp">
+        /// Timestamp in AVStream.time_base units
         /// or, if no stream is specified, in AV_TIME_BASE units.
-        /// @param flags flags which select direction and seeking mode
-        /// @return >= 0 on success
-        /// </summary>
+        /// </param>
+        /// <param name="flags">
+        /// flags which select direction and seeking mode
+        /// </param>
+        /// <returns>
+        /// >= 0 on success
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1988,20 +2139,30 @@ namespace FFmpeg
         /// If flags contain AVSEEK_FLAG_ANY, then non-keyframes are treated as
         /// keyframes (this may not be supported by all demuxers).
         /// If flags contain AVSEEK_FLAG_BACKWARD, it is ignored.
-        /// 
-        /// @param stream_index index of the stream which is used as time base
-        /// reference
-        /// @param min_ts smallest acceptable timestamp
-        /// @param ts target timestamp
-        /// @param max_ts largest acceptable timestamp
-        /// @param flags flags
-        /// @return >=0 on success, error code otherwise
-        /// 
-        /// @note This is part of the new seek API which is still under
-        /// construction.
+        /// </summary>
+        /// <param name="stream_index">
+        /// index of the stream which is used as time base reference
+        /// </param>
+        /// <param name="min_ts">
+        /// smallest acceptable timestamp
+        /// </param>
+        /// <param name="ts">
+        /// target timestamp
+        /// </param>
+        /// <param name="max_ts">
+        /// largest acceptable timestamp
+        /// </param>
+        /// <param name="flags">
+        /// flags
+        /// </param>
+        /// <returns>
+        /// >=0 on success, error code otherwise
+        /// </returns>
+        /// <remark>
+        /// This is part of the new seek API which is still under construction.
         /// Thus do not use this yet. It may change at any time, do not expect
         /// ABI compatibility yet!
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2062,10 +2223,13 @@ namespace FFmpeg
         /// Can only be called in the read_header() function. If the flag
         /// AVFMTCTX_NOHEADER is in the format context, then new streams
         /// can be added in read_packet too.
-        /// 
-        /// @param s media file handle
-        /// @param id file-format-dependent stream ID
         /// </summary>
+        /// <param name="s">
+        /// media file handle
+        /// </param>
+        /// <param name="id">
+        /// file-format-dependent stream ID
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -2087,21 +2251,23 @@ namespace FFmpeg
         /// 
         /// Allocate the stream private data and write the stream header to
         /// an output media file.
-        /// 
-        /// @param s Media file handle, must be allocated with
-        /// avformat_alloc_context().
+        /// </summary>
+        /// <param name="s">
+        /// Media file handle, must be allocated with avformat_alloc_context().
         /// Its oformat field must be set to the desired output format;
         /// Its pb field must be set to an already opened AVIOContext.
-        /// @param options  An AVDictionary filled with AVFormatContext and
-        /// muxer-private options.
+        /// </param>
+        /// <param name="options">
+        /// An AVDictionary filled with AVFormatContext and muxer-private options.
         /// On return this parameter will be destroyed and replaced with a dict
         /// containing
         /// options that were not found. May be NULL.
-        /// 
-        /// @return 0 on success, negative AVERROR on failure.
+        /// </param>
+        /// <returns>
+        /// 0 on success, negative AVERROR on failure.
         /// 
         /// @see av_opt_find, av_dict_set, avio_open, av_oformat_next.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2115,21 +2281,23 @@ namespace FFmpeg
         /// 
         /// Allocate the stream private data and write the stream header to
         /// an output media file.
-        /// 
-        /// @param s Media file handle, must be allocated with
-        /// avformat_alloc_context().
+        /// </summary>
+        /// <param name="s">
+        /// Media file handle, must be allocated with avformat_alloc_context().
         /// Its oformat field must be set to the desired output format;
         /// Its pb field must be set to an already opened AVIOContext.
-        /// @param options  An AVDictionary filled with AVFormatContext and
-        /// muxer-private options.
+        /// </param>
+        /// <param name="options">
+        /// An AVDictionary filled with AVFormatContext and muxer-private options.
         /// On return this parameter will be destroyed and replaced with a dict
         /// containing
         /// options that were not found. May be NULL.
-        /// 
-        /// @return 0 on success, negative AVERROR on failure.
+        /// </param>
+        /// <returns>
+        /// 0 on success, negative AVERROR on failure.
         /// 
         /// @see av_opt_find, av_dict_set, avio_open, av_oformat_next.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2142,17 +2310,22 @@ namespace FFmpeg
         /// The packet shall contain one audio or video frame.
         /// The packet must be correctly interleaved according to the container
         /// specification, if not then av_interleaved_write_frame must be used.
-        /// 
-        /// @param s media file handle
-        /// @param pkt The packet, which contains the stream_index, buf/buf_size,
+        /// </summary>
+        /// <param name="s">
+        /// media file handle
+        /// </param>
+        /// <param name="pkt">
+        /// The packet, which contains the stream_index, buf/buf_size,
         /// dts/pts, ...
         /// This can be NULL (at any time, not just at the end), in
         /// order to immediately flush data buffered within the muxer,
         /// for muxers that buffer up data internally before writing it
         /// to the output.
-        /// @return < 0 on error, = 0 if OK, 1 if flushed and there is no more data
-        /// to flush
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// < 0 on error, = 0 if OK, 1 if flushed and there is no more data to
+        /// flush
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2172,10 +2345,12 @@ namespace FFmpeg
         /// of memory to interleave with this, so it is preferable to interleave at
         /// the
         /// demuxer level.
-        /// 
-        /// @param s media file handle
-        /// @param pkt The packet containing the data to be written. pkt->buf must
-        /// be set
+        /// </summary>
+        /// <param name="s">
+        /// media file handle
+        /// </param>
+        /// <param name="pkt">
+        /// The packet containing the data to be written. pkt->buf must be set
         /// to a valid AVBufferRef describing the packet data. Libavformat takes
         /// ownership of this reference and will unref it when it sees fit. The
         /// caller
@@ -2192,9 +2367,10 @@ namespace FFmpeg
         /// "pts", @ref AVPacket.dts "dts" @ref AVPacket.duration "duration") is
         /// set to
         /// correct values.
-        /// 
-        /// @return 0 on success, a negative AVERROR on error.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2206,10 +2382,13 @@ namespace FFmpeg
         /// file private data.
         /// 
         /// May only be called after a successful call to avformat_write_header.
-        /// 
-        /// @param s media file handle
-        /// @return 0 if OK, AVERROR_xxx on error
         /// </summary>
+        /// <param name="s">
+        /// media file handle
+        /// </param>
+        /// <returns>
+        /// 0 if OK, AVERROR_xxx on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2220,14 +2399,19 @@ namespace FFmpeg
         /// Return the output format in the list of registered output formats
         /// which best matches the provided parameters, or return NULL if
         /// there is no match.
-        /// 
-        /// @param short_name if non-NULL checks if short_name matches with the
-        /// names of the registered formats
-        /// @param filename if non-NULL checks if filename terminates with the
-        /// extensions of the registered formats
-        /// @param mime_type if non-NULL checks if mime_type matches with the
-        /// MIME type of the registered formats
         /// </summary>
+        /// <param name="short_name">
+        /// if non-NULL checks if short_name matches with the
+        /// names of the registered formats
+        /// </param>
+        /// <param name="filename">
+        /// if non-NULL checks if filename terminates with the
+        /// extensions of the registered formats
+        /// </param>
+        /// <param name="mime_type">
+        /// if non-NULL checks if mime_type matches with the
+        /// MIME type of the registered formats
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2248,17 +2432,26 @@ namespace FFmpeg
         /// The exact meaning of "currently output" depends on the format.
         /// It is mostly relevant for devices that have an internal buffer and/or
         /// work in real time.
-        /// @param s          media file handle
-        /// @param stream     stream in the media file
-        /// @param[out] dts   DTS of the last packet output for the stream, in
-        /// stream
+        /// </summary>
+        /// <param name="s">
+        /// media file handle
+        /// </param>
+        /// <param name="stream">
+        /// stream in the media file
+        /// </param>
+        /// <param name="[out]">
+        /// dts   DTS of the last packet output for the stream, in stream
         /// time_base units
-        /// @param[out] wall  absolute time when that packet whas output,
+        /// </param>
+        /// <param name="[out]">
+        /// wall  absolute time when that packet whas output,
         /// in microsecond
-        /// @return  0 if OK, AVERROR(ENOSYS) if the format does not support it
+        /// </param>
+        /// <returns>
+        /// 0 if OK, AVERROR(ENOSYS) if the format does not support it
         /// Note: some formats or devices may not allow to measure dts and wall
         /// atomically.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2267,18 +2460,23 @@ namespace FFmpeg
 
         /// <summary>
         /// Send a nice hexadecimal dump of a buffer to the log.
-        /// 
-        /// @param avcl A pointer to an arbitrary struct of which the first field
-        /// is a
+        /// </summary>
+        /// <param name="avcl">
+        /// A pointer to an arbitrary struct of which the first field is a
         /// pointer to an AVClass struct.
-        /// @param level The importance level of the message, lower values
-        /// signifying
+        /// </param>
+        /// <param name="level">
+        /// The importance level of the message, lower values signifying
         /// higher importance.
-        /// @param buf buffer
-        /// @param size buffer size
+        /// </param>
+        /// <param name="buf">
+        /// buffer
+        /// </param>
+        /// <param name="size">
+        /// buffer size
         /// 
         /// @see av_hex_dump, av_pkt_dump2, av_pkt_dump_log2
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2287,17 +2485,24 @@ namespace FFmpeg
 
         /// <summary>
         /// Send a nice dump of a packet to the log.
-        /// 
-        /// @param avcl A pointer to an arbitrary struct of which the first field
-        /// is a
-        /// pointer to an AVClass struct.
-        /// @param level The importance level of the message, lower values
-        /// signifying
-        /// higher importance.
-        /// @param pkt packet to dump
-        /// @param dump_payload True if the payload must be displayed, too.
-        /// @param st AVStream that the packet belongs to
         /// </summary>
+        /// <param name="avcl">
+        /// A pointer to an arbitrary struct of which the first field is a
+        /// pointer to an AVClass struct.
+        /// </param>
+        /// <param name="level">
+        /// The importance level of the message, lower values signifying
+        /// higher importance.
+        /// </param>
+        /// <param name="pkt">
+        /// packet to dump
+        /// </param>
+        /// <param name="dump_payload">
+        /// True if the payload must be displayed, too.
+        /// </param>
+        /// <param name="st">
+        /// AVStream that the packet belongs to
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2307,10 +2512,11 @@ namespace FFmpeg
         /// <summary>
         /// Get the AVCodecID for the given codec tag tag.
         /// If no codec id is found returns AV_CODEC_ID_NONE.
-        /// 
-        /// @param tags list of supported codec_id-codec_tag pairs, as stored
-        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
         /// </summary>
+        /// <param name="tags">
+        /// list of supported codec_id-codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2320,10 +2526,11 @@ namespace FFmpeg
         /// <summary>
         /// Get the AVCodecID for the given codec tag tag.
         /// If no codec id is found returns AV_CODEC_ID_NONE.
-        /// 
-        /// @param tags list of supported codec_id-codec_tag pairs, as stored
-        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
         /// </summary>
+        /// <param name="tags">
+        /// list of supported codec_id-codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2333,10 +2540,11 @@ namespace FFmpeg
         /// <summary>
         /// Get the codec tag for the given codec id id.
         /// If no codec tag is found returns 0.
-        /// 
-        /// @param tags list of supported codec_id-codec_tag pairs, as stored
-        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
         /// </summary>
+        /// <param name="tags">
+        /// list of supported codec_id-codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2346,10 +2554,11 @@ namespace FFmpeg
         /// <summary>
         /// Get the codec tag for the given codec id id.
         /// If no codec tag is found returns 0.
-        /// 
-        /// @param tags list of supported codec_id-codec_tag pairs, as stored
-        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
         /// </summary>
+        /// <param name="tags">
+        /// list of supported codec_id-codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2358,13 +2567,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the codec tag for the given codec id.
-        /// 
-        /// @param tags list of supported codec_id - codec_tag pairs, as stored
-        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
-        /// @param id codec id that should be searched for in the list
-        /// @param tag A pointer to the found tag
-        /// @return 0 if id was not found in tags, > 0 if it was found
         /// </summary>
+        /// <param name="tags">
+        /// list of supported codec_id - codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </param>
+        /// <param name="id">
+        /// codec id that should be searched for in the list
+        /// </param>
+        /// <param name="tag">
+        /// A pointer to the found tag
+        /// </param>
+        /// <returns>
+        /// 0 if id was not found in tags, > 0 if it was found
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2373,13 +2589,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the codec tag for the given codec id.
-        /// 
-        /// @param tags list of supported codec_id - codec_tag pairs, as stored
-        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
-        /// @param id codec id that should be searched for in the list
-        /// @param tag A pointer to the found tag
-        /// @return 0 if id was not found in tags, > 0 if it was found
         /// </summary>
+        /// <param name="tags">
+        /// list of supported codec_id - codec_tag pairs, as stored
+        /// in AVInputFormat.codec_tag and AVOutputFormat.codec_tag
+        /// </param>
+        /// <param name="id">
+        /// codec id that should be searched for in the list
+        /// </param>
+        /// <param name="tag">
+        /// A pointer to the found tag
+        /// </param>
+        /// <returns>
+        /// 0 if id was not found in tags, > 0 if it was found
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2394,13 +2617,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the index for a specific timestamp.
-        /// @param flags if AVSEEK_FLAG_BACKWARD then the returned index will
-        /// correspond
+        /// </summary>
+        /// <param name="flags">
+        /// if AVSEEK_FLAG_BACKWARD then the returned index will correspond
         /// to the timestamp which is <= the requested one, if backward
         /// is 0, then it will be >=
         /// if AVSEEK_FLAG_ANY seek to any frame, only keyframes otherwise
-        /// @return < 0 if no such timestamp could be found
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// < 0 if no such timestamp could be found
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2410,9 +2636,10 @@ namespace FFmpeg
         /// <summary>
         /// Add an index entry into a sorted list. Update the entry if the list
         /// already contains it.
-        /// 
-        /// @param timestamp timestamp in the time base of the given stream
         /// </summary>
+        /// <param name="timestamp">
+        /// timestamp in the time base of the given stream
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2426,18 +2653,37 @@ namespace FFmpeg
         /// in order to ignore that component. Buffers for components not found are
         /// set to empty strings. If the port is not found, it is set to a negative
         /// value.
-        /// 
-        /// @param proto the buffer for the protocol
-        /// @param proto_size the size of the proto buffer
-        /// @param authorization the buffer for the authorization
-        /// @param authorization_size the size of the authorization buffer
-        /// @param hostname the buffer for the host name
-        /// @param hostname_size the size of the hostname buffer
-        /// @param port_ptr a pointer to store the port number in
-        /// @param path the buffer for the path
-        /// @param path_size the size of the path buffer
-        /// @param url the URL to split
         /// </summary>
+        /// <param name="proto">
+        /// the buffer for the protocol
+        /// </param>
+        /// <param name="proto_size">
+        /// the size of the proto buffer
+        /// </param>
+        /// <param name="authorization">
+        /// the buffer for the authorization
+        /// </param>
+        /// <param name="authorization_size">
+        /// the size of the authorization buffer
+        /// </param>
+        /// <param name="hostname">
+        /// the buffer for the host name
+        /// </param>
+        /// <param name="hostname_size">
+        /// the size of the hostname buffer
+        /// </param>
+        /// <param name="port_ptr">
+        /// a pointer to store the port number in
+        /// </param>
+        /// <param name="path">
+        /// the buffer for the path
+        /// </param>
+        /// <param name="path_size">
+        /// the size of the path buffer
+        /// </param>
+        /// <param name="url">
+        /// the URL to split
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2455,13 +2701,22 @@ namespace FFmpeg
         /// 
         /// Also handles the '%0nd' format where 'n' is the total number
         /// of digits and '%%'.
-        /// 
-        /// @param buf destination buffer
-        /// @param buf_size destination buffer size
-        /// @param path numbered sequence string
-        /// @param number frame number
-        /// @return 0 if OK, -1 on format error
         /// </summary>
+        /// <param name="buf">
+        /// destination buffer
+        /// </param>
+        /// <param name="buf_size">
+        /// destination buffer size
+        /// </param>
+        /// <param name="path">
+        /// numbered sequence string
+        /// </param>
+        /// <param name="number">
+        /// frame number
+        /// </param>
+        /// <returns>
+        /// 0 if OK, -1 on format error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2470,10 +2725,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Check whether filename actually is a numbered sequence generator.
-        /// 
-        /// @param filename possible numbered sequence string
-        /// @return 1 if a valid numbered sequence string, 0 otherwise
         /// </summary>
+        /// <param name="filename">
+        /// possible numbered sequence string
+        /// </param>
+        /// <returns>
+        /// 1 if a valid numbered sequence string, 0 otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2485,18 +2743,27 @@ namespace FFmpeg
         /// 
         /// Note, this overwrites the id values of AVStreams in the muxer contexts
         /// for getting unique dynamic payload types.
-        /// 
-        /// @param ac array of AVFormatContexts describing the RTP streams. If the
+        /// </summary>
+        /// <param name="ac">
+        /// array of AVFormatContexts describing the RTP streams. If the
         /// array is composed by only one context, such context can contain
         /// multiple AVStreams (one AVStream per RTP stream). Otherwise,
         /// all the contexts in the array (an AVCodecContext per RTP stream)
         /// must contain only one AVStream.
-        /// @param n_files number of AVCodecContexts contained in ac
-        /// @param buf buffer where the SDP will be stored (must be allocated by
+        /// </param>
+        /// <param name="n_files">
+        /// number of AVCodecContexts contained in ac
+        /// </param>
+        /// <param name="buf">
+        /// buffer where the SDP will be stored (must be allocated by
         /// the caller)
-        /// @param size the size of the buffer
-        /// @return 0 if OK, AVERROR_xxx on error
-        /// </summary>
+        /// </param>
+        /// <param name="size">
+        /// the size of the buffer
+        /// </param>
+        /// <returns>
+        /// 0 if OK, AVERROR_xxx on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2506,9 +2773,10 @@ namespace FFmpeg
         /// <summary>
         /// Return a positive value if the given filename has one of the given
         /// extensions, 0 otherwise.
-        /// 
-        /// @param extensions a comma-separated list of filename extensions
         /// </summary>
+        /// <param name="extensions">
+        /// a comma-separated list of filename extensions
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2517,13 +2785,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Test if the given container can store a codec.
-        /// 
-        /// @param std_compliance standards compliance level, one of FF_COMPLIANCE_
-        /// 
-        /// @return 1 if codec with ID codec_id can be stored in ofmt, 0 if it
-        /// cannot.
-        /// A negative number if this information is not available.
         /// </summary>
+        /// <param name="std_compliance">
+        /// standards compliance level, one of FF_COMPLIANCE_
+        /// </param>
+        /// <returns>
+        /// 1 if codec with ID codec_id can be stored in ofmt, 0 if it cannot.
+        /// A negative number if this information is not available.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2537,17 +2806,16 @@ namespace FFmpeg
         /// tables are
         /// meant to be passed to av_codec_get_id()/av_codec_get_tag() as in the
         /// following code:
-        /// @code
+        /// </summary>
+        /// <code>
         /// uint32_t tag = MKTAG('H', '2', '6', '4');
         /// const struct AVCodecTag *table[] = { avformat_get_riff_video_tags(), 0
         /// };
         /// enum AVCodecID id = av_codec_get_id(table, tag);
-        /// @endcode
-        /// 
-        /// 
-        /// @return the table mapping RIFF FourCCs for video to libavcodec
-        /// AVCodecID.
-        /// </summary>
+        /// </code>
+        /// <returns>
+        /// the table mapping RIFF FourCCs for video to libavcodec AVCodecID.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2555,8 +2823,11 @@ namespace FFmpeg
         public static extern libavformat.AVCodecTag* avformat_get_riff_video_tags();
 
         /// <summary>
-        /// @return the table mapping RIFF FourCCs for audio to AVCodecID.
+        /// 
         /// </summary>
+        /// <returns>
+        /// the table mapping RIFF FourCCs for audio to AVCodecID.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2580,12 +2851,19 @@ namespace FFmpeg
         /// otherwise use the frame aspect ratio. This way a container setting,
         /// which is
         /// usually easy to modify can override the coded value in the frames.
-        /// 
-        /// @param format the format context which the stream is part of
-        /// @param stream the stream which the frame is part of
-        /// @param frame the frame with the aspect ratio to be determined
-        /// @return the guessed (valid) sample_aspect_ratio, 0/1 if no idea
         /// </summary>
+        /// <param name="format">
+        /// the format context which the stream is part of
+        /// </param>
+        /// <param name="stream">
+        /// the stream which the frame is part of
+        /// </param>
+        /// <param name="frame">
+        /// the frame with the aspect ratio to be determined
+        /// </param>
+        /// <returns>
+        /// the guessed (valid) sample_aspect_ratio, 0/1 if no idea
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2595,13 +2873,19 @@ namespace FFmpeg
         /// <summary>
         /// Guess the frame rate, based on both the container and codec
         /// information.
-        /// 
-        /// @param ctx the format context which the stream is part of
-        /// @param stream the stream which the frame is part of
-        /// @param frame the frame for which the frame rate should be determined,
-        /// may be NULL
-        /// @return the guessed (valid) frame rate, 0/1 if no idea
         /// </summary>
+        /// <param name="ctx">
+        /// the format context which the stream is part of
+        /// </param>
+        /// <param name="stream">
+        /// the stream which the frame is part of
+        /// </param>
+        /// <param name="frame">
+        /// the frame for which the frame rate should be determined, may be NULL
+        /// </param>
+        /// <returns>
+        /// the guessed (valid) frame rate, 0/1 if no idea
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -2615,13 +2899,15 @@ namespace FFmpeg
         /// 
         /// See the "stream specifiers" chapter in the documentation for the syntax
         /// of spec.
-        /// 
-        /// @return  >0 if st is matched by spec;
+        /// </summary>
+        /// <returns>
+        /// >0 if st is matched by spec;
         /// 0  if st is not matched by spec;
         /// AVERROR code if spec is invalid
-        /// 
-        /// @note  A stream specifier can match several streams in the format.
-        /// </summary>
+        /// </returns>
+        /// <remark>
+        /// A stream specifier can match several streams in the format.
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

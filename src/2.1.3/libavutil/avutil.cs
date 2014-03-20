@@ -103,10 +103,14 @@ namespace FFmpeg
         /// <summary>
         /// Return a single letter to describe the given picture type
         /// pict_type.
-        /// 
-        /// @param[in] pict_type the picture type @return a single character
-        /// representing the picture type, '?' if pict_type is unknown
         /// </summary>
+        /// <param name="[in]">
+        /// pict_type the picture type
+        /// </param>
+        /// <returns>
+        /// a single character
+        /// representing the picture type, '?' if pict_type is unknown
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -124,12 +128,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Compute the length of an integer list.
-        /// 
-        /// @param elsize  size in bytes of each list element (only 1, 2, 4 or 8)
-        /// @param term    list terminator (usually 0 or -1)
-        /// @param list    pointer to the list
-        /// @return  length of the list, in elements, not counting the terminator
         /// </summary>
+        /// <param name="elsize">
+        /// size in bytes of each list element (only 1, 2, 4 or 8)
+        /// </param>
+        /// <param name="term">
+        /// list terminator (usually 0 or -1)
+        /// </param>
+        /// <param name="list">
+        /// pointer to the list
+        /// </param>
+        /// <returns>
+        /// length of the list, in elements, not counting the terminator
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

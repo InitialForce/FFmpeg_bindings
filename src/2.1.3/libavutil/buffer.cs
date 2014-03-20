@@ -47,9 +47,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate an AVBuffer of the given size using av_malloc().
-        /// 
-        /// @return an AVBufferRef of given size or NULL when out of memory
         /// </summary>
+        /// <returns>
+        /// an AVBufferRef of given size or NULL when out of memory
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -76,14 +77,25 @@ namespace FFmpeg
         /// derived from
         /// it.
         /// If this function fails, data is left untouched.
-        /// @param data   data array
-        /// @param size   size of data in bytes
-        /// @param free   a callback for freeing this buffer's data
-        /// @param opaque parameter to be got for processing or passed to free
-        /// @param flags  a combination of AV_BUFFER_FLAG_
-        /// 
-        /// @return an AVBufferRef referring to data on success, NULL on failure.
         /// </summary>
+        /// <param name="data">
+        /// data array
+        /// </param>
+        /// <param name="size">
+        /// size of data in bytes
+        /// </param>
+        /// <param name="free">
+        /// a callback for freeing this buffer's data
+        /// </param>
+        /// <param name="opaque">
+        /// parameter to be got for processing or passed to free
+        /// </param>
+        /// <param name="flags">
+        /// a combination of AV_BUFFER_FLAG_
+        /// </param>
+        /// <returns>
+        /// an AVBufferRef referring to data on success, NULL on failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -103,11 +115,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Create a new reference to an AVBuffer.
-        /// 
-        /// @return a new AVBufferRef referring to the same AVBuffer as buf or NULL
-        /// on
-        /// failure.
         /// </summary>
+        /// <returns>
+        /// a new AVBufferRef referring to the same AVBuffer as buf or NULL on
+        /// failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -118,10 +130,10 @@ namespace FFmpeg
         /// Free a given reference and automatically free the buffer if there are
         /// no more
         /// references to it.
-        /// 
-        /// @param buf the reference to be freed. The pointer is set to NULL on
-        /// return.
         /// </summary>
+        /// <param name="buf">
+        /// the reference to be freed. The pointer is set to NULL on return.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -132,10 +144,10 @@ namespace FFmpeg
         /// Free a given reference and automatically free the buffer if there are
         /// no more
         /// references to it.
-        /// 
-        /// @param buf the reference to be freed. The pointer is set to NULL on
-        /// return.
         /// </summary>
+        /// <param name="buf">
+        /// the reference to be freed. The pointer is set to NULL on return.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -143,13 +155,15 @@ namespace FFmpeg
         public static extern void av_buffer_unref(ref libavutil.AVBufferRef* buf);
 
         /// <summary>
-        /// @return 1 if the caller may write to the data referred to by buf (which
-        /// is
+        /// 
+        /// </summary>
+        /// <returns>
+        /// 1 if the caller may write to the data referred to by buf (which is
         /// true if and only if buf is the only reference to the underlying
         /// AVBuffer).
         /// Return 0 otherwise.
         /// A positive answer is valid until av_buffer_ref() is called on buf.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -157,8 +171,11 @@ namespace FFmpeg
         public static extern int av_buffer_is_writable(libavutil.AVBufferRef* buf);
 
         /// <summary>
-        /// @return the opaque parameter set by av_buffer_create.
+        /// 
         /// </summary>
+        /// <returns>
+        /// the opaque parameter set by av_buffer_create.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -175,13 +192,15 @@ namespace FFmpeg
         /// Create a writable reference from a given buffer reference, avoiding
         /// data copy
         /// if possible.
-        /// 
-        /// @param buf buffer reference to make writable. On success, buf is either
-        /// left
+        /// </summary>
+        /// <param name="buf">
+        /// buffer reference to make writable. On success, buf is either left
         /// untouched, or it is unreferenced and a new writable AVBufferRef is
         /// written in its place. On failure, buf is left untouched.
-        /// @return 0 on success, a negative AVERROR on failure.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -192,13 +211,15 @@ namespace FFmpeg
         /// Create a writable reference from a given buffer reference, avoiding
         /// data copy
         /// if possible.
-        /// 
-        /// @param buf buffer reference to make writable. On success, buf is either
-        /// left
+        /// </summary>
+        /// <param name="buf">
+        /// buffer reference to make writable. On success, buf is either left
         /// untouched, or it is unreferenced and a new writable AVBufferRef is
         /// written in its place. On failure, buf is left untouched.
-        /// @return 0 on success, a negative AVERROR on failure.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -207,22 +228,27 @@ namespace FFmpeg
 
         /// <summary>
         /// Reallocate a given buffer.
-        /// 
-        /// @param buf  a buffer reference to reallocate. On success, buf will be
+        /// </summary>
+        /// <param name="buf">
+        /// a buffer reference to reallocate. On success, buf will be
         /// unreferenced and a new reference with the required size will be
         /// written in its place. On failure buf will be left untouched. *buf
         /// may be NULL, then a new buffer is allocated.
-        /// @param size required new buffer size.
-        /// @return 0 on success, a negative AVERROR on failure.
-        /// 
-        /// @note the buffer is actually reallocated with av_realloc() only if it
-        /// was
+        /// </param>
+        /// <param name="size">
+        /// required new buffer size.
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure.
+        /// </returns>
+        /// <remark>
+        /// the buffer is actually reallocated with av_realloc() only if it was
         /// initially allocated through av_buffer_realloc(NULL) and there is only
         /// one
         /// reference to it (i.e. the one passed to this function). In all other
         /// cases
         /// a new buffer is allocated and the data is copied.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -231,22 +257,27 @@ namespace FFmpeg
 
         /// <summary>
         /// Reallocate a given buffer.
-        /// 
-        /// @param buf  a buffer reference to reallocate. On success, buf will be
+        /// </summary>
+        /// <param name="buf">
+        /// a buffer reference to reallocate. On success, buf will be
         /// unreferenced and a new reference with the required size will be
         /// written in its place. On failure buf will be left untouched. *buf
         /// may be NULL, then a new buffer is allocated.
-        /// @param size required new buffer size.
-        /// @return 0 on success, a negative AVERROR on failure.
-        /// 
-        /// @note the buffer is actually reallocated with av_realloc() only if it
-        /// was
+        /// </param>
+        /// <param name="size">
+        /// required new buffer size.
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR on failure.
+        /// </returns>
+        /// <remark>
+        /// the buffer is actually reallocated with av_realloc() only if it was
         /// initially allocated through av_buffer_realloc(NULL) and there is only
         /// one
         /// reference to it (i.e. the one passed to this function). In all other
         /// cases
         /// a new buffer is allocated and the data is copied.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -255,14 +286,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate and initialize a buffer pool.
-        /// 
-        /// @param size size of each buffer in this pool
-        /// @param alloc a function that will be used to allocate new buffers when
-        /// the
+        /// </summary>
+        /// <param name="size">
+        /// size of each buffer in this pool
+        /// </param>
+        /// <param name="alloc">
+        /// a function that will be used to allocate new buffers when the
         /// pool is empty. May be NULL, then the default allocator will be used
         /// (av_buffer_alloc()).
-        /// @return newly created buffer pool on success, NULL on error.
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// newly created buffer pool on success, NULL on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -277,10 +312,11 @@ namespace FFmpeg
         /// is safe to call this function while some of the allocated buffers are
         /// still
         /// in use.
-        /// 
-        /// @param pool pointer to the pool to be freed. It will be set to NULL.
-        /// @see av_buffer_pool_can_uninit()
         /// </summary>
+        /// <param name="pool">
+        /// pointer to the pool to be freed. It will be set to NULL.
+        /// @see av_buffer_pool_can_uninit()
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -295,10 +331,11 @@ namespace FFmpeg
         /// is safe to call this function while some of the allocated buffers are
         /// still
         /// in use.
-        /// 
-        /// @param pool pointer to the pool to be freed. It will be set to NULL.
-        /// @see av_buffer_pool_can_uninit()
         /// </summary>
+        /// <param name="pool">
+        /// pointer to the pool to be freed. It will be set to NULL.
+        /// @see av_buffer_pool_can_uninit()
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -309,9 +346,10 @@ namespace FFmpeg
         /// Allocate a new AVBuffer, reusing an old buffer from the pool when
         /// available.
         /// This function may be called simultaneously from multiple threads.
-        /// 
-        /// @return a reference to the new buffer on success, NULL on error.
         /// </summary>
+        /// <returns>
+        /// a reference to the new buffer on success, NULL on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

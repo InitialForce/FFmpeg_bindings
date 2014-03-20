@@ -70,10 +70,11 @@ namespace FFmpeg
         /// <summary>
         /// Rescale a 64-bit integer with specified rounding.
         /// A simple a*b/c isn't possible as it can overflow.
-        /// 
-        /// @return rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
-        /// INT64_MIN or INT64_MAX then a is passed through unchanged.
         /// </summary>
+        /// <returns>
+        /// rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
+        /// INT64_MIN or INT64_MAX then a is passed through unchanged.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -91,10 +92,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Rescale a 64-bit integer by 2 rational numbers with specified rounding.
-        /// 
-        /// @return rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
-        /// INT64_MIN or INT64_MAX then a is passed through unchanged.
         /// </summary>
+        /// <returns>
+        /// rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
+        /// INT64_MIN or INT64_MAX then a is passed through unchanged.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -105,9 +107,11 @@ namespace FFmpeg
         /// Compare 2 timestamps each in its own timebases.
         /// The result of the function is undefined if one of the timestamps
         /// is outside the int64_t range when represented in the others timebase.
-        /// @return -1 if ts_a is before ts_b, 1 if ts_a is after ts_b or 0 if they
-        /// represent the same position
         /// </summary>
+        /// <returns>
+        /// -1 if ts_a is before ts_b, 1 if ts_a is after ts_b or 0 if they
+        /// represent the same position
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -118,12 +122,15 @@ namespace FFmpeg
         /// Compare 2 integers modulo mod.
         /// That is we compare integers a and b for which only the least
         /// significant log2(mod) bits are known.
-        /// 
-        /// @param mod must be a power of 2
-        /// @return a negative value if a is smaller than b
+        /// </summary>
+        /// <param name="mod">
+        /// must be a power of 2
+        /// </param>
+        /// <returns>
+        /// a negative value if a is smaller than b
         /// a positive value if a is greater than b
         /// 0                if a equals          b
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -132,13 +139,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Rescale a timestamp while preserving known durations.
-        /// 
-        /// @param in_ts Input timestamp
-        /// @param in_tb Input timesbase
-        /// @param fs_tb Duration and *last timebase
-        /// @param duration duration till the next call
-        /// @param out_tb Output timesbase
         /// </summary>
+        /// <param name="in_ts">
+        /// Input timestamp
+        /// </param>
+        /// <param name="in_tb">
+        /// Input timesbase
+        /// </param>
+        /// <param name="fs_tb">
+        /// Duration and *last timebase
+        /// </param>
+        /// <param name="duration">
+        /// duration till the next call
+        /// </param>
+        /// <param name="out_tb">
+        /// Output timesbase
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

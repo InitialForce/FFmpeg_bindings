@@ -18,14 +18,17 @@ namespace FFmpeg
         /// the group of bytes which describe a pixel component and the first
         /// byte of the successive group in the same plane for the same
         /// component.
-        /// 
-        /// @param max_pixsteps an array which is filled with the max pixel step
+        /// </summary>
+        /// <param name="max_pixsteps">
+        /// an array which is filled with the max pixel step
         /// for each plane. Since a plane may contain different pixel
         /// components, the computed max_pixsteps[plane] is relative to the
         /// component in the plane with the max pixel step.
-        /// @param max_pixstep_comps an array which is filled with the component
+        /// </param>
+        /// <param name="max_pixstep_comps">
+        /// an array which is filled with the component
         /// for each plane which has the max pixel step. May be NULL.
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -35,9 +38,10 @@ namespace FFmpeg
         /// <summary>
         /// Compute the size of an image line with format pix_fmt and width
         /// width for the plane plane.
-        /// 
-        /// @return the computed size in bytes
         /// </summary>
+        /// <returns>
+        /// the computed size in bytes
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -47,10 +51,13 @@ namespace FFmpeg
         /// <summary>
         /// Fill plane linesizes for an image with pixel format pix_fmt and
         /// width width.
-        /// 
-        /// @param linesizes array to be filled with the linesize for each plane
-        /// @return >= 0 in case of success, a negative error code otherwise
         /// </summary>
+        /// <param name="linesizes">
+        /// array to be filled with the linesize for each plane
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative error code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -60,15 +67,21 @@ namespace FFmpeg
         /// <summary>
         /// Fill plane data pointers for an image with pixel format pix_fmt and
         /// height height.
-        /// 
-        /// @param data pointers array to be filled with the pointer for each image
-        /// plane
-        /// @param ptr the pointer to a buffer which will contain the image
-        /// @param linesizes the array containing the linesize for each
-        /// plane, should be filled by av_image_fill_linesizes()
-        /// @return the size in bytes required for the image buffer, a negative
-        /// error code in case of failure
         /// </summary>
+        /// <param name="data">
+        /// pointers array to be filled with the pointer for each image plane
+        /// </param>
+        /// <param name="ptr">
+        /// the pointer to a buffer which will contain the image
+        /// </param>
+        /// <param name="linesizes">
+        /// the array containing the linesize for each
+        /// plane, should be filled by av_image_fill_linesizes()
+        /// </param>
+        /// <returns>
+        /// the size in bytes required for the image buffer, a negative
+        /// error code in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -80,11 +93,14 @@ namespace FFmpeg
         /// fill pointers and linesizes accordingly.
         /// The allocated image buffer has to be freed by using
         /// av_freep(&pointers[0]).
-        /// 
-        /// @param align the value to use for buffer size alignment
-        /// @return the size in bytes required for the image buffer, a negative
-        /// error code in case of failure
         /// </summary>
+        /// <param name="align">
+        /// the value to use for buffer size alignment
+        /// </param>
+        /// <returns>
+        /// the size in bytes required for the image buffer, a negative
+        /// error code in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -99,10 +115,13 @@ namespace FFmpeg
         /// 
         /// bytewidth must be contained by both absolute values of dst_linesize
         /// and src_linesize, otherwise the function behavior is undefined.
-        /// 
-        /// @param dst_linesize linesize for the image plane in dst
-        /// @param src_linesize linesize for the image plane in src
         /// </summary>
+        /// <param name="dst_linesize">
+        /// linesize for the image plane in dst
+        /// </param>
+        /// <param name="src_linesize">
+        /// linesize for the image plane in src
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -111,10 +130,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Copy image in src_data to dst_data.
-        /// 
-        /// @param dst_linesizes linesizes for the image in dst_data
-        /// @param src_linesizes linesizes for the image in src_data
         /// </summary>
+        /// <param name="dst_linesizes">
+        /// linesizes for the image in dst_data
+        /// </param>
+        /// <param name="src_linesizes">
+        /// linesizes for the image in src_data
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -136,19 +158,33 @@ namespace FFmpeg
         /// 
         /// To allocate the buffer and fill in the dst_data and dst_linesize in
         /// one call, use av_image_alloc().
-        /// 
-        /// @param dst_data      data pointers to be filled in
-        /// @param dst_linesizes linesizes for the image in dst_data to be filled
-        /// in
-        /// @param src           buffer which will contain or contains the actual
-        /// image data, can be NULL
-        /// @param pix_fmt       the pixel format of the image
-        /// @param width         the width of the image in pixels
-        /// @param height        the height of the image in pixels
-        /// @param align         the value used in src for linesize alignment
-        /// @return the size in bytes required for src, a negative error code
-        /// in case of failure
         /// </summary>
+        /// <param name="dst_data">
+        /// data pointers to be filled in
+        /// </param>
+        /// <param name="dst_linesizes">
+        /// linesizes for the image in dst_data to be filled in
+        /// </param>
+        /// <param name="src">
+        /// buffer which will contain or contains the actual image data, can be
+        /// NULL
+        /// </param>
+        /// <param name="pix_fmt">
+        /// the pixel format of the image
+        /// </param>
+        /// <param name="width">
+        /// the width of the image in pixels
+        /// </param>
+        /// <param name="height">
+        /// the height of the image in pixels
+        /// </param>
+        /// <param name="align">
+        /// the value used in src for linesize alignment
+        /// </param>
+        /// <returns>
+        /// the size in bytes required for src, a negative error code
+        /// in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -158,9 +194,10 @@ namespace FFmpeg
         /// <summary>
         /// Return the size in bytes of the amount of data required to store an
         /// image with the given parameters.
-        /// 
-        /// @param[in] align the assumed linesize alignment
         /// </summary>
+        /// <param name="[in]">
+        /// align the assumed linesize alignment
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -172,18 +209,35 @@ namespace FFmpeg
         /// 
         /// av_image_get_buffer_size() can be used to compute the required size
         /// for the buffer to fill.
-        /// 
-        /// @param dst           a buffer into which picture data will be copied
-        /// @param dst_size      the size in bytes of dst
-        /// @param src_data      pointers containing the source image data
-        /// @param src_linesizes linesizes for the image in src_data
-        /// @param pix_fmt       the pixel format of the source image
-        /// @param width         the width of the source image in pixels
-        /// @param height        the height of the source image in pixels
-        /// @param align         the assumed linesize alignment for dst
-        /// @return the number of bytes written to dst, or a negative value
-        /// (error code) on error
         /// </summary>
+        /// <param name="dst">
+        /// a buffer into which picture data will be copied
+        /// </param>
+        /// <param name="dst_size">
+        /// the size in bytes of dst
+        /// </param>
+        /// <param name="src_data">
+        /// pointers containing the source image data
+        /// </param>
+        /// <param name="src_linesizes">
+        /// linesizes for the image in src_data
+        /// </param>
+        /// <param name="pix_fmt">
+        /// the pixel format of the source image
+        /// </param>
+        /// <param name="width">
+        /// the width of the source image in pixels
+        /// </param>
+        /// <param name="height">
+        /// the height of the source image in pixels
+        /// </param>
+        /// <param name="align">
+        /// the assumed linesize alignment for dst
+        /// </param>
+        /// <returns>
+        /// the number of bytes written to dst, or a negative value
+        /// (error code) on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -193,14 +247,22 @@ namespace FFmpeg
         /// <summary>
         /// Check if the given dimension of an image is valid, meaning that all
         /// bytes of the image can be addressed with a signed int.
-        /// 
-        /// @param w the width of the picture
-        /// @param h the height of the picture
-        /// @param log_offset the offset to sum to the log level for logging with
-        /// log_ctx
-        /// @param log_ctx the parent logging context, it may be NULL
-        /// @return >= 0 if valid, a negative error code otherwise
         /// </summary>
+        /// <param name="w">
+        /// the width of the picture
+        /// </param>
+        /// <param name="h">
+        /// the height of the picture
+        /// </param>
+        /// <param name="log_offset">
+        /// the offset to sum to the log level for logging with log_ctx
+        /// </param>
+        /// <param name="log_ctx">
+        /// the parent logging context, it may be NULL
+        /// </param>
+        /// <returns>
+        /// >= 0 if valid, a negative error code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

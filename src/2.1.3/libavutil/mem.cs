@@ -13,11 +13,15 @@ namespace FFmpeg
         /// <summary>
         /// Allocate a block of size bytes with alignment suitable for all
         /// memory accesses (including vectors if available on the CPU).
-        /// @param size Size in bytes for the memory block to be allocated.
-        /// @return Pointer to the allocated block, NULL if the block cannot
+        /// </summary>
+        /// <param name="size">
+        /// Size in bytes for the memory block to be allocated.
+        /// </param>
+        /// <returns>
+        /// Pointer to the allocated block, NULL if the block cannot
         /// be allocated.
         /// @see av_mallocz()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -26,12 +30,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate a block of size * nmemb bytes with av_malloc().
-        /// @param nmemb Number of elements
-        /// @param size Size of the single element
-        /// @return Pointer to the allocated block, NULL if the block cannot
+        /// </summary>
+        /// <param name="nmemb">
+        /// Number of elements
+        /// </param>
+        /// <param name="size">
+        /// Size of the single element
+        /// </param>
+        /// <returns>
+        /// Pointer to the allocated block, NULL if the block cannot
         /// be allocated.
         /// @see av_malloc()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -42,11 +52,17 @@ namespace FFmpeg
         /// Allocate or reallocate a block of memory.
         /// If ptr is NULL and size > 0, allocate a new block. If
         /// size is zero, free the memory block pointed to by ptr.
-        /// @param ptr Pointer to a memory block already allocated with
+        /// </summary>
+        /// <param name="ptr">
+        /// Pointer to a memory block already allocated with
         /// av_realloc() or NULL.
-        /// @param size Size in bytes of the memory block to be allocated or
+        /// </param>
+        /// <param name="size">
+        /// Size in bytes of the memory block to be allocated or
         /// reallocated.
-        /// @return Pointer to a newly-reallocated block or NULL if the block
+        /// </param>
+        /// <returns>
+        /// Pointer to a newly-reallocated block or NULL if the block
         /// cannot be reallocated or the function is used to free the memory block.
         /// @warning Pointers originating from the av_malloc() family of functions
         /// must
@@ -56,7 +72,7 @@ namespace FFmpeg
         /// The situation is undefined according to POSIX and may crash with
         /// some libc implementations.
         /// @see av_fast_realloc()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -82,12 +98,18 @@ namespace FFmpeg
         /// Allocate or reallocate a block of memory.
         /// If *ptr is NULL and size > 0, allocate a new block. If
         /// size is zero, free the memory block pointed to by ptr.
-        /// @param   ptr Pointer to a pointer to a memory block already allocated
+        /// </summary>
+        /// <param name="ptr">
+        /// Pointer to a pointer to a memory block already allocated
         /// with av_realloc(), or pointer to a pointer to NULL.
         /// The pointer is updated on success, or freed on failure.
-        /// @param   size Size in bytes for the memory block to be allocated or
+        /// </param>
+        /// <param name="size">
+        /// Size in bytes for the memory block to be allocated or
         /// reallocated
-        /// @return  Zero on success, an AVERROR error code on failure.
+        /// </param>
+        /// <returns>
+        /// Zero on success, an AVERROR error code on failure.
         /// @warning Pointers originating from the av_malloc() family of functions
         /// must
         /// not be passed to av_reallocp(). The former can be implemented using
@@ -95,7 +117,7 @@ namespace FFmpeg
         /// pointers from such functions can be passed to realloc() at all.
         /// The situation is undefined according to POSIX and may crash with
         /// some libc implementations.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -106,11 +128,19 @@ namespace FFmpeg
         /// Allocate or reallocate an array.
         /// If ptr is NULL and nmemb > 0, allocate a new block. If
         /// nmemb is zero, free the memory block pointed to by ptr.
-        /// @param ptr Pointer to a memory block already allocated with
+        /// </summary>
+        /// <param name="ptr">
+        /// Pointer to a memory block already allocated with
         /// av_realloc() or NULL.
-        /// @param nmemb Number of elements
-        /// @param size Size of the single element
-        /// @return Pointer to a newly-reallocated block or NULL if the block
+        /// </param>
+        /// <param name="nmemb">
+        /// Number of elements
+        /// </param>
+        /// <param name="size">
+        /// Size of the single element
+        /// </param>
+        /// <returns>
+        /// Pointer to a newly-reallocated block or NULL if the block
         /// cannot be reallocated or the function is used to free the memory block.
         /// @warning Pointers originating from the av_malloc() family of functions
         /// must
@@ -119,7 +149,7 @@ namespace FFmpeg
         /// pointers from such functions can be passed to realloc() at all.
         /// The situation is undefined according to POSIX and may crash with
         /// some libc implementations.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -130,12 +160,20 @@ namespace FFmpeg
         /// Allocate or reallocate an array through a pointer to a pointer.
         /// If *ptr is NULL and nmemb > 0, allocate a new block. If
         /// nmemb is zero, free the memory block pointed to by ptr.
-        /// @param ptr Pointer to a pointer to a memory block already allocated
+        /// </summary>
+        /// <param name="ptr">
+        /// Pointer to a pointer to a memory block already allocated
         /// with av_realloc(), or pointer to a pointer to NULL.
         /// The pointer is updated on success, or freed on failure.
-        /// @param nmemb Number of elements
-        /// @param size Size of the single element
-        /// @return Zero on success, an AVERROR error code on failure.
+        /// </param>
+        /// <param name="nmemb">
+        /// Number of elements
+        /// </param>
+        /// <param name="size">
+        /// Size of the single element
+        /// </param>
+        /// <returns>
+        /// Zero on success, an AVERROR error code on failure.
         /// @warning Pointers originating from the av_malloc() family of functions
         /// must
         /// not be passed to av_realloc(). The former can be implemented using
@@ -143,7 +181,7 @@ namespace FFmpeg
         /// pointers from such functions can be passed to realloc() at all.
         /// The situation is undefined according to POSIX and may crash with
         /// some libc implementations.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -153,11 +191,17 @@ namespace FFmpeg
         /// <summary>
         /// Free a memory block which has been allocated with av_malloc(z)() or
         /// av_realloc().
-        /// @param ptr Pointer to the memory block which should be freed.
-        /// @note ptr = NULL is explicitly allowed.
-        /// @note It is recommended that you use av_freep() instead.
-        /// @see av_freep()
         /// </summary>
+        /// <param name="ptr">
+        /// Pointer to the memory block which should be freed.
+        /// </param>
+        /// <remark>
+        /// ptr = NULL is explicitly allowed.
+        /// </remark>
+        /// <remark>
+        /// It is recommended that you use av_freep() instead.
+        /// @see av_freep()
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -168,10 +212,14 @@ namespace FFmpeg
         /// Allocate a block of size bytes with alignment suitable for all
         /// memory accesses (including vectors if available on the CPU) and
         /// zero all the bytes of the block.
-        /// @param size Size in bytes for the memory block to be allocated.
-        /// @return Pointer to the allocated block, NULL if it cannot be allocated.
-        /// @see av_malloc()
         /// </summary>
+        /// <param name="size">
+        /// Size in bytes for the memory block to be allocated.
+        /// </param>
+        /// <returns>
+        /// Pointer to the allocated block, NULL if it cannot be allocated.
+        /// @see av_malloc()
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -184,10 +232,16 @@ namespace FFmpeg
         /// zero all the bytes of the block.
         /// The allocation will fail if nmemb * size is greater than or equal
         /// to INT_MAX.
-        /// @param nmemb
-        /// @param size
-        /// @return Pointer to the allocated block, NULL if it cannot be allocated.
         /// </summary>
+        /// <param name="nmemb">
+        /// 
+        /// </param>
+        /// <param name="size">
+        /// 
+        /// </param>
+        /// <returns>
+        /// Pointer to the allocated block, NULL if it cannot be allocated.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -196,13 +250,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate a block of size * nmemb bytes with av_mallocz().
-        /// @param nmemb Number of elements
-        /// @param size Size of the single element
-        /// @return Pointer to the allocated block, NULL if the block cannot
+        /// </summary>
+        /// <param name="nmemb">
+        /// Number of elements
+        /// </param>
+        /// <param name="size">
+        /// Size of the single element
+        /// </param>
+        /// <returns>
+        /// Pointer to the allocated block, NULL if the block cannot
         /// be allocated.
         /// @see av_mallocz()
         /// @see av_malloc_array()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -211,10 +271,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Duplicate the string s.
-        /// @param s string to be duplicated
-        /// @return Pointer to a newly-allocated string containing a
-        /// copy of s or NULL if the string cannot be allocated.
         /// </summary>
+        /// <param name="s">
+        /// string to be duplicated
+        /// </param>
+        /// <returns>
+        /// Pointer to a newly-allocated string containing a
+        /// copy of s or NULL if the string cannot be allocated.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -223,10 +287,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Duplicate the buffer p.
-        /// @param p buffer to be duplicated
-        /// @return Pointer to a newly allocated buffer containing a
-        /// copy of p or NULL if the buffer cannot be allocated.
         /// </summary>
+        /// <param name="p">
+        /// buffer to be duplicated
+        /// </param>
+        /// <returns>
+        /// Pointer to a newly allocated buffer containing a
+        /// copy of p or NULL if the buffer cannot be allocated.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -236,10 +304,12 @@ namespace FFmpeg
         /// <summary>
         /// Free a memory block which has been allocated with av_malloc(z)() or
         /// av_realloc() and set the pointer pointing to it to NULL.
-        /// @param ptr Pointer to the pointer to the memory block which should
+        /// </summary>
+        /// <param name="ptr">
+        /// Pointer to the pointer to the memory block which should
         /// be freed.
         /// @see av_free()
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -261,12 +331,17 @@ namespace FFmpeg
         /// is incremented.
         /// In case of failure, the array is freed, *tab_ptr is set to NULL and
         /// nb_ptr is set to 0.
-        /// 
-        /// @param tab_ptr pointer to the array to grow
-        /// @param nb_ptr  pointer to the number of elements in the array
-        /// @param elem    element to add
-        /// @see av_dynarray2_add()
         /// </summary>
+        /// <param name="tab_ptr">
+        /// pointer to the array to grow
+        /// </param>
+        /// <param name="nb_ptr">
+        /// pointer to the number of elements in the array
+        /// </param>
+        /// <param name="elem">
+        /// element to add
+        /// @see av_dynarray2_add()
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -285,18 +360,25 @@ namespace FFmpeg
         /// is incremented.
         /// In case of failure, the array is freed, *tab_ptr is set to NULL and
         /// nb_ptr is set to 0.
-        /// 
-        /// @param tab_ptr   pointer to the array to grow
-        /// @param nb_ptr    pointer to the number of elements in the array
-        /// @param elem_size size in bytes of the elements in the array
-        /// @param elem_data pointer to the data of the element to add. If NULL,
-        /// the space of
+        /// </summary>
+        /// <param name="tab_ptr">
+        /// pointer to the array to grow
+        /// </param>
+        /// <param name="nb_ptr">
+        /// pointer to the number of elements in the array
+        /// </param>
+        /// <param name="elem_size">
+        /// size in bytes of the elements in the array
+        /// </param>
+        /// <param name="elem_data">
+        /// pointer to the data of the element to add. If NULL, the space of
         /// the new added element is not filled.
-        /// @return          pointer to the data of the element to copy in the new
-        /// allocated space.
+        /// </param>
+        /// <returns>
+        /// pointer to the data of the element to copy in the new allocated space.
         /// If NULL, the new allocated space is left uninitialized."
         /// @see av_dynarray_add()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -315,18 +397,25 @@ namespace FFmpeg
         /// is incremented.
         /// In case of failure, the array is freed, *tab_ptr is set to NULL and
         /// nb_ptr is set to 0.
-        /// 
-        /// @param tab_ptr   pointer to the array to grow
-        /// @param nb_ptr    pointer to the number of elements in the array
-        /// @param elem_size size in bytes of the elements in the array
-        /// @param elem_data pointer to the data of the element to add. If NULL,
-        /// the space of
+        /// </summary>
+        /// <param name="tab_ptr">
+        /// pointer to the array to grow
+        /// </param>
+        /// <param name="nb_ptr">
+        /// pointer to the number of elements in the array
+        /// </param>
+        /// <param name="elem_size">
+        /// size in bytes of the elements in the array
+        /// </param>
+        /// <param name="elem_data">
+        /// pointer to the data of the element to add. If NULL, the space of
         /// the new added element is not filled.
-        /// @return          pointer to the data of the element to copy in the new
-        /// allocated space.
+        /// </param>
+        /// <returns>
+        /// pointer to the data of the element to copy in the new allocated space.
         /// If NULL, the new allocated space is left uninitialized."
         /// @see av_dynarray_add()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -335,8 +424,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Multiply two size_t values checking for overflow.
-        /// @return  0 if success, AVERROR(EINVAL) if overflow.
         /// </summary>
+        /// <returns>
+        /// 0 if success, AVERROR(EINVAL) if overflow.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -354,14 +445,20 @@ namespace FFmpeg
 
         /// <summary>
         /// deliberately overlapping memcpy implementation
-        /// @param dst destination buffer
-        /// @param back how many bytes back we start (the initial size of the
-        /// overlapping window), must be > 0
-        /// @param cnt number of bytes to copy, must be >= 0
+        /// </summary>
+        /// <param name="dst">
+        /// destination buffer
+        /// </param>
+        /// <param name="back">
+        /// how many bytes back we start (the initial size of the overlapping
+        /// window), must be > 0
+        /// </param>
+        /// <param name="cnt">
+        /// number of bytes to copy, must be >= 0
         /// 
         /// cnt > back is valid, this will copy the bytes we just copied,
         /// thus creating a repeating pattern with a period length of back.
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

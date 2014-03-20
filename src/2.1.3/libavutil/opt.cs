@@ -55,35 +55,8 @@ namespace FFmpeg
         /// should also be set when applicable, but are not required.
         /// 
         /// The following example illustrates an AVOptions-enabled struct:
-        /// @code
-        /// typedef struct test_struct {
-        /// AVClass *class;
-        /// int      int_opt;
-        /// char    *str_opt;
-        /// uint8_t *bin_opt;
-        /// int      bin_len;
-        /// } test_struct;
         /// 
-        /// static const AVOption test_options[] = {
-        /// { "test_int", "This is a test option of int type.",
-        /// offsetof(test_struct, int_opt),
-        /// AV_OPT_TYPE_INT, { .i64 = -1 }, INT_MIN, INT_MAX },
-        /// { "test_str", "This is a test option of string type.",
-        /// offsetof(test_struct, str_opt),
-        /// AV_OPT_TYPE_STRING },
-        /// { "test_bin", "This is a test option of binary type.",
-        /// offsetof(test_struct, bin_opt),
-        /// AV_OPT_TYPE_BINARY },
-        /// { NULL },
-        /// };
         /// 
-        /// static const AVClass test_class = {
-        /// .class_name = "test class",
-        /// .item_name  = av_default_item_name,
-        /// .option     = test_options,
-        /// .version    = LIBAVUTIL_VERSION_INT,
-        /// };
-        /// @endcode
         /// 
         /// Next, when allocating your struct, you must ensure that the AVClass
         /// pointer
@@ -98,20 +71,8 @@ namespace FFmpeg
         /// 
         /// Continuing with the above example:
         /// 
-        /// @code
-        /// test_struct *alloc_test_struct(void)
-        /// {
-        /// test_struct *ret = av_malloc(sizeof(*ret));
-        /// ret->class = &test_class;
-        /// av_opt_set_defaults(ret);
-        /// return ret;
-        /// }
-        /// void free_test_struct(test_struct **foo)
-        /// {
-        /// av_opt_free(*foo);
-        /// av_freep(foo);
-        /// }
-        /// @endcode
+        /// 
+        /// 
         /// 
         /// @subsection avoptions_implement_nesting Nesting
         /// It may happen that an AVOptions-enabled struct contains another
@@ -124,36 +85,8 @@ namespace FFmpeg
         /// Assuming that the test_struct from above now also contains a
         /// child_struct field:
         /// 
-        /// @code
-        /// typedef struct child_struct {
-        /// AVClass *class;
-        /// int flags_opt;
-        /// } child_struct;
-        /// static const AVOption child_opts[] = {
-        /// { "test_flags", "This is a test option of flags type.",
-        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
-        /// INT_MIN, INT_MAX },
-        /// { NULL },
-        /// };
-        /// static const AVClass child_class = {
-        /// .class_name = "child class",
-        /// .item_name  = av_default_item_name,
-        /// .option     = child_opts,
-        /// .version    = LIBAVUTIL_VERSION_INT,
-        /// };
         /// 
-        /// void *child_next(void *obj, void *prev)
-        /// {
-        /// test_struct *t = obj;
-        /// if (!prev && t->child_struct)
-        /// return t->child_struct;
-        /// return NULL
-        /// }
-        /// const AVClass child_class_next(const AVClass *prev)
-        /// {
-        /// return prev ? NULL : &child_class;
-        /// }
-        /// @endcode
+        /// 
         /// Putting child_next() and child_class_next() as defined above into
         /// test_class will now make child_struct's options accessible through
         /// test_struct (again, proper setup as described above needs to be done on
@@ -178,13 +111,8 @@ namespace FFmpeg
         /// constant.
         /// For example, to add some named constants for the test_flags option
         /// above, put the following into the child_opts array:
-        /// @code
-        /// { "test_flags", "This is a test option of flags type.",
-        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
-        /// INT_MIN, INT_MAX, "test_unit" },
-        /// { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64
-        /// = 16 }, 0, 0, "test_unit" },
-        /// @endcode
+        /// 
+        /// 
         /// 
         /// @section avoptions_use Using AVOptions
         /// This section deals with accessing options in an AVOptions-enabled
@@ -241,6 +169,86 @@ namespace FFmpeg
         /// known
         /// before the file is actually opened.
         /// </summary>
+        /// <code>
+        /// typedef struct test_struct {
+        /// AVClass *class;
+        /// int      int_opt;
+        /// char    *str_opt;
+        /// uint8_t *bin_opt;
+        /// int      bin_len;
+        /// } test_struct;
+        /// 
+        /// static const AVOption test_options[] = {
+        /// { "test_int", "This is a test option of int type.",
+        /// offsetof(test_struct, int_opt),
+        /// AV_OPT_TYPE_INT, { .i64 = -1 }, INT_MIN, INT_MAX },
+        /// { "test_str", "This is a test option of string type.",
+        /// offsetof(test_struct, str_opt),
+        /// AV_OPT_TYPE_STRING },
+        /// { "test_bin", "This is a test option of binary type.",
+        /// offsetof(test_struct, bin_opt),
+        /// AV_OPT_TYPE_BINARY },
+        /// { NULL },
+        /// };
+        /// 
+        /// static const AVClass test_class = {
+        /// .class_name = "test class",
+        /// .item_name  = av_default_item_name,
+        /// .option     = test_options,
+        /// .version    = LIBAVUTIL_VERSION_INT,
+        /// };
+        /// </code>
+        /// <code>
+        /// test_struct *alloc_test_struct(void)
+        /// {
+        /// test_struct *ret = av_malloc(sizeof(*ret));
+        /// ret->class = &test_class;
+        /// av_opt_set_defaults(ret);
+        /// return ret;
+        /// }
+        /// void free_test_struct(test_struct **foo)
+        /// {
+        /// av_opt_free(*foo);
+        /// av_freep(foo);
+        /// }
+        /// </code>
+        /// <code>
+        /// typedef struct child_struct {
+        /// AVClass *class;
+        /// int flags_opt;
+        /// } child_struct;
+        /// static const AVOption child_opts[] = {
+        /// { "test_flags", "This is a test option of flags type.",
+        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
+        /// INT_MIN, INT_MAX },
+        /// { NULL },
+        /// };
+        /// static const AVClass child_class = {
+        /// .class_name = "child class",
+        /// .item_name  = av_default_item_name,
+        /// .option     = child_opts,
+        /// .version    = LIBAVUTIL_VERSION_INT,
+        /// };
+        /// 
+        /// void *child_next(void *obj, void *prev)
+        /// {
+        /// test_struct *t = obj;
+        /// if (!prev && t->child_struct)
+        /// return t->child_struct;
+        /// return NULL
+        /// }
+        /// const AVClass child_class_next(const AVClass *prev)
+        /// {
+        /// return prev ? NULL : &child_class;
+        /// }
+        /// </code>
+        /// <code>
+        /// { "test_flags", "This is a test option of flags type.",
+        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
+        /// INT_MIN, INT_MAX, "test_unit" },
+        /// { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64
+        /// = 16 }, 0, 0, "test_unit" },
+        /// </code>
         public enum AVOptionType
         {
             AV_OPT_TYPE_FLAGS = 0,
@@ -392,16 +400,23 @@ namespace FFmpeg
         /// Look for an option in obj. Look only for the options which
         /// have the flags set as specified in mask and flags (that is,
         /// for which it is the case that (opt->flags & mask) == flags).
-        /// 
-        /// @param[in] obj a pointer to a struct whose first element is a
+        /// </summary>
+        /// <param name="[in]">
+        /// obj a pointer to a struct whose first element is a
         /// pointer to an AVClass
-        /// @param[in] name the name of the option to look for
-        /// @param[in] unit the unit of the option to look for, or any if NULL
-        /// @return a pointer to the option found, or NULL if no option
+        /// </param>
+        /// <param name="[in]">
+        /// name the name of the option to look for
+        /// </param>
+        /// <param name="[in]">
+        /// unit the unit of the option to look for, or any if NULL
+        /// </param>
+        /// <returns>
+        /// a pointer to the option found, or NULL if no option
         /// has been found
         /// 
         /// @deprecated use av_opt_find.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -411,11 +426,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Set the field of obj with the given name to value.
-        /// 
-        /// @param[in] obj A struct whose first element is a pointer to an
+        /// </summary>
+        /// <param name="[in]">
+        /// obj A struct whose first element is a pointer to an
         /// AVClass.
-        /// @param[in] name the name of the field to set
-        /// @param[in] val The value to set. If the field is not of a string
+        /// </param>
+        /// <param name="[in]">
+        /// name the name of the field to set
+        /// </param>
+        /// <param name="[in]">
+        /// val The value to set. If the field is not of a string
         /// type, then the given string is parsed.
         /// SI postfixes and some named scalars are supported.
         /// If the field is of a numeric type, it has to be a numeric or named
@@ -425,16 +445,22 @@ namespace FFmpeg
         /// scalars or named flags separated by '+' or '-'. Prefixing a flag
         /// with '+' causes it to be set without affecting the other flags;
         /// similarly, '-' unsets a flag.
-        /// @param[out] o_out if non-NULL put here a pointer to the AVOption
+        /// </param>
+        /// <param name="[out]">
+        /// o_out if non-NULL put here a pointer to the AVOption
         /// found
-        /// @param alloc this parameter is currently ignored
-        /// @return 0 if the value has been set, or an AVERROR code in case of
+        /// </param>
+        /// <param name="alloc">
+        /// this parameter is currently ignored
+        /// </param>
+        /// <returns>
+        /// 0 if the value has been set, or an AVERROR code in case of
         /// error:
         /// AVERROR_OPTION_NOT_FOUND if no matching option exists
         /// AVERROR(ERANGE) if the value is out of range
         /// AVERROR(EINVAL) if the value is not valid
         /// @deprecated use av_opt_set()
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -444,11 +470,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Set the field of obj with the given name to value.
-        /// 
-        /// @param[in] obj A struct whose first element is a pointer to an
+        /// </summary>
+        /// <param name="[in]">
+        /// obj A struct whose first element is a pointer to an
         /// AVClass.
-        /// @param[in] name the name of the field to set
-        /// @param[in] val The value to set. If the field is not of a string
+        /// </param>
+        /// <param name="[in]">
+        /// name the name of the field to set
+        /// </param>
+        /// <param name="[in]">
+        /// val The value to set. If the field is not of a string
         /// type, then the given string is parsed.
         /// SI postfixes and some named scalars are supported.
         /// If the field is of a numeric type, it has to be a numeric or named
@@ -458,16 +489,22 @@ namespace FFmpeg
         /// scalars or named flags separated by '+' or '-'. Prefixing a flag
         /// with '+' causes it to be set without affecting the other flags;
         /// similarly, '-' unsets a flag.
-        /// @param[out] o_out if non-NULL put here a pointer to the AVOption
+        /// </param>
+        /// <param name="[out]">
+        /// o_out if non-NULL put here a pointer to the AVOption
         /// found
-        /// @param alloc this parameter is currently ignored
-        /// @return 0 if the value has been set, or an AVERROR code in case of
+        /// </param>
+        /// <param name="alloc">
+        /// this parameter is currently ignored
+        /// </param>
+        /// <returns>
+        /// 0 if the value has been set, or an AVERROR code in case of
         /// error:
         /// AVERROR_OPTION_NOT_FOUND if no matching option exists
         /// AVERROR(ERANGE) if the value is out of range
         /// AVERROR(EINVAL) if the value is not valid
         /// @deprecated use av_opt_set()
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -555,13 +592,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Show the obj options.
-        /// 
-        /// @param req_flags requested flags for the options to show. Show only the
-        /// options for which it is opt->flags & req_flags.
-        /// @param rej_flags rejected flags for the options to show. Show only the
-        /// options for which it is !(opt->flags & req_flags).
-        /// @param av_log_obj log context to use for showing the options
         /// </summary>
+        /// <param name="req_flags">
+        /// requested flags for the options to show. Show only the
+        /// options for which it is opt->flags & req_flags.
+        /// </param>
+        /// <param name="rej_flags">
+        /// rejected flags for the options to show. Show only the
+        /// options for which it is !(opt->flags & req_flags).
+        /// </param>
+        /// <param name="av_log_obj">
+        /// log context to use for showing the options
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -570,10 +612,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Set the values of all AVOption fields to their default values.
-        /// 
-        /// @param s an AVOption-enabled struct (its first member must be a pointer
-        /// to AVClass)
         /// </summary>
+        /// <param name="s">
+        /// an AVOption-enabled struct (its first member must be a pointer to
+        /// AVClass)
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -592,18 +635,25 @@ namespace FFmpeg
         /// found, stores the value in the field in ctx that is named like the
         /// key. ctx must be an AVClass context, storing is done using
         /// AVOptions.
-        /// 
-        /// @param opts options string to parse, may be NULL
-        /// @param key_val_sep a 0-terminated list of characters used to
+        /// </summary>
+        /// <param name="opts">
+        /// options string to parse, may be NULL
+        /// </param>
+        /// <param name="key_val_sep">
+        /// a 0-terminated list of characters used to
         /// separate key from value
-        /// @param pairs_sep a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="pairs_sep">
+        /// a 0-terminated list of characters used to separate
         /// two pairs from each other
-        /// @return the number of successfully set key/value pairs, or a negative
+        /// </param>
+        /// <returns>
+        /// the number of successfully set key/value pairs, or a negative
         /// value corresponding to an AVERROR code in case of error:
         /// AVERROR(EINVAL) if opts cannot be parsed,
         /// the error code issued by av_set_string3() if a key/value pair
         /// cannot be set
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -613,22 +663,32 @@ namespace FFmpeg
         /// <summary>
         /// Parse the key-value pairs list in opts. For each key=value pair found,
         /// set the value of the corresponding option in ctx.
-        /// 
-        /// @param ctx          the AVClass object to set options on
-        /// @param opts         the options string, key-value pairs separated by a
+        /// </summary>
+        /// <param name="ctx">
+        /// the AVClass object to set options on
+        /// </param>
+        /// <param name="opts">
+        /// the options string, key-value pairs separated by a
         /// delimiter
-        /// @param shorthand    a NULL-terminated array of options names for
-        /// shorthand
+        /// </param>
+        /// <param name="shorthand">
+        /// a NULL-terminated array of options names for shorthand
         /// notation: if the first field in opts has no key part,
         /// the key is taken from the first element of shorthand;
         /// then again for the second, etc., until either opts is
         /// finished, shorthand is finished or a named option is
         /// found; after that, all options must be named
-        /// @param key_val_sep  a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="key_val_sep">
+        /// a 0-terminated list of characters used to separate
         /// key from value, for example '='
-        /// @param pairs_sep    a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="pairs_sep">
+        /// a 0-terminated list of characters used to separate
         /// two pairs from each other, for example ':' or ','
-        /// @return  the number of successfully set key=value pairs, or a negative
+        /// </param>
+        /// <returns>
+        /// the number of successfully set key=value pairs, or a negative
         /// value corresponding to an AVERROR code in case of error:
         /// AVERROR(EINVAL) if opts cannot be parsed,
         /// the error code issued by av_set_string3() if a key/value pair
@@ -638,7 +698,7 @@ namespace FFmpeg
         /// _
         /// Separators must use characters distinct from option names and from each
         /// other.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -648,22 +708,32 @@ namespace FFmpeg
         /// <summary>
         /// Parse the key-value pairs list in opts. For each key=value pair found,
         /// set the value of the corresponding option in ctx.
-        /// 
-        /// @param ctx          the AVClass object to set options on
-        /// @param opts         the options string, key-value pairs separated by a
+        /// </summary>
+        /// <param name="ctx">
+        /// the AVClass object to set options on
+        /// </param>
+        /// <param name="opts">
+        /// the options string, key-value pairs separated by a
         /// delimiter
-        /// @param shorthand    a NULL-terminated array of options names for
-        /// shorthand
+        /// </param>
+        /// <param name="shorthand">
+        /// a NULL-terminated array of options names for shorthand
         /// notation: if the first field in opts has no key part,
         /// the key is taken from the first element of shorthand;
         /// then again for the second, etc., until either opts is
         /// finished, shorthand is finished or a named option is
         /// found; after that, all options must be named
-        /// @param key_val_sep  a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="key_val_sep">
+        /// a 0-terminated list of characters used to separate
         /// key from value, for example '='
-        /// @param pairs_sep    a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="pairs_sep">
+        /// a 0-terminated list of characters used to separate
         /// two pairs from each other, for example ':' or ','
-        /// @return  the number of successfully set key=value pairs, or a negative
+        /// </param>
+        /// <returns>
+        /// the number of successfully set key=value pairs, or a negative
         /// value corresponding to an AVERROR code in case of error:
         /// AVERROR(EINVAL) if opts cannot be parsed,
         /// the error code issued by av_set_string3() if a key/value pair
@@ -673,7 +743,7 @@ namespace FFmpeg
         /// _
         /// Separators must use characters distinct from option names and from each
         /// other.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -691,12 +761,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Check whether a particular flag is set in a flags field.
-        /// 
-        /// @param field_name the name of the flag field option
-        /// @param flag_name the name of the flag to check
-        /// @return non-zero if the flag is set, zero if the flag isn't set,
-        /// isn't of the right type, or the flags field doesn't exist.
         /// </summary>
+        /// <param name="field_name">
+        /// the name of the flag field option
+        /// </param>
+        /// <param name="flag_name">
+        /// the name of the flag to check
+        /// </param>
+        /// <returns>
+        /// non-zero if the flag is set, zero if the flag isn't set,
+        /// isn't of the right type, or the flags field doesn't exist.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -705,20 +780,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Set all the options from a given dictionary on an object.
-        /// 
-        /// @param obj a struct whose first element is a pointer to AVClass
-        /// @param options options to process. This dictionary will be freed and
-        /// replaced
+        /// </summary>
+        /// <param name="obj">
+        /// a struct whose first element is a pointer to AVClass
+        /// </param>
+        /// <param name="options">
+        /// options to process. This dictionary will be freed and replaced
         /// by a new one containing all options not found in obj.
         /// Of course this new dictionary needs to be freed by caller
         /// with av_dict_free().
-        /// 
-        /// @return 0 on success, a negative AVERROR if some option was found in
-        /// obj,
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR if some option was found in obj,
         /// but could not be set.
         /// 
         /// @see av_dict_copy()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -727,20 +804,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Set all the options from a given dictionary on an object.
-        /// 
-        /// @param obj a struct whose first element is a pointer to AVClass
-        /// @param options options to process. This dictionary will be freed and
-        /// replaced
+        /// </summary>
+        /// <param name="obj">
+        /// a struct whose first element is a pointer to AVClass
+        /// </param>
+        /// <param name="options">
+        /// options to process. This dictionary will be freed and replaced
         /// by a new one containing all options not found in obj.
         /// Of course this new dictionary needs to be freed by caller
         /// with av_dict_free().
-        /// 
-        /// @return 0 on success, a negative AVERROR if some option was found in
-        /// obj,
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative AVERROR if some option was found in obj,
         /// but could not be set.
         /// 
         /// @see av_dict_copy()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -749,23 +828,34 @@ namespace FFmpeg
 
         /// <summary>
         /// Extract a key-value pair from the beginning of a string.
-        /// 
-        /// @param ropts        pointer to the options string, will be updated to
+        /// </summary>
+        /// <param name="ropts">
+        /// pointer to the options string, will be updated to
         /// point to the rest of the string (one of the pairs_sep
         /// or the final NUL)
-        /// @param key_val_sep  a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="key_val_sep">
+        /// a 0-terminated list of characters used to separate
         /// key from value, for example '='
-        /// @param pairs_sep    a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="pairs_sep">
+        /// a 0-terminated list of characters used to separate
         /// two pairs from each other, for example ':' or ','
-        /// @param flags        flags; see the AV_OPT_FLAG_* values below
-        /// @param rkey         parsed key; must be freed using av_free()
-        /// @param rval         parsed value; must be freed using av_free()
-        /// 
-        /// @return  >=0 for success, or a negative value corresponding to an
+        /// </param>
+        /// <param name="flags">
+        /// flags; see the AV_OPT_FLAG_* values below
+        /// </param>
+        /// <param name="rkey">
+        /// parsed key; must be freed using av_free()
+        /// </param>
+        /// <param name="rval">
+        /// parsed value; must be freed using av_free()
+        /// </param>
+        /// <returns>
+        /// >=0 for success, or a negative value corresponding to an
         /// AVERROR code in case of error; in particular:
         /// AVERROR(EINVAL) if no key is present
-        /// 
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -774,23 +864,34 @@ namespace FFmpeg
 
         /// <summary>
         /// Extract a key-value pair from the beginning of a string.
-        /// 
-        /// @param ropts        pointer to the options string, will be updated to
+        /// </summary>
+        /// <param name="ropts">
+        /// pointer to the options string, will be updated to
         /// point to the rest of the string (one of the pairs_sep
         /// or the final NUL)
-        /// @param key_val_sep  a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="key_val_sep">
+        /// a 0-terminated list of characters used to separate
         /// key from value, for example '='
-        /// @param pairs_sep    a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="pairs_sep">
+        /// a 0-terminated list of characters used to separate
         /// two pairs from each other, for example ':' or ','
-        /// @param flags        flags; see the AV_OPT_FLAG_* values below
-        /// @param rkey         parsed key; must be freed using av_free()
-        /// @param rval         parsed value; must be freed using av_free()
-        /// 
-        /// @return  >=0 for success, or a negative value corresponding to an
+        /// </param>
+        /// <param name="flags">
+        /// flags; see the AV_OPT_FLAG_* values below
+        /// </param>
+        /// <param name="rkey">
+        /// parsed key; must be freed using av_free()
+        /// </param>
+        /// <param name="rval">
+        /// parsed value; must be freed using av_free()
+        /// </param>
+        /// <returns>
+        /// >=0 for success, or a negative value corresponding to an
         /// AVERROR code in case of error; in particular:
         /// AVERROR(EINVAL) if no key is present
-        /// 
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -803,14 +904,22 @@ namespace FFmpeg
         /// This group of functions can be used to evaluate option strings
         /// and get numbers out of them. They do the same thing as av_opt_set(),
         /// except the result is written into the caller-supplied pointer.
-        /// 
-        /// @param obj a struct whose first element is a pointer to AVClass.
-        /// @param o an option for which the string is to be evaluated.
-        /// @param val string to be evaluated.
-        /// @param *_out value of the string will be written here.
-        /// 
-        /// @return 0 on success, a negative number on failure.
         /// </summary>
+        /// <param name="obj">
+        /// a struct whose first element is a pointer to AVClass.
+        /// </param>
+        /// <param name="o">
+        /// an option for which the string is to be evaluated.
+        /// </param>
+        /// <param name="val">
+        /// string to be evaluated.
+        /// </param>
+        /// <param name="_out">
+        /// value of the string will be written here.
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative number on failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -850,28 +959,37 @@ namespace FFmpeg
         /// <summary>
         /// Look for an option in an object. Consider only options which
         /// have all the specified flags set.
-        /// 
-        /// @param[in] obj A pointer to a struct whose first element is a
+        /// </summary>
+        /// <param name="[in]">
+        /// obj A pointer to a struct whose first element is a
         /// pointer to an AVClass.
         /// Alternatively a double pointer to an AVClass, if
         /// AV_OPT_SEARCH_FAKE_OBJ search flag is set.
-        /// @param[in] name The name of the option to look for.
-        /// @param[in] unit When searching for named constants, name of the unit
+        /// </param>
+        /// <param name="[in]">
+        /// name The name of the option to look for.
+        /// </param>
+        /// <param name="[in]">
+        /// unit When searching for named constants, name of the unit
         /// it belongs to.
-        /// @param opt_flags Find only options with all the specified flags set
-        /// (AV_OPT_FLAG).
-        /// @param search_flags A combination of AV_OPT_SEARCH_*.
-        /// 
-        /// @return A pointer to the option found, or NULL if no option
+        /// </param>
+        /// <param name="opt_flags">
+        /// Find only options with all the specified flags set (AV_OPT_FLAG).
+        /// </param>
+        /// <param name="search_flags">
+        /// A combination of AV_OPT_SEARCH_*.
+        /// </param>
+        /// <returns>
+        /// A pointer to the option found, or NULL if no option
         /// was found.
-        /// 
-        /// @note Options found with AV_OPT_SEARCH_CHILDREN flag may not be
-        /// settable
+        /// </returns>
+        /// <remark>
+        /// Options found with AV_OPT_SEARCH_CHILDREN flag may not be settable
         /// directly with av_set_string3(). Use special calls which take an options
         /// AVDictionary (e.g. avformat_open_input()) to set options found with
         /// this
         /// flag.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -881,27 +999,37 @@ namespace FFmpeg
         /// <summary>
         /// Look for an option in an object. Consider only options which
         /// have all the specified flags set.
-        /// 
-        /// @param[in] obj A pointer to a struct whose first element is a
+        /// </summary>
+        /// <param name="[in]">
+        /// obj A pointer to a struct whose first element is a
         /// pointer to an AVClass.
         /// Alternatively a double pointer to an AVClass, if
         /// AV_OPT_SEARCH_FAKE_OBJ search flag is set.
-        /// @param[in] name The name of the option to look for.
-        /// @param[in] unit When searching for named constants, name of the unit
+        /// </param>
+        /// <param name="[in]">
+        /// name The name of the option to look for.
+        /// </param>
+        /// <param name="[in]">
+        /// unit When searching for named constants, name of the unit
         /// it belongs to.
-        /// @param opt_flags Find only options with all the specified flags set
-        /// (AV_OPT_FLAG).
-        /// @param search_flags A combination of AV_OPT_SEARCH_*.
-        /// @param[out] target_obj if non-NULL, an object to which the option
-        /// belongs will be
+        /// </param>
+        /// <param name="opt_flags">
+        /// Find only options with all the specified flags set (AV_OPT_FLAG).
+        /// </param>
+        /// <param name="search_flags">
+        /// A combination of AV_OPT_SEARCH_*.
+        /// </param>
+        /// <param name="[out]">
+        /// target_obj if non-NULL, an object to which the option belongs will be
         /// written here. It may be different from obj if AV_OPT_SEARCH_CHILDREN is
         /// present
         /// in search_flags. This parameter is ignored if search_flags contain
         /// AV_OPT_SEARCH_FAKE_OBJ.
-        /// 
-        /// @return A pointer to the option found, or NULL if no option
+        /// </param>
+        /// <returns>
+        /// A pointer to the option found, or NULL if no option
         /// was found.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -911,27 +1039,37 @@ namespace FFmpeg
         /// <summary>
         /// Look for an option in an object. Consider only options which
         /// have all the specified flags set.
-        /// 
-        /// @param[in] obj A pointer to a struct whose first element is a
+        /// </summary>
+        /// <param name="[in]">
+        /// obj A pointer to a struct whose first element is a
         /// pointer to an AVClass.
         /// Alternatively a double pointer to an AVClass, if
         /// AV_OPT_SEARCH_FAKE_OBJ search flag is set.
-        /// @param[in] name The name of the option to look for.
-        /// @param[in] unit When searching for named constants, name of the unit
+        /// </param>
+        /// <param name="[in]">
+        /// name The name of the option to look for.
+        /// </param>
+        /// <param name="[in]">
+        /// unit When searching for named constants, name of the unit
         /// it belongs to.
-        /// @param opt_flags Find only options with all the specified flags set
-        /// (AV_OPT_FLAG).
-        /// @param search_flags A combination of AV_OPT_SEARCH_*.
-        /// @param[out] target_obj if non-NULL, an object to which the option
-        /// belongs will be
+        /// </param>
+        /// <param name="opt_flags">
+        /// Find only options with all the specified flags set (AV_OPT_FLAG).
+        /// </param>
+        /// <param name="search_flags">
+        /// A combination of AV_OPT_SEARCH_*.
+        /// </param>
+        /// <param name="[out]">
+        /// target_obj if non-NULL, an object to which the option belongs will be
         /// written here. It may be different from obj if AV_OPT_SEARCH_CHILDREN is
         /// present
         /// in search_flags. This parameter is ignored if search_flags contain
         /// AV_OPT_SEARCH_FAKE_OBJ.
-        /// 
-        /// @return A pointer to the option found, or NULL if no option
+        /// </param>
+        /// <returns>
+        /// A pointer to the option found, or NULL if no option
         /// was found.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -940,13 +1078,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate over all AVOptions belonging to obj.
-        /// 
-        /// @param obj an AVOptions-enabled struct or a double pointer to an
-        /// AVClass describing it.
-        /// @param prev result of the previous call to av_opt_next() on this object
-        /// or NULL
-        /// @return next AVOption or NULL
         /// </summary>
+        /// <param name="obj">
+        /// an AVOptions-enabled struct or a double pointer to an
+        /// AVClass describing it.
+        /// </param>
+        /// <param name="prev">
+        /// result of the previous call to av_opt_next() on this object
+        /// or NULL
+        /// </param>
+        /// <returns>
+        /// next AVOption or NULL
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -955,10 +1098,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate over AVOptions-enabled children of obj.
-        /// 
-        /// @param prev result of a previous call to this function or NULL
-        /// @return next AVOptions-enabled child or NULL
         /// </summary>
+        /// <param name="prev">
+        /// result of a previous call to this function or NULL
+        /// </param>
+        /// <returns>
+        /// next AVOptions-enabled child or NULL
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -967,10 +1113,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate over potential AVOptions-enabled children of parent.
-        /// 
-        /// @param prev result of a previous call to this function or NULL
-        /// @return AVClass corresponding to next potential child or NULL
         /// </summary>
+        /// <param name="prev">
+        /// result of a previous call to this function or NULL
+        /// </param>
+        /// <returns>
+        /// AVClass corresponding to next potential child or NULL
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -981,11 +1130,15 @@ namespace FFmpeg
         /// @defgroup opt_set_funcs Option setting functions
         /// @{
         /// Those functions set the field of obj with the given name to value.
-        /// 
-        /// @param[in] obj A struct whose first element is a pointer to an AVClass.
-        /// @param[in] name the name of the field to set
-        /// @param[in] val The value to set. In case of av_opt_set() if the field
-        /// is not
+        /// </summary>
+        /// <param name="[in]">
+        /// obj A struct whose first element is a pointer to an AVClass.
+        /// </param>
+        /// <param name="[in]">
+        /// name the name of the field to set
+        /// </param>
+        /// <param name="[in]">
+        /// val The value to set. In case of av_opt_set() if the field is not
         /// of a string type, then the given string is parsed.
         /// SI postfixes and some named scalars are supported.
         /// If the field is of a numeric type, it has to be a numeric or named
@@ -995,16 +1148,18 @@ namespace FFmpeg
         /// scalars or named flags separated by '+' or '-'. Prefixing a flag
         /// with '+' causes it to be set without affecting the other flags;
         /// similarly, '-' unsets a flag.
-        /// @param search_flags flags passed to av_opt_find2. I.e. if
-        /// AV_OPT_SEARCH_CHILDREN
+        /// </param>
+        /// <param name="search_flags">
+        /// flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
         /// is passed here, then the option may be set on a child of obj.
-        /// 
-        /// @return 0 if the value has been set, or an AVERROR code in case of
+        /// </param>
+        /// <returns>
+        /// 0 if the value has been set, or an AVERROR code in case of
         /// error:
         /// AVERROR_OPTION_NOT_FOUND if no matching option exists
         /// AVERROR(ERANGE) if the value is out of range
         /// AVERROR(EINVAL) if the value is not valid
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1070,19 +1225,28 @@ namespace FFmpeg
         /// @{
         /// Those functions get a value of the option with the given name from an
         /// object.
-        /// 
-        /// @param[in] obj a struct whose first element is a pointer to an AVClass.
-        /// @param[in] name name of the option to get.
-        /// @param[in] search_flags flags passed to av_opt_find2. I.e. if
+        /// </summary>
+        /// <param name="[in]">
+        /// obj a struct whose first element is a pointer to an AVClass.
+        /// </param>
+        /// <param name="[in]">
+        /// name name of the option to get.
+        /// </param>
+        /// <param name="[in]">
+        /// search_flags flags passed to av_opt_find2. I.e. if
         /// AV_OPT_SEARCH_CHILDREN
         /// is passed here, then the option may be found in a child of obj.
-        /// @param[out] out_val value of the option will be written here
-        /// @return >=0 on success, a negative error code otherwise
-        /// 
-        /// 
-        /// @note the returned string will be av_malloc()ed and must be av_free()ed
-        /// by the caller
-        /// </summary>
+        /// </param>
+        /// <param name="[out]">
+        /// out_val value of the option will be written here
+        /// </param>
+        /// <returns>
+        /// >=0 on success, a negative error code otherwise
+        /// </returns>
+        /// <remark>
+        /// the returned string will be av_malloc()ed and must be av_free()ed by
+        /// the caller
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1094,19 +1258,28 @@ namespace FFmpeg
         /// @{
         /// Those functions get a value of the option with the given name from an
         /// object.
-        /// 
-        /// @param[in] obj a struct whose first element is a pointer to an AVClass.
-        /// @param[in] name name of the option to get.
-        /// @param[in] search_flags flags passed to av_opt_find2. I.e. if
+        /// </summary>
+        /// <param name="[in]">
+        /// obj a struct whose first element is a pointer to an AVClass.
+        /// </param>
+        /// <param name="[in]">
+        /// name name of the option to get.
+        /// </param>
+        /// <param name="[in]">
+        /// search_flags flags passed to av_opt_find2. I.e. if
         /// AV_OPT_SEARCH_CHILDREN
         /// is passed here, then the option may be found in a child of obj.
-        /// @param[out] out_val value of the option will be written here
-        /// @return >=0 on success, a negative error code otherwise
-        /// 
-        /// 
-        /// @note the returned string will be av_malloc()ed and must be av_free()ed
-        /// by the caller
-        /// </summary>
+        /// </param>
+        /// <param name="[out]">
+        /// out_val value of the option will be written here
+        /// </param>
+        /// <returns>
+        /// >=0 on success, a negative error code otherwise
+        /// </returns>
+        /// <remark>
+        /// the returned string will be av_malloc()ed and must be av_free()ed by
+        /// the caller
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1169,11 +1342,11 @@ namespace FFmpeg
         /// This function allows accessing a struct even when its fields are moved
         /// or
         /// renamed since the application making the access has been compiled,
-        /// 
-        /// @returns a pointer to the field, it can be cast to the correct type and
-        /// read
-        /// or written to.
         /// </summary>
+        /// <returns>
+        /// s a pointer to the field, it can be cast to the correct type and read
+        /// or written to.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1203,16 +1376,18 @@ namespace FFmpeg
         /// 
         /// The returned list may depend on other fields in obj like for example
         /// profile.
-        /// 
-        /// @param flags is a bitmask of flags, undefined flags should not be set
-        /// and should be ignored
+        /// </summary>
+        /// <param name="flags">
+        /// is a bitmask of flags, undefined flags should not be set and should be
+        /// ignored
         /// AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a
         /// AVClass instead of a full instance
         /// 
         /// The result must be freed with av_opt_freep_ranges.
-        /// 
-        /// @return >= 0 on success, a negative errro code otherwise
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// >= 0 on success, a negative errro code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1224,16 +1399,18 @@ namespace FFmpeg
         /// 
         /// The returned list may depend on other fields in obj like for example
         /// profile.
-        /// 
-        /// @param flags is a bitmask of flags, undefined flags should not be set
-        /// and should be ignored
+        /// </summary>
+        /// <param name="flags">
+        /// is a bitmask of flags, undefined flags should not be set and should be
+        /// ignored
         /// AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a
         /// AVClass instead of a full instance
         /// 
         /// The result must be freed with av_opt_freep_ranges.
-        /// 
-        /// @return >= 0 on success, a negative errro code otherwise
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// >= 0 on success, a negative errro code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1246,16 +1423,18 @@ namespace FFmpeg
         /// This list is constructed without using the AVClass.query_ranges()
         /// callback
         /// and can be used as fallback from within the callback.
-        /// 
-        /// @param flags is a bitmask of flags, undefined flags should not be set
-        /// and should be ignored
+        /// </summary>
+        /// <param name="flags">
+        /// is a bitmask of flags, undefined flags should not be set and should be
+        /// ignored
         /// AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a
         /// AVClass instead of a full instance
         /// 
         /// The result must be freed with av_opt_free_ranges.
-        /// 
-        /// @return >= 0 on success, a negative errro code otherwise
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// >= 0 on success, a negative errro code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -1268,16 +1447,18 @@ namespace FFmpeg
         /// This list is constructed without using the AVClass.query_ranges()
         /// callback
         /// and can be used as fallback from within the callback.
-        /// 
-        /// @param flags is a bitmask of flags, undefined flags should not be set
-        /// and should be ignored
+        /// </summary>
+        /// <param name="flags">
+        /// is a bitmask of flags, undefined flags should not be set and should be
+        /// ignored
         /// AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a
         /// AVClass instead of a full instance
         /// 
         /// The result must be freed with av_opt_free_ranges.
-        /// 
-        /// @return >= 0 on success, a negative errro code otherwise
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// >= 0 on success, a negative errro code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

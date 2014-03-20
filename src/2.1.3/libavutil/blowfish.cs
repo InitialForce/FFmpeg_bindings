@@ -22,11 +22,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize an AVBlowfish context.
-        /// 
-        /// @param ctx an AVBlowfish context
-        /// @param key a key
-        /// @param key_len length of the key
         /// </summary>
+        /// <param name="ctx">
+        /// an AVBlowfish context
+        /// </param>
+        /// <param name="key">
+        /// a key
+        /// </param>
+        /// <param name="key_len">
+        /// length of the key
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -35,12 +40,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Encrypt or decrypt a buffer using a previously initialized context.
-        /// 
-        /// @param ctx an AVBlowfish context
-        /// @param xl left four bytes halves of input to be encrypted
-        /// @param xr right four bytes halves of input to be encrypted
-        /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
+        /// <param name="ctx">
+        /// an AVBlowfish context
+        /// </param>
+        /// <param name="xl">
+        /// left four bytes halves of input to be encrypted
+        /// </param>
+        /// <param name="xr">
+        /// right four bytes halves of input to be encrypted
+        /// </param>
+        /// <param name="decrypt">
+        /// 0 for encryption, 1 for decryption
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -49,14 +61,25 @@ namespace FFmpeg
 
         /// <summary>
         /// Encrypt or decrypt a buffer using a previously initialized context.
-        /// 
-        /// @param ctx an AVBlowfish context
-        /// @param dst destination array, can be equal to src
-        /// @param src source array, can be equal to dst
-        /// @param count number of 8 byte blocks
-        /// @param iv initialization vector for CBC mode, if NULL ECB will be used
-        /// @param decrypt 0 for encryption, 1 for decryption
         /// </summary>
+        /// <param name="ctx">
+        /// an AVBlowfish context
+        /// </param>
+        /// <param name="dst">
+        /// destination array, can be equal to src
+        /// </param>
+        /// <param name="src">
+        /// source array, can be equal to dst
+        /// </param>
+        /// <param name="count">
+        /// number of 8 byte blocks
+        /// </param>
+        /// <param name="iv">
+        /// initialization vector for CBC mode, if NULL ECB will be used
+        /// </param>
+        /// <param name="decrypt">
+        /// 0 for encryption, 1 for decryption
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

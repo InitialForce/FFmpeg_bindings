@@ -49,12 +49,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Adjust frame number for NTSC drop frame time code.
-        /// 
-        /// @param framenum frame number to adjust
-        /// @param fps      frame per second, 30 or 60
-        /// @return         adjusted frame number
-        /// @warning        adjustment is only valid in NTSC 29.97 and 59.94
         /// </summary>
+        /// <param name="framenum">
+        /// frame number to adjust
+        /// </param>
+        /// <param name="fps">
+        /// frame per second, 30 or 60
+        /// </param>
+        /// <returns>
+        /// adjusted frame number
+        /// @warning        adjustment is only valid in NTSC 29.97 and 59.94
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -63,19 +68,27 @@ namespace FFmpeg
 
         /// <summary>
         /// Convert frame number to SMPTE 12M binary representation.
-        /// 
-        /// @param tc       timecode data correctly initialized
-        /// @param framenum frame number
-        /// @return         the SMPTE binary representation
-        /// 
-        /// @note Frame number adjustment is automatically done in case of drop
-        /// timecode,
-        /// you do NOT have to call av_timecode_adjust_ntsc_framenum2().
-        /// @note The frame number is relative to tc->start.
-        /// @note Color frame (CF), binary group flags (BGF) and biphase mark
-        /// polarity
-        /// correction (PC) bits are set to zero.
         /// </summary>
+        /// <param name="tc">
+        /// timecode data correctly initialized
+        /// </param>
+        /// <param name="framenum">
+        /// frame number
+        /// </param>
+        /// <returns>
+        /// the SMPTE binary representation
+        /// </returns>
+        /// <remark>
+        /// Frame number adjustment is automatically done in case of drop timecode,
+        /// you do NOT have to call av_timecode_adjust_ntsc_framenum2().
+        /// </remark>
+        /// <remark>
+        /// The frame number is relative to tc->start.
+        /// </remark>
+        /// <remark>
+        /// Color frame (CF), binary group flags (BGF) and biphase mark polarity
+        /// correction (PC) bits are set to zero.
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -84,18 +97,26 @@ namespace FFmpeg
 
         /// <summary>
         /// Load timecode string in buf.
-        /// 
-        /// @param buf      destination buffer, must be at least
-        /// AV_TIMECODE_STR_SIZE long
-        /// @param tc       timecode data correctly initialized
-        /// @param framenum frame number
-        /// @return         the buf parameter
-        /// 
-        /// @note Timecode representation can be a negative timecode and have more
-        /// than
-        /// 24 hours, but will only be honored if the flags are correctly set.
-        /// @note The frame number is relative to tc->start.
         /// </summary>
+        /// <param name="buf">
+        /// destination buffer, must be at least AV_TIMECODE_STR_SIZE long
+        /// </param>
+        /// <param name="tc">
+        /// timecode data correctly initialized
+        /// </param>
+        /// <param name="framenum">
+        /// frame number
+        /// </param>
+        /// <returns>
+        /// the buf parameter
+        /// </returns>
+        /// <remark>
+        /// Timecode representation can be a negative timecode and have more than
+        /// 24 hours, but will only be honored if the flags are correctly set.
+        /// </remark>
+        /// <remark>
+        /// The frame number is relative to tc->start.
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -104,15 +125,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the timecode string from the SMPTE timecode format.
-        /// 
-        /// @param buf        destination buffer, must be at least
-        /// AV_TIMECODE_STR_SIZE long
-        /// @param tcsmpte    the 32-bit SMPTE timecode
-        /// @param prevent_df prevent the use of a drop flag when it is known the
-        /// DF bit
-        /// is arbitrary
-        /// @return           the buf parameter
         /// </summary>
+        /// <param name="buf">
+        /// destination buffer, must be at least AV_TIMECODE_STR_SIZE long
+        /// </param>
+        /// <param name="tcsmpte">
+        /// the 32-bit SMPTE timecode
+        /// </param>
+        /// <param name="prevent_df">
+        /// prevent the use of a drop flag when it is known the DF bit
+        /// is arbitrary
+        /// </param>
+        /// <returns>
+        /// the buf parameter
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -122,12 +148,16 @@ namespace FFmpeg
         /// <summary>
         /// Get the timecode string from the 25-bit timecode format (MPEG GOP
         /// format).
-        /// 
-        /// @param buf     destination buffer, must be at least
-        /// AV_TIMECODE_STR_SIZE long
-        /// @param tc25bit the 25-bits timecode
-        /// @return        the buf parameter
         /// </summary>
+        /// <param name="buf">
+        /// destination buffer, must be at least AV_TIMECODE_STR_SIZE long
+        /// </param>
+        /// <param name="tc25bit">
+        /// the 25-bits timecode
+        /// </param>
+        /// <returns>
+        /// the buf parameter
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -136,18 +166,27 @@ namespace FFmpeg
 
         /// <summary>
         /// Init a timecode struct with the passed parameters.
-        /// 
-        /// @param log_ctx     a pointer to an arbitrary struct of which the first
-        /// field
-        /// is a pointer to an AVClass struct (used for av_log)
-        /// @param tc          pointer to an allocated AVTimecode
-        /// @param rate        frame rate in rational form
-        /// @param flags       miscellaneous flags such as drop frame, +24 hours,
-        /// ...
-        /// (see AVTimecodeFlag)
-        /// @param frame_start the first frame number
-        /// @return            0 on success, AVERROR otherwise
         /// </summary>
+        /// <param name="log_ctx">
+        /// a pointer to an arbitrary struct of which the first field
+        /// is a pointer to an AVClass struct (used for av_log)
+        /// </param>
+        /// <param name="tc">
+        /// pointer to an allocated AVTimecode
+        /// </param>
+        /// <param name="rate">
+        /// frame rate in rational form
+        /// </param>
+        /// <param name="flags">
+        /// miscellaneous flags such as drop frame, +24 hours, ...
+        /// (see AVTimecodeFlag)
+        /// </param>
+        /// <param name="frame_start">
+        /// the first frame number
+        /// </param>
+        /// <returns>
+        /// 0 on success, AVERROR otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -156,15 +195,23 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse timecode representation (hh:mm:ss[:;.]ff).
-        /// 
-        /// @param log_ctx a pointer to an arbitrary struct of which the first
-        /// field is a
-        /// pointer to an AVClass struct (used for av_log).
-        /// @param tc      pointer to an allocated AVTimecode
-        /// @param rate    frame rate in rational form
-        /// @param str     timecode string which will determine the frame start
-        /// @return        0 on success, AVERROR otherwise
         /// </summary>
+        /// <param name="log_ctx">
+        /// a pointer to an arbitrary struct of which the first field is a
+        /// pointer to an AVClass struct (used for av_log).
+        /// </param>
+        /// <param name="tc">
+        /// pointer to an allocated AVTimecode
+        /// </param>
+        /// <param name="rate">
+        /// frame rate in rational form
+        /// </param>
+        /// <param name="str">
+        /// timecode string which will determine the frame start
+        /// </param>
+        /// <returns>
+        /// 0 on success, AVERROR otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -173,9 +220,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Check if the timecode feature is available for the given frame rate
-        /// 
-        /// @return 0 if supported, <0 otherwise
         /// </summary>
+        /// <returns>
+        /// 0 if supported, <0 otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

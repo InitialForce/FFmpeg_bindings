@@ -46,12 +46,12 @@ namespace FFmpeg
         /// Descriptor that unambiguously describes how the bits of a pixel are
         /// stored in the up to 4 data planes of an image. It also stores the
         /// subsampling factors and number of components.
-        /// 
-        /// @note This is separate of the colorspace (RGB, YCbCr, YPbPr, JPEG-style
-        /// YUV
+        /// </summary>
+        /// <remark>
+        /// This is separate of the colorspace (RGB, YCbCr, YPbPr, JPEG-style YUV
         /// and all the YUV variants) AVPixFmtDescriptor just stores how values
         /// are stored not what these values represent.
-        /// </summary>
+        /// </remark>
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVPixFmtDescriptor
         {
@@ -92,20 +92,32 @@ namespace FFmpeg
         /// <summary>
         /// Read a line from an image, and write the values of the
         /// pixel format component c to dst.
-        /// 
-        /// @param data the array containing the pointers to the planes of the
-        /// image
-        /// @param linesize the array containing the linesizes of the image
-        /// @param desc the pixel format descriptor for the image
-        /// @param x the horizontal coordinate of the first pixel to read
-        /// @param y the vertical coordinate of the first pixel to read
-        /// @param w the width of the line to read, that is the number of
+        /// </summary>
+        /// <param name="data">
+        /// the array containing the pointers to the planes of the image
+        /// </param>
+        /// <param name="linesize">
+        /// the array containing the linesizes of the image
+        /// </param>
+        /// <param name="desc">
+        /// the pixel format descriptor for the image
+        /// </param>
+        /// <param name="x">
+        /// the horizontal coordinate of the first pixel to read
+        /// </param>
+        /// <param name="y">
+        /// the vertical coordinate of the first pixel to read
+        /// </param>
+        /// <param name="w">
+        /// the width of the line to read, that is the number of
         /// values to write to dst
-        /// @param read_pal_component if not zero and the format is a paletted
+        /// </param>
+        /// <param name="read_pal_component">
+        /// if not zero and the format is a paletted
         /// format writes the values corresponding to the palette
         /// component c in data[1] to dst, rather than the palette indexes in
         /// data[0]. The behavior is undefined if the format is not paletted.
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -115,17 +127,30 @@ namespace FFmpeg
         /// <summary>
         /// Write the values from src to the pixel format component c of an
         /// image line.
-        /// 
-        /// @param src array containing the values to write
-        /// @param data the array containing the pointers to the planes of the
-        /// image to write into. It is supposed to be zeroed.
-        /// @param linesize the array containing the linesizes of the image
-        /// @param desc the pixel format descriptor for the image
-        /// @param x the horizontal coordinate of the first pixel to write
-        /// @param y the vertical coordinate of the first pixel to write
-        /// @param w the width of the line to write, that is the number of
-        /// values to write to the image line
         /// </summary>
+        /// <param name="src">
+        /// array containing the values to write
+        /// </param>
+        /// <param name="data">
+        /// the array containing the pointers to the planes of the
+        /// image to write into. It is supposed to be zeroed.
+        /// </param>
+        /// <param name="linesize">
+        /// the array containing the linesizes of the image
+        /// </param>
+        /// <param name="desc">
+        /// the pixel format descriptor for the image
+        /// </param>
+        /// <param name="x">
+        /// the horizontal coordinate of the first pixel to write
+        /// </param>
+        /// <param name="y">
+        /// the vertical coordinate of the first pixel to write
+        /// </param>
+        /// <param name="w">
+        /// the width of the line to write, that is the number of
+        /// values to write to the image line
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -164,13 +189,18 @@ namespace FFmpeg
         /// <summary>
         /// Print in buf the string corresponding to the pixel format with
         /// number pix_fmt, or a header if pix_fmt is negative.
-        /// 
-        /// @param buf the buffer where to write the string
-        /// @param buf_size the size of buf
-        /// @param pix_fmt the number of the pixel format to print the
+        /// </summary>
+        /// <param name="buf">
+        /// the buffer where to write the string
+        /// </param>
+        /// <param name="buf_size">
+        /// the size of buf
+        /// </param>
+        /// <param name="pix_fmt">
+        /// the number of the pixel format to print the
         /// corresponding info string, or a negative value to print the
         /// corresponding header.
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -203,9 +233,12 @@ namespace FFmpeg
         public static extern int av_get_padded_bits_per_pixel(libavutil.AVPixFmtDescriptor* pixdesc);
 
         /// <summary>
-        /// @return a pixel format descriptor for provided pixel format or NULL if
-        /// this pixel format is unknown.
+        /// 
         /// </summary>
+        /// <returns>
+        /// a pixel format descriptor for provided pixel format or NULL if
+        /// this pixel format is unknown.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -214,11 +247,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate over all pixel format descriptors known to libavutil.
-        /// 
-        /// @param prev previous descriptor. NULL to get the first descriptor.
-        /// 
-        /// @return next descriptor or NULL after the last descriptor
         /// </summary>
+        /// <param name="prev">
+        /// previous descriptor. NULL to get the first descriptor.
+        /// </param>
+        /// <returns>
+        /// next descriptor or NULL after the last descriptor
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -226,10 +261,12 @@ namespace FFmpeg
         public static extern libavutil.AVPixFmtDescriptor* av_pix_fmt_desc_next(libavutil.AVPixFmtDescriptor* prev);
 
         /// <summary>
-        /// @return an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if
-        /// desc
-        /// is not a valid pointer to a pixel format descriptor.
+        /// 
         /// </summary>
+        /// <returns>
+        /// an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if desc
+        /// is not a valid pointer to a pixel format descriptor.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -244,14 +281,19 @@ namespace FFmpeg
         /// valid pixel format instead of returning an error code.
         /// Its recommanded that you use avcodec_get_chroma_sub_sample unless
         /// you do check the return code!
-        /// 
-        /// @param[in]  pix_fmt the pixel format
-        /// @param[out] h_shift store log2_chroma_w
-        /// @param[out] v_shift store log2_chroma_h
-        /// 
-        /// @return 0 on success, AVERROR(ENOSYS) on invalid or unknown pixel
-        /// format
         /// </summary>
+        /// <param name="[in]">
+        /// pix_fmt the pixel format
+        /// </param>
+        /// <param name="[out]">
+        /// h_shift store log2_chroma_w
+        /// </param>
+        /// <param name="[out]">
+        /// v_shift store log2_chroma_h
+        /// </param>
+        /// <returns>
+        /// 0 on success, AVERROR(ENOSYS) on invalid or unknown pixel format
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -259,10 +301,12 @@ namespace FFmpeg
         public static extern int av_pix_fmt_get_chroma_sub_sample(libavutil.AVPixelFormat pix_fmt, int* h_shift, int* v_shift);
 
         /// <summary>
-        /// @return number of planes in pix_fmt, a negative AVERROR if pix_fmt is
-        /// not a
-        /// valid pixel format.
+        /// 
         /// </summary>
+        /// <returns>
+        /// number of planes in pix_fmt, a negative AVERROR if pix_fmt is not a
+        /// valid pixel format.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -277,12 +321,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Utility function to swap the endianness of a pixel format.
-        /// 
-        /// @param[in]  pix_fmt the pixel format
-        /// 
-        /// @return pixel format with swapped endianness if it exists,
-        /// otherwise AV_PIX_FMT_NONE
         /// </summary>
+        /// <param name="[in]">
+        /// pix_fmt the pixel format
+        /// </param>
+        /// <returns>
+        /// pixel format with swapped endianness if it exists,
+        /// otherwise AV_PIX_FMT_NONE
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

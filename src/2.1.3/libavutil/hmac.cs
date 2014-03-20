@@ -32,8 +32,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate an AVHMAC context.
-        /// @param type The hash function used for the HMAC.
         /// </summary>
+        /// <param name="type">
+        /// The hash function used for the HMAC.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -42,8 +44,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Free an AVHMAC context.
-        /// @param ctx The context to free, may be NULL
         /// </summary>
+        /// <param name="ctx">
+        /// The context to free, may be NULL
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -52,10 +56,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize an AVHMAC context with an authentication key.
-        /// @param ctx    The HMAC context
-        /// @param key    The authentication key
-        /// @param keylen The length of the key, in bytes
         /// </summary>
+        /// <param name="ctx">
+        /// The HMAC context
+        /// </param>
+        /// <param name="key">
+        /// The authentication key
+        /// </param>
+        /// <param name="keylen">
+        /// The length of the key, in bytes
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -64,10 +74,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Hash data with the HMAC.
-        /// @param ctx  The HMAC context
-        /// @param data The data to hash
-        /// @param len  The length of the data, in bytes
         /// </summary>
+        /// <param name="ctx">
+        /// The HMAC context
+        /// </param>
+        /// <param name="data">
+        /// The data to hash
+        /// </param>
+        /// <param name="len">
+        /// The length of the data, in bytes
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -76,12 +92,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Finish hashing and output the HMAC digest.
-        /// @param ctx    The HMAC context
-        /// @param out    The output buffer to write the digest into
-        /// @param outlen The length of the out buffer, in bytes
-        /// @return       The number of bytes written to out, or a negative error
-        /// code.
         /// </summary>
+        /// <param name="ctx">
+        /// The HMAC context
+        /// </param>
+        /// <param name="out">
+        /// The output buffer to write the digest into
+        /// </param>
+        /// <param name="outlen">
+        /// The length of the out buffer, in bytes
+        /// </param>
+        /// <returns>
+        /// The number of bytes written to out, or a negative error code.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -90,16 +113,31 @@ namespace FFmpeg
 
         /// <summary>
         /// Hash an array of data with a key.
-        /// @param ctx    The HMAC context
-        /// @param data   The data to hash
-        /// @param len    The length of the data, in bytes
-        /// @param key    The authentication key
-        /// @param keylen The length of the key, in bytes
-        /// @param out    The output buffer to write the digest into
-        /// @param outlen The length of the out buffer, in bytes
-        /// @return       The number of bytes written to out, or a negative error
-        /// code.
         /// </summary>
+        /// <param name="ctx">
+        /// The HMAC context
+        /// </param>
+        /// <param name="data">
+        /// The data to hash
+        /// </param>
+        /// <param name="len">
+        /// The length of the data, in bytes
+        /// </param>
+        /// <param name="key">
+        /// The authentication key
+        /// </param>
+        /// <param name="keylen">
+        /// The length of the key, in bytes
+        /// </param>
+        /// <param name="out">
+        /// The output buffer to write the digest into
+        /// </param>
+        /// <param name="outlen">
+        /// The length of the out buffer, in bytes
+        /// </param>
+        /// <returns>
+        /// The number of bytes written to out, or a negative error code.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

@@ -17,13 +17,20 @@ namespace FFmpeg
         /// In case of failure the global variable errno is set to indicate the
         /// error. Even in case of failure av_strerror() will print a generic
         /// error message indicating the errnum provided to errbuf.
-        /// 
-        /// @param errnum      error code to describe
-        /// @param errbuf      buffer to which description is written
-        /// @param errbuf_size the size in bytes of errbuf
-        /// @return 0 on success, a negative value if a description for errnum
-        /// cannot be found
         /// </summary>
+        /// <param name="errnum">
+        /// error code to describe
+        /// </param>
+        /// <param name="errbuf">
+        /// buffer to which description is written
+        /// </param>
+        /// <param name="errbuf_size">
+        /// the size in bytes of errbuf
+        /// </param>
+        /// <returns>
+        /// 0 on success, a negative value if a description for errnum
+        /// cannot be found
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -33,13 +40,20 @@ namespace FFmpeg
         /// <summary>
         /// Fill the provided buffer with a string containing an error string
         /// corresponding to the AVERROR code errnum.
-        /// 
-        /// @param errbuf         a buffer
-        /// @param errbuf_size    size in bytes of errbuf
-        /// @param errnum         error code to describe
-        /// @return the buffer in input, filled with the error description
-        /// @see av_strerror()
         /// </summary>
+        /// <param name="errbuf">
+        /// a buffer
+        /// </param>
+        /// <param name="errbuf_size">
+        /// size in bytes of errbuf
+        /// </param>
+        /// <param name="errnum">
+        /// error code to describe
+        /// </param>
+        /// <returns>
+        /// the buffer in input, filled with the error description
+        /// @see av_strerror()
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

@@ -14,10 +14,11 @@ namespace FFmpeg
         /// <summary>
         /// Create and return a picref reference from the data and properties
         /// contained in frame.
-        /// 
-        /// @param perms permissions to assign to the new buffer reference
-        /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
+        /// <param name="perms">
+        /// permissions to assign to the new buffer reference
+        /// @deprecated avfilter APIs work natively with AVFrame instead.
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -28,10 +29,11 @@ namespace FFmpeg
         /// <summary>
         /// Create and return a picref reference from the data and properties
         /// contained in frame.
-        /// 
-        /// @param perms permissions to assign to the new buffer reference
-        /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
+        /// <param name="perms">
+        /// permissions to assign to the new buffer reference
+        /// @deprecated avfilter APIs work natively with AVFrame instead.
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -42,10 +44,11 @@ namespace FFmpeg
         /// <summary>
         /// Create and return a buffer reference from the data and properties
         /// contained in frame.
-        /// 
-        /// @param perms permissions to assign to the new buffer reference
-        /// @deprecated avfilter APIs work natively with AVFrame instead.
         /// </summary>
+        /// <param name="perms">
+        /// permissions to assign to the new buffer reference
+        /// @deprecated avfilter APIs work natively with AVFrame instead.
+        /// </param>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -55,13 +58,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Fill an AVFrame with the information stored in samplesref.
-        /// 
-        /// @param frame an already allocated AVFrame
-        /// @param samplesref an audio buffer reference
-        /// @return >= 0 in case of success, a negative AVERROR code in case of
+        /// </summary>
+        /// <param name="frame">
+        /// an already allocated AVFrame
+        /// </param>
+        /// <param name="samplesref">
+        /// an audio buffer reference
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code in case of
         /// failure
         /// @deprecated Use avfilter_copy_buf_props() instead.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -71,13 +79,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Fill an AVFrame with the information stored in picref.
-        /// 
-        /// @param frame an already allocated AVFrame
-        /// @param picref a video buffer reference
-        /// @return >= 0 in case of success, a negative AVERROR code in case of
+        /// </summary>
+        /// <param name="frame">
+        /// an already allocated AVFrame
+        /// </param>
+        /// <param name="picref">
+        /// a video buffer reference
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code in case of
         /// failure
         /// @deprecated Use avfilter_copy_buf_props() instead.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -87,13 +100,18 @@ namespace FFmpeg
 
         /// <summary>
         /// Fill an AVFrame with information stored in ref.
-        /// 
-        /// @param frame an already allocated AVFrame
-        /// @param ref a video or audio buffer reference
-        /// @return >= 0 in case of success, a negative AVERROR code in case of
+        /// </summary>
+        /// <param name="frame">
+        /// an already allocated AVFrame
+        /// </param>
+        /// <param name="ref">
+        /// a video or audio buffer reference
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative AVERROR code in case of
         /// failure
         /// @deprecated Use avfilter_copy_buf_props() instead.
-        /// </summary>
+        /// </returns>
         [System.ObsoleteAttribute()]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFILTER_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,

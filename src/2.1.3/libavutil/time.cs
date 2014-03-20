@@ -23,10 +23,13 @@ namespace FFmpeg
         /// Sleep for a period of time.  Although the duration is expressed in
         /// microseconds, the actual delay may be rounded to the precision of the
         /// system timer.
-        /// 
-        /// @param  usec Number of microseconds to sleep.
-        /// @return zero on success or (negative) error code.
         /// </summary>
+        /// <param name="usec">
+        /// Number of microseconds to sleep.
+        /// </param>
+        /// <returns>
+        /// zero on success or (negative) error code.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

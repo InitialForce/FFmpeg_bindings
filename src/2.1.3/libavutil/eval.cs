@@ -18,29 +18,46 @@ namespace FFmpeg
         /// <summary>
         /// Parse and evaluate an expression.
         /// Note, this is significantly slower than av_expr_eval().
-        /// 
-        /// @param res a pointer to a double where is put the result value of
-        /// the expression, or NAN in case of error
-        /// @param s expression as a zero terminated string, for example
-        /// "1+2^3+5*5+sin(2/3)"
-        /// @param const_names NULL terminated array of zero terminated strings of
-        /// constant identifiers, for example {"PI", "E", 0}
-        /// @param const_values a zero terminated array of values for the
-        /// identifiers from const_names
-        /// @param func1_names NULL terminated array of zero terminated strings of
-        /// funcs1 identifiers
-        /// @param funcs1 NULL terminated array of function pointers for functions
-        /// which take 1 argument
-        /// @param func2_names NULL terminated array of zero terminated strings of
-        /// funcs2 identifiers
-        /// @param funcs2 NULL terminated array of function pointers for functions
-        /// which take 2 arguments
-        /// @param opaque a pointer which will be passed to all functions from
-        /// funcs1 and funcs2
-        /// @param log_ctx parent logging context
-        /// @return >= 0 in case of success, a negative value corresponding to an
-        /// AVERROR code otherwise
         /// </summary>
+        /// <param name="res">
+        /// a pointer to a double where is put the result value of
+        /// the expression, or NAN in case of error
+        /// </param>
+        /// <param name="s">
+        /// expression as a zero terminated string, for example
+        /// "1+2^3+5*5+sin(2/3)"
+        /// </param>
+        /// <param name="const_names">
+        /// NULL terminated array of zero terminated strings of constant
+        /// identifiers, for example {"PI", "E", 0}
+        /// </param>
+        /// <param name="const_values">
+        /// a zero terminated array of values for the identifiers from const_names
+        /// </param>
+        /// <param name="func1_names">
+        /// NULL terminated array of zero terminated strings of funcs1 identifiers
+        /// </param>
+        /// <param name="funcs1">
+        /// NULL terminated array of function pointers for functions which take 1
+        /// argument
+        /// </param>
+        /// <param name="func2_names">
+        /// NULL terminated array of zero terminated strings of funcs2 identifiers
+        /// </param>
+        /// <param name="funcs2">
+        /// NULL terminated array of function pointers for functions which take 2
+        /// arguments
+        /// </param>
+        /// <param name="opaque">
+        /// a pointer which will be passed to all functions from funcs1 and funcs2
+        /// </param>
+        /// <param name="log_ctx">
+        /// parent logging context
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
+        /// AVERROR code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -50,29 +67,46 @@ namespace FFmpeg
         /// <summary>
         /// Parse and evaluate an expression.
         /// Note, this is significantly slower than av_expr_eval().
-        /// 
-        /// @param res a pointer to a double where is put the result value of
-        /// the expression, or NAN in case of error
-        /// @param s expression as a zero terminated string, for example
-        /// "1+2^3+5*5+sin(2/3)"
-        /// @param const_names NULL terminated array of zero terminated strings of
-        /// constant identifiers, for example {"PI", "E", 0}
-        /// @param const_values a zero terminated array of values for the
-        /// identifiers from const_names
-        /// @param func1_names NULL terminated array of zero terminated strings of
-        /// funcs1 identifiers
-        /// @param funcs1 NULL terminated array of function pointers for functions
-        /// which take 1 argument
-        /// @param func2_names NULL terminated array of zero terminated strings of
-        /// funcs2 identifiers
-        /// @param funcs2 NULL terminated array of function pointers for functions
-        /// which take 2 arguments
-        /// @param opaque a pointer which will be passed to all functions from
-        /// funcs1 and funcs2
-        /// @param log_ctx parent logging context
-        /// @return >= 0 in case of success, a negative value corresponding to an
-        /// AVERROR code otherwise
         /// </summary>
+        /// <param name="res">
+        /// a pointer to a double where is put the result value of
+        /// the expression, or NAN in case of error
+        /// </param>
+        /// <param name="s">
+        /// expression as a zero terminated string, for example
+        /// "1+2^3+5*5+sin(2/3)"
+        /// </param>
+        /// <param name="const_names">
+        /// NULL terminated array of zero terminated strings of constant
+        /// identifiers, for example {"PI", "E", 0}
+        /// </param>
+        /// <param name="const_values">
+        /// a zero terminated array of values for the identifiers from const_names
+        /// </param>
+        /// <param name="func1_names">
+        /// NULL terminated array of zero terminated strings of funcs1 identifiers
+        /// </param>
+        /// <param name="funcs1">
+        /// NULL terminated array of function pointers for functions which take 1
+        /// argument
+        /// </param>
+        /// <param name="func2_names">
+        /// NULL terminated array of zero terminated strings of funcs2 identifiers
+        /// </param>
+        /// <param name="funcs2">
+        /// NULL terminated array of function pointers for functions which take 2
+        /// arguments
+        /// </param>
+        /// <param name="opaque">
+        /// a pointer which will be passed to all functions from funcs1 and funcs2
+        /// </param>
+        /// <param name="log_ctx">
+        /// parent logging context
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
+        /// AVERROR code otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -81,27 +115,42 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse an expression.
-        /// 
-        /// @param expr a pointer where is put an AVExpr containing the parsed
+        /// </summary>
+        /// <param name="expr">
+        /// a pointer where is put an AVExpr containing the parsed
         /// value in case of successful parsing, or NULL otherwise.
         /// The pointed to AVExpr must be freed with av_expr_free() by the user
         /// when it is not needed anymore.
-        /// @param s expression as a zero terminated string, for example
+        /// </param>
+        /// <param name="s">
+        /// expression as a zero terminated string, for example
         /// "1+2^3+5*5+sin(2/3)"
-        /// @param const_names NULL terminated array of zero terminated strings of
-        /// constant identifiers, for example {"PI", "E", 0}
-        /// @param func1_names NULL terminated array of zero terminated strings of
-        /// funcs1 identifiers
-        /// @param funcs1 NULL terminated array of function pointers for functions
-        /// which take 1 argument
-        /// @param func2_names NULL terminated array of zero terminated strings of
-        /// funcs2 identifiers
-        /// @param funcs2 NULL terminated array of function pointers for functions
-        /// which take 2 arguments
-        /// @param log_ctx parent logging context
-        /// @return >= 0 in case of success, a negative value corresponding to an
+        /// </param>
+        /// <param name="const_names">
+        /// NULL terminated array of zero terminated strings of constant
+        /// identifiers, for example {"PI", "E", 0}
+        /// </param>
+        /// <param name="func1_names">
+        /// NULL terminated array of zero terminated strings of funcs1 identifiers
+        /// </param>
+        /// <param name="funcs1">
+        /// NULL terminated array of function pointers for functions which take 1
+        /// argument
+        /// </param>
+        /// <param name="func2_names">
+        /// NULL terminated array of zero terminated strings of funcs2 identifiers
+        /// </param>
+        /// <param name="funcs2">
+        /// NULL terminated array of function pointers for functions which take 2
+        /// arguments
+        /// </param>
+        /// <param name="log_ctx">
+        /// parent logging context
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
         /// AVERROR code otherwise
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -110,27 +159,42 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse an expression.
-        /// 
-        /// @param expr a pointer where is put an AVExpr containing the parsed
+        /// </summary>
+        /// <param name="expr">
+        /// a pointer where is put an AVExpr containing the parsed
         /// value in case of successful parsing, or NULL otherwise.
         /// The pointed to AVExpr must be freed with av_expr_free() by the user
         /// when it is not needed anymore.
-        /// @param s expression as a zero terminated string, for example
+        /// </param>
+        /// <param name="s">
+        /// expression as a zero terminated string, for example
         /// "1+2^3+5*5+sin(2/3)"
-        /// @param const_names NULL terminated array of zero terminated strings of
-        /// constant identifiers, for example {"PI", "E", 0}
-        /// @param func1_names NULL terminated array of zero terminated strings of
-        /// funcs1 identifiers
-        /// @param funcs1 NULL terminated array of function pointers for functions
-        /// which take 1 argument
-        /// @param func2_names NULL terminated array of zero terminated strings of
-        /// funcs2 identifiers
-        /// @param funcs2 NULL terminated array of function pointers for functions
-        /// which take 2 arguments
-        /// @param log_ctx parent logging context
-        /// @return >= 0 in case of success, a negative value corresponding to an
+        /// </param>
+        /// <param name="const_names">
+        /// NULL terminated array of zero terminated strings of constant
+        /// identifiers, for example {"PI", "E", 0}
+        /// </param>
+        /// <param name="func1_names">
+        /// NULL terminated array of zero terminated strings of funcs1 identifiers
+        /// </param>
+        /// <param name="funcs1">
+        /// NULL terminated array of function pointers for functions which take 1
+        /// argument
+        /// </param>
+        /// <param name="func2_names">
+        /// NULL terminated array of zero terminated strings of funcs2 identifiers
+        /// </param>
+        /// <param name="funcs2">
+        /// NULL terminated array of function pointers for functions which take 2
+        /// arguments
+        /// </param>
+        /// <param name="log_ctx">
+        /// parent logging context
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
         /// AVERROR code otherwise
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -139,13 +203,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Evaluate a previously parsed expression.
-        /// 
-        /// @param const_values a zero terminated array of values for the
-        /// identifiers from av_expr_parse() const_names
-        /// @param opaque a pointer which will be passed to all functions from
-        /// funcs1 and funcs2
-        /// @return the value of the expression
         /// </summary>
+        /// <param name="const_values">
+        /// a zero terminated array of values for the identifiers from
+        /// av_expr_parse() const_names
+        /// </param>
+        /// <param name="opaque">
+        /// a pointer which will be passed to all functions from funcs1 and funcs2
+        /// </param>
+        /// <returns>
+        /// the value of the expression
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -168,16 +236,19 @@ namespace FFmpeg
         /// floating-point number, no conversion is performed. In this case,
         /// returns a value of zero and the value returned in tail is the value
         /// of numstr.
-        /// 
-        /// @param numstr a string representing a number, may contain one of
+        /// </summary>
+        /// <param name="numstr">
+        /// a string representing a number, may contain one of
         /// the International System number postfixes, for example 'K', 'M',
         /// 'G'. If 'i' is appended after the postfix, powers of 2 are used
         /// instead of powers of 10. The 'B' postfix multiplies the value for
         /// 8, and can be appended after another postfix or used alone. This
         /// allows using for example 'KB', 'MiB', 'G' and 'B' as postfix.
-        /// @param tail if non-NULL puts here the pointer to the char next
+        /// </param>
+        /// <param name="tail">
+        /// if non-NULL puts here the pointer to the char next
         /// after the last parsed character
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -191,16 +262,19 @@ namespace FFmpeg
         /// floating-point number, no conversion is performed. In this case,
         /// returns a value of zero and the value returned in tail is the value
         /// of numstr.
-        /// 
-        /// @param numstr a string representing a number, may contain one of
+        /// </summary>
+        /// <param name="numstr">
+        /// a string representing a number, may contain one of
         /// the International System number postfixes, for example 'K', 'M',
         /// 'G'. If 'i' is appended after the postfix, powers of 2 are used
         /// instead of powers of 10. The 'B' postfix multiplies the value for
         /// 8, and can be appended after another postfix or used alone. This
         /// allows using for example 'KB', 'MiB', 'G' and 'B' as postfix.
-        /// @param tail if non-NULL puts here the pointer to the char next
+        /// </param>
+        /// <param name="tail">
+        /// if non-NULL puts here the pointer to the char next
         /// after the last parsed character
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

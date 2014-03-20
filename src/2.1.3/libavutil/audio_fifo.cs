@@ -17,9 +17,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Free an AVAudioFifo.
-        /// 
-        /// @param af  AVAudioFifo to free
         /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to free
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -28,12 +29,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Allocate an AVAudioFifo.
-        /// 
-        /// @param sample_fmt  sample format
-        /// @param channels    number of channels
-        /// @param nb_samples  initial allocation size, in samples
-        /// @return            newly allocated AVAudioFifo, or NULL on error
         /// </summary>
+        /// <param name="sample_fmt">
+        /// sample format
+        /// </param>
+        /// <param name="channels">
+        /// number of channels
+        /// </param>
+        /// <param name="nb_samples">
+        /// initial allocation size, in samples
+        /// </param>
+        /// <returns>
+        /// newly allocated AVAudioFifo, or NULL on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -42,11 +50,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Reallocate an AVAudioFifo.
-        /// 
-        /// @param af          AVAudioFifo to reallocate
-        /// @param nb_samples  new allocation size, in samples
-        /// @return            0 if OK, or negative AVERROR code on failure
         /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to reallocate
+        /// </param>
+        /// <param name="nb_samples">
+        /// new allocation size, in samples
+        /// </param>
+        /// <returns>
+        /// 0 if OK, or negative AVERROR code on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -62,15 +75,21 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param af          AVAudioFifo to write to
-        /// @param data        audio data plane pointers
-        /// @param nb_samples  number of samples to write
-        /// @return            number of samples actually written, or negative
-        /// AVERROR
+        /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to write to
+        /// </param>
+        /// <param name="data">
+        /// audio data plane pointers
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to write
+        /// </param>
+        /// <returns>
+        /// number of samples actually written, or negative AVERROR
         /// code on failure. If successful, the number of samples
         /// actually written will always be nb_samples.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -86,15 +105,21 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param af          AVAudioFifo to write to
-        /// @param data        audio data plane pointers
-        /// @param nb_samples  number of samples to write
-        /// @return            number of samples actually written, or negative
-        /// AVERROR
+        /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to write to
+        /// </param>
+        /// <param name="data">
+        /// audio data plane pointers
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to write
+        /// </param>
+        /// <returns>
+        /// number of samples actually written, or negative AVERROR
         /// code on failure. If successful, the number of samples
         /// actually written will always be nb_samples.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -106,16 +131,22 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param af          AVAudioFifo to read from
-        /// @param data        audio data plane pointers
-        /// @param nb_samples  number of samples to read
-        /// @return            number of samples actually read, or negative AVERROR
-        /// code
+        /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to read from
+        /// </param>
+        /// <param name="data">
+        /// audio data plane pointers
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to read
+        /// </param>
+        /// <returns>
+        /// number of samples actually read, or negative AVERROR code
         /// on failure. The number of samples actually read will not
         /// be greater than nb_samples, and will only be less than
         /// nb_samples if av_audio_fifo_size is less than nb_samples.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -127,16 +158,22 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param af          AVAudioFifo to read from
-        /// @param data        audio data plane pointers
-        /// @param nb_samples  number of samples to read
-        /// @return            number of samples actually read, or negative AVERROR
-        /// code
+        /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to read from
+        /// </param>
+        /// <param name="data">
+        /// audio data plane pointers
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to read
+        /// </param>
+        /// <returns>
+        /// number of samples actually read, or negative AVERROR code
         /// on failure. The number of samples actually read will not
         /// be greater than nb_samples, and will only be less than
         /// nb_samples if av_audio_fifo_size is less than nb_samples.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -147,11 +184,16 @@ namespace FFmpeg
         /// Drain data from an AVAudioFifo.
         /// 
         /// Removes the data without reading it.
-        /// 
-        /// @param af          AVAudioFifo to drain
-        /// @param nb_samples  number of samples to drain
-        /// @return            0 if OK, or negative AVERROR code on failure
         /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to drain
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to drain
+        /// </param>
+        /// <returns>
+        /// 0 if OK, or negative AVERROR code on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -162,9 +204,10 @@ namespace FFmpeg
         /// Reset the AVAudioFifo buffer.
         /// 
         /// This empties all data in the buffer.
-        /// 
-        /// @param af  AVAudioFifo to reset
         /// </summary>
+        /// <param name="af">
+        /// AVAudioFifo to reset
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -174,10 +217,13 @@ namespace FFmpeg
         /// <summary>
         /// Get the current number of samples in the AVAudioFifo available for
         /// reading.
-        /// 
-        /// @param af  the AVAudioFifo to query
-        /// @return    number of samples available for reading
         /// </summary>
+        /// <param name="af">
+        /// the AVAudioFifo to query
+        /// </param>
+        /// <returns>
+        /// number of samples available for reading
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -187,10 +233,13 @@ namespace FFmpeg
         /// <summary>
         /// Get the current number of samples in the AVAudioFifo available for
         /// writing.
-        /// 
-        /// @param af  the AVAudioFifo to query
-        /// @return    number of samples available for writing
         /// </summary>
+        /// <param name="af">
+        /// the AVAudioFifo to query
+        /// </param>
+        /// <returns>
+        /// number of samples available for writing
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

@@ -24,11 +24,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a signed integer value into the amin-amax range.
-        /// @param a value to clip
-        /// @param amin minimum value of the clip range
-        /// @param amax maximum value of the clip range
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <param name="amin">
+        /// minimum value of the clip range
+        /// </param>
+        /// <param name="amax">
+        /// maximum value of the clip range
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -37,11 +45,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a signed 64bit integer value into the amin-amax range.
-        /// @param a value to clip
-        /// @param amin minimum value of the clip range
-        /// @param amax maximum value of the clip range
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <param name="amin">
+        /// minimum value of the clip range
+        /// </param>
+        /// <param name="amax">
+        /// maximum value of the clip range
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -50,9 +66,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a signed integer value into the 0-255 range.
-        /// @param a value to clip
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -61,9 +81,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a signed integer value into the -128,127 range.
-        /// @param a value to clip
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -72,9 +96,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a signed integer value into the 0-65535 range.
-        /// @param a value to clip
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -83,9 +111,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a signed integer value into the -32768,32767 range.
-        /// @param a value to clip
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -95,9 +127,13 @@ namespace FFmpeg
         /// <summary>
         /// Clip a signed 64-bit integer value into the -2147483648,2147483647
         /// range.
-        /// @param a value to clip
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -106,10 +142,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a signed integer to an unsigned power of two range.
-        /// @param  a value to clip
-        /// @param  p bit position to clip at
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <param name="p">
+        /// bit position to clip at
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -118,11 +160,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Add two signed 32-bit values with saturation.
-        /// 
-        /// @param  a one value
-        /// @param  b another value
-        /// @return sum with signed saturation
         /// </summary>
+        /// <param name="a">
+        /// one value
+        /// </param>
+        /// <param name="b">
+        /// another value
+        /// </param>
+        /// <returns>
+        /// sum with signed saturation
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -131,11 +178,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Add a doubled value to another value with saturation at both stages.
-        /// 
-        /// @param  a first value
-        /// @param  b value doubled and added to a
-        /// @return sum with signed saturation
         /// </summary>
+        /// <param name="a">
+        /// first value
+        /// </param>
+        /// <param name="b">
+        /// value doubled and added to a
+        /// </param>
+        /// <returns>
+        /// sum with signed saturation
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -144,11 +196,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a float value into the amin-amax range.
-        /// @param a value to clip
-        /// @param amin minimum value of the clip range
-        /// @param amax maximum value of the clip range
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <param name="amin">
+        /// minimum value of the clip range
+        /// </param>
+        /// <param name="amax">
+        /// maximum value of the clip range
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -157,11 +217,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Clip a double value into the amin-amax range.
-        /// @param a value to clip
-        /// @param amin minimum value of the clip range
-        /// @param amax maximum value of the clip range
-        /// @return clipped value
         /// </summary>
+        /// <param name="a">
+        /// value to clip
+        /// </param>
+        /// <param name="amin">
+        /// minimum value of the clip range
+        /// </param>
+        /// <param name="amax">
+        /// maximum value of the clip range
+        /// </param>
+        /// <returns>
+        /// clipped value
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -170,9 +238,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Compute ceil(log2(x)).
-        /// @param x value used to compute ceil(log2(x))
-        /// @return computed ceiling of log2(x)
         /// </summary>
+        /// <param name="x">
+        /// value used to compute ceil(log2(x))
+        /// </param>
+        /// <returns>
+        /// computed ceiling of log2(x)
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -181,9 +253,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Count number of bits set to one in x
-        /// @param x value to count bits of
-        /// @return the number of bits set to one in x
         /// </summary>
+        /// <param name="x">
+        /// value to count bits of
+        /// </param>
+        /// <returns>
+        /// the number of bits set to one in x
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -192,9 +268,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Count number of bits set to one in x
-        /// @param x value to count bits of
-        /// @return the number of bits set to one in x
         /// </summary>
+        /// <param name="x">
+        /// value to count bits of
+        /// </param>
+        /// <returns>
+        /// the number of bits set to one in x
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

@@ -16,8 +16,8 @@ namespace FFmpeg
 
         /// <summary>
         /// Pixel format.
-        /// 
-        /// @note
+        /// </summary>
+        /// <remark>
         /// AV_PIX_FMT_RGB32 is handled in an endian-specific manner. An RGBA
         /// color is put together as:
         /// (A << 24) | (R << 16) | (G << 8) | B
@@ -39,13 +39,13 @@ namespace FFmpeg
         /// For all the 8bit per pixel formats, an RGB32 palette is in data[1] like
         /// for pal8. This palette is filled in automatically by the function
         /// allocating the picture.
-        /// 
-        /// @note
+        /// </remark>
+        /// <remark>
         /// Make sure that all newly added big-endian formats have (pix_fmt & 1) ==
         /// 1
         /// and that all newly added little-endian formats have (pix_fmt & 1) == 0.
         /// This allows simpler detection of big vs little-endian.
-        /// </summary>
+        /// </remark>
         public enum AVPixelFormat
         {
             AV_PIX_FMT_NONE = -1,

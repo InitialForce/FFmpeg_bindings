@@ -28,9 +28,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize an AVFifoBuffer.
-        /// @param size of FIFO
-        /// @return AVFifoBuffer or NULL in case of memory allocation failure
         /// </summary>
+        /// <param name="size">
+        /// of FIFO
+        /// </param>
+        /// <returns>
+        /// AVFifoBuffer or NULL in case of memory allocation failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -39,8 +43,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Free an AVFifoBuffer.
-        /// @param f AVFifoBuffer to free
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to free
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -50,8 +56,10 @@ namespace FFmpeg
         /// <summary>
         /// Reset the AVFifoBuffer to the state right after av_fifo_alloc, in
         /// particular it is emptied.
-        /// @param f AVFifoBuffer to reset
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to reset
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -61,9 +69,13 @@ namespace FFmpeg
         /// <summary>
         /// Return the amount of data in bytes in the AVFifoBuffer, that is the
         /// amount of data you can read from it.
-        /// @param f AVFifoBuffer to read from
-        /// @return size
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to read from
+        /// </param>
+        /// <returns>
+        /// size
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -73,9 +85,13 @@ namespace FFmpeg
         /// <summary>
         /// Return the amount of space in bytes in the AVFifoBuffer, that is the
         /// amount of data you can write into it.
-        /// @param f AVFifoBuffer to write into
-        /// @return size
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to write into
+        /// </param>
+        /// <returns>
+        /// size
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -84,11 +100,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Feed data from an AVFifoBuffer to a user-supplied callback.
-        /// @param f AVFifoBuffer to read from
-        /// @param buf_size number of bytes to read
-        /// @param func generic read function
-        /// @param dest data destination
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to read from
+        /// </param>
+        /// <param name="buf_size">
+        /// number of bytes to read
+        /// </param>
+        /// <param name="func">
+        /// generic read function
+        /// </param>
+        /// <param name="dest">
+        /// data destination
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -97,18 +121,28 @@ namespace FFmpeg
 
         /// <summary>
         /// Feed data from a user-supplied callback to an AVFifoBuffer.
-        /// @param f AVFifoBuffer to write to
-        /// @param src data source; non-const since it may be used as a
+        /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to write to
+        /// </param>
+        /// <param name="src">
+        /// data source; non-const since it may be used as a
         /// modifiable context by the function defined in func
-        /// @param size number of bytes to write
-        /// @param func generic write function; the first parameter is src,
+        /// </param>
+        /// <param name="size">
+        /// number of bytes to write
+        /// </param>
+        /// <param name="func">
+        /// generic write function; the first parameter is src,
         /// the second is dest_buf, the third is dest_buf_size.
         /// func must return the number of bytes written to dest_buf, or <= 0 to
         /// indicate no more data available to write.
         /// If func is NULL, src is interpreted as a simple byte array for source
         /// data.
-        /// @return the number of bytes written to the FIFO
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// the number of bytes written to the FIFO
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -118,11 +152,16 @@ namespace FFmpeg
         /// <summary>
         /// Resize an AVFifoBuffer.
         /// In case of reallocation failure, the old FIFO is kept unchanged.
-        /// 
-        /// @param f AVFifoBuffer to resize
-        /// @param size new AVFifoBuffer size in bytes
-        /// @return <0 for failure, >=0 otherwise
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to resize
+        /// </param>
+        /// <param name="size">
+        /// new AVFifoBuffer size in bytes
+        /// </param>
+        /// <returns>
+        /// <0 for failure, >=0 otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -133,12 +172,16 @@ namespace FFmpeg
         /// Enlarge an AVFifoBuffer.
         /// In case of reallocation failure, the old FIFO is kept unchanged.
         /// The new fifo size may be larger than the requested size.
-        /// 
-        /// @param f AVFifoBuffer to resize
-        /// @param additional_space the amount of space in bytes to allocate in
-        /// addition to av_fifo_size()
-        /// @return <0 for failure, >=0 otherwise
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to resize
+        /// </param>
+        /// <param name="additional_space">
+        /// the amount of space in bytes to allocate in addition to av_fifo_size()
+        /// </param>
+        /// <returns>
+        /// <0 for failure, >=0 otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -147,9 +190,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Read and discard the specified amount of data from an AVFifoBuffer.
-        /// @param f AVFifoBuffer to read from
-        /// @param size amount of data to read in bytes
         /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to read from
+        /// </param>
+        /// <param name="size">
+        /// amount of data to read in bytes
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -160,13 +207,16 @@ namespace FFmpeg
         /// Return a pointer to the data stored in a FIFO buffer at a certain
         /// offset.
         /// The FIFO buffer is not modified.
-        /// 
-        /// @param f    AVFifoBuffer to peek at, f must be non-NULL
-        /// @param offs an offset in bytes, its absolute value must be less
+        /// </summary>
+        /// <param name="f">
+        /// AVFifoBuffer to peek at, f must be non-NULL
+        /// </param>
+        /// <param name="offs">
+        /// an offset in bytes, its absolute value must be less
         /// than the used buffer size or the returned pointer will
         /// point outside to the buffer data.
         /// The used buffer size can be checked with av_fifo_size().
-        /// </summary>
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

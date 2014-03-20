@@ -105,10 +105,11 @@ namespace FFmpeg
         /// If the passed sample_fmt is already in packed format, the format
         /// returned is
         /// the same as the input.
-        /// 
-        /// @return  the packed alternative form of the given sample format or
-        /// AV_SAMPLE_FMT_NONE on error.
         /// </summary>
+        /// <returns>
+        /// the packed alternative form of the given sample format or
+        /// AV_SAMPLE_FMT_NONE on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -121,10 +122,11 @@ namespace FFmpeg
         /// If the passed sample_fmt is already in planar format, the format
         /// returned is
         /// the same as the input.
-        /// 
-        /// @return  the planar alternative form of the given sample format or
-        /// AV_SAMPLE_FMT_NONE on error.
         /// </summary>
+        /// <returns>
+        /// the planar alternative form of the given sample format or
+        /// AV_SAMPLE_FMT_NONE on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -134,15 +136,22 @@ namespace FFmpeg
         /// <summary>
         /// Generate a string corresponding to the sample format with
         /// sample_fmt, or a header if sample_fmt is negative.
-        /// 
-        /// @param buf the buffer where to write the string
-        /// @param buf_size the size of buf
-        /// @param sample_fmt the number of the sample format to print the
+        /// </summary>
+        /// <param name="buf">
+        /// the buffer where to write the string
+        /// </param>
+        /// <param name="buf_size">
+        /// the size of buf
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the number of the sample format to print the
         /// corresponding info string, or a negative value to print the
         /// corresponding header.
-        /// @return the pointer to the filled buffer or NULL if sample_fmt is
+        /// </param>
+        /// <returns>
+        /// the pointer to the filled buffer or NULL if sample_fmt is
         /// unknown or in case of other errors
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -158,11 +167,14 @@ namespace FFmpeg
 
         /// <summary>
         /// Return number of bytes per sample.
-        /// 
-        /// @param sample_fmt the sample format
-        /// @return number of bytes per sample or zero if unknown for the given
-        /// sample format
         /// </summary>
+        /// <param name="sample_fmt">
+        /// the sample format
+        /// </param>
+        /// <returns>
+        /// number of bytes per sample or zero if unknown for the given
+        /// sample format
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -171,10 +183,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Check if the sample format is planar.
-        /// 
-        /// @param sample_fmt the sample format to inspect
-        /// @return 1 if the sample format is planar, 0 if it is interleaved
         /// </summary>
+        /// <param name="sample_fmt">
+        /// the sample format to inspect
+        /// </param>
+        /// <returns>
+        /// 1 if the sample format is planar, 0 if it is interleaved
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -183,16 +198,25 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the required buffer size for the given audio parameters.
-        /// 
-        /// @param[out] linesize calculated linesize, may be NULL
-        /// @param nb_channels   the number of channels
-        /// @param nb_samples    the number of samples in a single channel
-        /// @param sample_fmt    the sample format
-        /// @param align         buffer size alignment (0 = default, 1 = no
-        /// alignment)
-        /// @return              required buffer size, or negative error code on
-        /// failure
         /// </summary>
+        /// <param name="[out]">
+        /// linesize calculated linesize, may be NULL
+        /// </param>
+        /// <param name="nb_channels">
+        /// the number of channels
+        /// </param>
+        /// <param name="nb_samples">
+        /// the number of samples in a single channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the sample format
+        /// </param>
+        /// <param name="align">
+        /// buffer size alignment (0 = default, 1 = no alignment)
+        /// </param>
+        /// <returns>
+        /// required buffer size, or negative error code on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -219,21 +243,33 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param[out] audio_data  array to be filled with the pointer for each
-        /// channel
-        /// @param[out] linesize    calculated linesize, may be NULL
-        /// @param buf              the pointer to a buffer containing the samples
-        /// @param nb_channels      the number of channels
-        /// @param nb_samples       the number of samples in a single channel
-        /// @param sample_fmt       the sample format
-        /// @param align            buffer size alignment (0 = default, 1 = no
-        /// alignment)
-        /// @return                 >=0 on success or a negative error code on
-        /// failure
+        /// </summary>
+        /// <param name="[out]">
+        /// audio_data  array to be filled with the pointer for each channel
+        /// </param>
+        /// <param name="[out]">
+        /// linesize    calculated linesize, may be NULL
+        /// </param>
+        /// <param name="buf">
+        /// the pointer to a buffer containing the samples
+        /// </param>
+        /// <param name="nb_channels">
+        /// the number of channels
+        /// </param>
+        /// <param name="nb_samples">
+        /// the number of samples in a single channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the sample format
+        /// </param>
+        /// <param name="align">
+        /// buffer size alignment (0 = default, 1 = no alignment)
+        /// </param>
+        /// <returns>
+        /// >=0 on success or a negative error code on failure
         /// @todo return minimum size in bytes required for the buffer in case
         /// of success at the next bump
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -260,21 +296,33 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param[out] audio_data  array to be filled with the pointer for each
-        /// channel
-        /// @param[out] linesize    calculated linesize, may be NULL
-        /// @param buf              the pointer to a buffer containing the samples
-        /// @param nb_channels      the number of channels
-        /// @param nb_samples       the number of samples in a single channel
-        /// @param sample_fmt       the sample format
-        /// @param align            buffer size alignment (0 = default, 1 = no
-        /// alignment)
-        /// @return                 >=0 on success or a negative error code on
-        /// failure
+        /// </summary>
+        /// <param name="[out]">
+        /// audio_data  array to be filled with the pointer for each channel
+        /// </param>
+        /// <param name="[out]">
+        /// linesize    calculated linesize, may be NULL
+        /// </param>
+        /// <param name="buf">
+        /// the pointer to a buffer containing the samples
+        /// </param>
+        /// <param name="nb_channels">
+        /// the number of channels
+        /// </param>
+        /// <param name="nb_samples">
+        /// the number of samples in a single channel
+        /// </param>
+        /// <param name="sample_fmt">
+        /// the sample format
+        /// </param>
+        /// <param name="align">
+        /// buffer size alignment (0 = default, 1 = no alignment)
+        /// </param>
+        /// <returns>
+        /// >=0 on success or a negative error code on failure
         /// @todo return minimum size in bytes required for the buffer in case
         /// of success at the next bump
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -291,21 +339,29 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param[out] audio_data  array to be filled with the pointer for each
-        /// channel
-        /// @param[out] linesize    aligned size for audio buffer(s), may be NULL
-        /// @param nb_channels      number of audio channels
-        /// @param nb_samples       number of samples per channel
-        /// @param align            buffer size alignment (0 = default, 1 = no
-        /// alignment)
-        /// @return                 >=0 on success or a negative error code on
-        /// failure
+        /// </summary>
+        /// <param name="[out]">
+        /// audio_data  array to be filled with the pointer for each channel
+        /// </param>
+        /// <param name="[out]">
+        /// linesize    aligned size for audio buffer(s), may be NULL
+        /// </param>
+        /// <param name="nb_channels">
+        /// number of audio channels
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples per channel
+        /// </param>
+        /// <param name="align">
+        /// buffer size alignment (0 = default, 1 = no alignment)
+        /// </param>
+        /// <returns>
+        /// >=0 on success or a negative error code on failure
         /// @todo return the size of the allocated buffer in case of success at the
         /// next bump
         /// @see av_samples_fill_arrays()
         /// @see av_samples_alloc_array_and_samples()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -322,21 +378,29 @@ namespace FFmpeg
         /// 
         /// @see enum AVSampleFormat
         /// The documentation for AVSampleFormat describes the data layout.
-        /// 
-        /// @param[out] audio_data  array to be filled with the pointer for each
-        /// channel
-        /// @param[out] linesize    aligned size for audio buffer(s), may be NULL
-        /// @param nb_channels      number of audio channels
-        /// @param nb_samples       number of samples per channel
-        /// @param align            buffer size alignment (0 = default, 1 = no
-        /// alignment)
-        /// @return                 >=0 on success or a negative error code on
-        /// failure
+        /// </summary>
+        /// <param name="[out]">
+        /// audio_data  array to be filled with the pointer for each channel
+        /// </param>
+        /// <param name="[out]">
+        /// linesize    aligned size for audio buffer(s), may be NULL
+        /// </param>
+        /// <param name="nb_channels">
+        /// number of audio channels
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples per channel
+        /// </param>
+        /// <param name="align">
+        /// buffer size alignment (0 = default, 1 = no alignment)
+        /// </param>
+        /// <returns>
+        /// >=0 on success or a negative error code on failure
         /// @todo return the size of the allocated buffer in case of success at the
         /// next bump
         /// @see av_samples_fill_arrays()
         /// @see av_samples_alloc_array_and_samples()
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -360,17 +424,28 @@ namespace FFmpeg
 
         /// <summary>
         /// Copy samples from src to dst.
-        /// 
-        /// @param dst destination array of pointers to data planes
-        /// @param src source array of pointers to data planes
-        /// @param dst_offset offset in samples at which the data will be written
-        /// to dst
-        /// @param src_offset offset in samples at which the data will be read from
-        /// src
-        /// @param nb_samples number of samples to be copied
-        /// @param nb_channels number of audio channels
-        /// @param sample_fmt audio sample format
         /// </summary>
+        /// <param name="dst">
+        /// destination array of pointers to data planes
+        /// </param>
+        /// <param name="src">
+        /// source array of pointers to data planes
+        /// </param>
+        /// <param name="dst_offset">
+        /// offset in samples at which the data will be written to dst
+        /// </param>
+        /// <param name="src_offset">
+        /// offset in samples at which the data will be read from src
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to be copied
+        /// </param>
+        /// <param name="nb_channels">
+        /// number of audio channels
+        /// </param>
+        /// <param name="sample_fmt">
+        /// audio sample format
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -379,17 +454,28 @@ namespace FFmpeg
 
         /// <summary>
         /// Copy samples from src to dst.
-        /// 
-        /// @param dst destination array of pointers to data planes
-        /// @param src source array of pointers to data planes
-        /// @param dst_offset offset in samples at which the data will be written
-        /// to dst
-        /// @param src_offset offset in samples at which the data will be read from
-        /// src
-        /// @param nb_samples number of samples to be copied
-        /// @param nb_channels number of audio channels
-        /// @param sample_fmt audio sample format
         /// </summary>
+        /// <param name="dst">
+        /// destination array of pointers to data planes
+        /// </param>
+        /// <param name="src">
+        /// source array of pointers to data planes
+        /// </param>
+        /// <param name="dst_offset">
+        /// offset in samples at which the data will be written to dst
+        /// </param>
+        /// <param name="src_offset">
+        /// offset in samples at which the data will be read from src
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to be copied
+        /// </param>
+        /// <param name="nb_channels">
+        /// number of audio channels
+        /// </param>
+        /// <param name="sample_fmt">
+        /// audio sample format
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -398,13 +484,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Fill an audio buffer with silence.
-        /// 
-        /// @param audio_data  array of pointers to data planes
-        /// @param offset      offset in samples at which to start filling
-        /// @param nb_samples  number of samples to fill
-        /// @param nb_channels number of audio channels
-        /// @param sample_fmt  audio sample format
         /// </summary>
+        /// <param name="audio_data">
+        /// array of pointers to data planes
+        /// </param>
+        /// <param name="offset">
+        /// offset in samples at which to start filling
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to fill
+        /// </param>
+        /// <param name="nb_channels">
+        /// number of audio channels
+        /// </param>
+        /// <param name="sample_fmt">
+        /// audio sample format
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -413,13 +508,22 @@ namespace FFmpeg
 
         /// <summary>
         /// Fill an audio buffer with silence.
-        /// 
-        /// @param audio_data  array of pointers to data planes
-        /// @param offset      offset in samples at which to start filling
-        /// @param nb_samples  number of samples to fill
-        /// @param nb_channels number of audio channels
-        /// @param sample_fmt  audio sample format
         /// </summary>
+        /// <param name="audio_data">
+        /// array of pointers to data planes
+        /// </param>
+        /// <param name="offset">
+        /// offset in samples at which to start filling
+        /// </param>
+        /// <param name="nb_samples">
+        /// number of samples to fill
+        /// </param>
+        /// <param name="nb_channels">
+        /// number of audio channels
+        /// </param>
+        /// <param name="sample_fmt">
+        /// audio sample format
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

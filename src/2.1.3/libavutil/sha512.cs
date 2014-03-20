@@ -26,11 +26,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize SHA-2 512 hashing.
-        /// 
-        /// @param context pointer to the function context (of size av_sha512_size)
-        /// @param bits    number of bits in digest (224, 256, 384 or 512 bits)
-        /// @return        zero if initialization succeeded, -1 otherwise
         /// </summary>
+        /// <param name="context">
+        /// pointer to the function context (of size av_sha512_size)
+        /// </param>
+        /// <param name="bits">
+        /// number of bits in digest (224, 256, 384 or 512 bits)
+        /// </param>
+        /// <returns>
+        /// zero if initialization succeeded, -1 otherwise
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -39,11 +44,16 @@ namespace FFmpeg
 
         /// <summary>
         /// Update hash value.
-        /// 
-        /// @param context hash function context
-        /// @param data    input data to update hash with
-        /// @param len     input data length
         /// </summary>
+        /// <param name="context">
+        /// hash function context
+        /// </param>
+        /// <param name="data">
+        /// input data to update hash with
+        /// </param>
+        /// <param name="len">
+        /// input data length
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -52,10 +62,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Finish hashing and output digest value.
-        /// 
-        /// @param context hash function context
-        /// @param digest  buffer where output digest value is stored
         /// </summary>
+        /// <param name="context">
+        /// hash function context
+        /// </param>
+        /// <param name="digest">
+        /// buffer where output digest value is stored
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

@@ -144,10 +144,11 @@ namespace FFmpeg
         /// <summary>
         /// Return a pointer to yuv<->rgb coefficients for the given colorspace
         /// suitable for sws_setColorspaceDetails().
-        /// 
-        /// @param colorspace One of the SWS_CS_* macros. If invalid,
-        /// SWS_CS_DEFAULT is used.
         /// </summary>
+        /// <param name="colorspace">
+        /// One of the SWS_CS_* macros. If invalid,
+        /// SWS_CS_DEFAULT is used.
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -175,10 +176,15 @@ namespace FFmpeg
         public static extern int sws_isSupportedOutput(libavutil.AVPixelFormat pix_fmt);
 
         /// <summary>
-        /// @param[in]  pix_fmt the pixel format
-        /// @return a positive value if an endianness conversion for pix_fmt is
-        /// supported, 0 otherwise.
+        /// 
         /// </summary>
+        /// <param name="[in]">
+        /// pix_fmt the pixel format
+        /// </param>
+        /// <returns>
+        /// a positive value if an endianness conversion for pix_fmt is
+        /// supported, 0 otherwise.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -198,10 +204,11 @@ namespace FFmpeg
 
         /// <summary>
         /// Initialize the swscaler context sws_context.
-        /// 
-        /// @return zero or positive value on success, a negative value on
-        /// error
         /// </summary>
+        /// <returns>
+        /// zero or positive value on success, a negative value on
+        /// error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -221,19 +228,36 @@ namespace FFmpeg
         /// <summary>
         /// Allocate and return an SwsContext. You need it to perform
         /// scaling/conversion operations using sws_scale().
-        /// 
-        /// @param srcW the width of the source image
-        /// @param srcH the height of the source image
-        /// @param srcFormat the source image format
-        /// @param dstW the width of the destination image
-        /// @param dstH the height of the destination image
-        /// @param dstFormat the destination image format
-        /// @param flags specify which algorithm and options to use for rescaling
-        /// @return a pointer to an allocated context, or NULL in case of error
-        /// @note this function is to be removed after a saner alternative is
+        /// </summary>
+        /// <param name="srcW">
+        /// the width of the source image
+        /// </param>
+        /// <param name="srcH">
+        /// the height of the source image
+        /// </param>
+        /// <param name="srcFormat">
+        /// the source image format
+        /// </param>
+        /// <param name="dstW">
+        /// the width of the destination image
+        /// </param>
+        /// <param name="dstH">
+        /// the height of the destination image
+        /// </param>
+        /// <param name="dstFormat">
+        /// the destination image format
+        /// </param>
+        /// <param name="flags">
+        /// specify which algorithm and options to use for rescaling
+        /// </param>
+        /// <returns>
+        /// a pointer to an allocated context, or NULL in case of error
+        /// </returns>
+        /// <remark>
+        /// this function is to be removed after a saner alternative is
         /// written
         /// @deprecated Use sws_getCachedContext() instead.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -248,24 +272,39 @@ namespace FFmpeg
         /// Slices have to be provided in sequential order, either in
         /// top-bottom or bottom-top order. If slices are provided in
         /// non-sequential order the behavior of the function is undefined.
-        /// 
-        /// @param c         the scaling context previously created with
+        /// </summary>
+        /// <param name="c">
+        /// the scaling context previously created with
         /// sws_getContext()
-        /// @param srcSlice  the array containing the pointers to the planes of
+        /// </param>
+        /// <param name="srcSlice">
+        /// the array containing the pointers to the planes of
         /// the source slice
-        /// @param srcStride the array containing the strides for each plane of
+        /// </param>
+        /// <param name="srcStride">
+        /// the array containing the strides for each plane of
         /// the source image
-        /// @param srcSliceY the position in the source image of the slice to
+        /// </param>
+        /// <param name="srcSliceY">
+        /// the position in the source image of the slice to
         /// process, that is the number (counted starting from
         /// zero) in the image of the first row of the slice
-        /// @param srcSliceH the height of the source slice, that is the number
+        /// </param>
+        /// <param name="srcSliceH">
+        /// the height of the source slice, that is the number
         /// of rows in the slice
-        /// @param dst       the array containing the pointers to the planes of
+        /// </param>
+        /// <param name="dst">
+        /// the array containing the pointers to the planes of
         /// the destination image
-        /// @param dstStride the array containing the strides for each plane of
+        /// </param>
+        /// <param name="dstStride">
+        /// the array containing the strides for each plane of
         /// the destination image
-        /// @return          the height of the output slice
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// the height of the output slice
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -273,19 +312,34 @@ namespace FFmpeg
         public static extern int sws_scale(libswscale.SwsContext* c, byte** srcSlice, int* srcStride, int srcSliceY, int srcSliceH, byte** dst, int* dstStride);
 
         /// <summary>
-        /// @param dstRange flag indicating the while-black range of the output
-        /// (1=jpeg / 0=mpeg)
-        /// @param srcRange flag indicating the while-black range of the input
-        /// (1=jpeg / 0=mpeg)
-        /// @param table the yuv2rgb coefficients describing the output yuv space,
-        /// normally ff_yuv2rgb_coeffs[x]
-        /// @param inv_table the yuv2rgb coefficients describing the input yuv
-        /// space, normally ff_yuv2rgb_coeffs[x]
-        /// @param brightness 16.16 fixed point brightness correction
-        /// @param contrast 16.16 fixed point contrast correction
-        /// @param saturation 16.16 fixed point saturation correction
-        /// @return -1 if not supported
+        /// 
         /// </summary>
+        /// <param name="dstRange">
+        /// flag indicating the while-black range of the output (1=jpeg / 0=mpeg)
+        /// </param>
+        /// <param name="srcRange">
+        /// flag indicating the while-black range of the input (1=jpeg / 0=mpeg)
+        /// </param>
+        /// <param name="table">
+        /// the yuv2rgb coefficients describing the output yuv space, normally
+        /// ff_yuv2rgb_coeffs[x]
+        /// </param>
+        /// <param name="inv_table">
+        /// the yuv2rgb coefficients describing the input yuv space, normally
+        /// ff_yuv2rgb_coeffs[x]
+        /// </param>
+        /// <param name="brightness">
+        /// 16.16 fixed point brightness correction
+        /// </param>
+        /// <param name="contrast">
+        /// 16.16 fixed point contrast correction
+        /// </param>
+        /// <param name="saturation">
+        /// 16.16 fixed point saturation correction
+        /// </param>
+        /// <returns>
+        /// -1 if not supported
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -293,8 +347,11 @@ namespace FFmpeg
         public static extern int sws_setColorspaceDetails(libswscale.SwsContext* c, int* inv_table, int srcRange, int* table, int dstRange, int brightness, int contrast, int saturation);
 
         /// <summary>
-        /// @return -1 if not supported
+        /// 
         /// </summary>
+        /// <returns>
+        /// -1 if not supported
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -302,8 +359,11 @@ namespace FFmpeg
         public static extern int sws_getColorspaceDetails(libswscale.SwsContext* c, int** inv_table, int* srcRange, int** table, int* dstRange, int* brightness, int* contrast, int* saturation);
 
         /// <summary>
-        /// @return -1 if not supported
+        /// 
         /// </summary>
+        /// <returns>
+        /// -1 if not supported
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -452,13 +512,20 @@ namespace FFmpeg
         /// bits.
         /// 
         /// The output frame will have the same packed format as the palette.
-        /// 
-        /// @param src        source frame buffer
-        /// @param dst        destination frame buffer
-        /// @param num_pixels number of pixels to convert
-        /// @param palette    array with [256] entries, which must match color
-        /// arrangement (RGB or BGR) of src
         /// </summary>
+        /// <param name="src">
+        /// source frame buffer
+        /// </param>
+        /// <param name="dst">
+        /// destination frame buffer
+        /// </param>
+        /// <param name="num_pixels">
+        /// number of pixels to convert
+        /// </param>
+        /// <param name="palette">
+        /// array with [256] entries, which must match color arrangement (RGB or
+        /// BGR) of src
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -471,13 +538,20 @@ namespace FFmpeg
         /// 
         /// With the palette format "ABCD", the destination frame ends up with the
         /// format "ABC".
-        /// 
-        /// @param src        source frame buffer
-        /// @param dst        destination frame buffer
-        /// @param num_pixels number of pixels to convert
-        /// @param palette    array with [256] entries, which must match color
-        /// arrangement (RGB or BGR) of src
         /// </summary>
+        /// <param name="src">
+        /// source frame buffer
+        /// </param>
+        /// <param name="dst">
+        /// destination frame buffer
+        /// </param>
+        /// <param name="num_pixels">
+        /// number of pixels to convert
+        /// </param>
+        /// <param name="palette">
+        /// array with [256] entries, which must match color arrangement (RGB or
+        /// BGR) of src
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(SWSCALE_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

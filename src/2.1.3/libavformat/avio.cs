@@ -50,12 +50,13 @@ namespace FFmpeg
         /// Removal, reordering and changes to existing fields require a major
         /// version bump.
         /// sizeof(AVIOContext) must not be used outside libav*.
-        /// 
-        /// @note None of the function pointers in AVIOContext should be called
+        /// </summary>
+        /// <remark>
+        /// None of the function pointers in AVIOContext should be called
         /// directly, they should only be set by the client application
         /// when implementing custom I/O. Normally these are set to the
         /// function pointers specified in avio_alloc_context()
-        /// </summary>
+        /// </remark>
         [StructLayout(LayoutKind.Sequential)]
         public unsafe partial struct AVIOContext
         {
@@ -200,13 +201,14 @@ namespace FFmpeg
         /// of the resource in url, or a negative value corresponding to an
         /// AVERROR code in case of failure. The returned access flags are
         /// masked by the value in flags.
-        /// 
-        /// @note This function is intrinsically unsafe, in the sense that the
+        /// </summary>
+        /// <remark>
+        /// This function is intrinsically unsafe, in the sense that the
         /// checked resource may change its existence or permission status from
         /// one call to another. Thus you should not trust the returned value,
         /// unless you are sure that no other processes are accessing the
         /// checked resource.
-        /// </summary>
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -217,24 +219,35 @@ namespace FFmpeg
         /// Allocate and initialize an AVIOContext for buffered I/O. It must be
         /// later
         /// freed with av_free().
-        /// 
-        /// @param buffer Memory block for input/output operations via AVIOContext.
+        /// </summary>
+        /// <param name="buffer">
+        /// Memory block for input/output operations via AVIOContext.
         /// The buffer must be allocated with av_malloc() and friends.
-        /// @param buffer_size The buffer size is very important for performance.
+        /// </param>
+        /// <param name="buffer_size">
+        /// The buffer size is very important for performance.
         /// For protocols with fixed blocksize it should be set to this blocksize.
         /// For others a typical size is a cache page, e.g. 4kb.
-        /// @param write_flag Set to 1 if the buffer should be writable, 0
-        /// otherwise.
-        /// @param opaque An opaque pointer to user-specific data.
-        /// @param read_packet  A function for refilling the buffer, may be NULL.
-        /// @param write_packet A function for writing the buffer contents, may be
-        /// NULL.
+        /// </param>
+        /// <param name="write_flag">
+        /// Set to 1 if the buffer should be writable, 0 otherwise.
+        /// </param>
+        /// <param name="opaque">
+        /// An opaque pointer to user-specific data.
+        /// </param>
+        /// <param name="read_packet">
+        /// A function for refilling the buffer, may be NULL.
+        /// </param>
+        /// <param name="write_packet">
+        /// A function for writing the buffer contents, may be NULL.
         /// The function may not change the input buffers content.
-        /// @param seek A function for seeking to specified byte position, may be
-        /// NULL.
-        /// 
-        /// @return Allocated AVIOContext or NULL on failure.
-        /// </summary>
+        /// </param>
+        /// <param name="seek">
+        /// A function for seeking to specified byte position, may be NULL.
+        /// </param>
+        /// <returns>
+        /// Allocated AVIOContext or NULL on failure.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -303,8 +316,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Write a NULL-terminated string.
-        /// @return number of bytes written.
         /// </summary>
+        /// <returns>
+        /// number of bytes written.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -313,8 +328,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Convert an UTF-8 string to UTF-16LE and write it.
-        /// @return number of bytes written.
         /// </summary>
+        /// <returns>
+        /// number of bytes written.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -323,8 +340,10 @@ namespace FFmpeg
 
         /// <summary>
         /// fseek() equivalent for AVIOContext.
-        /// @return new position or AVERROR.
         /// </summary>
+        /// <returns>
+        /// new position or AVERROR.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -333,8 +352,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Skip given number of bytes forward
-        /// @return new position or AVERROR.
         /// </summary>
+        /// <returns>
+        /// new position or AVERROR.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -343,8 +364,10 @@ namespace FFmpeg
 
         /// <summary>
         /// ftell() equivalent for AVIOContext.
-        /// @return position or AVERROR.
         /// </summary>
+        /// <returns>
+        /// position or AVERROR.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -353,8 +376,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the filesize.
-        /// @return filesize or AVERROR
         /// </summary>
+        /// <returns>
+        /// filesize or AVERROR
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -363,8 +388,10 @@ namespace FFmpeg
 
         /// <summary>
         /// feof() equivalent for AVIOContext.
-        /// @return non zero if and only if end of file
         /// </summary>
+        /// <returns>
+        /// non zero if and only if end of file
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -391,8 +418,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Read size bytes from AVIOContext into buf.
-        /// @return number of bytes read or AVERROR
         /// </summary>
+        /// <returns>
+        /// number of bytes read or AVERROR
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -402,10 +431,11 @@ namespace FFmpeg
         /// <summary>
         /// @name Functions for reading from AVIOContext
         /// @{
-        /// 
-        /// @note return 0 if EOF, so you cannot use it if EOF handling is
-        /// necessary
         /// </summary>
+        /// <remark>
+        /// return 0 if EOF, so you cannot use it if EOF handling is
+        /// necessary
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -470,11 +500,12 @@ namespace FFmpeg
         /// Note that the string is not interpreted or validated in any way, it
         /// might get truncated in the middle of a sequence for multi-byte
         /// encodings.
-        /// 
-        /// @return number of bytes read (is always <= maxlen).
+        /// </summary>
+        /// <returns>
+        /// number of bytes read (is always <= maxlen).
         /// If reading ends on EOF or error, the return value will be one more than
         /// bytes actually read.
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -485,8 +516,10 @@ namespace FFmpeg
         /// Read a UTF-16 string from pb and convert it to UTF-8.
         /// The reading will terminate when either a null or invalid character was
         /// encountered or maxlen bytes have been read.
-        /// @return number of bytes read (is always <= maxlen)
         /// </summary>
+        /// <returns>
+        /// number of bytes read (is always <= maxlen)
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -502,16 +535,23 @@ namespace FFmpeg
         /// <summary>
         /// Create and initialize a AVIOContext for accessing the
         /// resource indicated by url.
-        /// @note When the resource indicated by url has been opened in
-        /// read+write mode, the AVIOContext can be used only for writing.
-        /// 
-        /// @param s Used to return the pointer to the created AVIOContext.
-        /// In case of failure the pointed to value is set to NULL.
-        /// @param flags flags which control how the resource indicated by url
-        /// is to be opened
-        /// @return >= 0 in case of success, a negative value corresponding to an
-        /// AVERROR code in case of failure
         /// </summary>
+        /// <remark>
+        /// When the resource indicated by url has been opened in
+        /// read+write mode, the AVIOContext can be used only for writing.
+        /// </remark>
+        /// <param name="s">
+        /// Used to return the pointer to the created AVIOContext.
+        /// In case of failure the pointed to value is set to NULL.
+        /// </param>
+        /// <param name="flags">
+        /// flags which control how the resource indicated by url
+        /// is to be opened
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
+        /// AVERROR code in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -521,16 +561,23 @@ namespace FFmpeg
         /// <summary>
         /// Create and initialize a AVIOContext for accessing the
         /// resource indicated by url.
-        /// @note When the resource indicated by url has been opened in
-        /// read+write mode, the AVIOContext can be used only for writing.
-        /// 
-        /// @param s Used to return the pointer to the created AVIOContext.
-        /// In case of failure the pointed to value is set to NULL.
-        /// @param flags flags which control how the resource indicated by url
-        /// is to be opened
-        /// @return >= 0 in case of success, a negative value corresponding to an
-        /// AVERROR code in case of failure
         /// </summary>
+        /// <remark>
+        /// When the resource indicated by url has been opened in
+        /// read+write mode, the AVIOContext can be used only for writing.
+        /// </remark>
+        /// <param name="s">
+        /// Used to return the pointer to the created AVIOContext.
+        /// In case of failure the pointed to value is set to NULL.
+        /// </param>
+        /// <param name="flags">
+        /// flags which control how the resource indicated by url
+        /// is to be opened
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
+        /// AVERROR code in case of failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -540,22 +587,32 @@ namespace FFmpeg
         /// <summary>
         /// Create and initialize a AVIOContext for accessing the
         /// resource indicated by url.
-        /// @note When the resource indicated by url has been opened in
+        /// </summary>
+        /// <remark>
+        /// When the resource indicated by url has been opened in
         /// read+write mode, the AVIOContext can be used only for writing.
-        /// 
-        /// @param s Used to return the pointer to the created AVIOContext.
+        /// </remark>
+        /// <param name="s">
+        /// Used to return the pointer to the created AVIOContext.
         /// In case of failure the pointed to value is set to NULL.
-        /// @param flags flags which control how the resource indicated by url
+        /// </param>
+        /// <param name="flags">
+        /// flags which control how the resource indicated by url
         /// is to be opened
-        /// @param int_cb an interrupt callback to be used at the protocols level
-        /// @param options  A dictionary filled with protocol-private options. On
-        /// return
+        /// </param>
+        /// <param name="int_cb">
+        /// an interrupt callback to be used at the protocols level
+        /// </param>
+        /// <param name="options">
+        /// A dictionary filled with protocol-private options. On return
         /// this parameter will be destroyed and replaced with a dict containing
         /// options
         /// that were not found. May be NULL.
-        /// @return >= 0 in case of success, a negative value corresponding to an
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
         /// AVERROR code in case of failure
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -565,22 +622,32 @@ namespace FFmpeg
         /// <summary>
         /// Create and initialize a AVIOContext for accessing the
         /// resource indicated by url.
-        /// @note When the resource indicated by url has been opened in
+        /// </summary>
+        /// <remark>
+        /// When the resource indicated by url has been opened in
         /// read+write mode, the AVIOContext can be used only for writing.
-        /// 
-        /// @param s Used to return the pointer to the created AVIOContext.
+        /// </remark>
+        /// <param name="s">
+        /// Used to return the pointer to the created AVIOContext.
         /// In case of failure the pointed to value is set to NULL.
-        /// @param flags flags which control how the resource indicated by url
+        /// </param>
+        /// <param name="flags">
+        /// flags which control how the resource indicated by url
         /// is to be opened
-        /// @param int_cb an interrupt callback to be used at the protocols level
-        /// @param options  A dictionary filled with protocol-private options. On
-        /// return
+        /// </param>
+        /// <param name="int_cb">
+        /// an interrupt callback to be used at the protocols level
+        /// </param>
+        /// <param name="options">
+        /// A dictionary filled with protocol-private options. On return
         /// this parameter will be destroyed and replaced with a dict containing
         /// options
         /// that were not found. May be NULL.
-        /// @return >= 0 in case of success, a negative value corresponding to an
+        /// </param>
+        /// <returns>
+        /// >= 0 in case of success, a negative value corresponding to an
         /// AVERROR code in case of failure
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -593,10 +660,11 @@ namespace FFmpeg
         /// 
         /// The internal buffer is automatically flushed before closing the
         /// resource.
-        /// 
-        /// @return 0 on success, an AVERROR < 0 on error.
-        /// @see avio_closep
         /// </summary>
+        /// <returns>
+        /// 0 on success, an AVERROR < 0 on error.
+        /// @see avio_closep
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -610,10 +678,11 @@ namespace FFmpeg
         /// 
         /// The internal buffer is automatically flushed before closing the
         /// resource.
-        /// 
-        /// @return 0 on success, an AVERROR < 0 on error.
-        /// @see avio_close
         /// </summary>
+        /// <returns>
+        /// 0 on success, an AVERROR < 0 on error.
+        /// @see avio_close
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -627,10 +696,11 @@ namespace FFmpeg
         /// 
         /// The internal buffer is automatically flushed before closing the
         /// resource.
-        /// 
-        /// @return 0 on success, an AVERROR < 0 on error.
-        /// @see avio_close
         /// </summary>
+        /// <returns>
+        /// 0 on success, an AVERROR < 0 on error.
+        /// @see avio_close
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -639,10 +709,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Open a write only memory stream.
-        /// 
-        /// @param s new IO context
-        /// @return zero if no error.
         /// </summary>
+        /// <param name="s">
+        /// new IO context
+        /// </param>
+        /// <returns>
+        /// zero if no error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -651,10 +724,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Open a write only memory stream.
-        /// 
-        /// @param s new IO context
-        /// @return zero if no error.
         /// </summary>
+        /// <param name="s">
+        /// new IO context
+        /// </param>
+        /// <returns>
+        /// zero if no error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -665,11 +741,16 @@ namespace FFmpeg
         /// Return the written size and a pointer to the buffer. The buffer
         /// must be freed with av_free().
         /// Padding of FF_INPUT_BUFFER_PADDING_SIZE is added to the buffer.
-        /// 
-        /// @param s IO context
-        /// @param pbuffer pointer to a byte buffer
-        /// @return the length of the byte buffer
         /// </summary>
+        /// <param name="s">
+        /// IO context
+        /// </param>
+        /// <param name="pbuffer">
+        /// pointer to a byte buffer
+        /// </param>
+        /// <returns>
+        /// the length of the byte buffer
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -680,11 +761,16 @@ namespace FFmpeg
         /// Return the written size and a pointer to the buffer. The buffer
         /// must be freed with av_free().
         /// Padding of FF_INPUT_BUFFER_PADDING_SIZE is added to the buffer.
-        /// 
-        /// @param s IO context
-        /// @param pbuffer pointer to a byte buffer
-        /// @return the length of the byte buffer
         /// </summary>
+        /// <param name="s">
+        /// IO context
+        /// </param>
+        /// <param name="pbuffer">
+        /// pointer to a byte buffer
+        /// </param>
+        /// <returns>
+        /// the length of the byte buffer
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -693,15 +779,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate through names of available protocols.
-        /// 
-        /// @param opaque A private pointer representing current protocol.
+        /// </summary>
+        /// <param name="opaque">
+        /// A private pointer representing current protocol.
         /// It must be a pointer to NULL on first iteration and will
         /// be updated by successive calls to avio_enum_protocols.
-        /// @param output If set to 1, iterate over output protocols,
+        /// </param>
+        /// <param name="output">
+        /// If set to 1, iterate over output protocols,
         /// otherwise over input protocols.
-        /// 
-        /// @return A static string containing the name of current protocol or NULL
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// A static string containing the name of current protocol or NULL
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -710,15 +800,19 @@ namespace FFmpeg
 
         /// <summary>
         /// Iterate through names of available protocols.
-        /// 
-        /// @param opaque A private pointer representing current protocol.
+        /// </summary>
+        /// <param name="opaque">
+        /// A private pointer representing current protocol.
         /// It must be a pointer to NULL on first iteration and will
         /// be updated by successive calls to avio_enum_protocols.
-        /// @param output If set to 1, iterate over output protocols,
+        /// </param>
+        /// <param name="output">
+        /// If set to 1, iterate over output protocols,
         /// otherwise over input protocols.
-        /// 
-        /// @return A static string containing the name of current protocol or NULL
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// A static string containing the name of current protocol or NULL
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -728,8 +822,10 @@ namespace FFmpeg
         /// <summary>
         /// Pause and resume playing - only meaningful if using a network streaming
         /// protocol (e.g. MMS).
-        /// @param pause 1 for pause, 0 for resume
         /// </summary>
+        /// <param name="pause">
+        /// 1 for pause, 0 for resume
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -739,21 +835,28 @@ namespace FFmpeg
         /// <summary>
         /// Seek to a given timestamp relative to some component stream.
         /// Only meaningful if using a network streaming protocol (e.g. MMS.).
-        /// @param stream_index The stream index that the timestamp is relative to.
+        /// </summary>
+        /// <param name="stream_index">
+        /// The stream index that the timestamp is relative to.
         /// If stream_index is (-1) the timestamp should be in AV_TIME_BASE
         /// units from the beginning of the presentation.
         /// If a stream_index >= 0 is used and the protocol does not support
         /// seeking based on component streams, the call will fail.
-        /// @param timestamp timestamp in AVStream.time_base units
+        /// </param>
+        /// <param name="timestamp">
+        /// timestamp in AVStream.time_base units
         /// or if there is no stream specified then in AV_TIME_BASE units.
-        /// @param flags Optional combination of AVSEEK_FLAG_BACKWARD,
-        /// AVSEEK_FLAG_BYTE
+        /// </param>
+        /// <param name="flags">
+        /// Optional combination of AVSEEK_FLAG_BACKWARD, AVSEEK_FLAG_BYTE
         /// and AVSEEK_FLAG_ANY. The protocol may silently ignore
         /// AVSEEK_FLAG_BACKWARD and AVSEEK_FLAG_ANY, but AVSEEK_FLAG_BYTE will
         /// fail if used and not supported.
-        /// @return >= 0 on success
+        /// </param>
+        /// <returns>
+        /// >= 0 on success
         /// @see AVInputFormat::read_seek
-        /// </summary>
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVFORMAT_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

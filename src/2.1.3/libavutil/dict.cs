@@ -37,13 +37,17 @@ namespace FFmpeg
 
         /// <summary>
         /// Get a dictionary entry with matching key.
-        /// 
-        /// @param prev Set to the previous matching element to find the next.
-        /// If set to NULL the first matching element is returned.
-        /// @param flags Allows case as well as suffix-insensitive comparisons.
-        /// @return Found entry or NULL, changing key or value leads to undefined
-        /// behavior.
         /// </summary>
+        /// <param name="prev">
+        /// Set to the previous matching element to find the next.
+        /// If set to NULL the first matching element is returned.
+        /// </param>
+        /// <param name="flags">
+        /// Allows case as well as suffix-insensitive comparisons.
+        /// </param>
+        /// <returns>
+        /// Found entry or NULL, changing key or value leads to undefined behavior.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -52,10 +56,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Get number of entries in dictionary.
-        /// 
-        /// @param m dictionary
-        /// @return  number of entries in dictionary
         /// </summary>
+        /// <param name="m">
+        /// dictionary
+        /// </param>
+        /// <returns>
+        /// number of entries in dictionary
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -64,16 +71,21 @@ namespace FFmpeg
 
         /// <summary>
         /// Set the given entry in *pm, overwriting an existing entry.
-        /// 
-        /// @param pm pointer to a pointer to a dictionary struct. If *pm is NULL
-        /// a dictionary struct is allocated and put in *pm.
-        /// @param key entry key to add to *pm (will be av_strduped depending on
-        /// flags)
-        /// @param value entry value to add to *pm (will be av_strduped depending
-        /// on flags).
-        /// Passing a NULL value will cause an existing entry to be deleted.
-        /// @return >= 0 on success otherwise an error code <0
         /// </summary>
+        /// <param name="pm">
+        /// pointer to a pointer to a dictionary struct. If *pm is NULL
+        /// a dictionary struct is allocated and put in *pm.
+        /// </param>
+        /// <param name="key">
+        /// entry key to add to *pm (will be av_strduped depending on flags)
+        /// </param>
+        /// <param name="value">
+        /// entry value to add to *pm (will be av_strduped depending on flags).
+        /// Passing a NULL value will cause an existing entry to be deleted.
+        /// </param>
+        /// <returns>
+        /// >= 0 on success otherwise an error code <0
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -82,16 +94,21 @@ namespace FFmpeg
 
         /// <summary>
         /// Set the given entry in *pm, overwriting an existing entry.
-        /// 
-        /// @param pm pointer to a pointer to a dictionary struct. If *pm is NULL
-        /// a dictionary struct is allocated and put in *pm.
-        /// @param key entry key to add to *pm (will be av_strduped depending on
-        /// flags)
-        /// @param value entry value to add to *pm (will be av_strduped depending
-        /// on flags).
-        /// Passing a NULL value will cause an existing entry to be deleted.
-        /// @return >= 0 on success otherwise an error code <0
         /// </summary>
+        /// <param name="pm">
+        /// pointer to a pointer to a dictionary struct. If *pm is NULL
+        /// a dictionary struct is allocated and put in *pm.
+        /// </param>
+        /// <param name="key">
+        /// entry key to add to *pm (will be av_strduped depending on flags)
+        /// </param>
+        /// <param name="value">
+        /// entry value to add to *pm (will be av_strduped depending on flags).
+        /// Passing a NULL value will cause an existing entry to be deleted.
+        /// </param>
+        /// <returns>
+        /// >= 0 on success otherwise an error code <0
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -100,17 +117,24 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse the key/value pairs list and add to a dictionary.
-        /// 
-        /// @param key_val_sep  a 0-terminated list of characters used to separate
+        /// </summary>
+        /// <param name="key_val_sep">
+        /// a 0-terminated list of characters used to separate
         /// key from value
-        /// @param pairs_sep    a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="pairs_sep">
+        /// a 0-terminated list of characters used to separate
         /// two pairs from each other
-        /// @param flags        flags to use when adding to dictionary.
+        /// </param>
+        /// <param name="flags">
+        /// flags to use when adding to dictionary.
         /// AV_DICT_DONT_STRDUP_KEY and AV_DICT_DONT_STRDUP_VAL
         /// are ignored since the key/value tokens will always
         /// be duplicated.
-        /// @return             0 on success, negative AVERROR code on failure
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, negative AVERROR code on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -119,17 +143,24 @@ namespace FFmpeg
 
         /// <summary>
         /// Parse the key/value pairs list and add to a dictionary.
-        /// 
-        /// @param key_val_sep  a 0-terminated list of characters used to separate
+        /// </summary>
+        /// <param name="key_val_sep">
+        /// a 0-terminated list of characters used to separate
         /// key from value
-        /// @param pairs_sep    a 0-terminated list of characters used to separate
+        /// </param>
+        /// <param name="pairs_sep">
+        /// a 0-terminated list of characters used to separate
         /// two pairs from each other
-        /// @param flags        flags to use when adding to dictionary.
+        /// </param>
+        /// <param name="flags">
+        /// flags to use when adding to dictionary.
         /// AV_DICT_DONT_STRDUP_KEY and AV_DICT_DONT_STRDUP_VAL
         /// are ignored since the key/value tokens will always
         /// be duplicated.
-        /// @return             0 on success, negative AVERROR code on failure
-        /// </summary>
+        /// </param>
+        /// <returns>
+        /// 0 on success, negative AVERROR code on failure
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -138,13 +169,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Copy entries from one AVDictionary struct into another.
-        /// @param dst pointer to a pointer to a AVDictionary struct. If *dst is
-        /// NULL,
-        /// this function will allocate a struct for you and put it in *dst
-        /// @param src pointer to source AVDictionary struct
-        /// @param flags flags to use when setting entries in *dst
-        /// @note metadata is read using the AV_DICT_IGNORE_SUFFIX flag
         /// </summary>
+        /// <param name="dst">
+        /// pointer to a pointer to a AVDictionary struct. If *dst is NULL,
+        /// this function will allocate a struct for you and put it in *dst
+        /// </param>
+        /// <param name="src">
+        /// pointer to source AVDictionary struct
+        /// </param>
+        /// <param name="flags">
+        /// flags to use when setting entries in *dst
+        /// </param>
+        /// <remark>
+        /// metadata is read using the AV_DICT_IGNORE_SUFFIX flag
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -153,13 +191,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Copy entries from one AVDictionary struct into another.
-        /// @param dst pointer to a pointer to a AVDictionary struct. If *dst is
-        /// NULL,
-        /// this function will allocate a struct for you and put it in *dst
-        /// @param src pointer to source AVDictionary struct
-        /// @param flags flags to use when setting entries in *dst
-        /// @note metadata is read using the AV_DICT_IGNORE_SUFFIX flag
         /// </summary>
+        /// <param name="dst">
+        /// pointer to a pointer to a AVDictionary struct. If *dst is NULL,
+        /// this function will allocate a struct for you and put it in *dst
+        /// </param>
+        /// <param name="src">
+        /// pointer to source AVDictionary struct
+        /// </param>
+        /// <param name="flags">
+        /// flags to use when setting entries in *dst
+        /// </param>
+        /// <remark>
+        /// metadata is read using the AV_DICT_IGNORE_SUFFIX flag
+        /// </remark>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

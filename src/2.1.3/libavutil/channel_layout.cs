@@ -91,10 +91,13 @@ namespace FFmpeg
         /// <summary>
         /// Return a description of a channel layout.
         /// If nb_channels is <= 0, it is guessed from the channel_layout.
-        /// 
-        /// @param buf put here the string containing the channel layout
-        /// @param buf_size size in bytes of the buffer
         /// </summary>
+        /// <param name="buf">
+        /// put here the string containing the channel layout
+        /// </param>
+        /// <param name="buf_size">
+        /// size in bytes of the buffer
+        /// </param>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -130,15 +133,15 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the index of a channel in channel_layout.
-        /// 
-        /// @param channel a channel layout describing exactly one channel which
-        /// must be
-        /// present in channel_layout.
-        /// 
-        /// @return index of channel in channel_layout on success, a negative
-        /// AVERROR
-        /// on error.
         /// </summary>
+        /// <param name="channel">
+        /// a channel layout describing exactly one channel which must be
+        /// present in channel_layout.
+        /// </param>
+        /// <returns>
+        /// index of channel in channel_layout on success, a negative AVERROR
+        /// on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -156,9 +159,10 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the name of a given channel.
-        /// 
-        /// @return channel name on success, NULL on error.
         /// </summary>
+        /// <returns>
+        /// channel name on success, NULL on error.
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -167,10 +171,13 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the description of a given channel.
-        /// 
-        /// @param channel  a channel layout with a single channel
-        /// @return  channel description on success, NULL on error
         /// </summary>
+        /// <param name="channel">
+        /// a channel layout with a single channel
+        /// </param>
+        /// <returns>
+        /// channel description on success, NULL on error
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -179,13 +186,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the value and name of a standard channel layout.
-        /// 
-        /// @param[in]  index   index in an internal list, starting at 0
-        /// @param[out] layout  channel layout mask
-        /// @param[out] name    name of the layout
-        /// @return  0  if the layout exists,
-        /// 0 if index is beyond the limits
         /// </summary>
+        /// <param name="[in]">
+        /// index   index in an internal list, starting at 0
+        /// </param>
+        /// <param name="[out]">
+        /// layout  channel layout mask
+        /// </param>
+        /// <param name="[out]">
+        /// name    name of the layout
+        /// </param>
+        /// <returns>
+        /// 0  if the layout exists,
+        /// 0 if index is beyond the limits
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -194,13 +208,20 @@ namespace FFmpeg
 
         /// <summary>
         /// Get the value and name of a standard channel layout.
-        /// 
-        /// @param[in]  index   index in an internal list, starting at 0
-        /// @param[out] layout  channel layout mask
-        /// @param[out] name    name of the layout
-        /// @return  0  if the layout exists,
-        /// 0 if index is beyond the limits
         /// </summary>
+        /// <param name="[in]">
+        /// index   index in an internal list, starting at 0
+        /// </param>
+        /// <param name="[out]">
+        /// layout  channel layout mask
+        /// </param>
+        /// <param name="[out]">
+        /// name    name of the layout
+        /// </param>
+        /// <returns>
+        /// 0  if the layout exists,
+        /// 0 if index is beyond the limits
+        /// </returns>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVUTIL_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,

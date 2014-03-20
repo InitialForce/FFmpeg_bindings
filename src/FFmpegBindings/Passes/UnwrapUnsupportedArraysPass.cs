@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CppSharp;
 using CppSharp.AST;
+using CppSharp.AST.Extensions;
 using CppSharp.Passes;
 using Type = CppSharp.AST.Type;
 

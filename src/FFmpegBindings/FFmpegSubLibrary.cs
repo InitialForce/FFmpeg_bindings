@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using CppSharp;
 using CppSharp.AST;
+using CppSharp.AST.Extensions;
 using CppSharp.Passes;
 using FFmpegBindings.Passes;
 using FFmpegBindings.Utilities;

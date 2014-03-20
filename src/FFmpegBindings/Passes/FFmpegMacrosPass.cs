@@ -25,7 +25,7 @@ namespace FFmpegBindings.Passes
 
         void CheckIgnoreMacros(Declaration decl, IEnumerable<MacroExpansion> expansions)
         {
-            if (expansions.Any(e => e.Text.Contains("attribute_deprecated")))
+            if (expansions.Any(e => MatchDeclType(decl, e) && e.Text.Contains("attribute_deprecated")))
             {
                 if (decl.Attributes.All(v => v.Type != typeof (ObsoleteAttribute)))
                 {
@@ -47,6 +47,23 @@ namespace FFmpegBindings.Passes
                     decl.Attributes.Add(attribute);
                 }
             }
+        }
+
+        private bool MatchDeclType(Declaration decl, MacroExpansion macroExpansion)
+        {
+            if (decl is Class)
+                return macroExpansion.Location == MacroLocation.ClassHead;
+
+            if (decl is Function)
+                return macroExpansion.Location == MacroLocation.FunctionHead;
+
+            if (decl is Parameter)
+                return macroExpansion.Location == MacroLocation.FunctionParameters;
+
+            if (decl is Field)
+                return macroExpansion.Location == MacroLocation.ClassBody;
+
+            return false;
         }
     }
 }

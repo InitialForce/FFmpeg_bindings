@@ -15,9 +15,10 @@ namespace FFmpegBindings
         {
 //            GenerateLibrary(new WinAPI());
 //            ConsoleDriver.Run(new FSALibrary());
+            ConsoleDriver.Run(new FFMS2Library());
             //            Environment.Exit(0);
 
-            GenerateFFmpeg();
+//            GenerateFFmpeg();
         }
 
         private static void GenerateFFmpeg()

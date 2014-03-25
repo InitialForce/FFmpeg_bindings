@@ -59,35 +59,8 @@ namespace FFmpeg
         /// should also be set when applicable, but are not required.
         /// 
         /// The following example illustrates an AVOptions-enabled struct:
-        /// @code
-        /// typedef struct test_struct {
-        /// AVClass *class;
-        /// int      int_opt;
-        /// char    *str_opt;
-        /// uint8_t *bin_opt;
-        /// int      bin_len;
-        /// } test_struct;
         /// 
-        /// static const AVOption test_options[] = {
-        /// { "test_int", "This is a test option of int type.",
-        /// offsetof(test_struct, int_opt),
-        /// AV_OPT_TYPE_INT, { .i64 = -1 }, INT_MIN, INT_MAX },
-        /// { "test_str", "This is a test option of string type.",
-        /// offsetof(test_struct, str_opt),
-        /// AV_OPT_TYPE_STRING },
-        /// { "test_bin", "This is a test option of binary type.",
-        /// offsetof(test_struct, bin_opt),
-        /// AV_OPT_TYPE_BINARY },
-        /// { NULL },
-        /// };
         /// 
-        /// static const AVClass test_class = {
-        /// .class_name = "test class",
-        /// .item_name  = av_default_item_name,
-        /// .option     = test_options,
-        /// .version    = LIBAVUTIL_VERSION_INT,
-        /// };
-        /// @endcode
         /// 
         /// Next, when allocating your struct, you must ensure that the AVClass
         /// pointer
@@ -102,20 +75,8 @@ namespace FFmpeg
         /// 
         /// Continuing with the above example:
         /// 
-        /// @code
-        /// test_struct *alloc_test_struct(void)
-        /// {
-        /// test_struct *ret = av_malloc(sizeof(*ret));
-        /// ret->class = &test_class;
-        /// av_opt_set_defaults(ret);
-        /// return ret;
-        /// }
-        /// void free_test_struct(test_struct **foo)
-        /// {
-        /// av_opt_free(*foo);
-        /// av_freep(foo);
-        /// }
-        /// @endcode
+        /// 
+        /// 
         /// 
         /// @subsection avoptions_implement_nesting Nesting
         /// It may happen that an AVOptions-enabled struct contains another
@@ -128,36 +89,8 @@ namespace FFmpeg
         /// Assuming that the test_struct from above now also contains a
         /// child_struct field:
         /// 
-        /// @code
-        /// typedef struct child_struct {
-        /// AVClass *class;
-        /// int flags_opt;
-        /// } child_struct;
-        /// static const AVOption child_opts[] = {
-        /// { "test_flags", "This is a test option of flags type.",
-        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
-        /// INT_MIN, INT_MAX },
-        /// { NULL },
-        /// };
-        /// static const AVClass child_class = {
-        /// .class_name = "child class",
-        /// .item_name  = av_default_item_name,
-        /// .option     = child_opts,
-        /// .version    = LIBAVUTIL_VERSION_INT,
-        /// };
         /// 
-        /// void *child_next(void *obj, void *prev)
-        /// {
-        /// test_struct *t = obj;
-        /// if (!prev && t->child_struct)
-        /// return t->child_struct;
-        /// return NULL
-        /// }
-        /// const AVClass child_class_next(const AVClass *prev)
-        /// {
-        /// return prev ? NULL : &child_class;
-        /// }
-        /// @endcode
+        /// 
         /// Putting child_next() and child_class_next() as defined above into
         /// test_class will now make child_struct's options accessible through
         /// test_struct (again, proper setup as described above needs to be done on
@@ -182,13 +115,8 @@ namespace FFmpeg
         /// constant.
         /// For example, to add some named constants for the test_flags option
         /// above, put the following into the child_opts array:
-        /// @code
-        /// { "test_flags", "This is a test option of flags type.",
-        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
-        /// INT_MIN, INT_MAX, "test_unit" },
-        /// { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64
-        /// = 16 }, 0, 0, "test_unit" },
-        /// @endcode
+        /// 
+        /// 
         /// 
         /// @section avoptions_use Using AVOptions
         /// This section deals with accessing options in an AVOptions-enabled
@@ -245,6 +173,86 @@ namespace FFmpeg
         /// known
         /// before the file is actually opened.
         /// </summary>
+        /// <code>
+        /// typedef struct test_struct {
+        /// AVClass *class;
+        /// int      int_opt;
+        /// char    *str_opt;
+        /// uint8_t *bin_opt;
+        /// int      bin_len;
+        /// } test_struct;
+        /// 
+        /// static const AVOption test_options[] = {
+        /// { "test_int", "This is a test option of int type.",
+        /// offsetof(test_struct, int_opt),
+        /// AV_OPT_TYPE_INT, { .i64 = -1 }, INT_MIN, INT_MAX },
+        /// { "test_str", "This is a test option of string type.",
+        /// offsetof(test_struct, str_opt),
+        /// AV_OPT_TYPE_STRING },
+        /// { "test_bin", "This is a test option of binary type.",
+        /// offsetof(test_struct, bin_opt),
+        /// AV_OPT_TYPE_BINARY },
+        /// { NULL },
+        /// };
+        /// 
+        /// static const AVClass test_class = {
+        /// .class_name = "test class",
+        /// .item_name  = av_default_item_name,
+        /// .option     = test_options,
+        /// .version    = LIBAVUTIL_VERSION_INT,
+        /// };
+        /// </code>
+        /// <code>
+        /// test_struct *alloc_test_struct(void)
+        /// {
+        /// test_struct *ret = av_malloc(sizeof(*ret));
+        /// ret->class = &test_class;
+        /// av_opt_set_defaults(ret);
+        /// return ret;
+        /// }
+        /// void free_test_struct(test_struct **foo)
+        /// {
+        /// av_opt_free(*foo);
+        /// av_freep(foo);
+        /// }
+        /// </code>
+        /// <code>
+        /// typedef struct child_struct {
+        /// AVClass *class;
+        /// int flags_opt;
+        /// } child_struct;
+        /// static const AVOption child_opts[] = {
+        /// { "test_flags", "This is a test option of flags type.",
+        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
+        /// INT_MIN, INT_MAX },
+        /// { NULL },
+        /// };
+        /// static const AVClass child_class = {
+        /// .class_name = "child class",
+        /// .item_name  = av_default_item_name,
+        /// .option     = child_opts,
+        /// .version    = LIBAVUTIL_VERSION_INT,
+        /// };
+        /// 
+        /// void *child_next(void *obj, void *prev)
+        /// {
+        /// test_struct *t = obj;
+        /// if (!prev && t->child_struct)
+        /// return t->child_struct;
+        /// return NULL
+        /// }
+        /// const AVClass child_class_next(const AVClass *prev)
+        /// {
+        /// return prev ? NULL : &child_class;
+        /// }
+        /// </code>
+        /// <code>
+        /// { "test_flags", "This is a test option of flags type.",
+        /// offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 },
+        /// INT_MIN, INT_MAX, "test_unit" },
+        /// { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64
+        /// = 16 }, 0, 0, "test_unit" },
+        /// </code>
         public enum AVOptionType
         {
             AV_OPT_TYPE_FLAGS = 0,

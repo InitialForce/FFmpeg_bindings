@@ -279,14 +279,14 @@ namespace FFmpeg
 
             /// <summary>
             /// motion vector table
-            /// @code
+            /// </summary>
+            /// <code>
             /// example:
             /// int mv_sample_log2= 4 - motion_subsample_log2;
             /// int mb_width= (width+15)>>4;
             /// int mv_stride= (mb_width << mv_sample_log2) + 1;
             /// motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
-            /// @endcode
-            /// </summary>
+            /// </code>
             [System.ObsoleteAttribute()]
             public libavutil.ArrayWrapper_ShortPtrPtr2 motion_val;
 

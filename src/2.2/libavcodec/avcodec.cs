@@ -4364,8 +4364,8 @@ namespace FFmpeg
         /// retrieving a codec.
         /// 
         /// @warning This function is not thread safe!
-        /// 
-        /// @code
+        /// </summary>
+        /// <code>
         /// avcodec_register_all();
         /// av_dict_set(&opts, "b", "2.5M", 0);
         /// codec = avcodec_find_decoder(AV_CODEC_ID_H264);
@@ -4376,8 +4376,7 @@ namespace FFmpeg
         /// 
         /// if (avcodec_open2(context, codec, opts) < 0)
         /// exit(1);
-        /// @endcode
-        /// </summary>
+        /// </code>
         /// <param name="avctx">
         /// The context to initialize.
         /// </param>
@@ -4416,8 +4415,8 @@ namespace FFmpeg
         /// retrieving a codec.
         /// 
         /// @warning This function is not thread safe!
-        /// 
-        /// @code
+        /// </summary>
+        /// <code>
         /// avcodec_register_all();
         /// av_dict_set(&opts, "b", "2.5M", 0);
         /// codec = avcodec_find_decoder(AV_CODEC_ID_H264);
@@ -4428,8 +4427,7 @@ namespace FFmpeg
         /// 
         /// if (avcodec_open2(context, codec, opts) < 0)
         /// exit(1);
-        /// @endcode
-        /// </summary>
+        /// </code>
         /// <param name="avctx">
         /// The context to initialize.
         /// </param>
@@ -5317,7 +5315,8 @@ namespace FFmpeg
         /// the number of bytes of the input bitstream used.
         /// 
         /// Example:
-        /// @code
+        /// </returns>
+        /// <code>
         /// while(in_len){
         /// len = av_parser_parse2(myparser, AVCodecContext, &data, &size,
         /// in_data, in_len,
@@ -5328,8 +5327,7 @@ namespace FFmpeg
         /// if(size)
         /// decode_frame(data, size);
         /// }
-        /// @endcode
-        /// </returns>
+        /// </code>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -5371,7 +5369,8 @@ namespace FFmpeg
         /// the number of bytes of the input bitstream used.
         /// 
         /// Example:
-        /// @code
+        /// </returns>
+        /// <code>
         /// while(in_len){
         /// len = av_parser_parse2(myparser, AVCodecContext, &data, &size,
         /// in_data, in_len,
@@ -5382,8 +5381,7 @@ namespace FFmpeg
         /// if(size)
         /// decode_frame(data, size);
         /// }
-        /// @endcode
-        /// </returns>
+        /// </code>
         [SuppressUnmanagedCodeSecurity]
         [DllImport(AVCODEC_DLL_NAME, CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
             CharSet = CharSet.Ansi, ExactSpelling = true,
@@ -6112,8 +6110,8 @@ namespace FFmpeg
         /// If one of the destination formats is AV_PIX_FMT_NONE the other pixel
         /// format (if valid) will be
         /// returned.
-        /// 
-        /// @code
+        /// </summary>
+        /// <code>
         /// src_pix_fmt = AV_PIX_FMT_YUV420P;
         /// dst_pix_fmt1= AV_PIX_FMT_RGB24;
         /// dst_pix_fmt2= AV_PIX_FMT_GRAY8;
@@ -6124,8 +6122,7 @@ namespace FFmpeg
         /// dst_pix_fmt2, src_pix_fmt, alpha, &loss);
         /// dst_pix_fmt = avcodec_find_best_pix_fmt_of_2(dst_pix_fmt, dst_pix_fmt3,
         /// src_pix_fmt, alpha, &loss);
-        /// @endcode
-        /// </summary>
+        /// </code>
         /// <param name="[in]">
         /// dst_pix_fmt1 One of the two destination pixel formats to choose from
         /// </param>

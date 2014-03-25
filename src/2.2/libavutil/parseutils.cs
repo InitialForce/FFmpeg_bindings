@@ -168,6 +168,15 @@ namespace FFmpeg
         /// <summary>
         /// Parse timestr and return in *time a corresponding number of
         /// microseconds.
+        /// 
+        /// 
+        /// 
+        /// If the value is "now" it takes the current time.
+        /// Time is local time unless Z is appended, in which case it is
+        /// interpreted as UTC.
+        /// If the year-month-day part is not specified it takes the current
+        /// year-month-day.
+        /// - If a duration the syntax is:
         /// </summary>
         /// <param name="timeval">
         /// puts here the number of microseconds corresponding
@@ -180,22 +189,16 @@ namespace FFmpeg
         /// <param name="timestr">
         /// a string representing a date or a duration.
         /// - If a date the syntax is:
-        /// @code
+        /// </param>
+        /// <code>
         /// [{YYYY-MM-DD|YYYYMMDD}[T|t|
         /// ]]{{HH:MM:SS[.m...]]]}|{HHMMSS[.m...]]]}}[Z]
         /// now
-        /// @endcode
-        /// If the value is "now" it takes the current time.
-        /// Time is local time unless Z is appended, in which case it is
-        /// interpreted as UTC.
-        /// If the year-month-day part is not specified it takes the current
-        /// year-month-day.
-        /// - If a duration the syntax is:
-        /// @code
+        /// </code>
+        /// <code>
         /// [-][HH:]MM:SS[.m...]
         /// [-]S+[.m...]
-        /// @endcode
-        /// </param>
+        /// </code>
         /// <param name="duration">
         /// flag which tells how to interpret timestr, if not
         /// zero timestr is interpreted as a duration, otherwise as a date

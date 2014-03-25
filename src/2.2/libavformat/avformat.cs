@@ -3109,13 +3109,13 @@ namespace FFmpeg
         /// tables are
         /// meant to be passed to av_codec_get_id()/av_codec_get_tag() as in the
         /// following code:
-        /// @code
+        /// </summary>
+        /// <code>
         /// uint32_t tag = MKTAG('H', '2', '6', '4');
         /// const struct AVCodecTag *table[] = { avformat_get_riff_video_tags(), 0
         /// };
         /// enum AVCodecID id = av_codec_get_id(table, tag);
-        /// @endcode
-        /// </summary>
+        /// </code>
         /// <returns>
         /// the table mapping RIFF FourCCs for video to libavcodec AVCodecID.
         /// </returns>

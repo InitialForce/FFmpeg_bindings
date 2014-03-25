@@ -15,16 +15,16 @@ namespace FFmpegBindings
         {
 //            GenerateLibrary(new WinAPI());
 //            ConsoleDriver.Run(new FSALibrary());
-            ConsoleDriver.Run(new FFMS2Library());
+//            ConsoleDriver.Run(new FFMS2Library());
             //            Environment.Exit(0);
 
-//            GenerateFFmpeg();
+            GenerateFFmpeg();
         }
 
         private static void GenerateFFmpeg()
         {
 //            string versionString = "2.1.3";
-            string versionString = "2.2-rc2";
+            string versionString = "2.2";
             //            string versionString = "1.0.7";
             var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
             var outputDir = new DirectoryInfo(@"..\..\..\..\" + versionString);

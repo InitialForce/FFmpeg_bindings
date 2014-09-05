@@ -14,11 +14,75 @@ namespace FFmpegBindings
         public static void Main(string[] args)
         {
 //            GenerateLibrary(new WinAPI());
-//            ConsoleDriver.Run(new FSALibrary());
-//            ConsoleDriver.Run(new FFMS2Library());
+//            RunSingle(new FSALibrary());
+//            RunSingle(new FFMS2Library());
             //            Environment.Exit(0);
 
             GenerateFFmpeg();
+        }
+
+         public static void RunSingle(ILibrary library)
+        {
+            var options = new DriverOptions
+            {
+                TargetTriple = "i686-pc-win32",
+                //            TargetTriple = "x86_64-pc-win64",
+                Gnu99Mode = true,
+                Verbose = false,
+            };
+
+            var Log = new TextDiagnosticPrinter();
+            var driver = new Driver(options, Log);
+
+            library.Setup(driver);
+            driver.Setup();
+
+            Log.Verbose = driver.Options.Verbose;
+
+            if (!options.Quiet)
+                Log.EmitMessage("Parsing libraries...");
+
+            if (!driver.ParseLibraries())
+                return;
+
+            if (!options.Quiet)
+                Log.EmitMessage("Indexing library symbols...");
+
+            driver.Symbols.IndexSymbols();
+
+            if (!options.Quiet)
+                Log.EmitMessage("Parsing code...");
+
+            if (!driver.ParseCode())
+                return;
+
+            if (!options.Quiet)
+                Log.EmitMessage("Processing code...");
+
+            library.Preprocess(driver, driver.ASTContext);
+
+            driver.SetupPasses(library);
+
+            driver.ProcessCode();
+            library.Postprocess(driver, driver.ASTContext);
+
+            if (!options.Quiet)
+                Log.EmitMessage("Generating code...");
+
+            var outputs = driver.GenerateCode();
+
+            foreach (var output in outputs)
+            {
+                foreach (var pass in driver.GeneratorOutputPasses.Passes)
+                {
+                    pass.Driver = driver;
+                    pass.VisitGeneratorOutput(output);
+                }
+            }
+
+            driver.WriteCode(outputs);
+            if (driver.Options.IsCSharpGenerator)
+                driver.CompileCode();
         }
 
         private static void GenerateFFmpeg()

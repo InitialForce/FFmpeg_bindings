@@ -88,7 +88,7 @@ namespace FFmpegBindings
         private static void GenerateFFmpeg()
         {
 //            string versionString = "2.1.3";
-            string versionString = "2.2";
+            string versionString = "2.3";
             //            string versionString = "1.0.7";
             var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
             var outputDir = new DirectoryInfo(@"..\..\..\..\" + versionString);

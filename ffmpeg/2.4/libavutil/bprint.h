@@ -126,7 +126,7 @@ void av_bprintf(AVBPrint *buf, const char *fmt, ...) av_printf_format(2, 3);
 /**
  * Append a formatted string to a print buffer.
  */
-void av_vbprintf(AVBPrint *buf, const char *fmt, va_list vl_arg);
+//void av_vbprintf(AVBPrint *buf, const char *fmt, va_list vl_arg);
 
 /**
  * Append char c n times to a print buffer.

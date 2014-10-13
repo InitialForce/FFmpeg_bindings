@@ -243,7 +243,7 @@ void av_log(void *avcl, int level, const char *fmt, ...) av_printf_format(3, 4);
  *        subsequent arguments are converted to output.
  * @param vl The arguments referenced by the format string.
  */
-void av_vlog(void *avcl, int level, const char *fmt, va_list vl);
+//void av_vlog(void *avcl, int level, const char *fmt, va_list vl);
 
 /**
  * Get the current log level
@@ -273,7 +273,7 @@ void av_log_set_level(int level);
  *
  * @param callback A logging function with a compatible signature.
  */
-void av_log_set_callback(void (*callback)(void*, int, const char*, va_list));
+//void av_log_set_callback(void (*callback)(void*, int, const char*st));
 
 /**
  * Default logging callback
@@ -288,8 +288,8 @@ void av_log_set_callback(void (*callback)(void*, int, const char*, va_list));
  *        subsequent arguments are converted to output.
  * @param vl The arguments referenced by the format string.
  */
-void av_log_default_callback(void *avcl, int level, const char *fmt,
-                             va_list vl);
+//void av_log_default_callback(void *avcl, int level, const char *fmt,
+//                             va_list vl);
 
 void av_log_set_formatted_callback(void (*)(void*, int, const char*));
 void av_log_set_formatted_filtered_callback(void (*)(void*, int, const char*));
@@ -311,8 +311,8 @@ AVClassCategory av_default_get_category(void *ptr);
  * @param print_prefix  used to store whether the prefix must be printed;
  *                      must point to a persistent integer initially set to 1
  */
-void av_log_format_line(void *ptr, int level, const char *fmt, va_list vl,
-                        char *line, int line_size, int *print_prefix);
+//void av_log_format_line(void *ptr, int level, const char *fmt, va_list vl,
+//                        char *line, int line_size, int *print_prefix);
 
 /**
  * av_dlog macros

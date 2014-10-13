@@ -88,7 +88,7 @@ namespace FFmpegBindings
         private static void GenerateFFmpeg()
         {
 //            string versionString = "2.1.3";
-            string versionString = "2.3";
+            string versionString = "2.4";
             //            string versionString = "1.0.7";
             var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
             var outputDir = new DirectoryInfo(@"..\..\..\..\" + versionString);
@@ -99,8 +99,8 @@ namespace FFmpegBindings
                 FilePath = Path.Combine(ffmpegInstallDir.FullName, "generated.h"),
             };
 
-            var avutilLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avutil", "avutil-if-52.dll", outputDir);
-            var avcodecLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avcodec", "avcodec-if-55.dll",
+            var avutilLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avutil", "avutil-if-54.dll", outputDir);
+            var avcodecLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avcodec", "avcodec-if-56.dll",
                 outputDir, new List<string>
                 {
                     "old_codec_ids.h",
@@ -110,21 +110,21 @@ namespace FFmpegBindings
                     "xvmc.h"
                 }, new[] {avutilLib});
 
-            var avformatLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avformat", "avformat-if-55.dll",
+            var avformatLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avformat", "avformat-if-56.dll",
                 outputDir, null,
                 new[] {avutilLib, avcodecLib});
 
-            var swresampleLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "swresample", "swresample-if-0.dll",
+            var swresampleLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "swresample", "swresample-if-1.dll",
                 outputDir,
                 null, new[] {avutilLib});
 
-            var swscaleLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "swscale", "swscale-if-2.dll",
+            var swscaleLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "swscale", "swscale-if-3.dll",
                 outputDir, null, new[] {avutilLib});
 
-            var avfilterLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avfilter", "avfilter-if-3.dll",
+            var avfilterLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avfilter", "avfilter-if-5.dll",
                 outputDir, null, new[] {avutilLib, swresampleLib, swscaleLib, avcodecLib, avformatLib});
 
-            var avdeviceLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avdevice", "avdevice-if-55.dll",
+            var avdeviceLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avdevice", "avdevice-if-56.dll",
                 outputDir);
 
             GenerateComplexLibraries(new[]

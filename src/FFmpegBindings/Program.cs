@@ -200,6 +200,7 @@ namespace FFmpegBindings
                 //            TargetTriple = "x86_64-pc-win64",
                 Gnu99Mode = true,
                 Verbose = false,
+                ForceNativeTypePrinting = true,
             };
 
             var driver = new Driver(options, log);

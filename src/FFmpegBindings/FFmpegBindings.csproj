@@ -62,10 +62,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PointGreyLibrary.cs" />
+    <Compile Include="ForesightLibrary.cs" />
     <Compile Include="BodiTrakLibrary.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Passes\FFmpegMacrosPass.cs" />
+    <Compile Include="TypeParameterRenamePass.cs" />
     <Compile Include="Utilities\ASTContextExtensions.cs" />
     <Compile Include="FFmpegSubLibrary.cs" />
     <Compile Include="FFMS2Library.cs" />

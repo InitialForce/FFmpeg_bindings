@@ -13,12 +13,21 @@ namespace FFmpegBindings
     {
         public static void Main(string[] args)
         {
-//            GenerateLibrary(new WinAPI());
+//            RunSingle(new WinAPI());
 //            RunSingle(new FSALibrary());
+//            RunSingle(new ForesightLibrary());
+
+            var pointGreyLibrary = new PointGreyLibrary();
+            var pointGreyLibraryGui = new PointGreyLibraryGUI(pointGreyLibrary);
+            GenerateComplexLibraries(new IComplexLibrary[]
+            {
+                pointGreyLibrary,
+                pointGreyLibraryGui
+            });
 //            RunSingle(new FFMS2Library());
             //            Environment.Exit(0);
 
-            GenerateFFmpeg();
+//            GenerateFFmpeg();
         }
 
          public static void RunSingle(ILibrary library)

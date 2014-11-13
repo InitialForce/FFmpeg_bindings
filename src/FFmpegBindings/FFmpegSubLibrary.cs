@@ -14,7 +14,7 @@ using FFmpegBindings.Utilities;
 namespace FFmpegBindings
 {
     [DebuggerDisplay("{LibraryName}")]
-    public class FFmpegSubLibrary : ILibrary
+    public class FFmpegSubLibrary : IComplexLibrary
     {
         private readonly IEnumerable<string> _filesToIgnore;
         private readonly DirectoryInfo _includeDir;
@@ -44,7 +44,7 @@ namespace FFmpegBindings
         public string LibraryName { get; private set; }
         public string DllName { get; private set; }
         public string LibraryNameSpace { get; private set; }
-        public IEnumerable<FFmpegSubLibrary> DependentLibraries { get; private set; }
+        public IEnumerable<IComplexLibrary> DependentLibraries { get; private set; }
         public string OutputNamespace { get; private set; }
 
         public void Preprocess(Driver driver, ASTContext ctx)

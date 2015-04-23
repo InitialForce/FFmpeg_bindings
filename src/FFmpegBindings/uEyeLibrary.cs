@@ -12,6 +12,7 @@ namespace FFmpegBindings
         {
             // it's not possible to handle va_list using p/invoke
             ctx.IgnoreFunctionsWithParameterTypeName("va_list");
+            ctx.MergeStructAndPtrStructName();
         }
 
         public void Postprocess(Driver driver, ASTContext lib)

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using CppSharp;
 using CppSharp.AST;
 
@@ -142,5 +143,34 @@ namespace FFmpegBindings
                 tu.Enums.Clear();
             }
         }
+
+        /// <summary>
+        /// Merge struct defined like:
+        /// struct _NAME {}  NAME, *PNAME
+        /// </summary>
+        /// <param name="context"></param>
+        public static void MergeStructAndPtrStructName(this ASTContext context)
+        {
+            foreach (var unit in context.TranslationUnits)
+            {
+                var typeDefs = unit.Typedefs.ToDictionary(v=>v.Name);
+                var structs = unit.Classes.Where(v=>v.Type == ClassType.ValueType).ToDictionary(v=>v.Name);
+                foreach (var @struct in structs.Where(v => v.Key.StartsWith("_")))
+                {
+                    // match struct _NAME against typedefs PNAME
+                    var matchingTypeDefs = typeDefs.Where(v=>v.Key.Substring(1) == @struct.Key.Substring(1)).ToList();
+                    foreach (var kvp in matchingTypeDefs)
+                    {
+                        kvp.Value.ExplicityIgnored = true;
+                    }
+                    if (matchingTypeDefs.Any())
+                    {
+                        // Remove leading _
+                        @struct.Value.Name = @struct.Value.Name.Substring(1);
+                    }
+                }
+            }
+        }
+
     }
 }

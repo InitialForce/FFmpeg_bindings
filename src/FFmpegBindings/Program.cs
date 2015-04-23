@@ -17,17 +17,20 @@ namespace FFmpegBindings
 //            RunSingle(new FSALibrary());
 //            RunSingle(new ForesightLibrary());
 
-            var pointGreyLibrary = new PointGreyLibrary();
-            var pointGreyLibraryGui = new PointGreyLibraryGUI(pointGreyLibrary);
-            GenerateComplexLibraries(new IComplexLibrary[]
-            {
-                pointGreyLibrary,
-                pointGreyLibraryGui
-            });
+//            var pointGreyLibrary = new PointGreyLibrary();
+//            var pointGreyLibraryGui = new PointGreyLibraryGUI(pointGreyLibrary);
+//            GenerateComplexLibraries(new IComplexLibrary[]
+//            {
+//                pointGreyLibrary,
+//                pointGreyLibraryGui
+//            });
+
 //            RunSingle(new FFMS2Library());
             RunSingle(new LibraryUeye());
 
 //            GenerateFFmpeg();
+
+            //            Environment.Exit(0);
         }
 
          public static void RunSingle(ILibrary library)
@@ -97,9 +100,10 @@ namespace FFmpegBindings
         private static void GenerateFFmpeg()
         {
 //            string versionString = "2.1.3";
-            string versionString = "2.4";
+            string versionString = "2.6.1";
             //            string versionString = "1.0.7";
-            var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
+            var ffmpegInstallDir = new DirectoryInfo(@"C:\WORK\LIBS\2015-03-25\mingw64/include");
+//            var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
             var outputDir = new DirectoryInfo(@"..\..\..\..\" + versionString);
 
             var utilityClass = new TranslationUnit

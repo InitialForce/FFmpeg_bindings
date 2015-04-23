@@ -26,6 +26,7 @@ namespace FFmpegBindings
             driver.Options.IncludeDirs.Add(@"C:\Program Files (x86)\Windows Kits\8.1\Include\um");
             driver.Options.OutputDir = @"C:\WORK\REPOS-SC\CppSharp\examples\SDL\wingdi";
             driver.Options.OutputNamespace = "winapi";
+            driver.Options.OutputContainerClass = "winapi";
             driver.Options.Headers.Add(@"C:\Program Files (x86)\Windows Kits\8.1\Include\um\windows.h");
             driver.Options.Headers.Add(@"C:\Program Files (x86)\Windows Kits\8.1\Include\shared\winapifamily.h");
             driver.Options.Headers.Add(@"C:\Program Files (x86)\Windows Kits\8.1\Include\um\wingdi.h");

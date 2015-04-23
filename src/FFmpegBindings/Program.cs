@@ -25,7 +25,7 @@ namespace FFmpegBindings
                 pointGreyLibraryGui
             });
 //            RunSingle(new FFMS2Library());
-            //            Environment.Exit(0);
+            RunSingle(new LibraryUeye());
 
 //            GenerateFFmpeg();
         }

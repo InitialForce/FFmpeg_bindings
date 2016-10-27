@@ -26,9 +26,10 @@ namespace FFmpegBindings
 //            });
 
 //            RunSingle(new FFMS2Library());
-            RunSingle(new LibraryUeye());
+//            RunSingle(new LibraryUeye());
+//            RunSingle(new LibraryMfx());
 
-//            GenerateFFmpeg();
+            GenerateFFmpeg();
 
             //            Environment.Exit(0);
         }
@@ -100,9 +101,9 @@ namespace FFmpegBindings
         private static void GenerateFFmpeg()
         {
 //            string versionString = "2.1.3";
-            string versionString = "2.6.1";
+            string versionString = "3.1";
             //            string versionString = "1.0.7";
-            var ffmpegInstallDir = new DirectoryInfo(@"C:\WORK\LIBS\2015-03-25\mingw64/include");
+            var ffmpegInstallDir = new DirectoryInfo(@"D:\WORK\LIBS\2016-10-19\mingw64\include");
 //            var ffmpegInstallDir = new DirectoryInfo(@"..\..\..\..\..\ffmpeg\" + versionString);
             var outputDir = new DirectoryInfo(@"..\..\..\..\" + versionString);
 
@@ -116,6 +117,7 @@ namespace FFmpegBindings
             var avcodecLib = new FFmpegSubLibrary(ffmpegInstallDir, utilityClass, "avcodec", "avcodec-if-56.dll",
                 outputDir, new List<string>
                 {
+                    "old_pix_fmts.h",
                     "old_codec_ids.h",
                     "dxva2.h",
                     "vda.h",

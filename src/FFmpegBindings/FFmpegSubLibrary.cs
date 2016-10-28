@@ -10,6 +10,7 @@ using CppSharp.AST.Extensions;
 using CppSharp.Passes;
 using FFmpegBindings.Passes;
 using FFmpegBindings.Utilities;
+using Attribute = CppSharp.AST.Attribute;
 
 namespace FFmpegBindings
 {
@@ -59,6 +60,12 @@ namespace FFmpegBindings
 
         public virtual void Setup(Driver driver)
         {
+//            driver.Options.IncludeDirs.Add(@"C:\git-sdk-64\mingw64\x86_64-w64-mingw32\include");
+//            driver.Options.IncludeDirs.Add(@"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include");
+//            driver.Options.IncludeDirs.Add(@"C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt");
+//            driver.Options.IncludeDirs.Add(@"C:\Program Files (x86)\Windows Kits\8.1\Include\km\crt");
+            driver.Options.IncludeDirs.Add(@"C:\Program Files\Microsoft SDKs\Windows\v7.0\Include");
+
             driver.Options.LibraryName = DllName;
             driver.Options.IncludeDirs.Add(_includeDir.FullName);
             driver.Options.OutputDir = Path.Combine(_outputDir.FullName, LibraryNameSpace);
@@ -159,6 +166,34 @@ namespace FFmpegBindings
             lib.GenerateClassWithConstValuesFromMacros(ourTranslationUnits, LibraryNameSpace);
             lib.CreateOverloadsForFunctionWithParamConstChar(ourTranslationUnits);
             this.MoveAllIntoWrapperClass(LibraryNameSpace, ourTranslationUnits);
+
+            foreach (TranslationUnit tu in ourTranslationUnits)
+            {
+                Class wrappingClass;
+                Extensions.GetCreateWrappingClass(LibraryNameSpace, tu, out wrappingClass);
+                if (!wrappingClass.Attributes.Any(v => v.Value.Contains("SuppressMessage")))
+                {
+                    string[] suppressed =
+                    {
+                        "\"ReSharper\", \"UnusedMember.Global\"",
+                        "\"ReSharper\", \"InconsistentNaming\"",
+                        "\"ReSharper\", \"RedundantUnsafeContext\"",
+                        "\"ReSharper\", \"MemberCanBePrivate.Global\"",
+                        "\"ReSharper\", \"MemberCanBePrivate.Global\"",
+                        "\"ReSharper\", \"FieldCanBeMadeReadOnly.Global\"",
+                        "\"ReSharper\", \"PartialTypeWithSinglePart\"",
+                        "\"ReSharper\", \"RedundantNameQualifier\"",
+                        "\"ReSharper\", \"ArrangeModifiersOrder\"",
+                    };
+                    foreach (var s in suppressed)
+
+                        wrappingClass.Attributes.Add(new Attribute
+                        {
+                            Type = typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute),
+                            Value = s
+                        });
+                }
+            }
         }
 
         private static List<TranslationUnit> GetLibOnlyTranslationUnits(ASTContext lib,

@@ -100,7 +100,7 @@ namespace FFmpegBindings
             }
         }
 
-        private static bool GetCreateWrappingClass(string className, TranslationUnit tu, out Class wrappingClass)
+        public static bool GetCreateWrappingClass(string className, TranslationUnit tu, out Class wrappingClass)
         {
             wrappingClass = tu.FindClass(className);
             if (wrappingClass == null)

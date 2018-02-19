@@ -20,8 +20,8 @@ namespace FFmpegBindings
             driver.Options.Headers.Add(@"C:\Program Files\Point Grey Research\FlyCapture2\include\C\FlyCapture2GUI_C.h");
             driver.Options.OutputDir =
                 Path.Combine(
-                    @"C:\WORK\REPOS-SC\ScDesktop\code\build\swingcatalyst\Video\SwingCatalyst.Video.PointGrey\Interop");
-            driver.Options.OutputNamespace = "SwingCatalyst.Video.PointGrey.Interop";
+                    @"C:\WORK\REPOS-SC\ScDesktop1\src\motioncatalyst\Video\InitialForce.Video.PointGrey\Interop");
+            driver.Options.OutputNamespace = "InitialForce.Video.PointGrey.Interop";
             driver.Options.OutputContainerClass = "FlyCapture2GUI_C";
             driver.Options.CustomDllImport = "\"FlyCapture2GUI_C.dll\"";
         }
@@ -37,8 +37,8 @@ namespace FFmpegBindings
                 @"C:\Program Files\Point Grey Research\FlyCapture2\include\C\FlyCapture2Defs_C.h");
             driver.Options.OutputDir =
                 Path.Combine(
-                    @"C:\WORK\REPOS-SC\ScDesktop\code\build\swingcatalyst\Video\SwingCatalyst.Video.PointGrey\Interop");
-            driver.Options.OutputNamespace = "SwingCatalyst.Video.PointGrey.Interop";
+                    @"C:\WORK\REPOS-SC\ScDesktop1\src\motioncatalyst\Video\InitialForce.Video.PointGrey\Interop");
+            driver.Options.OutputNamespace = "InitialForce.Video.PointGrey.Interop";
             driver.Options.OutputContainerClass = "FlyCapture2_C";
             driver.Options.CustomDllImport = "\"FlyCapture2_C.dll\"";
         }

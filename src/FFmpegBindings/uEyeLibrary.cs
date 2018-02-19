@@ -31,21 +31,20 @@ namespace FFmpegBindings
             driver.Options.IncludeDirs.Add(@"C:\Program Files (x86)\Windows Kits\8.1\Include\shared");
             driver.Options.IncludeDirs.Add(@"C:\Program Files (x86)\Windows Kits\8.1\Include\um");
             driver.Options.Headers.Add(@"C:\Program Files\IDS\uEye\Develop\include\uEye.h");
-            driver.Options.OutputDir = Path.Combine(@"C:\WORK\Temp\ids");
+            driver.Options.OutputDir = Path.Combine(@"C:\WORK\REPOS-SC\ScDesktop1\src\motioncatalyst\Video\InitialForce.Video.IDS\Interop");
             driver.Options.OutputNamespace = "InitialForce.Video.IDS.Interop";
             driver.Options.CustomDllImport = "UEyeHelpers.DRIVER_DLL_NAME_X86";
             driver.Options.OutputContainerClass = "UEye";
-//            driver.Options.Defines.Add("_MSC_VER");
-//            driver.Options.Defines.Add("_IDS_EXPORT");
-//            driver.Options.Defines.Add("IDSEXP int");
-//            driver.Options.Defines.Add("IDSEXP int");
-//            driver.Options.Defines.Add("IDSEXPUL unsigned long");
-//            driver.Options.Defines.Add("WCHAR=char");
+            //driver.Options.Defines.Add("_MSC_VER");
+            driver.Options.Defines.Add("_IDS_EXPORT");
+            driver.Options.Defines.Add("IDSEXP int");
+            driver.Options.Defines.Add("IDSEXPUL unsigned long");
+//            driver.Options.Defines.Add("WCHAR char");
 //            driver.Options.Defines.Add("HIDS DWORD");
 //            driver.Options.Defines.Add("UINT unsigned int");
 //            driver.Options.Defines.Add("ULONG unsigned long");
-//            driver.Options.Defines.Add("BOOL=int");
-//            driver.Options.Defines.Add("bool=int");
+//            driver.Options.Defines.Add("BOOL int");
+//            driver.Options.Defines.Add("bool int");
         }
 
         public void SetupPasses(Driver driver)
